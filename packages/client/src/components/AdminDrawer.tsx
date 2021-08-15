@@ -9,30 +9,16 @@ import { themeColor } from "./ThemeContainer";
 import { NavLink } from "react-router-dom";
 import { getChallengeSlug } from "@pairwise/common";
 import { composeWithProps } from "../tools/utils";
-
-/** ===========================================================================
- * Types & Config
- * ============================================================================
- */
-
-interface IState {
-  pullRequestId: string;
-}
+import toaster from "../tools/toast-utils";
 
 /** ===========================================================================
  * AdminDrawer Component
+ * ---------------------------------------------------------------------------
+ * This component is only visible to Pairwise admin users.
  * ============================================================================
  */
 
-class AdminDrawer extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = {
-      pullRequestId: "",
-    };
-  }
-
+class AdminDrawer extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     const {
       isMobile,
@@ -40,7 +26,10 @@ class AdminDrawer extends React.Component<IProps, IState> {
       isUserAdmin,
       challengeMap,
       isAdminDrawerOpen,
+      adminPullRequestId,
       setAdminDrawerState,
+      setAdminPullRequestId,
+      pullRequestDataPresent,
       pullRequestChallengeIds,
       fetchingPullRequestCourses,
     } = this.props;
@@ -68,20 +57,21 @@ class AdminDrawer extends React.Component<IProps, IState> {
                 <TextItem>
                   <Bold>Load Pull Request Course Content</Bold>
                 </TextItem>
-                <form style={{ marginTop: 0, marginBottom: 12 }}>
+                <form
+                  style={{ marginTop: 0, marginBottom: 12 }}
+                  onSubmit={this.handleFetchPullRequestCourseList}
+                >
                   <InputField
-                    autoFocus
                     type="text"
+                    autoFocus={!isMobile}
+                    disabled={fetchingPullRequestCourses}
                     id="admin-pull-request-diff-id"
                     placeholder={isMobile ? "id" : "Enter a pull request id"}
                     className={Classes.INPUT}
-                    value={this.state.pullRequestId}
+                    value={adminPullRequestId}
                     onChange={(event) =>
-                      this.setState({
-                        pullRequestId: event.target.value,
-                      })
+                      setAdminPullRequestId(event.target.value)
                     }
-                    onSubmit={this.handleFetchPullRequestCourseList}
                   />
                   <Button
                     style={{ width: isMobile ? 85 : 175, marginTop: 12 }}
@@ -92,7 +82,7 @@ class AdminDrawer extends React.Component<IProps, IState> {
                         ? "Loading..."
                         : isMobile
                         ? "Load"
-                        : "Load Courses"
+                        : "Load Content"
                     }
                     onClick={this.handleFetchPullRequestCourseList}
                   />
@@ -132,6 +122,16 @@ class AdminDrawer extends React.Component<IProps, IState> {
                     })}
                   </>
                 )}
+                {pullRequestDataPresent && (
+                  <>
+                    <Line />
+                    <Button
+                      icon="reset"
+                      text="Reset Course Content"
+                      onClick={this.resetCourseContent}
+                    />
+                  </>
+                )}
               </AdminControlBox>
             </>
           </div>
@@ -140,11 +140,21 @@ class AdminDrawer extends React.Component<IProps, IState> {
     );
   }
 
-  handleFetchPullRequestCourseList = () => {
-    const { pullRequestId } = this.state;
-    if (pullRequestId !== "") {
-      this.props.fetchPullRequestCourseList(pullRequestId);
+  handleFetchPullRequestCourseList = (e: any) => {
+    e.preventDefault();
+
+    const { adminPullRequestId } = this.props;
+    if (adminPullRequestId !== "") {
+      this.props.fetchPullRequestCourseList(adminPullRequestId);
     }
+  };
+
+  resetCourseContent = () => {
+    this.props.fetchCourses();
+    this.props.fetchCourseSkeletons();
+    this.props.resetPullRequestState();
+    this.props.setAdminPullRequestId("");
+    this.props.setAdminDrawerState({ isOpen: false });
   };
 }
 
@@ -156,14 +166,18 @@ class AdminDrawer extends React.Component<IProps, IState> {
 const AdminTitle = styled.h1`
   line-height: 32px;
   margin-top: 42px;
-  margin-bottom: 18px;
-  color: ${COLORS.RED};
+  margin-bottom: 12px;
+  color: ${COLORS.LIGHT_RED};
+  border-bottom: 1px solid ${COLORS.LIGHT_RED};
+
+  @media ${MOBILE} {
+    border-bottom: none;
+  }
 `;
 
 const AdminControlBox = styled.div`
   border-radius: 2px;
   padding: 12px 8px;
-  border: 1px solid ${COLORS.RED};
 `;
 
 const ButtonLink = styled(NavLink)``;
@@ -193,10 +207,11 @@ const InputField = styled.input`
 
 const Bold = styled.b`
   font-weight: bold;
-  ${themeColor("color", COLORS.TEXT_CONTENT)};
+  ${themeColor("color", COLORS.WHITE)};
 `;
 
 const Line = styled.div`
+  margin: 12px auto;
   border: ${(props) => {
     const color = props.theme.dark ? COLORS.DARK_BORDER : COLORS.LIGHT_BORDER;
     return `1px solid ${color}`;
@@ -212,6 +227,9 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   isDarkTheme: Modules.selectors.user.isDarkTheme(state),
   isUserAdmin: Modules.selectors.auth.isUserAdmin(state),
   isAdminDrawerOpen: Modules.selectors.app.isAdminDrawerOpen(state),
+  adminPullRequestId: Modules.selectors.app.adminPullRequestId(state),
+  pullRequestDataPresent:
+    Modules.selectors.challenges.pullRequestDataPresent(state),
   challengeMap: Modules.selectors.challenges.getChallengeMap(state),
   pullRequestChallengeIds:
     Modules.selectors.challenges.pullRequestChallengeIds(state),
@@ -220,7 +238,11 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 });
 
 const dispatchProps = {
+  fetchCourses: Modules.actions.challenges.fetchCourses,
+  fetchCourseSkeletons: Modules.actions.challenges.fetchNavigationSkeleton,
+  resetPullRequestState: Modules.actions.challenges.resetPullRequestState,
   setAdminDrawerState: Modules.actions.app.setAdminDrawerState,
+  setAdminPullRequestId: Modules.actions.app.setAdminPullRequestId,
   fetchPullRequestCourseList:
     Modules.actions.challenges.fetchPullRequestCourseList,
 };

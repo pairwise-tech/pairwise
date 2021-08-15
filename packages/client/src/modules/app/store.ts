@@ -14,6 +14,7 @@ export interface State {
   screensaver: boolean;
   loadingAnimationComplete: boolean;
   adminDrawerOpen: boolean;
+  adminPullRequestId: string;
 }
 
 const initialState = {
@@ -23,6 +24,7 @@ const initialState = {
   screensaver: false,
   loadingAnimationComplete: false,
   adminDrawerOpen: false,
+  adminPullRequestId: "",
 };
 
 const app = createReducer<State, AppActionTypes>(initialState)
@@ -45,6 +47,10 @@ const app = createReducer<State, AppActionTypes>(initialState)
   .handleAction(actions.setAdminDrawerState, (state, action) => ({
     ...state,
     adminDrawerOpen: action.payload.isOpen,
+  }))
+  .handleAction(actions.setAdminPullRequestId, (state, action) => ({
+    ...state,
+    adminPullRequestId: action.payload,
   }))
   .handleAction(actions.locationChange, (state, action) => ({
     ...state,

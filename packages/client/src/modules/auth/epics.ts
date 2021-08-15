@@ -109,6 +109,7 @@ const storeAccessTokenEpic: EpicSignature = (action$, _, deps) => {
 const isUserAdminEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.storeAccessTokenSuccess)),
+    filter((x) => x.payload.accessToken !== ""),
     mergeMap(deps.api.isUserAdmin),
     map((result) => {
       if (result.value) {
@@ -190,6 +191,12 @@ const logoutUserSuccessEpic: EpicSignature = (action$, _, deps) => {
     // Put a short delay so the user feels like something actually happened.
     delay(250),
     tap(logoutToast),
+    tap(({ payload }) => {
+      // Optionally reload the page.
+      if (payload.shouldReloadPage === true) {
+        window.location.reload();
+      }
+    }),
     ignoreElements(),
   );
 };

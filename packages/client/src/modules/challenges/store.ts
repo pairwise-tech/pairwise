@@ -679,6 +679,10 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     courseSkeletons: action.payload.courseSkeletonList,
     pullRequestChallengeIds: new Set(action.payload.challengeIds),
   }))
+  .handleAction(actions.resetPullRequestState, (state, action) => ({
+    ...state,
+    pullRequestChallengeIds: new Set(),
+  }))
   .handleAction(actions.toggleSectionAccordionView, (state, action) => ({
     ...state,
     navigationSectionAccordionViewState: {

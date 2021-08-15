@@ -12,6 +12,8 @@ export const COLORS = {
   SECONDARY_PINK: "#f50057",
   BETA_LABEL: "#ff2153",
   RED: "#f7142b",
+  LIGHT_RED: "#fc3045",
+  PINK: "rgb(252, 66, 109, 1)",
   SECONDARY_YELLOW: "#ffdf75",
   SECONDARY_ORANGE: "#FFB85A",
   HEADER_BORDER: "#176191",

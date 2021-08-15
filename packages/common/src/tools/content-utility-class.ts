@@ -258,6 +258,31 @@ class ContentUtilityClass {
   getCourseIds = () => {
     return this.courses.map((c) => c.id);
   };
+
+  /**
+   * Map the course lists to reset the userCanAccess permissions for the
+   * admin user.
+   */
+  mapCoursesToAdmin = (courseList: CourseList | CourseSkeletonList) => {
+    return courseList.map((c) => {
+      return {
+        ...c,
+        userCanAccess: true,
+        modules: c.modules.map((m) => {
+          return {
+            ...m,
+            userCanAccess: true,
+            challenges: m.challenges.map((c) => {
+              return {
+                ...c,
+                userCanAccess: true,
+              };
+            }),
+          };
+        }),
+      };
+    });
+  };
 }
 
 /** ===========================================================================

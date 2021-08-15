@@ -51,7 +51,9 @@ export const bulkPersistenceComplete = createAction(
   ActionTypesEnum.BULK_PERSISTENCE_COMPLETE,
 )();
 
-export const logoutUser = createAction(ActionTypesEnum.LOGOUT)();
+export const logoutUser = createAction(ActionTypesEnum.LOGOUT)<{
+  shouldReloadPage?: boolean;
+}>();
 
 export const loginByEmail = createAction(ActionTypesEnum.LOGIN_BY_EMAIL)<{
   email: string;

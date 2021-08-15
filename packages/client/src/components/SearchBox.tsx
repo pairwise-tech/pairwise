@@ -349,8 +349,8 @@ const Input = styled(InputGroup)`
 const Box = styled.div`
   position: relative;
   flex: 1 100%;
-  margin-right: auto;
-  max-width: 700px;
+  width: auto;
+  margin-right: 10px;
 `;
 
 // NOTE: The z-index on this is meant to make it appear above the nav overlay

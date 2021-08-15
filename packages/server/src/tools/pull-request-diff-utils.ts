@@ -4,7 +4,6 @@ import {
   ContentUtility,
   Course,
   CourseList,
-  CourseSkeletonList,
   createInverseChallengeMapping,
   PullRequestCourseContent,
   PullRequestDiffContext,
@@ -16,6 +15,9 @@ import ENV from "./server-env";
  * Types & Config
  * ============================================================================
  */
+
+const PAIRWISE_REPO_BASE =
+  "https://api.github.com/repos/pairwise-tech/pairwise";
 
 interface CourseFileDiff {
   sha: string;
@@ -61,7 +63,6 @@ export const fetchPullRequestCourseContent = async (
       courseList.push(course);
     } else {
       // Fetch course blob from pull request data
-
       const allChangedLines = getPatchChangedLines(data.patch);
       const blob: Course = await fetchFileBlob(data.sha);
       const blobJSON = JSON.stringify(blob, null, 2);
@@ -82,39 +83,15 @@ export const fetchPullRequestCourseContent = async (
     ContentUtility.convertCourseListToSkeletons(courseList);
 
   // Map course and skeletons to set permissions for admin user
-  const adminCourseList = mapCoursesToAdmin(courseList);
-  const adminCourseSkeletonList = mapCoursesToAdmin(courseSkeletonList);
+  const adminCourseList = ContentUtility.mapCoursesToAdmin(courseList);
+  const adminCourseSkeletonList =
+    ContentUtility.mapCoursesToAdmin(courseSkeletonList);
 
   return {
     challengeIds,
     courseList: adminCourseList,
     courseSkeletonList: adminCourseSkeletonList,
   };
-};
-
-/**
- * Map the course lists to reset the userCanAccess permissions for the
- * admin user.
- */
-const mapCoursesToAdmin = (courseList: CourseList | CourseSkeletonList) => {
-  return courseList.map((c) => {
-    return {
-      ...c,
-      userCanAccess: true,
-      modules: c.modules.map((m) => {
-        return {
-          ...m,
-          userCanAccess: true,
-          challenges: m.challenges.map((c) => {
-            return {
-              ...c,
-              userCanAccess: true,
-            };
-          }),
-        };
-      }),
-    };
-  });
 };
 
 /**
@@ -229,9 +206,6 @@ export const parsePullRequestDiff = async (
     throw new InternalServerErrorException(err);
   }
 };
-
-const PAIRWISE_REPO_BASE =
-  "https://api.github.com/repos/pairwise-tech/pairwise";
 
 /**
  * Fetch PR diff.

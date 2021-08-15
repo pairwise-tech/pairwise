@@ -1,6 +1,5 @@
 import identity from "ramda/es/identity";
 import { createSelector } from "reselect";
-
 import { ReduxStoreState } from "modules/root";
 
 /** ===========================================================================
@@ -32,4 +31,9 @@ export const screensaverVisible = createSelector(
 export const isAdminDrawerOpen = createSelector(
   appSelector,
   (app) => app.adminDrawerOpen,
+);
+
+export const adminPullRequestId = createSelector(
+  appSelector,
+  (app) => app.adminPullRequestId,
 );

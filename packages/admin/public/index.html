@@ -24,6 +24,10 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+
+    <!-- Css styles mainly for initial page load elements and animation -->
+    <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/admin.css" />
+
     <title>Pairwise Admin</title>
   </head>
   <body>
@@ -39,8 +43,13 @@
             transform: rotateZ(360deg);
           }
         }
-        /* prettier-ignore */
-        .pw-initial-loading { top: 0; left: 0; right: 0; bottom: 0; position: absolute; }
+        .pw-initial-loading {
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          position: absolute;
+        }
         svg.pw-initial-loading {
           position: absolute;
           top: 50%; /* Fallback if calc() is not supported */

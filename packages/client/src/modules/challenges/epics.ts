@@ -131,7 +131,9 @@ const searchEpic: EpicSignature = (action$) => {
  */
 const contentSkeletonInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
-    filter(isActionOf(Actions.initializeApp)),
+    filter(
+      isActionOf([Actions.initializeApp, Actions.fetchNavigationSkeleton]),
+    ),
     mergeMap(deps.api.fetchCourseSkeletons),
     map(({ value: courses, error }) => {
       if (courses) {
@@ -235,7 +237,13 @@ const codepressDeleteToasterEpic: EpicSignature = (action$, state$, deps) => {
  */
 const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
-    filter(isActionOf([Actions.initializeApp, Actions.logoutUser])),
+    filter(
+      isActionOf([
+        Actions.fetchCourses,
+        Actions.initializeApp,
+        Actions.logoutUser,
+      ]),
+    ),
     mergeMap(deps.api.fetchCourses),
     map((result) => {
       if (result.value) {
@@ -388,6 +396,33 @@ const adminPullRequestDeepLinkEpic: EpicSignature = (action$) => {
           `Invalid pullRequestId param received: ${pullRequestId}`,
         );
       }
+    }),
+  );
+};
+
+/**
+ * Identify when the course reset action has completed. This epic
+ * should run after the reset pull request action and then after
+ * both the courses and skeletons are fetched successfully.
+ */
+const courseContentResetEpic: EpicSignature = (action$, state$, deps) => {
+  const fetchCoursesSuccess$ = action$.pipe(
+    filter(isActionOf(Actions.fetchCoursesSuccess)),
+  );
+  const fetchSkeletonsSuccess$ = action$.pipe(
+    filter(isActionOf(Actions.fetchNavigationSkeletonSuccess)),
+  );
+
+  return action$.pipe(
+    filter(isActionOf(Actions.resetPullRequestState)),
+    mergeMap(() => {
+      return combineLatest([fetchCoursesSuccess$, fetchSkeletonsSuccess$]).pipe(
+        take(1),
+        tap(() => {
+          deps.toaster.success("Course content reset.");
+        }),
+        ignoreElements(),
+      );
     }),
   );
 };
@@ -1008,6 +1043,7 @@ export default combineEpics(
   hydrateSandboxType,
   fetchAdminCourseListEpic,
   adminPullRequestDeepLinkEpic,
+  courseContentResetEpic,
   contentSkeletonInitializationEpic,
   initializeChallengeStateEpic,
   inverseChallengeMappingEpic,

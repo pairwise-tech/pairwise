@@ -120,10 +120,13 @@ const ApplicationContainer = (props: IProps) => {
     toggleNavigationMap,
     setAdminDrawerState,
     initializationError,
+    adminPullRequestId,
     setNavigationMapState,
+    pullRequestDataPresent,
     setSingleSignOnDialogState,
   } = props;
 
+  const adminPullRequestBadgerVisible = isUserAdmin && pullRequestDataPresent;
   const [hasHandledRedirect, setHasHandledRedirect] = React.useState(false);
   const isMobile = useMedia(MOBILE, false);
   const history = useHistory();
@@ -148,7 +151,7 @@ const ApplicationContainer = (props: IProps) => {
   }
 
   if (initializationError) {
-    return <ErrorOverlay />;
+    return <ErrorOverlay logoutUser={logoutUser} />;
   } else if (!initialized) {
     return <LoadingOverlay visible={workspaceLoading} />;
   } else if (screensaverVisible) {
@@ -272,6 +275,28 @@ const ApplicationContainer = (props: IProps) => {
           {(!isSandbox || !isMobile) && (
             <SearchBox onFocus={handleSearchFocus} onBlur={handleSearchBlur} />
           )}
+          {adminPullRequestBadgerVisible && !isMobile && (
+            <Tooltip2
+              usePortal={false}
+              position="bottom"
+              content="Open in GitHub"
+            >
+              <Button
+                icon="git-pull"
+                style={{
+                  width: 225,
+                  color: COLORS.TEXT_DARK,
+                  background: COLORS.SECONDARY_YELLOW,
+                }}
+                onClick={() => {
+                  const url = `https://github.com/pairwise-tech/pairwise/pull/${adminPullRequestId}`;
+                  window.open(url, "_blank")?.focus();
+                }}
+              >
+                Viewing Pull Request {adminPullRequestId}
+              </Button>
+            </Tooltip2>
+          )}
           {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
           <div style={{ marginLeft: 10 }} />
           {!isMobile && <PomodoroTimer />}
@@ -314,7 +339,7 @@ const ApplicationContainer = (props: IProps) => {
               usePortal={false}
               position="bottom"
               openOnTargetFocus={false}
-              content="Open Admin Drawer"
+              content="Toggle Admin Drawer"
             >
               <IconButton
                 icon="shield"
@@ -429,7 +454,11 @@ const ApplicationContainer = (props: IProps) => {
                     <Icon icon="info-sign" style={{ marginRight: 10 }} />
                     About Pairwise
                   </Link>
-                  <Link to="/logout" id="logout-link" onClick={logoutUser}>
+                  <Link
+                    to="/logout"
+                    id="logout-link"
+                    onClick={() => logoutUser({})}
+                  >
                     <Icon icon="log-out" style={{ marginRight: 10 }} />
                     Logout
                   </Link>
@@ -509,31 +538,6 @@ const ApplicationContainer = (props: IProps) => {
     </React.Fragment>
   );
 };
-
-const LoadingOverlay = (props: { visible: boolean }) => (
-  <FullScreenOverlay
-    visible={props.visible}
-    data-selector="full-screen-overlay"
-  >
-    <div />
-  </FullScreenOverlay>
-);
-
-const ErrorOverlay = () => (
-  <FullScreenOverlay visible data-selector="full-screen-overlay">
-    <div>
-      <OverlayText error id="pw-loading-overlay">
-        An error occurred when loading Pairwise...{" "}
-        <span aria-label=":(" role="img">
-          😓
-        </span>
-      </OverlayText>
-      <OverlaySmallText>
-        We apologize for the inconvenience! You can try to reload the page.
-      </OverlaySmallText>
-    </div>
-  </FullScreenOverlay>
-);
 
 /** ===========================================================================
  * Styles & Utils
@@ -677,6 +681,46 @@ const ControlsContainer = styled.div`
   flex-direction: row;
 `;
 
+const LoadingOverlay = (props: { visible: boolean }) => (
+  <FullScreenOverlay
+    visible={props.visible}
+    data-selector="full-screen-overlay"
+  >
+    <div />
+  </FullScreenOverlay>
+);
+
+const ErrorOverlay = (props: {
+  logoutUser: typeof Modules.actions.auth.logoutUser;
+}) => (
+  <FullScreenOverlay visible data-selector="full-screen-overlay">
+    <div>
+      <OverlayText error id="pw-loading-overlay">
+        An error occurred when loading Pairwise...{" "}
+        <span aria-label=":(" role="img">
+          😓
+        </span>
+      </OverlayText>
+      <OverlaySmallText>
+        We apologize for the inconvenience! You can try to reload the page.
+      </OverlaySmallText>
+      <Centered>
+        <Button
+          text="Logout"
+          onClick={() => props.logoutUser({ shouldReloadPage: true })}
+        />
+      </Centered>
+    </div>
+  </FullScreenOverlay>
+);
+
+const Centered = styled.div`
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const NavIconButton = styled(({ overlayVisible, theme, ...rest }) => (
   <Button
     large
@@ -794,6 +838,12 @@ const AdminBadge = styled.div`
   }
 `;
 
+const AdminPullRequestViewBadge = styled.div`
+  width: 250px;
+  height: 25px;
+  background: ${COLORS.SECONDARY_YELLOW};
+`;
+
 const LostPageContainer = styled.div`
   margin-top: 150px;
   padding: 50px;
@@ -839,6 +889,9 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   userLoading: Modules.selectors.user.loading(state),
   isUserAdmin: Modules.selectors.auth.isUserAdmin(state),
   isAdminDrawerOpen: Modules.selectors.app.isAdminDrawerOpen(state),
+  adminPullRequestId: Modules.selectors.app.adminPullRequestId(state),
+  pullRequestDataPresent:
+    Modules.selectors.challenges.pullRequestDataPresent(state),
   location: Modules.selectors.app.locationSelector(state),
   screensaverVisible: Modules.selectors.app.screensaverVisible(state),
   initialized: Modules.selectors.app.appSelector(state).initialized,
