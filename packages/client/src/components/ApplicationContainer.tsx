@@ -56,6 +56,7 @@ import PairwiseScreensaver from "./PairwiseScreensaver";
 import NavigationSwipeHandler from "./MobileSwipeHandler";
 import DeepLinkCodeStringAlert from "./DeepLinkCodeStringAlert";
 import { IThemeProps, themeColor, themeText } from "./ThemeContainer";
+import AdminDrawer from "./AdminDrawer";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -110,12 +111,14 @@ const ApplicationContainer = (props: IProps) => {
     hasMediaContent,
     workspaceLoading,
     userAuthenticated,
+    isAdminDrawerOpen,
     updateUserSettings,
     openFeedbackDialog,
     nextPrevChallenges,
     screensaverVisible,
     setScreensaverState,
     toggleNavigationMap,
+    setAdminDrawerState,
     initializationError,
     setNavigationMapState,
     setSingleSignOnDialogState,
@@ -228,6 +231,7 @@ const ApplicationContainer = (props: IProps) => {
   return (
     <React.Fragment>
       <Modals />
+      <AdminDrawer />
       <DeepLinkCodeStringAlert />
       <LoadingOverlay visible={workspaceLoading} />
       <GlobalKeyboardShortcuts />
@@ -301,6 +305,25 @@ const ApplicationContainer = (props: IProps) => {
                     appTheme:
                       user.settings.appTheme === "dark" ? "light" : "dark",
                   })
+                }
+              />
+            </Tooltip2>
+          )}
+          {isUserAdmin && (
+            <Tooltip2
+              usePortal={false}
+              position="bottom"
+              openOnTargetFocus={false}
+              content="Open Admin Drawer"
+            >
+              <IconButton
+                icon="shield"
+                style={{ padding: 0 }}
+                color={COLORS.SECONDARY_PINK}
+                hoverColor={COLORS.RED}
+                aria-label="Toggle the admin drawer"
+                onClick={() =>
+                  setAdminDrawerState({ isOpen: !isAdminDrawerOpen })
                 }
               />
             </Tooltip2>
@@ -385,8 +408,11 @@ const ApplicationContainer = (props: IProps) => {
                 </UserBio>
                 <div className="dropdown-links">
                   <Link id="account-link" to="/account">
-                    <Icon icon="user" style={{ marginRight: 10 }} />
-                    My Account
+                    <Icon
+                      style={{ marginRight: 10 }}
+                      icon={isUserAdmin ? "shield" : "user"}
+                    />
+                    My Account{isUserAdmin ? " (Admin)" : ""}
                   </Link>
                   <Link
                     id="pairwise-about-link"
@@ -812,6 +838,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
   userLoading: Modules.selectors.user.loading(state),
   isUserAdmin: Modules.selectors.auth.isUserAdmin(state),
+  isAdminDrawerOpen: Modules.selectors.app.isAdminDrawerOpen(state),
   location: Modules.selectors.app.locationSelector(state),
   screensaverVisible: Modules.selectors.app.screensaverVisible(state),
   initialized: Modules.selectors.app.appSelector(state).initialized,
@@ -837,6 +864,7 @@ const dispatchProps = {
   storeAccessToken: Modules.actions.auth.storeAccessToken,
   updateChallenge: Modules.actions.challenges.updateChallenge,
   setFeedbackDialogState: Modules.actions.feedback.setFeedbackDialogState,
+  setAdminDrawerState: Modules.actions.app.setAdminDrawerState,
 };
 
 const mergeProps = (

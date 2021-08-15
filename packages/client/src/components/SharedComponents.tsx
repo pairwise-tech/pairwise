@@ -235,15 +235,23 @@ export const IconNavLink = styled(
   }
 `;
 
-export const IconButton = styled(Button)`
+export const IconButton = styled(Button)<{ hoverColor?: string }>`
   .bp3-icon:only-child {
-    color: ${(props: IThemeProps) => {
+    color: ${(props) => {
+      if (props.color !== undefined) {
+        return props.color;
+      }
+
       return props.theme.dark ? C.TEXT_CONTENT : undefined;
     }} !important;
   }
 
   &:hover .bp3-icon:only-child {
-    color: ${(props: IThemeProps) => {
+    color: ${(props) => {
+      if (props.hoverColor !== undefined) {
+        return props.hoverColor;
+      }
+
       return props.theme.dark ? "white" : undefined;
     }} !important;
   }

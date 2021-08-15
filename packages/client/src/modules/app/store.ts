@@ -13,6 +13,7 @@ export interface State {
   initializationError: boolean;
   screensaver: boolean;
   loadingAnimationComplete: boolean;
+  adminDrawerOpen: boolean;
 }
 
 const initialState = {
@@ -21,6 +22,7 @@ const initialState = {
   initializationError: false,
   screensaver: false,
   loadingAnimationComplete: false,
+  adminDrawerOpen: false,
 };
 
 const app = createReducer<State, AppActionTypes>(initialState)
@@ -39,6 +41,10 @@ const app = createReducer<State, AppActionTypes>(initialState)
   .handleAction(actions.setLoadingAnimationComplete, (state) => ({
     ...state,
     loadingAnimationComplete: true,
+  }))
+  .handleAction(actions.setAdminDrawerState, (state, action) => ({
+    ...state,
+    adminDrawerOpen: action.payload.isOpen,
   }))
   .handleAction(actions.locationChange, (state, action) => ({
     ...state,

@@ -582,8 +582,6 @@ class NavigationOverlay extends React.Component<
       }
     }
 
-    console.log(challenge.id, isModifiedChallenge);
-
     const isDark = user.settings.appTheme === "dark";
     const { selectedIndex, menuSelectColumn } = menuSelectState;
     const isMenuItemSelected =

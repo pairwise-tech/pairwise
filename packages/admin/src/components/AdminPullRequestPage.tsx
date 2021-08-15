@@ -241,9 +241,9 @@ class DiffContent extends React.PureComponent<DiffContentProps, {}> {
           </>
         )}
         {!contentDiff && !instructionsDiff && (
-          <DiffTitle>
+          <SubTitle>
             No diff exists for the challenge content or instructions.
-          </DiffTitle>
+          </SubTitle>
         )}
       </ChallengeDiff>
     );
@@ -264,6 +264,11 @@ const DiffTitle = styled.h3`
   margin-bottom: 16px;
   font-family: Avenir, Arial, Helvetica, sans-serif;
   ${themeText(COLORS.SECONDARY_YELLOW, COLORS.TEXT_LIGHT_THEME)};
+`;
+
+const SubTitle = styled.p`
+  font-family: Avenir, Arial, Helvetica, sans-serif;
+  ${defaultTextColor};
 `;
 
 const ChallengeDiff = styled.div`
