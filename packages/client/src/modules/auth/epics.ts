@@ -109,6 +109,7 @@ const storeAccessTokenEpic: EpicSignature = (action$, _, deps) => {
 const isUserAdminEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.storeAccessTokenSuccess)),
+    filter((x) => x.payload.accessToken !== ""),
     mergeMap(deps.api.isUserAdmin),
     map((result) => {
       if (result.value) {
