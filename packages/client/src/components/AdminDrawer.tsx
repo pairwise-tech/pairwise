@@ -11,30 +11,13 @@ import { getChallengeSlug } from "@pairwise/common";
 import { composeWithProps } from "../tools/utils";
 
 /** ===========================================================================
- * Types & Config
- * ============================================================================
- */
-
-interface IState {
-  pullRequestId: string;
-}
-
-/** ===========================================================================
  * AdminDrawer Component
  * ---------------------------------------------------------------------------
  * This component is only visible to Pairwise admin users.
  * ============================================================================
  */
 
-class AdminDrawer extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = {
-      pullRequestId: "",
-    };
-  }
-
+class AdminDrawer extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     const {
       isMobile,
@@ -42,7 +25,9 @@ class AdminDrawer extends React.Component<IProps, IState> {
       isUserAdmin,
       challengeMap,
       isAdminDrawerOpen,
+      adminPullRequestId,
       setAdminDrawerState,
+      setAdminPullRequestId,
       pullRequestChallengeIds,
       fetchingPullRequestCourses,
     } = this.props;
@@ -70,20 +55,20 @@ class AdminDrawer extends React.Component<IProps, IState> {
                 <TextItem>
                   <Bold>Load Pull Request Course Content</Bold>
                 </TextItem>
-                <form style={{ marginTop: 0, marginBottom: 12 }}>
+                <form
+                  onSubmit={this.handleFetchPullRequestCourseList}
+                  style={{ marginTop: 0, marginBottom: 12 }}
+                >
                   <InputField
                     type="text"
                     autoFocus={!isMobile}
                     id="admin-pull-request-diff-id"
                     placeholder={isMobile ? "id" : "Enter a pull request id"}
                     className={Classes.INPUT}
-                    value={this.state.pullRequestId}
+                    value={adminPullRequestId}
                     onChange={(event) =>
-                      this.setState({
-                        pullRequestId: event.target.value,
-                      })
+                      setAdminPullRequestId(event.target.value)
                     }
-                    onSubmit={this.handleFetchPullRequestCourseList}
                   />
                   <Button
                     style={{ width: isMobile ? 85 : 175, marginTop: 12 }}
@@ -145,9 +130,9 @@ class AdminDrawer extends React.Component<IProps, IState> {
   handleFetchPullRequestCourseList = (e: any) => {
     e.preventDefault();
 
-    const { pullRequestId } = this.state;
-    if (pullRequestId !== "") {
-      this.props.fetchPullRequestCourseList(pullRequestId);
+    const { adminPullRequestId } = this.props;
+    if (adminPullRequestId !== "") {
+      this.props.fetchPullRequestCourseList(adminPullRequestId);
     }
   };
 }
@@ -216,6 +201,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   isDarkTheme: Modules.selectors.user.isDarkTheme(state),
   isUserAdmin: Modules.selectors.auth.isUserAdmin(state),
   isAdminDrawerOpen: Modules.selectors.app.isAdminDrawerOpen(state),
+  adminPullRequestId: Modules.selectors.app.adminPullRequestId(state),
   challengeMap: Modules.selectors.challenges.getChallengeMap(state),
   pullRequestChallengeIds:
     Modules.selectors.challenges.pullRequestChallengeIds(state),
@@ -225,6 +211,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 
 const dispatchProps = {
   setAdminDrawerState: Modules.actions.app.setAdminDrawerState,
+  setAdminPullRequestId: Modules.actions.app.setAdminPullRequestId,
   fetchPullRequestCourseList:
     Modules.actions.challenges.fetchPullRequestCourseList,
 };

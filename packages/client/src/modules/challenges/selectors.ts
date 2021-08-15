@@ -7,6 +7,7 @@ import { SANDBOX_ID } from "tools/constants";
 import { findCourseById } from "tools/utils";
 import { userProgress } from "modules/user/selectors";
 import { BreadcrumbsData } from "components/Breadcrumbs";
+import { appState } from "../app/selectors";
 
 /** ===========================================================================
  * Selectors
@@ -585,6 +586,20 @@ export const revealSolutionCode = createSelector(
 export const pullRequestChallengeIds = createSelector(
   [challengesState],
   (x) => x.pullRequestChallengeIds,
+);
+
+/**
+ * Assume there is pull request content loaded if the pull request
+ * id exists and the challenge ids are not empty.
+ */
+export const pullRequestDataPresent = createSelector(
+  [challengesState, appState],
+  (challenges, app) => {
+    return (
+      app.adminPullRequestId !== "" &&
+      challenges.pullRequestChallengeIds.size > 0
+    );
+  },
 );
 
 export const fetchingPullRequestCourses = createSelector(

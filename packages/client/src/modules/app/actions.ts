@@ -19,6 +19,7 @@ enum ActionTypesEnum {
   SET_SCREENSAVER_STATE = "SET_SCREENSAVER_STATE",
   LOADING_ANIMATION_COMPLETE = "LOADING_ANIMATION_COMPLETE",
   SET_ADMIN_DRAWER_STATE = "SET_ADMIN_DRAWER_STATE",
+  SET_ADMIN_PULL_REQUEST_ID = "SET_ADMIN_PULL_REQUEST_ID",
 }
 
 /** ===========================================================================
@@ -71,3 +72,7 @@ export const setLoadingAnimationComplete = createAction(
 export const setAdminDrawerState = createAction(
   ActionTypesEnum.SET_ADMIN_DRAWER_STATE,
 )<{ isOpen: boolean }>();
+
+export const setAdminPullRequestId = createAction(
+  ActionTypesEnum.SET_ADMIN_PULL_REQUEST_ID,
+)<string>();
