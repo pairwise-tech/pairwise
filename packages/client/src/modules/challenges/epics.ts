@@ -322,11 +322,22 @@ const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+/**
+ * Create the inverse challenge map whenever the course content is updated.
+ */
 const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
   return merge(
     action$.pipe(
       filter(isActionOf(Actions.fetchCoursesSuccess)),
       map(({ payload: { courses } }) => {
+        const challengeMap = createInverseChallengeMapping(courses);
+        return challengeMap;
+      }),
+    ),
+    action$.pipe(
+      filter(isActionOf(Actions.fetchPullRequestCourseListSuccess)),
+      map((x) => x.payload.courseList),
+      map((courses) => {
         const challengeMap = createInverseChallengeMapping(courses);
         return challengeMap;
       }),

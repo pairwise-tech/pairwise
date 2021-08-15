@@ -32,7 +32,6 @@ interface IState {
   displayName: string;
   editMode: boolean;
   editedEmail: boolean;
-  pullRequestId: string;
   editAvatarUseGravatar: boolean;
 }
 
@@ -50,7 +49,6 @@ class Account extends React.Component<IProps, IState> {
       givenName: "",
       familyName: "",
       displayName: "",
-      pullRequestId: "",
       editMode: false,
       editedEmail: false,
       editAvatarUseGravatar: false,
@@ -65,13 +63,7 @@ class Account extends React.Component<IProps, IState> {
 
   render(): Nullable<JSX.Element> {
     const { editMode: edit } = this.state;
-    const {
-      user,
-      skeletons,
-      isUserAdmin,
-      emailVerificationStatus,
-      fetchingPullRequestCourses,
-    } = this.props;
+    const { user, skeletons, emailVerificationStatus } = this.props;
 
     const { payments, profile } = user;
     if (!payments || !profile || !skeletons) {
@@ -263,54 +255,6 @@ class Account extends React.Component<IProps, IState> {
           Feel free to reach out to <b>sean@pairwise.tech</b> if you want to
           contact someone directly.
         </Text>
-        {isUserAdmin && (
-          <>
-            <PageTitle
-              style={{
-                marginTop: 24,
-                marginBottom: 0,
-                color: COLORS.RED,
-              }}
-            >
-              Admin Controls
-            </PageTitle>
-            <AdminControlBox>
-              <TextItem id="profile-display-name">
-                <Bold>Load Pull Request Course Content</Bold>
-              </TextItem>
-              <div style={{ marginTop: 12, marginBottom: 12 }}>
-                <InputField
-                  style={{ margin: 0, marginRight: 12 }}
-                  type="text"
-                  id="admin-pull-request-diff-id"
-                  placeholder="Enter a pull request id"
-                  className={Classes.INPUT}
-                  value={this.state.pullRequestId}
-                  onChange={(event) =>
-                    this.setState({
-                      pullRequestId: event.target.value,
-                    })
-                  }
-                />
-                <Button
-                  style={{ width: 150 }}
-                  disabled={fetchingPullRequestCourses}
-                  id="admin-pull-request-diff-button"
-                  text={
-                    fetchingPullRequestCourses
-                      ? "Loading..."
-                      : "Load Course List"
-                  }
-                  onClick={this.handleFetchPullRequestCourseList}
-                />
-                <TextItem>
-                  Modified challenges will be highlighted with yellow in the
-                  navigation menu.
-                </TextItem>
-              </div>
-            </AdminControlBox>
-          </>
-        )}
       </PageContainer>
     );
   }
@@ -401,13 +345,6 @@ class Account extends React.Component<IProps, IState> {
   handleDiscardChanges = () => {
     this.setState({ editMode: false });
   };
-
-  handleFetchPullRequestCourseList = () => {
-    const { pullRequestId } = this.state;
-    if (pullRequestId !== "") {
-      this.props.fetchPullRequestCourseList(pullRequestId);
-    }
-  };
 }
 
 /** ===========================================================================
@@ -457,13 +394,6 @@ const Underline = styled.span`
   text-decoration: underline;
 `;
 
-const AdminControlBox = styled.div`
-  border-radius: 2px;
-  padding-left: 8px;
-  width: 600px;
-  border: 1px solid ${COLORS.RED};
-`;
-
 /** ===========================================================================
  * Props
  * ============================================================================
@@ -471,9 +401,6 @@ const AdminControlBox = styled.div`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
-  isUserAdmin: Modules.selectors.auth.isUserAdmin(state),
-  fetchingPullRequestCourses:
-    Modules.selectors.challenges.fetchingPullRequestCourses(state),
   skeletons: Modules.selectors.challenges.getCourseSkeletons(state),
   emailVerificationStatus:
     Modules.selectors.user.emailVerificationStatus(state),
@@ -483,8 +410,6 @@ const dispatchProps = {
   initializeApp: Modules.actions.app.initializeApp,
   updateUser: Modules.actions.user.updateUser,
   updateUserEmail: Modules.actions.user.updateUserEmail,
-  fetchPullRequestCourseList:
-    Modules.actions.challenges.fetchPullRequestCourseList,
   setEmailVerificationStatus: Modules.actions.user.setEmailVerificationStatus,
 };
 

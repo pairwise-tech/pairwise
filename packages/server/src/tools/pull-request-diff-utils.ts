@@ -330,15 +330,31 @@ const getPatchChallengeIds = (
   const challengeIdSet: Set<string> = new Set();
   const lineNumberSet = new Set(allChangedLines);
 
+  // Crude flag, see comment below
+  let hasFoundId = false;
+
   for (let i = 1; i < jsonByLines.length + 1; i++) {
     const lineNumber = i;
     const line = jsonByLines[lineNumber - 1];
+
     if (line.includes(`"id":`)) {
       const id = line.match(/\"id\": \"(.*)\"/).pop();
+      hasFoundId = true;
       currentChallengeId = id;
     }
 
-    if (lineNumberSet.has(lineNumber)) {
+    /**
+     * We have to avoid mis-identifying the challenge id... use this crude
+     * heuristic to determine when we've reached the end of a challenge block
+     * and do not mark the current challenge id as changed until it is
+     * reset to a new challenge id, otherwise it would indicate the previous
+     * challenge was modified.
+     */
+    if (line.replace(/ /g, "") === "},") {
+      hasFoundId = false;
+    }
+
+    if (lineNumberSet.has(lineNumber) && hasFoundId) {
       challengeIdSet.add(currentChallengeId);
     }
   }

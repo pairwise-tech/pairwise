@@ -45,12 +45,7 @@ import {
 import { IconButton, RotatingIcon } from "./SharedComponents";
 import cx from "classnames";
 import { Select } from "@blueprintjs/select";
-import {
-  defaultTextColor,
-  IThemeProps,
-  themeColor,
-  themeText,
-} from "./ThemeContainer";
+import { defaultTextColor, IThemeProps, themeColor } from "./ThemeContainer";
 
 /** ===========================================================================
  * Types & Config
@@ -581,8 +576,6 @@ class NavigationOverlay extends React.Component<
         isModifiedChallenge = true;
       }
     }
-
-    console.log(challenge.id, isModifiedChallenge);
 
     const isDark = user.settings.appTheme === "dark";
     const { selectedIndex, menuSelectColumn } = menuSelectState;

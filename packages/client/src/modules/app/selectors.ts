@@ -28,3 +28,8 @@ export const screensaverVisible = createSelector(
   appSelector,
   (app) => app.screensaver,
 );
+
+export const isAdminDrawerOpen = createSelector(
+  appSelector,
+  (app) => app.adminDrawerOpen,
+);

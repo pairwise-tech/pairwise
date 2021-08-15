@@ -44,6 +44,7 @@ interface NonMappedKeys {
   arrowleft: ShortcutKeyHandler;
   arrowright: ShortcutKeyHandler;
   "cmd+shift+e": ShortcutKeyHandler; // Codepress editing toolbar
+  "cmd+u": ShortcutKeyHandler; // Admin drawer menu
 }
 
 /**
@@ -141,6 +142,7 @@ const KeyboardShortcuts = ({ keymap }: KeyboardShortcutsProps) => {
         )
         .map((x) => metaMap[x])
         .filter(Boolean);
+
       // All meta keys not included in the sequence
       const inverseMeta = difference(Object.values(metaMap), meta);
 

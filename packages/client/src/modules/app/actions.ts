@@ -18,6 +18,7 @@ enum ActionTypesEnum {
   APP_INITIALIZATION_FAILED = "APP_INITIALIZATION_FAILED",
   SET_SCREENSAVER_STATE = "SET_SCREENSAVER_STATE",
   LOADING_ANIMATION_COMPLETE = "LOADING_ANIMATION_COMPLETE",
+  SET_ADMIN_DRAWER_STATE = "SET_ADMIN_DRAWER_STATE",
 }
 
 /** ===========================================================================
@@ -66,3 +67,7 @@ export const setScreensaverState = createAction(
 export const setLoadingAnimationComplete = createAction(
   ActionTypesEnum.LOADING_ANIMATION_COMPLETE,
 )();
+
+export const setAdminDrawerState = createAction(
+  ActionTypesEnum.SET_ADMIN_DRAWER_STATE,
+)<{ isOpen: boolean }>();
