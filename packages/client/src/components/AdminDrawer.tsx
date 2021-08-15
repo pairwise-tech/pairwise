@@ -21,6 +21,8 @@ interface IState {
 
 /** ===========================================================================
  * AdminDrawer Component
+ * ---------------------------------------------------------------------------
+ * This component is only visible to Pairwise admin users.
  * ============================================================================
  */
 
@@ -70,8 +72,8 @@ class AdminDrawer extends React.Component<IProps, IState> {
                 </TextItem>
                 <form style={{ marginTop: 0, marginBottom: 12 }}>
                   <InputField
-                    autoFocus
                     type="text"
+                    autoFocus={!isMobile}
                     id="admin-pull-request-diff-id"
                     placeholder={isMobile ? "id" : "Enter a pull request id"}
                     className={Classes.INPUT}
