@@ -229,7 +229,7 @@ const ApplicationContainer = (props: IProps) => {
         text="Toggle App Theme"
       />
       <MenuItem
-        icon={<Icon icon="video" color="rgb(202,8,19)" />}
+        icon={<Icon icon="video" color={COLORS.YOUTUBE_RED} />}
         text="Pairwise on YouTube"
         onClick={() => {
           const url =
@@ -371,9 +371,9 @@ const ApplicationContainer = (props: IProps) => {
             >
               <IconButton
                 icon="video"
-                color="rgb(202,8,19)"
-                hover_color="rgb(202,8,19)"
                 style={{ padding: 0 }}
+                color={COLORS.YOUTUBE_RED}
+                hover_color={COLORS.YOUTUBE_RED}
                 aria-label="View Pairwise on YouTube"
                 onClick={() => {
                   const url =
