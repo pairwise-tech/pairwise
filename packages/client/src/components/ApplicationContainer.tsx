@@ -336,6 +336,7 @@ const ApplicationContainer = (props: IProps) => {
           )}
           {isUserAdmin && (
             <Tooltip2
+              disabled={isMobile}
               usePortal={false}
               position="bottom"
               openOnTargetFocus={false}
