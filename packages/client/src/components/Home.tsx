@@ -9,6 +9,7 @@ import { PageContainer, Text, PageTitle } from "./SharedComponents";
 import { COLORS, MOBILE } from "tools/constants";
 import SEO from "./SEO";
 import { defaultTextColor, themeColor, themeText } from "./ThemeContainer";
+import { YoutubeEmbed } from "./MediaArea";
 
 /** ===========================================================================
  * Home Component
@@ -32,6 +33,7 @@ class Home extends React.Component<IProps, {}> {
         <FlexContainer>
           <ContentContainer style={{ paddingRight: 50, marginBottom: 25 }}>
             <PageTitle>Welcome to Pairwise!</PageTitle>
+            <YoutubeEmbed url="https://www.youtube.com/embed/d2DShyE37T4" />
             {hasPurchasedTypeScriptCourse ? (
               <ContentText>
                 Thank you for purchasing the Pairwise Course! Please enjoy the
@@ -39,44 +41,41 @@ class Home extends React.Component<IProps, {}> {
               </ContentText>
             ) : (
               <>
-                <ContentText style={{ fontWeight: "bold" }}>
-                  What is Pairwise?
-                </ContentText>
+                <ContentTitle>What is Pairwise?</ContentTitle>
                 <ContentText>
-                  Pairwise is a single curriculum of challenges and projects
-                  which you can use to learn all of the fundamental skills to
-                  build modern web and mobile applications.
+                  Pairwise is an online platform where you can learn to code by
+                  solving challenges and building projects.
                 </ContentText>
+                <ContentTitle>What will I learn?</ContentTitle>
                 <ContentText>
-                  Most coding bootcamps cost $10,000 USD or more, and a computer
-                  science degree from a university is even more expensive and
-                  takes years to complete.
+                  You will learn the most popular, in-demand fullstack web
+                  development stack: TypeScript, React, NodeJS/Express, and
+                  Postgres.
                 </ContentText>
+                <ContentTitle>How much does it cost?</ContentTitle>
                 <ContentText>
-                  Pairwise is the fastest and most affordable way to learn these
-                  skills.
+                  The first three modules covering HTML, CSS, and TypeScript are
+                  free. The remaining course currently costs only $50.
                 </ContentText>
-                <ContentText style={{ fontWeight: "bold" }}>
-                  How much does it cost?
-                </ContentText>
+                <ContentTitle>
+                  How is this different from other platforms?
+                </ContentTitle>
                 <ContentText>
-                  The Pairwise FullStack TypeScript Course is currently in{" "}
-                  <Bold style={{ textDecoration: "underline " }}>BETA</Bold> and
-                  available to purchase now for{" "}
-                  <PaymentText>$50 USD</PaymentText>. This includes all of the
-                  modules you can view in the course navigation menu, and covers
-                  HTML & CSS, basic programming, frontend and backend
-                  development, mobile development, and other skills like testing
-                  and deploying software.
+                  Pairwise combines everything you need to learn to get a job
+                  into a single curriculum, which is comprised of hands-on
+                  challenges and projects. Think of it like a coding bootcamp at
+                  a fraction of the cost.
                 </ContentText>
               </>
             )}
-            {this.props.skeletons?.map(this.renderCourseItem)}
+            {/* Hidden for now: */}
+            {/* {this.props.skeletons?.map(this.renderCourseItem)} */}
           </ContentContainer>
           <CourseProgressContainer>
             {userCourseProgressSummary && currentNavigationOverlayCourse && (
               <>
                 <PageTitle>Course Progress</PageTitle>
+                {this.renderTypeScriptCourseButtonBox()}
                 <ContentText>
                   You have completed {userCourseProgressSummary.totalCompleted}{" "}
                   out of {userCourseProgressSummary.totalChallenges} challenges
@@ -179,6 +178,73 @@ class Home extends React.Component<IProps, {}> {
     );
   };
 
+  renderTypeScriptCourseButtonBox = () => {
+    const { user, skeletons, challengeMap } = this.props;
+    const { payments, lastActiveChallengeIds } = user;
+    const skeleton = skeletons?.find((c) => c.id === "fpvPtfu7s");
+
+    if (!skeleton) {
+      return null;
+    }
+
+    const paidForCourse = payments?.find((p) => p.courseId === skeleton.id);
+    const firstCourseChallenge = skeleton.modules[0].challenges[0];
+    const isCourseFree = skeleton.free;
+    const canAccessCourse = paidForCourse || isCourseFree;
+    const courseId = skeleton.id;
+
+    if (!firstCourseChallenge) {
+      return null;
+    }
+
+    /**
+     * Determine the url slug for the last active challenge for the course
+     * to redirect to.
+     */
+    let lastActiveChallengeExists = false;
+    let courseChallengeLinkId = firstCourseChallenge.id;
+    if (courseId in lastActiveChallengeIds) {
+      lastActiveChallengeExists = true;
+      courseChallengeLinkId = lastActiveChallengeIds[courseId];
+    }
+
+    let slug = courseChallengeLinkId;
+    if (challengeMap && courseChallengeLinkId in challengeMap) {
+      const { challenge } = challengeMap[courseChallengeLinkId];
+      slug = getChallengeSlug(challenge);
+    }
+
+    return (
+      <ButtonsBox>
+        {canAccessCourse ? (
+          <Link id={`course-link-0-start`} to={`workspace/${slug}`}>
+            <Button large intent="success" className="courseLinkContinue">
+              {lastActiveChallengeExists ? "Resume Course" : "Start Now"}
+            </Button>
+          </Link>
+        ) : (
+          <>
+            <Link id={`course-link-0-start`} to={`workspace/${slug}`}>
+              <Button large intent="success">
+                {lastActiveChallengeExists
+                  ? "Resume Course"
+                  : "Start Now for Free"}
+              </Button>
+            </Link>
+            <Button
+              large
+              // intent="success"
+              id={`course-link-0-purchase`}
+              onClick={this.handlePurchaseCourse(skeleton.id)}
+            >
+              Purchase Course
+            </Button>
+          </>
+        )}
+      </ButtonsBox>
+    );
+  };
+
   handlePurchaseCourse = (courseId: string) => () => {
     this.props.handlePaymentCourseIntent({ courseId });
   };
@@ -251,6 +317,11 @@ const ModuleProgressPercentage = styled.div`
 
 const ContentText = styled(Text)`
   margin-top: 14px;
+`;
+
+const ContentTitle = styled(ContentText)`
+  font-weight: bold;
+  ${themeColor("color", COLORS.TEXT_WHITE)}
 `;
 
 const CourseTitle = styled.h2`

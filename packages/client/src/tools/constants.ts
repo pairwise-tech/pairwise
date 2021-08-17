@@ -14,6 +14,7 @@ export const COLORS = {
   RED: "#f7142b",
   LIGHT_RED: "#fc3045",
   PINK: "rgb(252, 66, 109, 1)",
+  YOUTUBE_RED: "rgb(202,8,19)",
   SECONDARY_YELLOW: "#ffdf75",
   SECONDARY_ORANGE: "#FFB85A",
   HEADER_BORDER: "#176191",

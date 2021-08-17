@@ -12,7 +12,7 @@ import ENV from "../tools/server-env";
 import { emailService, EmailService } from "../email/email.service";
 import { validateEmailUpdateRequest } from "../tools/validation-utils";
 import { RequestUser } from "../types";
-import { isAdminEmail } from "./admin.guard";
+import { isAdminEmail } from "./admin-auth";
 
 export type SigninStrategy = "Email" | "GitHub" | "Facebook" | "Google";
 

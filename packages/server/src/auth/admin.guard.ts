@@ -2,17 +2,7 @@ import { AuthGuard } from "@nestjs/passport";
 import { UnauthorizedException, BadRequestException } from "@nestjs/common";
 import getenv from "getenv";
 import { UserProfile } from "@pairwise/common";
-
-/**
- * Hard-coded list of administrators emails.
- */
-const WHITELISTED_ADMIN_EMAILS = getenv.array(
-  "WHITELISTED_ADMIN_EMAILS",
-  "string",
-  [],
-);
-
-const ADMIN_EMAILS = new Set(WHITELISTED_ADMIN_EMAILS);
+import { isAdminEmail } from "./admin-auth";
 
 /**
  * Hard-coded Admin Access Token. This is dangerous!!! This should be fully
@@ -23,13 +13,6 @@ const ADMIN_TOKEN = getenv(
   "DANGEROUSLY_WHITELISTED_PUBLIC_ADMIN_ACCESS_TOKEN",
   "",
 );
-
-/**
- * Returns true is the provided email is whitelisted as an admin user.
- */
-export const isAdminEmail = (email: string) => {
-  return ADMIN_EMAILS.has(email);
-};
 
 /**
  * Admin authentication guard. Requires jwt authentication and then only

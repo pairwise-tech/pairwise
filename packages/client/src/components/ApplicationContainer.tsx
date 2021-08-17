@@ -228,6 +228,15 @@ const ApplicationContainer = (props: IProps) => {
         onClick={toggleAppTheme}
         text="Toggle App Theme"
       />
+      <MenuItem
+        icon={<Icon icon="video" color={COLORS.YOUTUBE_RED} />}
+        text="Pairwise on YouTube"
+        onClick={() => {
+          const url =
+            "https://www.youtube.com/channel/UCG52QHurjYWfqFBQR_60EUQ";
+          window.open(url, "_blank")?.focus();
+        }}
+      />
     </Menu>
   );
 
@@ -351,6 +360,26 @@ const ApplicationContainer = (props: IProps) => {
                 onClick={() =>
                   setAdminDrawerState({ isOpen: !isAdminDrawerOpen })
                 }
+              />
+            </Tooltip2>
+          )}
+          {!isMobile && (
+            <Tooltip2
+              usePortal={false}
+              position="bottom"
+              content="Subscribe to Pairwise on YouTube"
+            >
+              <IconButton
+                icon="video"
+                style={{ padding: 0 }}
+                color={COLORS.YOUTUBE_RED}
+                hover_color={COLORS.YOUTUBE_RED}
+                aria-label="View Pairwise on YouTube"
+                onClick={() => {
+                  const url =
+                    "https://www.youtube.com/channel/UCG52QHurjYWfqFBQR_60EUQ";
+                  window.open(url, "_blank")?.focus();
+                }}
               />
             </Tooltip2>
           )}
