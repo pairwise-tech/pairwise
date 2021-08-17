@@ -43,31 +43,23 @@ class Home extends React.Component<IProps, {}> {
                   What is Pairwise?
                 </ContentText>
                 <ContentText>
-                  Pairwise is a single curriculum of challenges and projects
-                  which you can use to learn all of the fundamental skills to
-                  build modern web and mobile applications.
+                  Pairwise is an online platform where you can learn to code by
+                  solving challenges and building projects.
+                </ContentText>
+                <ContentText style={{ fontWeight: "bold" }}>
+                  What will I learn?
                 </ContentText>
                 <ContentText>
-                  Most coding bootcamps cost $10,000 USD or more, and a computer
-                  science degree from a university is even more expensive and
-                  takes years to complete.
-                </ContentText>
-                <ContentText>
-                  Pairwise is the fastest and most affordable way to learn these
-                  skills.
+                  You will learn the most popular, in-demand fullstack web
+                  development stack: TypeScript, React, NodeJS/Express, and
+                  Postgres.
                 </ContentText>
                 <ContentText style={{ fontWeight: "bold" }}>
                   How much does it cost?
                 </ContentText>
                 <ContentText>
-                  The Pairwise FullStack TypeScript Course is currently in{" "}
-                  <Bold style={{ textDecoration: "underline " }}>BETA</Bold> and
-                  available to purchase now for{" "}
-                  <PaymentText>$50 USD</PaymentText>. This includes all of the
-                  modules you can view in the course navigation menu, and covers
-                  HTML & CSS, basic programming, frontend and backend
-                  development, mobile development, and other skills like testing
-                  and deploying software.
+                  The first three modules covering HTML, CSS, and TypeScript are
+                  free. The remaining course currently costs only $50.
                 </ContentText>
               </>
             )}
