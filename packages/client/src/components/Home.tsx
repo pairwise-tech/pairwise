@@ -321,7 +321,7 @@ const ContentText = styled(Text)`
 
 const ContentTitle = styled(ContentText)`
   font-weight: bold;
-  color: ${COLORS.TEXT_WHITE};
+  ${themeColor("color", COLORS.TEXT_WHITE)}
 `;
 
 const CourseTitle = styled.h2`
