@@ -214,33 +214,32 @@ class Home extends React.Component<IProps, {}> {
       slug = getChallengeSlug(challenge);
     }
 
-    return (
+    return canAccessCourse ? (
+      <Link id={`course-link-0-start`} to={`workspace/${slug}`}>
+        <Button
+          large
+          intent="success"
+          style={{ width: 250 }}
+          className="courseLinkContinue"
+        >
+          {lastActiveChallengeExists ? "Resume Course" : "Start Now"}
+        </Button>
+      </Link>
+    ) : (
       <ButtonsBox>
-        {canAccessCourse ? (
-          <Link id={`course-link-0-start`} to={`workspace/${slug}`}>
-            <Button large intent="success" className="courseLinkContinue">
-              {lastActiveChallengeExists ? "Resume Course" : "Start Now"}
-            </Button>
-          </Link>
-        ) : (
-          <>
-            <Link id={`course-link-0-start`} to={`workspace/${slug}`}>
-              <Button large intent="success">
-                {lastActiveChallengeExists
-                  ? "Resume Course"
-                  : "Start Now for Free"}
-              </Button>
-            </Link>
-            <Button
-              large
-              // intent="success"
-              id={`course-link-0-purchase`}
-              onClick={this.handlePurchaseCourse(skeleton.id)}
-            >
-              Purchase Course
-            </Button>
-          </>
-        )}
+        <Link id={`course-link-0-start`} to={`workspace/${slug}`}>
+          <Button large intent="success">
+            {lastActiveChallengeExists ? "Resume Course" : "Start Now for Free"}
+          </Button>
+        </Link>
+        <Button
+          large
+          // intent="success"
+          id={`course-link-0-purchase`}
+          onClick={this.handlePurchaseCourse(skeleton.id)}
+        >
+          Purchase Course
+        </Button>
       </ButtonsBox>
     );
   };
@@ -361,11 +360,13 @@ const ButtonsBox = styled.div`
 
   & > button,
   & > a {
+    flex: 1 100%;
     display: block;
     text-align: center;
-    flex: 1 100%;
+
     &:not(:last-child) {
       margin-right: 20px;
+
       @media ${MOBILE} {
         margin-right: 0px;
         margin-bottom: 20px;
