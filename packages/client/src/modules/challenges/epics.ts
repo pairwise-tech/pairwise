@@ -127,25 +127,6 @@ const searchEpic: EpicSignature = (action$) => {
 };
 
 /**
- * Fetch the course content skeletons when the app launches.
- */
-const contentSkeletonInitializationEpic: EpicSignature = (action$, _, deps) => {
-  return action$.pipe(
-    filter(
-      isActionOf([Actions.initializeApp, Actions.fetchNavigationSkeleton]),
-    ),
-    mergeMap(deps.api.fetchCourseSkeletons),
-    map(({ value: courses, error }) => {
-      if (courses) {
-        return Actions.fetchNavigationSkeletonSuccess(courses);
-      } else {
-        return Actions.fetchNavigationSkeletonFailure(error);
-      }
-    }),
-  );
-};
-
-/**
  * After a challenge or module is deleted when running Codepress, some side
  * effects are required. This epic takes care of that: updating the URL and
  * triggering the setChallengeIdContext actions to indicate the challenge id
@@ -233,14 +214,37 @@ const codepressDeleteToasterEpic: EpicSignature = (action$, state$, deps) => {
 };
 
 /**
- * Fetch the courses.
+ * Fetch the course content skeletons when the app launches.
  */
-const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
+const courseSkeletonsInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(
       isActionOf([
-        Actions.fetchCourses,
         Actions.initializeApp,
+        Actions.fetchNavigationSkeleton,
+        Actions.logoutUser,
+      ]),
+    ),
+    mergeMap(deps.api.fetchCourseSkeletons),
+    map(({ value: courses, error }) => {
+      if (courses) {
+        return Actions.fetchNavigationSkeletonSuccess(courses);
+      } else {
+        return Actions.fetchNavigationSkeletonFailure(error);
+      }
+    }),
+  );
+};
+
+/**
+ * Fetch the courses.
+ */
+const coursesInitializationEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(
+      isActionOf([
+        Actions.initializeApp,
+        Actions.fetchCourses,
         Actions.logoutUser,
       ]),
     ),
@@ -1044,7 +1048,7 @@ export default combineEpics(
   fetchAdminCourseListEpic,
   adminPullRequestDeepLinkEpic,
   courseContentResetEpic,
-  contentSkeletonInitializationEpic,
+  courseSkeletonsInitializationEpic,
   initializeChallengeStateEpic,
   inverseChallengeMappingEpic,
   saveCourse,
@@ -1056,7 +1060,7 @@ export default combineEpics(
   resetChallengeContextAfterDeletionEpic,
   codepressDeleteToasterEpic,
   updateLastActiveChallengeIdsEpic,
-  challengeInitializationEpic,
+  coursesInitializationEpic,
   syncChallengeContextToUrlEpic,
   handleSaveCodeBlobEpic,
   saveCodeBlobEpic,
