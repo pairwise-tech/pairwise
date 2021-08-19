@@ -347,6 +347,20 @@ export class AuthService {
     }
   }
 
+  /**
+   * Invalidate a jwt for the user logout flow.
+   *
+   * This currently does not happen - jwt tokens cannot be invalidated. To
+   * actually invalidate it, we would have to persist a list of blacklisted
+   * (logged out) tokens or use some other method which would subsequently be
+   * checked in the authentication flow for requests. That logic, if added,
+   * could live in this function.
+   */
+  public invalidateJwtAccessToken(token: string) {
+    // TODO: No implementation.
+    return;
+  }
+
   private getJwtAccessToken(user: UserProfile) {
     const payload: JwtPassportSignPayload = {
       uuid: user.uuid,

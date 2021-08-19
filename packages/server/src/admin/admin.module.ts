@@ -7,9 +7,11 @@ import { PaymentsModule } from "../payments/payments.module";
 import { ProgressModule } from "../progress/progress.module";
 import { ContentModule } from "../content/content.module";
 import { BlobModule } from "../blob/blob.module";
+import { AuthModule } from "../auth/auth.module";
 
 @Module({
   imports: [
+    AuthModule,
     UsersModule,
     PaymentsModule,
     FeedbackModule,

@@ -31,6 +31,7 @@ import {
 } from "../tools/pull-request-diff-utils";
 import { BlobService } from "../blob/blob.service";
 import { SUCCESS_CODES } from "../tools/constants";
+import { AuthService } from "../auth/auth.service";
 
 @Controller("admin")
 export class AdminController {
@@ -38,6 +39,8 @@ export class AdminController {
 
   constructor(
     private readonly adminService: AdminService,
+
+    private readonly authService: AuthService,
 
     private readonly userService: UserService,
 
@@ -285,13 +288,11 @@ export class AdminController {
     return parsePullRequestDiff(params.pull, courses);
   }
 
-  /**
-   * Process logout.
-   */
   @UseGuards(AdminAuthGuard)
   @Get("/logout")
-  public logout(@Req() req: Request & { logout: () => void }, @Res() res) {
-    req.logout();
+  public logout(@Req() req: Request, @Res() res) {
+    // @ts-ignore
+    this.authService.invalidateJwtAccessToken(req.headers.authorization);
     return res.send(SUCCESS_CODES.OK);
   }
 
