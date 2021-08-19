@@ -1,4 +1,9 @@
-import { createAuthenticatedUser } from "./utils/e2e-utils";
+import request from "supertest";
+import {
+  createAuthenticatedUser,
+  fetchAccessToken,
+  HOST,
+} from "./utils/e2e-utils";
 
 /** ===========================================================================
  * e2e Tests for /auth APIs
@@ -46,6 +51,34 @@ describe("Auth APIs", () => {
     checkUser(user);
 
     done();
+  });
+
+  test("/auth/logout (GET) - works", async (done) => {
+    const accessToken = await fetchAccessToken();
+    const authorizationHeader = `Bearer ${accessToken}`;
+
+    request(`${HOST}/auth/logout`)
+      .get("/")
+      .set("Authorization", authorizationHeader)
+      .expect(200)
+      .end((error, response) => {
+        expect(response.text).toBe("Success");
+        done();
+      });
+
+    /**
+     * Would only work if the backend has a way of invalidating jwt tokens.
+     * This is not implemented at present because it would require additional
+     * persistent storage, i.e. a blacklist of logged out tokens.
+     */
+    // request(`${HOST}/user/profile`)
+    //   .get("/")
+    //   .set("Authorization", authorizationHeader)
+    //   .expect(401)
+    //   .end((error, response) => {
+    //     expect(response.body.message).toBe("Unauthorized");
+    //     done(error);
+    //   });
   });
 });
 

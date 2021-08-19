@@ -165,11 +165,15 @@ export class AuthController {
 
   /**
    * Process logout.
+   *
+   * NOTE: This does not invalidate the jwt token. To actually invalidate
+   * it, we would have to persist a list of blacklisted (logged out) tokens
+   * or use some other method which would subsequently be checked in the
+   * authentication flow for requests.
    */
   @UseGuards(AuthGuard("jwt"))
   @Get("logout")
-  public logout(@Req() req: Request & { logout: () => void }, @Res() res) {
-    req.logout();
+  public logout(@Req() req: Request, @Res() res) {
     return res.send(SUCCESS_CODES.OK);
   }
 
