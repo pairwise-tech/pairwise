@@ -7,7 +7,7 @@ import { CLIENT_APP_URL, TIMEOUT, click, type } from "../support/cypress-utils";
  * ============================================================================
  */
 
-describe("Authentication Flows: signin, profile, and logout", () => {
+describe.only("Authentication Flows: signin, profile, and logout", () => {
   beforeEach(() => {
     cy.visit(CLIENT_APP_URL);
     cy.wait(TIMEOUT);
@@ -78,6 +78,9 @@ const assertAuthenticatedFlowWorks = () => {
 
   cy.get("#account-menu-dropdown").trigger("mouseover");
   click("logout-link");
+
+  // Wait to allow the logout process to fully complete
+  cy.wait(500);
 
   cy.contains("Login or Signup");
   cy.url().should("include", "home");
