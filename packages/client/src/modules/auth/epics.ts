@@ -188,6 +188,7 @@ const logoutUserEpic: EpicSignature = (action$, _, deps) => {
     pluck("payload"),
     mergeMap(async (payload) => {
       const result = await deps.api.logoutUser();
+
       if (result.error) {
         console.error("Error occurring processing logout.", result.error);
       }

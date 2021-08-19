@@ -56,7 +56,7 @@ export const logoutUser = createAction(ActionTypesEnum.LOGOUT)<{
   shouldReloadPage?: boolean;
 }>();
 
-export const logoutUserSuccess = createAction(ActionTypesEnum.LOGOUT)<{
+export const logoutUserSuccess = createAction(ActionTypesEnum.LOGOUT_SUCCESS)<{
   shouldReloadPage?: boolean;
 }>();
 
