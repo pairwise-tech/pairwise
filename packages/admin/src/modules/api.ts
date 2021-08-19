@@ -309,6 +309,13 @@ class Api extends BaseApiClass {
       );
     });
   };
+
+  logoutUser = async () => {
+    const { config } = this.getRequestHeaders();
+    return this.httpHandler(async () => {
+      return axios.get(`${HOST}/admin/logout`, config);
+    });
+  };
 }
 
 /** ===========================================================================

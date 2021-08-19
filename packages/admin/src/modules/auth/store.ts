@@ -20,7 +20,7 @@ const auth = createReducer<State, AuthActionTypes>(initialState)
     ...state,
     accessToken: action.payload.accessToken,
   }))
-  .handleAction(actions.logoutUser, (state, action) => initialState);
+  .handleAction(actions.logoutUserSuccess, (state, action) => initialState);
 
 /** ===========================================================================
  * Export

@@ -11,6 +11,7 @@ enum ActionTypesEnum {
   STORE_ACCESS_TOKEN_FAILURE = "STORE_ACCESS_TOKEN_FAILURE",
 
   LOGOUT = "LOGOUT",
+  LOGOUT_SUCCESS = "LOGOUT_SUCCESS",
 }
 
 /** ===========================================================================
@@ -34,3 +35,5 @@ export const storeAccessTokenFailure = createAction(
 )();
 
 export const logoutUser = createAction(ActionTypesEnum.LOGOUT)();
+
+export const logoutUserSuccess = createAction(ActionTypesEnum.LOGOUT_SUCCESS)();

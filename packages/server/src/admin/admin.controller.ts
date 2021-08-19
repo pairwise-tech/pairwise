@@ -9,6 +9,8 @@ import {
   Delete,
   BadRequestException,
   Query,
+  Req,
+  Res,
 } from "@nestjs/common";
 import { AdminAuthGuard } from "../auth/admin.guard";
 import { AuthenticatedRequest } from "../types";
@@ -28,6 +30,7 @@ import {
   parsePullRequestDiff,
 } from "../tools/pull-request-diff-utils";
 import { BlobService } from "../blob/blob.service";
+import { SUCCESS_CODES } from "../tools/constants";
 
 @Controller("admin")
 export class AdminController {
@@ -280,6 +283,16 @@ export class AdminController {
   async fetchPullRequestFileDiff(@Param() params) {
     const courses = this.contentService.fetchAllCoursesForAdmin();
     return parsePullRequestDiff(params.pull, courses);
+  }
+
+  /**
+   * Process logout.
+   */
+  @UseGuards(AdminAuthGuard)
+  @Get("/logout")
+  public logout(@Req() req: Request & { logout: () => void }, @Res() res) {
+    req.logout();
+    return res.send(SUCCESS_CODES.OK);
   }
 
   @UseGuards(AdminAuthGuard)

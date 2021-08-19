@@ -61,7 +61,7 @@ const auth = createReducer<State, AuthActionTypes>(initialState)
     ...state,
     isUserAdmin: true,
   }))
-  .handleAction(actions.logoutUser, (state, action) => initialState);
+  .handleAction(actions.logoutUserSuccess, (state, action) => initialState);
 
 /** ===========================================================================
  * Export

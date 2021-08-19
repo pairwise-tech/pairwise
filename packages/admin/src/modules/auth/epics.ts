@@ -91,6 +91,24 @@ const storeAccessTokenEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+/**
+ * Handle logging out the user.
+ */
+const logoutUserEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.logoutUser)),
+    mergeMap(async () => {
+      const result = await deps.api.logoutUser();
+
+      if (result.error) {
+        console.error("Error occurring processing logout.", result.error);
+      }
+
+      return Actions.logoutUserSuccess();
+    }),
+  );
+};
+
 // Logout the user by removing the local storage access token.
 const logoutUserSuccessEpic: EpicSignature = (action$, _, deps) => {
   const logoutToast = () => {
@@ -98,7 +116,7 @@ const logoutUserSuccessEpic: EpicSignature = (action$, _, deps) => {
   };
 
   return action$.pipe(
-    filter(isActionOf(Actions.logoutUser)),
+    filter(isActionOf(Actions.logoutUserSuccess)),
     tap(logoutUserInLocalStorage),
     // Put a short delay so the user feels like something actually happened.
     delay(250),
@@ -115,5 +133,6 @@ const logoutUserSuccessEpic: EpicSignature = (action$, _, deps) => {
 export default combineEpics(
   accessTokenInitializationEpic,
   storeAccessTokenEpic,
+  logoutUserEpic,
   logoutUserSuccessEpic,
 );

@@ -222,7 +222,7 @@ const courseSkeletonsInitializationEpic: EpicSignature = (action$, _, deps) => {
       isActionOf([
         Actions.initializeApp,
         Actions.fetchNavigationSkeleton,
-        Actions.logoutUser,
+        Actions.logoutUserSuccess,
       ]),
     ),
     mergeMap(deps.api.fetchCourseSkeletons),
@@ -245,7 +245,7 @@ const coursesInitializationEpic: EpicSignature = (action$, _, deps) => {
       isActionOf([
         Actions.initializeApp,
         Actions.fetchCourses,
-        Actions.logoutUser,
+        Actions.logoutUserSuccess,
       ]),
     ),
     mergeMap(deps.api.fetchCourses),
