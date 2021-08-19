@@ -164,6 +164,19 @@ export class AuthController {
   }
 
   /**
+   * Process logout.
+   */
+  @UseGuards(AuthGuard("jwt"))
+  @Get("logout")
+  public async logout(
+    @Req() req: Request & { logout: () => void },
+    @Res() res,
+  ) {
+    req.logout();
+    return res.send(SUCCESS_CODES.OK);
+  }
+
+  /**
    * Stringify the parameters into query parameters.
    */
   private getQueryParams(accessToken: string, accountCreated: boolean) {

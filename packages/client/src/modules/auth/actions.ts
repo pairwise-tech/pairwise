@@ -15,6 +15,7 @@ enum ActionTypesEnum {
   BULK_PERSISTENCE_COMPLETE = "BULK_PERSISTENCE_COMPLETE",
 
   LOGOUT = "LOGOUT",
+  LOGOUT_SUCCESS = "LOGOUT_SUCCESS",
 
   LOGIN_BY_EMAIL = "LOGIN_BY_EMAIL",
   LOGIN_BY_EMAIL_SUCCESS = "LOGIN_BY_EMAIL_SUCCESS",
@@ -52,6 +53,10 @@ export const bulkPersistenceComplete = createAction(
 )();
 
 export const logoutUser = createAction(ActionTypesEnum.LOGOUT)<{
+  shouldReloadPage?: boolean;
+}>();
+
+export const logoutUserSuccess = createAction(ActionTypesEnum.LOGOUT)<{
   shouldReloadPage?: boolean;
 }>();
 
