@@ -540,7 +540,7 @@ class Api extends BaseApiClass {
 
   logoutUser = async () => {
     const { config } = this.getRequestHeaders();
-    return this.httpHandler<PullRequestCourseContent>(async () => {
+    return this.httpHandler(async () => {
       return axios.get(`${HOST}/auth/logout`, config);
     });
   };
