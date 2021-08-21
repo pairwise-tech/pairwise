@@ -162,7 +162,8 @@ class NavigationOverlay extends React.Component<
           onClick={(e) => e.stopPropagation()}
           className={cx("module-select", { open: this.state.showModuleList })}
         >
-          <ColTitle className="course-select">
+          {/* Disabled while multiple course selection is unavailable */}
+          {/* <ColTitle className="course-select">
             <CourseSelect
               filterable={false}
               items={courseListMetadata}
@@ -198,7 +199,8 @@ class NavigationOverlay extends React.Component<
                 text={isMobile ? "" : course.title}
               />
             </CourseSelect>
-          </ColTitle>
+          </ColTitle> */}
+          <ColTitle>{isMobile ? null : <p>{course.title}</p>}</ColTitle>
           <ColScroll>
             {/* In case of no challenges yet, or to add one at the start, here's a button */}
             <div style={{ position: "relative" }}>
