@@ -38,7 +38,7 @@ const ChallengeTypeMenu = ({
 }: Props) => {
   const activeItem = items.find((x) => x.value === currentChallengeType);
   return (
-    <div style={{ flexShrink: 0, marginLeft: 10, marginRight: 10 }}>
+    <div style={{ flexShrink: 0, marginLeft: 9, marginRight: 0 }}>
       <ChallengeTypeSelect
         items={items}
         filterable={false}

@@ -6,7 +6,7 @@ import { IconNavLink } from "./SharedComponents";
 import Modules, { ReduxStoreState } from "modules/root";
 import styled from "styled-components/macro";
 import { getChallengeSlug } from "@pairwise/common";
-import { MOBILE } from "tools/constants";
+import { COLORS, MOBILE } from "tools/constants";
 import { getDimensions } from "tools/dimensions";
 import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
 
@@ -28,11 +28,13 @@ export const PrevChallengeIconButton = connect((state: ReduxStoreState) => {
   const tooltipMessage = slug
     ? "Previous Challenge"
     : "Already at the first challenge";
+
   return (
-    <Tooltip2 content={tooltipMessage}>
+    <Tooltip2 content={tooltipMessage} usePortal={false} position="bottom">
       <IconNavLink
         disabled={!slug}
         icon="chevron-left"
+        color={slug !== null ? COLORS.WHITE : undefined}
         aria-label="Previous Challenge"
         to={`/workspace/${slug}`}
         {...props}
@@ -50,11 +52,13 @@ export const NextChallengeIconButton = connect((state: ReduxStoreState) => {
   const tooltipMessage = slug
     ? "Next Challenge"
     : "Already at the last challenge";
+
   return (
-    <Tooltip2 content={tooltipMessage}>
+    <Tooltip2 content={tooltipMessage} usePortal={false} position="bottom">
       <IconNavLink
         disabled={!slug}
         icon="chevron-right"
+        color={slug !== null ? COLORS.WHITE : undefined}
         aria-label="Next Challenge"
         to={`/workspace/${slug}`}
         {...props}

@@ -179,14 +179,10 @@ export const preventDefault = (e: SyntheticEvent) => {
   return e;
 };
 
-/**
- * NOTE: I wasn't sure how to type this usage of pipe. This is quite a bit
- * convoluted, when all I really want was the styling from a blueprint button on
- * top of a RR link. However, by restyling a link
- */
 export const IconNavLink = styled(
   ({
     icon,
+    color,
     className,
     disabled = false,
     beforeText,
@@ -194,8 +190,13 @@ export const IconNavLink = styled(
     ...props
   }: IconNavLinkProps) => {
     const onClick = disabled ? preventDefault : identity;
-    // @ts-ignore See NOTE
-    // prettier-ignore
+
+    /**
+     * NOTE: I wasn't sure how to type this usage of pipe. This is quite a bit
+     * convoluted, when all I really want was the styling from a blueprint button on
+     * top of a RR link. However, by restyling a link
+     */
+    // @ts-ignore
     const handleClick = props.onClick ? pipe(onClick, props.onClick) : onClick;
 
     /**
@@ -216,7 +217,7 @@ export const IconNavLink = styled(
         onClick={handleClick}
       >
         {beforeText && <span style={{ marginRight: 6 }}>{beforeText}</span>}
-        <Icon icon={icon} />
+        <Icon color={color} icon={icon} />
         {afterText && <span style={{ marginLeft: 6 }}>{afterText}</span>}
       </NavLink>
     );

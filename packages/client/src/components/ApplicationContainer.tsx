@@ -416,22 +416,28 @@ const ApplicationContainer = (props: IProps) => {
           )}
           {displayNavigationArrows && (
             <DesktopOnly>
-              <ButtonGroup style={{ marginLeft: 6 }}>
+              <NextPrevButtons>
                 <PrevChallengeIconButton id="prevButton" />
                 <NextChallengeIconButton id="nextButton" />
-              </ButtonGroup>
+              </NextPrevButtons>
             </DesktopOnly>
           )}
           {!isMobile && (
-            <Link style={{ color: "white" }} to={"/workspace/sandbox"}>
-              <Button
-                id="sandboxButton"
-                disabled={isSandbox}
-                style={{ marginLeft: 10 }}
-              >
-                Sandbox
-              </Button>
-            </Link>
+            <Tooltip2
+              usePortal={false}
+              position="bottom"
+              content="Open Sandbox Scratchpad"
+            >
+              <Link style={{ color: "white" }} to={"/workspace/sandbox"}>
+                <Button
+                  id="sandboxButton"
+                  disabled={isSandbox}
+                  style={{ marginLeft: 9 }}
+                >
+                  Sandbox
+                </Button>
+              </Link>
+            </Tooltip2>
           )}
           {isMobile && (
             <LastChildMargin
@@ -848,6 +854,13 @@ const AccountDropdownButton = styled.div`
     cursor: pointer;
     ${themeText(COLORS.TEXT_HOVER)};
   }
+`;
+
+const NextPrevButtons = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 9px;
 `;
 
 const AdminBadge = styled.div`
