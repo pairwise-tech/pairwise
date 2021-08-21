@@ -5,7 +5,7 @@ import { Tooltip2 } from "@blueprintjs/popover2";
 import { IconNavLink } from "./SharedComponents";
 import Modules, { ReduxStoreState } from "modules/root";
 import styled from "styled-components/macro";
-import { getChallengeSlug } from "@pairwise/common";
+import { AppTheme, getChallengeSlug } from "@pairwise/common";
 import { COLORS, MOBILE } from "tools/constants";
 import { getDimensions } from "tools/dimensions";
 import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
@@ -19,22 +19,27 @@ interface ChallengeButtonProps {
   large?: boolean;
 }
 
+type NextPrevProps = ChallengeButtonProps & { appTheme: AppTheme };
+
 export const PrevChallengeIconButton = connect((state: ReduxStoreState) => {
   const { prev } = Modules.selectors.challenges.nextPrevChallenges(state);
   return {
     slug: prev ? getChallengeSlug(prev) : null,
+    appTheme: Modules.selectors.user.userSettings(state).appTheme,
   };
-})(({ slug, ...props }: ChallengeButtonProps) => {
+})(({ slug, appTheme, ...props }: NextPrevProps) => {
   const tooltipMessage = slug
     ? "Previous Challenge"
     : "Already at the first challenge";
+
+  const color = appTheme === "dark" ? COLORS.WHITE : COLORS.TEXT_DARK;
 
   return (
     <Tooltip2 content={tooltipMessage} usePortal={false} position="bottom">
       <IconNavLink
         disabled={!slug}
         icon="chevron-left"
-        color={slug !== null ? COLORS.WHITE : undefined}
+        color={slug !== null ? color : undefined}
         aria-label="Previous Challenge"
         to={`/workspace/${slug}`}
         {...props}
@@ -47,18 +52,21 @@ export const NextChallengeIconButton = connect((state: ReduxStoreState) => {
   const { next } = Modules.selectors.challenges.nextPrevChallenges(state);
   return {
     slug: next ? getChallengeSlug(next) : null,
+    appTheme: Modules.selectors.user.userSettings(state).appTheme,
   };
-})(({ slug, ...props }: ChallengeButtonProps) => {
+})(({ slug, appTheme, ...props }: NextPrevProps) => {
   const tooltipMessage = slug
     ? "Next Challenge"
     : "Already at the last challenge";
+
+  const color = appTheme === "dark" ? COLORS.WHITE : COLORS.TEXT_DARK;
 
   return (
     <Tooltip2 content={tooltipMessage} usePortal={false} position="bottom">
       <IconNavLink
         disabled={!slug}
         icon="chevron-right"
-        color={slug !== null ? COLORS.WHITE : undefined}
+        color={slug !== null ? color : undefined}
         aria-label="Next Challenge"
         to={`/workspace/${slug}`}
         {...props}
@@ -99,7 +107,6 @@ const cardDispatchProps = {
 const cardMergeProps = (
   state: ReturnType<typeof cardMapStateToProps>,
   methods: typeof cardDispatchProps,
-  props: {},
 ) => ({
   challenge: state.challenge,
   nextChallenge: state.nextChallenge,
