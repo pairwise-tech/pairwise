@@ -658,7 +658,11 @@ class Workspace extends React.Component<IProps, IState> {
                         id="editor-toggle-codemirror-editor"
                         icon="application"
                         aria-label="toggle codemirror editor"
-                        text="Toggle Alternate Editor"
+                        text={
+                          useCodemirrorEditor
+                            ? "Switch to Monaco Editor"
+                            : "Switch to Code Mirror Editor"
+                        }
                         onClick={this.props.toggleCodemirrorEditor}
                       />
                     )}
