@@ -350,7 +350,7 @@ const Box = styled.div`
   position: relative;
   flex: 1 100%;
   width: auto;
-  margin-right: 10px;
+  margin-left: 9px;
 `;
 
 // NOTE: The z-index on this is meant to make it appear above the nav overlay

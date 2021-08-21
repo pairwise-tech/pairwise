@@ -163,16 +163,27 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
       <SlideOut show={isEditMode && !hidden}>
         <ChallengeInsertionMenu />
         {challenge && <GitContributionInfo challenge={challenge} />}
-        <Button
-          large
-          minimal
-          icon="saved"
+        <Tooltip2
+          content="Save"
           disabled={!isDirty}
-          onClick={handleSave}
-          intent={isDirty ? "primary" : "none"}
-        />
+          usePortal={false}
+          position={Position.BOTTOM}
+        >
+          <Button
+            large
+            minimal
+            icon="saved"
+            disabled={!isDirty}
+            onClick={handleSave}
+            intent={isDirty ? "primary" : "none"}
+          />
+        </Tooltip2>
         {canDelete && (
-          <Tooltip2 content="Delete" position={Position.BOTTOM}>
+          <Tooltip2
+            content="Delete"
+            position={Position.BOTTOM}
+            usePortal={false}
+          >
             <Button
               intent="danger"
               icon="trash"
@@ -272,18 +283,23 @@ const ChallengeInsertionMenu = connectChallengeInsertion(
   (props: ChallengeInsertionProps) => {
     return (
       <Popover2
+        usePortal={false}
         canEscapeKeyClose
         position={Position.BOTTOM}
         content={
-          <div>
-            <ButtonGroup>
-              <Button onClick={props.insertPrevChallenge}>Insert Before</Button>
-              <Button onClick={props.insertNextChallenge}>Insert After</Button>
-            </ButtonGroup>
-          </div>
+          <ButtonGroup>
+            <Button onClick={props.insertPrevChallenge}>Insert Before</Button>
+            <Button onClick={props.insertNextChallenge}>Insert After</Button>
+          </ButtonGroup>
         }
       >
-        <IconButton large minimal icon="add-to-artifact" />
+        <Tooltip2
+          usePortal={false}
+          position={Position.BOTTOM}
+          content="Insert Challenge Before/After"
+        >
+          <IconButton large minimal icon="add-to-artifact" />
+        </Tooltip2>
       </Popover2>
     );
   },
@@ -308,6 +324,7 @@ const GitContributionInfo = ({ challenge }: { challenge: Challenge }) => {
   }, []);
 
   let content;
+
   if (error) {
     content = (
       <>
@@ -315,7 +332,7 @@ const GitContributionInfo = ({ challenge }: { challenge: Challenge }) => {
         <p>
           Could not load metadata for current challenge. This probably just
           means the metadata index hasn't been rebuilt after recent course
-          udpates.
+          updates.
         </p>
       </>
     );
@@ -382,11 +399,18 @@ const GitContributionInfo = ({ challenge }: { challenge: Challenge }) => {
 
   return (
     <Popover2
+      usePortal={false}
       canEscapeKeyClose
       position={Position.BOTTOM}
       content={<Card style={{ maxWidth: 350 }}>{content}</Card>}
     >
-      <IconButton onClick={handleClick} large minimal icon="git-branch" />
+      <Tooltip2
+        usePortal={false}
+        content="View Git History"
+        position={Position.BOTTOM}
+      >
+        <IconButton onClick={handleClick} large minimal icon="git-branch" />
+      </Tooltip2>
     </Popover2>
   );
 };
