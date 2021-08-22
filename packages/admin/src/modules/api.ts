@@ -60,6 +60,8 @@ const createNonHttpResponseError = (
  */
 
 class BaseApiClass {
+  createNonHttpResponseError = createNonHttpResponseError;
+
   httpHandler = async <X extends {}>(
     httpFn: () => Promise<AxiosResponse<X>>,
   ) => {

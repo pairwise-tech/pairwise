@@ -114,6 +114,8 @@ export const createCodepressAPI = (endpoint: string): CodepressAPI => {
  */
 
 class BaseApiClass {
+  createNonHttpResponseError = createNonHttpResponseError;
+
   httpHandler = async <X extends {}>(
     httpFn: () => Promise<AxiosResponse<X>>,
   ) => {

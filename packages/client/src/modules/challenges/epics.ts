@@ -267,12 +267,15 @@ const fetchAdminCourseListEpic: EpicSignature = (action$, _, deps) => {
     filter(isActionOf(Actions.fetchPullRequestCourseList)),
     pluck("payload"),
     mergeMap(deps.api.fetchAdminPullRequestCourseList),
-    map(({ value: courses, error }) => {
-      if (courses) {
+    map((result) => {
+      if (result.value) {
+        const courses = result.value;
         const { challengeIds } = courses;
         if (challengeIds.length === 0) {
-          deps.toaster.warn(
-            `No modified challenge ids found for this pull request.`,
+          const msg = "No modified challenge ids found for this pull request.";
+          deps.toaster.warn(msg);
+          return Actions.fetchPullRequestCourseListFailure(
+            deps.api.createNonHttpResponseError(msg).error,
           );
         } else {
           deps.toaster.success(
@@ -282,7 +285,7 @@ const fetchAdminCourseListEpic: EpicSignature = (action$, _, deps) => {
         return Actions.fetchPullRequestCourseListSuccess(courses);
       } else {
         deps.toaster.warn("Failed to fetch pull request course content.");
-        return Actions.fetchPullRequestCourseListFailure(error);
+        return Actions.fetchPullRequestCourseListFailure(result.error);
       }
     }),
   );
