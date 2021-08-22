@@ -601,6 +601,7 @@ const isInternalLink = (
 export const editorColors = {
   almostBlack: "#181A1B",
   lightBlack: "#2F3336",
+  codeLight: "#232324",
   almostWhite: "#E6E6E6",
   white: "#FFF",
   white10: "rgba(255, 255, 255, 0.1)",
@@ -664,7 +665,7 @@ const getEditorTheme = (appTheme: AppTheme) => {
 
     quote: editorColors.almostWhite,
 
-    codeBackground: isDark ? editorColors.almostBlack : editorColors.lightBlack,
+    codeBackground: isDark ? editorColors.almostBlack : editorColors.codeLight,
     codeBorder: isDark ? editorColors.lightBlack : editorColors.greyMid,
 
     codeString: editorColors.codeString,

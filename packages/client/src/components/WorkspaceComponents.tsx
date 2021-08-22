@@ -211,7 +211,7 @@ const TestMessageHighlighter = styled(HighlightedMarkdown)`
     color: ${(props: IThemeProps) => {
       const color = props.theme.dark
         ? editorColors.lightBlack
-        : editorColors.greyMid;
+        : editorColors.codeLight;
 
       return `1px solid ${color}`;
     }};
@@ -219,7 +219,7 @@ const TestMessageHighlighter = styled(HighlightedMarkdown)`
     ${themeColor(
       "background",
       editorColors.almostBlack,
-      editorColors.lightBlack,
+      editorColors.codeLight,
     )}
   }
 `;
@@ -237,7 +237,6 @@ export const ContentDiv = styled.div`
 
 const TestStatus = styled.div`
   display: flex;
-  width: 160px;
   margin-left: auto;
   flex-direction: row;
   padding: 2px 6px 0px 6px;
