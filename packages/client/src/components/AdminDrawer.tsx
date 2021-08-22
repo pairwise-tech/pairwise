@@ -43,6 +43,7 @@ class AdminDrawer extends React.Component<IProps, {}> {
 
     return (
       <Drawer
+        canEscapeKeyClose
         icon="shield"
         title="Pairwise Admin"
         isOpen={isAdminDrawerOpen}
