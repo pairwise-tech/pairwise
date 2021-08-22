@@ -516,7 +516,7 @@ class Workspace extends React.Component<IProps, IState> {
         style={getConsoleRowStyles(theme)}
         initialHeight={D.WORKSPACE_HEIGHT}
       >
-        <>{IS_ALTERNATIVE_EDIT_VIEW && WorkspaceTestContainer}</>
+        {IS_ALTERNATIVE_EDIT_VIEW && WorkspaceTestContainer}
         <div>
           {!IS_ALTERNATIVE_EDIT_VIEW && ScrollableWorkspaceConsole}
           <DragIgnorantFrameContainer

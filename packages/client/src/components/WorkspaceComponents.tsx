@@ -496,6 +496,7 @@ export const Tab = styled.div<{ active?: boolean }>`
 
   border-top: 2px solid
     ${(props) => (props.active ? C.PRIMARY_GREEN : "transparent")};
+
   border-bottom: none;
   transition: all 0.2s ease-out;
 
@@ -527,7 +528,10 @@ export const Tab = styled.div<{ active?: boolean }>`
     left: 0;
     right: 0;
     height: 1px;
-    background: ${(props) => (props.active ? "#1e1e1e" : "transparent")};
+    background: ${(props) => {
+      const color = props.theme.dark ? "#1e1e1e" : C.LIGHT_BORDER;
+      return props.active ? color : "transparent";
+    }};
   }
 `;
 
