@@ -269,9 +269,16 @@ const fetchAdminCourseListEpic: EpicSignature = (action$, _, deps) => {
     mergeMap(deps.api.fetchAdminPullRequestCourseList),
     map(({ value: courses, error }) => {
       if (courses) {
-        deps.toaster.success(
-          "Successfully loaded pull request course content.",
-        );
+        const { challengeIds } = courses;
+        if (challengeIds.length === 0) {
+          deps.toaster.warn(
+            `No modified challenge ids found for this pull request.`,
+          );
+        } else {
+          deps.toaster.success(
+            "Successfully loaded pull request course content.",
+          );
+        }
         return Actions.fetchPullRequestCourseListSuccess(courses);
       } else {
         deps.toaster.warn("Failed to fetch pull request course content.");
