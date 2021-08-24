@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { Classes, Button, Checkbox } from "@blueprintjs/core";
+import { Alert, Classes, Button, Checkbox, Intent } from "@blueprintjs/core";
 import Modules, { ReduxStoreState } from "modules/root";
 import {
   PageContainer,
@@ -13,6 +13,7 @@ import {
 import { COLORS } from "tools/constants";
 import { SSO, Payment } from "@pairwise/common";
 import {
+  capitalize,
   formatDate,
   getGravatarUrlFromEmail,
   isUsingGravatar,
@@ -27,6 +28,8 @@ import { ConnectedAccountButtons } from "./SingleSignOnModal";
  */
 
 interface IState {
+  sso: Nullable<SSO>;
+  alert: boolean;
   email: string;
   givenName: string;
   familyName: string;
@@ -46,6 +49,8 @@ class Account extends React.Component<IProps, IState> {
     super(props);
 
     this.state = {
+      sso: null,
+      alert: false,
       email: "",
       givenName: "",
       familyName: "",
@@ -63,7 +68,7 @@ class Account extends React.Component<IProps, IState> {
   }
 
   render(): Nullable<JSX.Element> {
-    const { editMode: edit } = this.state;
+    const { sso, alert, editMode: edit } = this.state;
     const { user, skeletons, emailVerificationStatus } = this.props;
 
     const { payments, profile } = user;
@@ -76,6 +81,24 @@ class Account extends React.Component<IProps, IState> {
 
     return (
       <PageContainer>
+        <Alert
+          icon="dollar"
+          canEscapeKeyCancel
+          canOutsideClickCancel
+          className="bp3-dark"
+          isOpen={alert}
+          cancelButtonText="Cancel"
+          intent={Intent.DANGER}
+          onCancel={this.handleCancelAlert}
+          onConfirm={this.handleConfirmAlert}
+          confirmButtonText="DisconnectAccount"
+        >
+          <p>
+            This will disconnect your {sso ? capitalize(sso) : ""} from your
+            Pairwise profile. To undo this action, you would have to log in
+            again with that account.
+          </p>
+        </Alert>
         <PageTitle>Account</PageTitle>
         <ProfileIcon
           width={95}
@@ -340,10 +363,6 @@ class Account extends React.Component<IProps, IState> {
     });
   };
 
-  handleDiscardChanges = () => {
-    this.setState({ editMode: false });
-  };
-
   /**
    * Account click handler.
    *
@@ -352,7 +371,23 @@ class Account extends React.Component<IProps, IState> {
    * that was so desired at some point.
    */
   onClickConnectedAccount = (sso: SSO) => {
-    this.props.disconnectAccount(sso);
+    this.setState({ sso, alert: true });
+  };
+
+  handleDiscardChanges = () => {
+    this.setState({ editMode: false });
+  };
+
+  handleCancelAlert = () => {
+    this.setState({ alert: false });
+  };
+
+  handleConfirmAlert = () => {
+    const { sso } = this.state;
+    if (sso) {
+      this.props.disconnectAccount(sso);
+      this.setState({ alert: false, sso: null });
+    }
   };
 }
 

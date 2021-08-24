@@ -110,6 +110,7 @@ const disconnectAccountEpic: EpicSignature = (action$, _, deps) => {
     mergeMap(API.disconnectAccount),
     map((result) => {
       if (result.value) {
+        deps.toaster.success("Account disconnected.");
         return Actions.disconnectAccountSuccess(result.value);
       } else {
         return Actions.disconnectAccountFailure(result.error);

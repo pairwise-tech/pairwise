@@ -546,7 +546,7 @@ class Api extends BaseApiClass {
     const { config } = this.getRequestHeaders();
     return this.httpHandler(async () => {
       return axios.post<IUserDto<UserProfile>>(
-        `${HOST}/user/disconnect/account/${sso}`,
+        `${HOST}/user/disconnect-account/${sso}`,
         {},
         config,
       );
