@@ -19,7 +19,7 @@ import {
 } from "./SharedComponents";
 import { COLORS } from "tools/constants";
 import { ReactComponent as googleSvgIcon } from "../icons/google-sso-icon.svg";
-import { IThemeProps, themeColor, themeText } from "./ThemeContainer";
+import { IThemeProps, themeColor } from "./ThemeContainer";
 import { AppTheme, SSO } from "@pairwise/common";
 
 /** ===========================================================================
@@ -355,12 +355,19 @@ export interface ConnectedAccountsProps {
   github: Nullable<string>;
   facebook: Nullable<string>;
   google: Nullable<string>;
-  onClickConnectedAccountHandler: (sso: SSO) => void;
+  emailVerified: boolean;
+  onClickConnectedAccountHandler: (sso: SSO | "email") => void;
 }
 
 export const ConnectedAccountButtons = (props: ConnectedAccountsProps) => {
-  const { email, github, google, facebook, onClickConnectedAccountHandler } =
-    props;
+  const {
+    github,
+    google,
+    facebook,
+    email,
+    emailVerified,
+    onClickConnectedAccountHandler,
+  } = props;
 
   const NotConnected = (sso: SSO | "email") => {
     return (
@@ -419,12 +426,20 @@ export const ConnectedAccountButtons = (props: ConnectedAccountsProps) => {
         NotConnected("github")
       )}
       {email ? (
-        <ConnectedAccount>
+        <ConnectedAccountEmail
+          onClick={() => onClickConnectedAccountHandler("email")}
+        >
           <IconBox>
-            <Icon icon="tick" color={COLORS.PRIMARY_GREEN} />
+            {emailVerified ? (
+              <Icon icon="tick" color={COLORS.PRIMARY_GREEN} />
+            ) : (
+              <Icon icon="disable" color={COLORS.LIGHT_GREY} />
+            )}
           </IconBox>
-          <SsoText style={{ marginLeft: 4 }}>Email Verified</SsoText>
-        </ConnectedAccount>
+          <SsoText style={{ marginLeft: 4 }}>
+            Email {emailVerified ? "" : "Not "}Verified
+          </SsoText>
+        </ConnectedAccountEmail>
       ) : (
         NotConnected("email")
       )}
@@ -454,6 +469,13 @@ const ConnectedAccount = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+`;
+
+const ConnectedAccountEmail = styled(ConnectedAccount)`
+  &:hover {
+    cursor: pointer;
+    background: rgb(75, 75, 75);
+  }
 `;
 
 const SsoText = styled.p`

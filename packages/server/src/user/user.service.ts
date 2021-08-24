@@ -27,6 +27,7 @@ import { EmailService, emailService } from "../email/email.service";
 
 export interface GenericUserProfile {
   email: string;
+  emailVerified: boolean;
   displayName: string;
   givenName: string;
   familyName: string;
@@ -154,6 +155,10 @@ export class UserService {
     const { uuid } = userProfile;
     await this.userRepository.update({ uuid }, { googleAccountId });
     return await this.findUserByUuidGetFullProfile(uuid);
+  }
+
+  public async markEmailAsVerified(uuid: string) {
+    await this.userRepository.update({ uuid }, { emailVerified: true });
   }
 
   /**

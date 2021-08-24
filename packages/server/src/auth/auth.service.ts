@@ -100,11 +100,15 @@ export class AuthService {
         // If a user exists, just log them in. Otherwise create a new user
         // with this email address.
         if (existingUser) {
-          const token = this.getJwtAccessToken(existingUser.profile);
+          // Mark email as verified
+          await this.userService.markEmailAsVerified(existingUser.profile.uuid);
+          // Generate an access token
+          const token = this.generateJwtAccessToken(existingUser.profile);
           return new Ok({ token, accountCreated: false });
         } else {
           const userProfile: GenericUserProfile = {
             email,
+            emailVerified: true,
             avatarUrl: "",
             displayName: "",
             givenName: "",
@@ -118,7 +122,7 @@ export class AuthService {
             userProfile,
             "Email",
           );
-          const token = this.getJwtAccessToken(user.profile);
+          const token = this.generateJwtAccessToken(user.profile);
           return new Ok({ token, accountCreated: true });
         }
       } else {
@@ -145,7 +149,7 @@ export class AuthService {
 
       if (existingUser) {
         user = existingUser;
-        token = this.getJwtAccessToken(user.profile);
+        token = this.generateJwtAccessToken(user.profile);
         return new Ok({ token, accountCreated: false });
       } else {
         const email = profile.email;
@@ -159,7 +163,7 @@ export class AuthService {
               userWithEmailExists.profile,
               facebookAccountId,
             );
-            token = this.getJwtAccessToken(user.profile);
+            token = this.generateJwtAccessToken(user.profile);
             return new Ok({ token, accountCreated: false });
           }
         }
@@ -173,6 +177,7 @@ export class AuthService {
 
         const userProfile: GenericUserProfile = {
           email,
+          emailVerified: false,
           avatarUrl,
           givenName,
           familyName,
@@ -183,7 +188,7 @@ export class AuthService {
         };
 
         user = await this.userService.createNewUser(userProfile, "Facebook");
-        token = this.getJwtAccessToken(user.profile);
+        token = this.generateJwtAccessToken(user.profile);
         return new Ok({ token, accountCreated: true });
       }
     } catch (err) {
@@ -208,7 +213,7 @@ export class AuthService {
 
       if (existingUser) {
         user = existingUser;
-        token = this.getJwtAccessToken(user.profile);
+        token = this.generateJwtAccessToken(user.profile);
         return new Ok({ token, accountCreated: false });
       } else {
         const email = profile.email;
@@ -222,7 +227,7 @@ export class AuthService {
               userWithEmailExists.profile,
               githubAccountId,
             );
-            token = this.getJwtAccessToken(user.profile);
+            token = this.generateJwtAccessToken(user.profile);
             return new Ok({ token, accountCreated: false });
           }
         }
@@ -242,6 +247,7 @@ export class AuthService {
         const avatarUrl = profile.avatar_url;
         const userProfile: GenericUserProfile = {
           email,
+          emailVerified: false,
           avatarUrl,
           displayName,
           givenName: firstName,
@@ -252,7 +258,7 @@ export class AuthService {
         };
 
         user = await this.userService.createNewUser(userProfile, "GitHub");
-        token = this.getJwtAccessToken(user.profile);
+        token = this.generateJwtAccessToken(user.profile);
         return new Ok({ token, accountCreated: true });
       }
     } catch (err) {
@@ -277,7 +283,7 @@ export class AuthService {
 
       if (existingUser) {
         user = existingUser;
-        token = this.getJwtAccessToken(existingUser.profile);
+        token = this.generateJwtAccessToken(existingUser.profile);
         return new Ok({ token, accountCreated: false });
       } else {
         const email = profile.email;
@@ -291,7 +297,7 @@ export class AuthService {
               userWithEmailExists.profile,
               googleAccountId,
             );
-            token = this.getJwtAccessToken(user.profile);
+            token = this.generateJwtAccessToken(user.profile);
             return new Ok({ token, accountCreated: false });
           }
         }
@@ -299,6 +305,7 @@ export class AuthService {
         const avatarUrl = profile.picture;
         const userProfile: GenericUserProfile = {
           email,
+          emailVerified: false,
           avatarUrl,
           displayName: profile.name || "",
           givenName: profile.given_name || "",
@@ -309,7 +316,7 @@ export class AuthService {
         };
 
         user = await this.userService.createNewUser(userProfile, "Google");
-        token = this.getJwtAccessToken(user.profile);
+        token = this.generateJwtAccessToken(user.profile);
         return new Ok({ token, accountCreated: true });
       }
     } catch (err) {
@@ -332,7 +339,7 @@ export class AuthService {
         const email = user.profile.email;
 
         if (isAdminEmail(email)) {
-          const token = this.getJwtAccessToken(existingUser.profile);
+          const token = this.generateJwtAccessToken(existingUser.profile);
           return new Ok({ token, accountCreated: false });
         } else {
           throw new Error("Unauthorized.");
@@ -361,7 +368,7 @@ export class AuthService {
     return;
   }
 
-  private getJwtAccessToken(user: UserProfile) {
+  private generateJwtAccessToken(user: UserProfile) {
     const payload: JwtPassportSignPayload = {
       uuid: user.uuid,
     };

@@ -29,7 +29,7 @@ import { ConnectedAccountButtons } from "./SingleSignOnModal";
 
 interface IState {
   sso: Nullable<SSO>;
-  alert: boolean;
+  alert: "sso" | "email" | null;
   email: string;
   givenName: string;
   familyName: string;
@@ -50,7 +50,7 @@ class Account extends React.Component<IProps, IState> {
 
     this.state = {
       sso: null,
-      alert: false,
+      alert: null,
       email: "",
       givenName: "",
       familyName: "",
@@ -82,22 +82,29 @@ class Account extends React.Component<IProps, IState> {
     return (
       <PageContainer>
         <Alert
-          icon="dollar"
+          icon="info-sign"
           canEscapeKeyCancel
           canOutsideClickCancel
           className="bp3-dark"
-          isOpen={alert}
+          isOpen={alert !== null}
           cancelButtonText="Cancel"
           intent={Intent.DANGER}
           onCancel={this.handleCancelAlert}
           onConfirm={this.handleConfirmAlert}
-          confirmButtonText="DisconnectAccount"
+          confirmButtonText={alert === "sso" ? "Disconnect Account" : "OK"}
         >
-          <p>
-            This will disconnect your {sso ? capitalize(sso) : ""} from your
-            Pairwise profile. To undo this action, you would have to log in
-            again with that account.
-          </p>
+          {alert === "sso" ? (
+            <p>
+              This will disconnect your {sso ? capitalize(sso) : ""} from your
+              Pairwise profile. To undo this action, you would have to log in
+              again with the same account.
+            </p>
+          ) : (
+            <p>
+              To verify your email, logout and then login and choose "Sign in
+              with Email".
+            </p>
+          )}
         </Alert>
         <PageTitle>Account</PageTitle>
         <ProfileIcon
@@ -259,6 +266,7 @@ class Account extends React.Component<IProps, IState> {
           google={profile.googleAccountId}
           github={profile.githubAccountId}
           facebook={profile.facebookAccountId}
+          emailVerified={profile.emailVerified}
           onClickConnectedAccountHandler={this.onClickConnectedAccount}
         />
         {payments.length > 0 && (
@@ -370,8 +378,12 @@ class Account extends React.Component<IProps, IState> {
    * to "disconnect" it (set the account id field back to null), if
    * that was so desired at some point.
    */
-  onClickConnectedAccount = (sso: SSO) => {
-    this.setState({ sso, alert: true });
+  onClickConnectedAccount = (sso: SSO | "email") => {
+    if (sso === "email") {
+      this.setState({ alert: "email" });
+    } else {
+      this.setState({ sso, alert: "sso" });
+    }
   };
 
   handleDiscardChanges = () => {
@@ -379,15 +391,18 @@ class Account extends React.Component<IProps, IState> {
   };
 
   handleCancelAlert = () => {
-    this.setState({ alert: false });
+    this.setState({ alert: null });
   };
 
   handleConfirmAlert = () => {
-    const { sso } = this.state;
-    if (sso) {
-      this.props.disconnectAccount(sso);
-      this.setState({ alert: false, sso: null });
+    const { sso, alert } = this.state;
+    if (alert === "sso") {
+      if (sso) {
+        this.props.disconnectAccount(sso);
+      }
     }
+
+    this.setState({ alert: null, sso: null });
   };
 }
 
