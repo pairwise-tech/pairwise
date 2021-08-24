@@ -379,8 +379,11 @@ class Account extends React.Component<IProps, IState> {
    * that was so desired at some point.
    */
   onClickConnectedAccount = (sso: SSO | "email") => {
+    const profile = this.props.user.profile;
     if (sso === "email") {
-      this.setState({ alert: "email" });
+      if (profile && !profile.emailVerified) {
+        this.setState({ alert: "email" });
+      }
     } else {
       this.setState({ sso, alert: "sso" });
     }
