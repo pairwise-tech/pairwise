@@ -102,6 +102,11 @@ Where `MyMigrationName` is a name to describe the current migration. The second 
 ## Deployment
 
 ```bash
+# First be sure you are running the database and have an updated app build
+$ yarn db
+$ yarn migration:run
+$ yarn build
+
 # Build the Dockerfile
 $ docker build -t pairwise-server .
 
