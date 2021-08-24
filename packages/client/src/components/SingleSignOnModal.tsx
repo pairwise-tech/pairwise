@@ -17,7 +17,7 @@ import {
   ModalSubText,
   ExternalLink,
 } from "./SharedComponents";
-import { COLORS } from "tools/constants";
+import { COLORS, MOBILE } from "tools/constants";
 import { ReactComponent as googleSvgIcon } from "../icons/google-sso-icon.svg";
 import { IThemeProps, themeColor } from "./ThemeContainer";
 import { AppTheme, SSO } from "@pairwise/common";
@@ -335,6 +335,10 @@ const EmailButtonsContainer = styled.div`
 const InputField = styled.input`
   margin-top: 12px;
   width: 415px;
+
+  @media ${MOBILE} {
+    width: 250px;
+  }
 
   color: ${(props: IThemeProps) => {
     return props.theme.dark ? COLORS.TEXT_HOVER : undefined;
