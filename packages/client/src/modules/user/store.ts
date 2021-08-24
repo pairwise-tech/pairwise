@@ -72,6 +72,12 @@ const user = createReducer<
   UserActionTypes | AuthActionTypes | ChallengesActionTypes
 >(initialUserState)
   .handleAction(actions.logoutUser, () => initialUserState)
+  .handleAction(actions.disconnectAccountSuccess, (state, action) => {
+    return {
+      ...state,
+      profile: action.payload.profile,
+    };
+  })
   .handleAction(
     actions.updateLastActiveChallengeIdsSuccess,
     (state, action) => {

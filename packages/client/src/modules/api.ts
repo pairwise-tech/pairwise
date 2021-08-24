@@ -21,6 +21,8 @@ import {
   IGenericFeedback,
   NullBlob,
   PullRequestCourseContent,
+  SSO,
+  UserProfile,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable, lastValueFrom } from "rxjs";
@@ -535,6 +537,17 @@ class Api extends BaseApiClass {
     return this.httpHandler<PullRequestCourseContent>(async () => {
       return axios.get(
         `${HOST}/admin/pull-requests/courses/${pullRequestId}`,
+        config,
+      );
+    });
+  };
+
+  disconnectAccount = async (sso: SSO) => {
+    const { config } = this.getRequestHeaders();
+    return this.httpHandler(async () => {
+      return axios.post<IUserDto<UserProfile>>(
+        `${HOST}/user/disconnect/account/${sso}`,
+        {},
         config,
       );
     });

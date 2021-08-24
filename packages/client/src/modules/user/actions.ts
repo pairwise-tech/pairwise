@@ -1,4 +1,10 @@
-import { IUserDto, UserUpdateOptions, UserSettings } from "@pairwise/common";
+import {
+  IUserDto,
+  UserUpdateOptions,
+  UserSettings,
+  SSO,
+  UserProfile,
+} from "@pairwise/common";
 import { HttpResponseError } from "modules/api";
 import { createAction } from "typesafe-actions";
 import { UserStoreState, EMAIL_VERIFICATION_STATUS } from "./store";
@@ -26,6 +32,10 @@ enum ActionTypesEnum {
   UPDATE_USER_SETTINGS = "UPDATE_USER_SETTINGS",
   UPDATE_USER_SETTINGS_SUCCESS = "UPDATE_USER_SETTINGS_SUCCESS",
   UPDATE_USER_SETTINGS_FAILURE = "UPDATE_USER_SETTINGS_FAILURE",
+
+  DISCONNECT_ACCOUNT = "DISCONNECT_ACCOUNT",
+  DISCONNECT_ACCOUNT_SUCCESS = "DISCONNECT_ACCOUNT_SUCCESS",
+  DISCONNECT_ACCOUNT_FAILURE = "UPDATE_USER_SETTINGS_FAILURE",
 }
 
 /** ===========================================================================
@@ -81,4 +91,16 @@ export const updateUserSettingsSuccess = createAction(
 
 export const updateUserSettingsFailure = createAction(
   ActionTypesEnum.UPDATE_USER_SETTINGS_FAILURE,
+)<HttpResponseError>();
+
+export const disconnectAccount = createAction(
+  ActionTypesEnum.DISCONNECT_ACCOUNT,
+)<SSO>();
+
+export const disconnectAccountSuccess = createAction(
+  ActionTypesEnum.DISCONNECT_ACCOUNT_SUCCESS,
+)<IUserDto<UserProfile>>();
+
+export const disconnectAccountFailure = createAction(
+  ActionTypesEnum.DISCONNECT_ACCOUNT_FAILURE,
 )<HttpResponseError>();

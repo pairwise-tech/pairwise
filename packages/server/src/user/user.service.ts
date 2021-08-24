@@ -158,7 +158,7 @@ export class UserService {
 
   /**
    * Handle setting a connected user SSO account id back to null to
-   * disconnect that account.
+   * disconnect that account.2
    */
   public async handleDisconnectAccount(userProfile: UserProfile, sso: SSO) {
     switch (sso) {

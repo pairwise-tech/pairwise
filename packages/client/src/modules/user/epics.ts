@@ -103,6 +103,21 @@ const updateUserSettingsEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+const disconnectAccountEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.disconnectAccount)),
+    pluck("payload"),
+    mergeMap(API.disconnectAccount),
+    map((result) => {
+      if (result.value) {
+        return Actions.disconnectAccountSuccess(result.value);
+      } else {
+        return Actions.disconnectAccountFailure(result.error);
+      }
+    }),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -113,4 +128,5 @@ export default combineEpics(
   updateUserEpic,
   updateUserEmailEpic,
   updateUserSettingsEpic,
+  disconnectAccountEpic,
 );

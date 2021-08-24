@@ -352,7 +352,7 @@ class Account extends React.Component<IProps, IState> {
    * that was so desired at some point.
    */
   onClickConnectedAccount = (sso: SSO) => {
-    console.log(`Clicked ${sso} - not implemented.`);
+    this.props.disconnectAccount(sso);
   };
 }
 
@@ -419,6 +419,7 @@ const dispatchProps = {
   initializeApp: Modules.actions.app.initializeApp,
   updateUser: Modules.actions.user.updateUser,
   updateUserEmail: Modules.actions.user.updateUserEmail,
+  disconnectAccount: Modules.actions.user.disconnectAccount,
   setEmailVerificationStatus: Modules.actions.user.setEmailVerificationStatus,
 };
 
