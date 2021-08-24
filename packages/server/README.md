@@ -95,6 +95,9 @@ $ yarn migration:generate MyMigrationName
 
 # Run any pending migrations
 $ yarn migration:run
+
+# Format the migration file
+$ yarn prettier:fix
 ```
 
 Where `MyMigrationName` is a name to describe the current migration. The second command will execute the migration against the database.
