@@ -31,7 +31,7 @@ export class User {
   public email: string;
 
   @Column()
-  public emailVerified: boolean;
+  public emailVerified: boolean | null;
 
   @Column()
   public displayName: string;

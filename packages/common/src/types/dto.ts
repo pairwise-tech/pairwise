@@ -32,7 +32,7 @@ import {
 export interface UserProfile {
   uuid: string;
   email: string | null;
-  emailVerified: boolean;
+  emailVerified: boolean | null;
   displayName: string;
   givenName: string;
   familyName: string;

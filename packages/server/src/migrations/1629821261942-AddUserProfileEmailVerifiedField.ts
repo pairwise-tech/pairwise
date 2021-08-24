@@ -6,9 +6,7 @@ export class AddUserProfileEmailVerifiedField1629821261942
   name = "AddUserProfileEmailVerifiedField1629821261942";
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `ALTER TABLE "user" ADD "emailVerified" boolean NOT NULL`,
-    );
+    await queryRunner.query(`ALTER TABLE "user" ADD "emailVerified" boolean`);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

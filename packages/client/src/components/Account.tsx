@@ -266,7 +266,7 @@ class Account extends React.Component<IProps, IState> {
           google={profile.googleAccountId}
           github={profile.githubAccountId}
           facebook={profile.facebookAccountId}
-          emailVerified={profile.emailVerified}
+          emailVerified={Boolean(profile.emailVerified)}
           onClickConnectedAccountHandler={this.onClickConnectedAccount}
         />
         {payments.length > 0 && (
