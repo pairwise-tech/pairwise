@@ -334,11 +334,7 @@ const EmailButtonsContainer = styled.div`
 
 const InputField = styled.input`
   margin-top: 12px;
-  width: 415px;
-
-  @media ${MOBILE} {
-    width: 250px;
-  }
+  width: 300px;
 
   color: ${(props: IThemeProps) => {
     return props.theme.dark ? COLORS.TEXT_HOVER : undefined;
@@ -347,6 +343,10 @@ const InputField = styled.input`
   background: ${(props: IThemeProps) => {
     return props.theme.dark ? COLORS.BACKGROUND_CONSOLE_DARK : undefined;
   }} !important;
+
+  @media ${MOBILE} {
+    width: 250px !important;
+  }
 `;
 
 /** ===========================================================================

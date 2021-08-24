@@ -112,6 +112,7 @@ const ApplicationContainer = (props: IProps) => {
     workspaceLoading,
     userAuthenticated,
     isAdminDrawerOpen,
+    accessTokenExists,
     updateUserSettings,
     openFeedbackDialog,
     nextPrevChallenges,
@@ -151,7 +152,12 @@ const ApplicationContainer = (props: IProps) => {
   }
 
   if (initializationError) {
-    return <ErrorOverlay logoutUser={logoutUser} />;
+    return (
+      <ErrorOverlay
+        logoutUser={logoutUser}
+        accessTokenExists={accessTokenExists}
+      />
+    );
   } else if (!initialized) {
     return <LoadingOverlay visible={workspaceLoading} />;
   } else if (screensaverVisible) {
@@ -727,6 +733,7 @@ const LoadingOverlay = (props: { visible: boolean }) => (
 );
 
 const ErrorOverlay = (props: {
+  accessTokenExists: boolean;
   logoutUser: typeof Modules.actions.auth.logoutUser;
 }) => (
   <FullScreenOverlay visible data-selector="full-screen-overlay">
@@ -741,10 +748,12 @@ const ErrorOverlay = (props: {
         We apologize for the inconvenience! You can try to reload the page.
       </OverlaySmallText>
       <Centered>
-        <Button
-          text="Logout"
-          onClick={() => props.logoutUser({ shouldReloadPage: true })}
-        />
+        {props.accessTokenExists && (
+          <Button
+            text="Logout"
+            onClick={() => props.logoutUser({ shouldReloadPage: true })}
+          />
+        )}
       </Centered>
     </div>
   </FullScreenOverlay>
@@ -931,6 +940,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
   userLoading: Modules.selectors.user.loading(state),
   isUserAdmin: Modules.selectors.auth.isUserAdmin(state),
+  accessTokenExists: Modules.selectors.auth.accessTokenExists(state),
   isAdminDrawerOpen: Modules.selectors.app.isAdminDrawerOpen(state),
   adminPullRequestId: Modules.selectors.app.adminPullRequestId(state),
   pullRequestDataPresent:

@@ -41,6 +41,13 @@ export const loginEmailRequestLoading = createSelector(
   },
 );
 
+export const accessTokenExists = createSelector(
+  authSelector,
+  ({ accessToken }) => {
+    return typeof accessToken === "string" && accessToken !== "";
+  },
+);
+
 export const isUserAdmin = createSelector(authSelector, (authStateResult) => {
   return authStateResult.isUserAdmin;
 });
