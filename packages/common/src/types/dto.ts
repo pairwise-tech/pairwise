@@ -36,6 +36,9 @@ export interface UserProfile {
   givenName: string;
   familyName: string;
   avatarUrl: string;
+  googleAccountId: string | null;
+  facebookAccountId: string | null;
+  githubAccountId: string | null;
 }
 
 export type AppTheme = "dark" | "light";

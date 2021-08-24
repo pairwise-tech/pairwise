@@ -9,7 +9,7 @@ import {
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import * as ENV from "tools/client-env";
-import { composeWithProps } from "tools/utils";
+import { capitalize, composeWithProps } from "tools/utils";
 import { removeEphemeralPurchaseCourseId } from "tools/storage-utils";
 import {
   ModalTitleText,
@@ -19,7 +19,7 @@ import {
 } from "./SharedComponents";
 import { COLORS } from "tools/constants";
 import { ReactComponent as googleSvgIcon } from "../icons/google-sso-icon.svg";
-import { IThemeProps, themeColor } from "./ThemeContainer";
+import { IThemeProps, themeColor, themeText } from "./ThemeContainer";
 import { AppTheme } from "@pairwise/common";
 
 /** ===========================================================================
@@ -30,7 +30,7 @@ import { AppTheme } from "@pairwise/common";
 interface IState {}
 
 /** ===========================================================================
- * React Component
+ * SingleSignOnHandler
  * ----------------------------------------------------------------------------
  * - This component renders a modal which provides and handles SSO options
  * for the application. Facebook is currently supported, Google and GitHub
@@ -57,6 +57,40 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
     );
   }
 }
+
+/** ===========================================================================
+ * Props
+ * ============================================================================
+ */
+
+const mapStateToProps = (state: ReduxStoreState) => ({
+  appTheme: Modules.selectors.user.userSettings(state).appTheme,
+  dialogOpen: Modules.selectors.auth.singleSignOnDialogState(state),
+});
+
+const dispatchProps = {
+  setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
+};
+
+interface ComponentProps {}
+
+type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
+
+interface IProps extends ComponentProps, ConnectProps {}
+
+const withProps = connect(mapStateToProps, dispatchProps);
+
+/** ===========================================================================
+ * Export SingleSignOnHandler
+ * ============================================================================
+ */
+
+export default composeWithProps<ComponentProps>(withProps)(SingleSignOnHandler);
+
+/** ===========================================================================
+ * AuthenticationForm
+ * ============================================================================
+ */
 
 interface AuthenticationFormProps {
   appTheme: AppTheme;
@@ -228,7 +262,11 @@ class AuthenticationFormComponent extends React.Component<
   };
 }
 
-// Connect AuthenticationForm
+/** ===========================================================================
+ * Export AuthenticationForm
+ * ============================================================================
+ */
+
 export const AuthenticationForm = connect(
   (state: ReduxStoreState) => ({
     appTheme: Modules.selectors.user.userSettings(state).appTheme,
@@ -308,30 +346,136 @@ const InputField = styled.input`
 `;
 
 /** ===========================================================================
- * Props
+ * Connected Accounts Components
  * ============================================================================
  */
 
-const mapStateToProps = (state: ReduxStoreState) => ({
-  appTheme: Modules.selectors.user.userSettings(state).appTheme,
-  dialogOpen: Modules.selectors.auth.singleSignOnDialogState(state),
-});
+export type SSO = "google" | "github" | "facebook";
 
-const dispatchProps = {
-  setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
+export interface ConnectedAccountsProps {
+  email: Nullable<string>;
+  github: Nullable<string>;
+  facebook: Nullable<string>;
+  google: Nullable<string>;
+  onClickConnectedAccountHandler: (sso: SSO) => void;
+}
+
+export const ConnectedAccountButtons = (props: ConnectedAccountsProps) => {
+  const { email, github, google, facebook, onClickConnectedAccountHandler } =
+    props;
+
+  const NotConnected = (sso: SSO | "email") => {
+    return (
+      <NotConnectedAccount>
+        <SsoTextDisabled>{capitalize(sso)} Not Connected</SsoTextDisabled>
+      </NotConnectedAccount>
+    );
+  };
+
+  return (
+    <>
+      <Text style={{ maxWidth: 500 }}>
+        Your connected accounts are linked together by email. If you sign in
+        with multiple providers, which all have the same email, they will all be
+        associated with a single Pairwise account.
+      </Text>
+      {google ? (
+        <GoogleLoginButton
+          onClick={() => onClickConnectedAccountHandler("google")}
+          className="sso-button"
+          style={{
+            ...ssoButtonStyles,
+            padding: 0,
+            paddingBottom: 2,
+          }}
+        >
+          <LoginButtonText style={{ marginLeft: 2 }}>
+            Google Connected
+          </LoginButtonText>
+        </GoogleLoginButton>
+      ) : (
+        NotConnected("google")
+      )}
+      {facebook ? (
+        <FacebookLoginButton
+          // @ts-ignore
+          onClick={() => onClickConnectedAccountHandler("facebook")}
+          className="sso-button"
+          style={ssoButtonStyles}
+        >
+          <LoginButtonText>Facebook Connected</LoginButtonText>
+        </FacebookLoginButton>
+      ) : (
+        NotConnected("facebook")
+      )}
+      {github ? (
+        <GithubLoginButton
+          // @ts-ignore
+          onClick={() => onClickConnectedAccountHandler("github")}
+          className="sso-button"
+          style={ssoButtonStyles}
+        >
+          <LoginButtonText>GitHub Connected</LoginButtonText>
+        </GithubLoginButton>
+      ) : (
+        NotConnected("github")
+      )}
+      {email ? (
+        <ConnectedAccount>
+          <IconBox>
+            <Icon icon="tick" color={COLORS.PRIMARY_GREEN} />
+          </IconBox>
+          <SsoText style={{ marginLeft: 4 }}>Email Verified</SsoText>
+        </ConnectedAccount>
+      ) : (
+        NotConnected("email")
+      )}
+    </>
+  );
 };
 
-interface ComponentProps {}
+const NotConnectedAccount = styled.div`
+  margin-top: 12px;
+  margin-left: 4px;
+  height: 46px;
+  width: 235px;
+  background: rgb(20, 20, 20);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
-type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
+const ConnectedAccount = styled.div`
+  margin-top: 12px;
+  margin-left: 4px;
+  height: 46px;
+  width: 235px;
+  background: rgb(50, 50, 50);
+  border-radius: 2px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
 
-interface IProps extends ComponentProps, ConnectProps {}
+const SsoText = styled.p`
+  margin: 0;
+  color: ${COLORS.WHITE};
+`;
 
-const withProps = connect(mapStateToProps, dispatchProps);
+const SsoTextDisabled = styled.p`
+  margin: 0;
+  color: ${COLORS.LIGHT_GREY};
+`;
 
-/** ===========================================================================
- * Export
- * ============================================================================
- */
+const Text = styled.p`
+  margin: 0;
+`;
 
-export default composeWithProps<ComponentProps>(withProps)(SingleSignOnHandler);
+const IconBox = styled.div`
+  width: 50px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

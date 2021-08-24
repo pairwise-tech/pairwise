@@ -19,6 +19,7 @@ import {
 } from "tools/utils";
 import { EMAIL_VERIFICATION_STATUS } from "modules/user/store";
 import { themeColor } from "./ThemeContainer";
+import { ConnectedAccountButtons, SSO } from "./SingleSignOnModal";
 
 /** ===========================================================================
  * Types & Config
@@ -202,19 +203,8 @@ class Account extends React.Component<IProps, IState> {
             ) : (
               <>
                 <TextItem style={{ fontSize: 12 }}>
-                  • <Underline>Note I</Underline>: To change your email you will
+                  • <Underline>Note</Underline>: To change your email you will
                   need to verify the new email address.
-                </TextItem>
-                <TextItem
-                  style={{
-                    fontSize: 12,
-                    maxWidth: 525,
-                  }}
-                >
-                  • <Underline>Note II</Underline>: Your account is identified
-                  using your email address. If you sign in with an SSO provider,
-                  the associated social profile <b>must match</b> your current
-                  account email, otherwise a new account will be created.
                 </TextItem>
               </>
             )}
@@ -240,6 +230,14 @@ class Account extends React.Component<IProps, IState> {
             />
           </Controls>
         )}
+        <PageTitle style={{ marginTop: 24 }}>Connected Accounts</PageTitle>
+        <ConnectedAccountButtons
+          email={profile.email}
+          google={profile.googleAccountId}
+          github={profile.githubAccountId}
+          facebook={profile.facebookAccountId}
+          onClickConnectedAccountHandler={this.onClickConnectedAccount}
+        />
         {payments.length > 0 && (
           <>
             <PageTitle style={{ marginTop: 24 }}>Payments</PageTitle>
@@ -344,6 +342,17 @@ class Account extends React.Component<IProps, IState> {
 
   handleDiscardChanges = () => {
     this.setState({ editMode: false });
+  };
+
+  /**
+   * Account click handler.
+   *
+   * This could call an API which will clear a connected SSO account
+   * to "disconnect" it (set the account id field back to null), if
+   * that was so desired at some point.
+   */
+  onClickConnectedAccount = (sso: SSO) => {
+    console.log(`Clicked ${sso} - not implemented.`);
   };
 }
 

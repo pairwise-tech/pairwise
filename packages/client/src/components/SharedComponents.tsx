@@ -60,6 +60,7 @@ export const ButtonCore = styled.button`
 
 export const PageTitle = styled.h1`
   margin-top: 0;
+  margin-bottom: 12px;
   ${defaultTextColor};
 `;
 
