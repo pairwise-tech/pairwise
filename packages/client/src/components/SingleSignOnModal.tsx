@@ -20,7 +20,7 @@ import {
 import { COLORS } from "tools/constants";
 import { ReactComponent as googleSvgIcon } from "../icons/google-sso-icon.svg";
 import { IThemeProps, themeColor, themeText } from "./ThemeContainer";
-import { AppTheme } from "@pairwise/common";
+import { AppTheme, SSO } from "@pairwise/common";
 
 /** ===========================================================================
  * Types & Config
@@ -349,8 +349,6 @@ const InputField = styled.input`
  * Connected Accounts Components
  * ============================================================================
  */
-
-export type SSO = "google" | "github" | "facebook";
 
 export interface ConnectedAccountsProps {
   email: Nullable<string>;

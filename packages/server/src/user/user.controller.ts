@@ -5,6 +5,7 @@ import {
   Get,
   Body,
   Post,
+  Param,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { AuthGuard } from "@nestjs/passport";
@@ -29,6 +30,18 @@ export class UserController {
     @Request() req: AuthenticatedRequest,
   ) {
     return this.userService.updateUser(req.user, updateDetails);
+  }
+
+  @UseGuards(AuthGuard("jwt"))
+  @Post("disconnect-account/:sso")
+  public async disconnectAccount(
+    @Param() params,
+    @Request() req: AuthenticatedRequest,
+  ) {
+    return this.userService.handleDisconnectAccount(
+      req.user.profile,
+      params.sso,
+    );
   }
 
   @UseGuards(AuthGuard("jwt"))

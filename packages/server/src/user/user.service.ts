@@ -11,6 +11,8 @@ import {
   defaultUserSettings,
   UserProfile,
   ILastActiveIdsDto,
+  SSO,
+  assertUnreachable,
 } from "@pairwise/common";
 import { RequestUser } from "../types";
 import {
@@ -129,7 +131,7 @@ export class UserService {
 
   public async updateFacebookAccountId(
     userProfile: UserProfile,
-    facebookAccountId: string,
+    facebookAccountId: string | null,
   ) {
     const { uuid } = userProfile;
     await this.userRepository.update({ uuid }, { facebookAccountId });
@@ -138,7 +140,7 @@ export class UserService {
 
   public async updateGithubAccountId(
     userProfile: UserProfile,
-    githubAccountId: string,
+    githubAccountId: string | null,
   ) {
     const { uuid } = userProfile;
     await this.userRepository.update({ uuid }, { githubAccountId });
@@ -147,11 +149,32 @@ export class UserService {
 
   public async updateGoogleAccountId(
     userProfile: UserProfile,
-    googleAccountId: string,
+    googleAccountId: string | null,
   ) {
     const { uuid } = userProfile;
     await this.userRepository.update({ uuid }, { googleAccountId });
     return await this.findUserByUuidGetFullProfile(uuid);
+  }
+
+  /**
+   * Handle setting a connected user SSO account id back to null to
+   * disconnect that account.
+   */
+  public async handleDisconnectAccount(userProfile: UserProfile, sso: SSO) {
+    switch (sso) {
+      case "google": {
+        return this.updateGoogleAccountId(userProfile, null);
+      }
+      case "facebook": {
+        return this.updateFacebookAccountId(userProfile, null);
+      }
+      case "github": {
+        return this.updateGithubAccountId(userProfile, null);
+      }
+      default: {
+        assertUnreachable(sso);
+      }
+    }
   }
 
   /**

@@ -124,6 +124,8 @@ export type PAYMENT_TYPE = "ADMIN_GIFT" | "USER_PAID";
 
 export type COURSE_ACCESS_LEVEL = "FREE" | "PAID";
 
+export type SSO = "google" | "github" | "facebook";
+
 /** ===========================================================================
  * Feedback Types
  * ============================================================================

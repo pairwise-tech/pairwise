@@ -11,7 +11,7 @@ import {
   ExternalLink,
 } from "./SharedComponents";
 import { COLORS } from "tools/constants";
-import { Payment } from "@pairwise/common";
+import { SSO, Payment } from "@pairwise/common";
 import {
   formatDate,
   getGravatarUrlFromEmail,
@@ -19,7 +19,7 @@ import {
 } from "tools/utils";
 import { EMAIL_VERIFICATION_STATUS } from "modules/user/store";
 import { themeColor } from "./ThemeContainer";
-import { ConnectedAccountButtons, SSO } from "./SingleSignOnModal";
+import { ConnectedAccountButtons } from "./SingleSignOnModal";
 
 /** ===========================================================================
  * Types & Config
