@@ -51,8 +51,11 @@ export class AdminAuthGuard extends AuthGuard("jwt") {
           email: "admin-access-token-user@pairwise.tech",
           givenName: "ADMIN",
           familyName: "ADMIN",
-          avatarUrl: "ADMIN",
           displayName: "FIXED ADMIN USER",
+          avatarUrl: "ADMIN",
+          githubAccountId: "admin-account-id",
+          facebookAccountId: "admin-account-id",
+          googleAccountId: "admin-account-id",
         };
 
         const FAKE_ADMIN_USER = {
