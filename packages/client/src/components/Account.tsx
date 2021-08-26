@@ -228,16 +228,16 @@ class Account extends React.Component<IProps, IState> {
               <TextItem
                 style={{ color: COLORS.SECONDARY_YELLOW, fontSize: 12 }}
               >
-                * Please enter your email to receive course and product updates.
+                • Please enter your email to receive course and product updates.
               </TextItem>
-            ) : (
+            ) : edit ? (
               <>
                 <TextItem style={{ fontSize: 12 }}>
-                  • <Underline>Note</Underline>: To change your email you will
-                  need to verify the new email address.
+                  • To change your email you will need to verify the new email
+                  address.
                 </TextItem>
               </>
-            )}
+            ) : null}
           </>
         )}
         {edit ? (
