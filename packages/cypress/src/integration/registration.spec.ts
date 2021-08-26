@@ -147,14 +147,14 @@ describe("Account Creation Flow", () => {
     // Click the toast and visit the account page
     cy.contains("Setup Email").click({ force: true });
     cy.contains(
-      "* Please enter your email to receive course and product updates.",
+      "• Please enter your email to receive course and product updates.",
     );
     cy.reload();
 
     // Verify that the warning toast is gone, but email is still null
     cy.get("Setup Email").should("not.exist");
     cy.contains(
-      "* Please enter your email to receive course and product updates.",
+      "• Please enter your email to receive course and product updates.",
     );
   });
 });
