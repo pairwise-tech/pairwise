@@ -128,6 +128,8 @@ const ApplicationContainer = (props: IProps) => {
 
   const adminPullRequestBadgeVisible = isUserAdmin && pullRequestDataPresent;
   const [hasHandledRedirect, setHasHandledRedirect] = React.useState(false);
+  const [mobileAccountMenuOpen, setMobileAccountMenuState] =
+    React.useState(false);
   const isMobile = useMedia(MOBILE, false);
   const history = useHistory();
   const [isSearchFocused, setIsSearchFocused] = React.useState(false);
@@ -143,8 +145,10 @@ const ApplicationContainer = (props: IProps) => {
     const dropdown = document.getElementById(ACCOUNT_MENU_DROPDOWN_CLASS);
     if (dropdown) {
       if (state === "open") {
+        setMobileAccountMenuState(true);
         dropdown.classList.add(className);
       } else {
+        setMobileAccountMenuState(false);
         dropdown.classList.remove(className);
       }
     }
@@ -154,6 +158,7 @@ const ApplicationContainer = (props: IProps) => {
     const handleEvent = (event: MouseEvent) => {
       const shouldClose = shouldCloseMobileDropdownMenu(event);
       if (shouldClose) {
+        setMobileAccountMenuState(false);
         mobileToggleAccountDropdown("close");
       }
     };
@@ -490,7 +495,15 @@ const ApplicationContainer = (props: IProps) => {
                 id={ACCOUNT_MENU_DROPDOWN_CLASS}
                 className={ACCOUNT_MENU_DROPDOWN_CLASS}
               >
-                <UserBio onClick={() => mobileToggleAccountDropdown("open")}>
+                <UserBio
+                  onClick={() => {
+                    if (mobileAccountMenuOpen) {
+                      mobileToggleAccountDropdown("close");
+                    } else {
+                      mobileToggleAccountDropdown("open");
+                    }
+                  }}
+                >
                   {!isMobile && (
                     <CreateAccountText className="account-menu">
                       {!user.profile.givenName
@@ -629,20 +642,21 @@ const ACCOUNT_MENU_DROPDOWN_CLASS_CSS = ".account-menu-dropdown";
 const shouldCloseMobileDropdownMenu = (event: MouseEvent) => {
   try {
     if (event) {
-      // @ts-ignore
-      for (const domElement of event.path) {
-        if (domElement && domElement.classList) {
-          console.log(domElement.classList);
-          for (const className of domElement.classList) {
-            if (className === ACCOUNT_MENU_DROPDOWN_CLASS) {
-              return false;
-            }
+      let node = event.target;
+      while (node) {
+        // @ts-ignore
+        for (const className of node.classList) {
+          if (className === ACCOUNT_MENU_DROPDOWN_CLASS) {
+            return false;
           }
         }
+
+        // @ts-ignore
+        node = node.parentElement;
       }
     }
 
-    return false;
+    return true;
   } catch (err) {
     // no op
   }
