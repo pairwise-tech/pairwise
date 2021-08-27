@@ -6,14 +6,13 @@ import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
 import { CODEPRESS } from "tools/client-env";
-import { COLORS, SANDBOX_ID, MOBILE } from "tools/constants";
+import { COLORS, SANDBOX_ID, MOBILE, DESKTOP } from "tools/constants";
 import { HEADER_HEIGHT } from "tools/dimensions";
 import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
 import NavigationOverlay from "./NavigationOverlay";
 import {
   Button,
-  ButtonGroup,
   FocusStyleManager,
   Menu,
   MenuItem,
@@ -127,7 +126,7 @@ const ApplicationContainer = (props: IProps) => {
     setSingleSignOnDialogState,
   } = props;
 
-  const adminPullRequestBadgerVisible = isUserAdmin && pullRequestDataPresent;
+  const adminPullRequestBadgeVisible = isUserAdmin && pullRequestDataPresent;
   const [hasHandledRedirect, setHasHandledRedirect] = React.useState(false);
   const isMobile = useMedia(MOBILE, false);
   const history = useHistory();
@@ -138,6 +137,32 @@ const ApplicationContainer = (props: IProps) => {
   const handleSearchBlur = React.useCallback(() => {
     setIsSearchFocused(false);
   }, [setIsSearchFocused]);
+
+  const mobileToggleAccountDropdown = (state: "open" | "close") => {
+    const className = "account-menu-dropdown-active";
+    const dropdown = document.getElementById(ACCOUNT_MENU_DROPDOWN_CLASS);
+    if (dropdown) {
+      if (state === "open") {
+        dropdown.classList.add(className);
+      } else {
+        dropdown.classList.remove(className);
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    const handleEvent = (event: MouseEvent) => {
+      const shouldClose = shouldCloseMobileDropdownMenu(event);
+      if (shouldClose) {
+        mobileToggleAccountDropdown("close");
+      }
+    };
+
+    window.addEventListener("click", handleEvent);
+    return () => {
+      window.removeEventListener("click", handleEvent);
+    };
+  });
 
   React.useEffect(() => {
     // We have to pass location in here to correctly capture the original
@@ -290,7 +315,7 @@ const ApplicationContainer = (props: IProps) => {
           {(!isSandbox || !isMobile) && (
             <SearchBox onFocus={handleSearchFocus} onBlur={handleSearchBlur} />
           )}
-          {adminPullRequestBadgerVisible && !isMobile && (
+          {adminPullRequestBadgeVisible && !isMobile && (
             <Tooltip2
               usePortal={false}
               position="bottom"
@@ -461,8 +486,11 @@ const ApplicationContainer = (props: IProps) => {
             <div style={{ width: 8 }} />
           ) : isLoggedIn && user.profile ? (
             <AccountDropdownButton>
-              <div id="account-menu-dropdown" className="account-menu-dropdown">
-                <UserBio>
+              <div
+                id={ACCOUNT_MENU_DROPDOWN_CLASS}
+                className={ACCOUNT_MENU_DROPDOWN_CLASS}
+              >
+                <UserBio onClick={() => mobileToggleAccountDropdown("open")}>
                   {!isMobile && (
                     <CreateAccountText className="account-menu">
                       {!user.profile.givenName
@@ -474,7 +502,11 @@ const ApplicationContainer = (props: IProps) => {
                   {isUserAdmin && !isMobile && <AdminBadge />}
                 </UserBio>
                 <div className="dropdown-links">
-                  <Link id="account-link" to="/account">
+                  <Link
+                    id="account-link"
+                    to="/account"
+                    onClick={() => mobileToggleAccountDropdown("close")}
+                  >
                     <Icon
                       style={{ marginRight: 10 }}
                       icon={isUserAdmin ? "shield" : "user"}
@@ -485,6 +517,7 @@ const ApplicationContainer = (props: IProps) => {
                     id="pairwise-about-link"
                     target="__blank"
                     to={{ pathname: "https://www.pairwise.tech/" }}
+                    onClick={() => mobileToggleAccountDropdown("close")}
                     style={{
                       borderBottom: `1px solid ${
                         user.settings.appTheme === "dark"
@@ -499,7 +532,10 @@ const ApplicationContainer = (props: IProps) => {
                   <Link
                     to="/logout"
                     id="logout-link"
-                    onClick={() => logoutUser({})}
+                    onClick={() => {
+                      mobileToggleAccountDropdown("close");
+                      logoutUser({});
+                    }}
                   >
                     <Icon icon="log-out" style={{ marginRight: 10 }} />
                     Logout
@@ -585,6 +621,32 @@ const ApplicationContainer = (props: IProps) => {
  * Styles & Utils
  * ============================================================================
  */
+
+const ACCOUNT_MENU_DROPDOWN_CLASS = "account-menu-dropdown";
+const ACCOUNT_MENU_DROPDOWN_CLASS_CSS = ".account-menu-dropdown";
+
+// Rather hideous way to cancel the hover effect on mobile...
+const shouldCloseMobileDropdownMenu = (event: MouseEvent) => {
+  try {
+    if (event) {
+      // @ts-ignore
+      for (const domElement of event.path) {
+        if (domElement && domElement.classList) {
+          console.log(domElement.classList);
+          for (const className of domElement.classList) {
+            if (className === ACCOUNT_MENU_DROPDOWN_CLASS) {
+              return false;
+            }
+          }
+        }
+      }
+    }
+
+    return false;
+  } catch (err) {
+    // no op
+  }
+};
 
 const BORDER = 2;
 
@@ -818,7 +880,7 @@ const CreateAccountText = styled.h1`
 const AccountDropdownButton = styled.div`
   flex-shrink: 0;
 
-  .account-menu-dropdown {
+  ${ACCOUNT_MENU_DROPDOWN_CLASS_CSS} {
     position: relative;
     display: inline-block;
     ${themeText(COLORS.TEXT_TITLE, COLORS.TEXT_LIGHT_THEME)};
@@ -855,8 +917,16 @@ const AccountDropdownButton = styled.div`
     )};
   }
 
-  .account-menu-dropdown:hover .dropdown-links {
-    display: block;
+  @media ${DESKTOP} {
+    ${ACCOUNT_MENU_DROPDOWN_CLASS_CSS}:hover .dropdown-links {
+      display: block;
+    }
+  }
+
+  @media ${MOBILE} {
+    ${ACCOUNT_MENU_DROPDOWN_CLASS_CSS}-active .dropdown-links {
+      display: block;
+    }
   }
 
   :hover {

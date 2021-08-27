@@ -279,7 +279,7 @@ class Account extends React.Component<IProps, IState> {
             {payments.map(this.renderPaymentDetails)}
           </>
         )}
-        <PageTitle style={{ marginTop: 24 }}>Questions?</PageTitle>
+        <PageTitle style={{ marginTop: 24 }}>Questions</PageTitle>
         <Text>
           Feel free to reach out to <b>sean@pairwise.tech</b> if you want to
           contact someone directly.
