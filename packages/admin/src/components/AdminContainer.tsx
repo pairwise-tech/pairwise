@@ -6,7 +6,7 @@ import { Redirect, Route, Switch } from "react-router";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
-import { COLORS, HEADER_HEIGHT, MOBILE } from "tools/constants";
+import { COLORS, DESKTOP, HEADER_HEIGHT, MOBILE } from "tools/constants";
 import AdminStatsPage from "./AdminStatsPage";
 import AdminIndex from "./AdminIndex";
 import Swipy from "swipyjs";
@@ -63,8 +63,39 @@ const AdminContainer = (props: IProps) => {
     setNavigationMapState,
   } = props;
 
-  const [hasHandledRedirect, setHasHandledRedirect] = React.useState(false);
   const isMobile = useMedia(MOBILE, false);
+  const [hasHandledRedirect, setHasHandledRedirect] = React.useState(false);
+  const [mobileAccountMenuOpen, setMobileAccountMenuState] =
+    React.useState(false);
+
+  const mobileToggleAccountDropdown = (state: "open" | "close") => {
+    const className = "account-menu-dropdown-active";
+    const dropdown = document.getElementById(ACCOUNT_MENU_DROPDOWN_CLASS);
+    if (dropdown) {
+      if (state === "open") {
+        setMobileAccountMenuState(true);
+        dropdown.classList.add(className);
+      } else {
+        setMobileAccountMenuState(false);
+        dropdown.classList.remove(className);
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    const handleEvent = (event: MouseEvent) => {
+      const shouldClose = shouldCloseMobileDropdownMenu(event);
+      if (shouldClose) {
+        setMobileAccountMenuState(false);
+        mobileToggleAccountDropdown("close");
+      }
+    };
+
+    window.addEventListener("click", handleEvent);
+    return () => {
+      window.removeEventListener("click", handleEvent);
+    };
+  });
 
   React.useEffect(() => {
     // We have to pass location in here to correctly capture the original
@@ -150,10 +181,18 @@ const AdminContainer = (props: IProps) => {
             ) : isLoggedIn && user.profile ? (
               <AccountDropdownButton>
                 <div
-                  id="account-menu-dropdown"
-                  className="account-menu-dropdown"
+                  id={ACCOUNT_MENU_DROPDOWN_CLASS}
+                  className={ACCOUNT_MENU_DROPDOWN_CLASS}
                 >
-                  <UserBio>
+                  <UserBio
+                    onClick={() => {
+                      if (mobileAccountMenuOpen) {
+                        mobileToggleAccountDropdown("close");
+                      } else {
+                        mobileToggleAccountDropdown("open");
+                      }
+                    }}
+                  >
                     <CreateAccountText className="account-menu">
                       {!user.profile.givenName
                         ? "Hi, Admin"
@@ -168,7 +207,14 @@ const AdminContainer = (props: IProps) => {
                     />
                   </UserBio>
                   <div className="dropdown-links">
-                    <Link to="/logout" id="logout-link" onClick={logoutUser}>
+                    <Link
+                      to="/logout"
+                      id="logout-link"
+                      onClick={() => {
+                        mobileToggleAccountDropdown("close");
+                        logoutUser();
+                      }}
+                    >
                       <Icon icon="log-out" style={{ marginRight: 10 }} />
                       Logout
                     </Link>
@@ -239,6 +285,33 @@ const ErrorOverlay = () => (
  * Styles & Utils
  * ============================================================================
  */
+
+const ACCOUNT_MENU_DROPDOWN_CLASS = "account-menu-dropdown";
+const ACCOUNT_MENU_DROPDOWN_CLASS_CSS = ".account-menu-dropdown";
+
+// Rather hideous way to cancel the hover effect on mobile...
+const shouldCloseMobileDropdownMenu = (event: MouseEvent) => {
+  try {
+    if (event) {
+      let node = event.target;
+      while (node) {
+        // @ts-ignore
+        for (const className of node.classList) {
+          if (className === ACCOUNT_MENU_DROPDOWN_CLASS) {
+            return false;
+          }
+        }
+
+        // @ts-ignore
+        node = node.parentElement;
+      }
+    }
+
+    return true;
+  } catch (err) {
+    // no op
+  }
+};
 
 const BORDER = 2;
 
@@ -405,7 +478,7 @@ const AccountDropdownButton = styled.div`
   margin-right: 4px;
   flex-shrink: 0;
 
-  .account-menu-dropdown {
+  ${ACCOUNT_MENU_DROPDOWN_CLASS_CSS} {
     position: relative;
     display: inline-block;
     ${themeText(COLORS.TEXT_TITLE, COLORS.TEXT_LIGHT_THEME)};
@@ -442,8 +515,16 @@ const AccountDropdownButton = styled.div`
     )};
   }
 
-  .account-menu-dropdown:hover .dropdown-links {
-    display: block;
+  @media ${DESKTOP} {
+    ${ACCOUNT_MENU_DROPDOWN_CLASS_CSS}:hover .dropdown-links {
+      display: block;
+    }
+  }
+
+  @media ${MOBILE} {
+    ${ACCOUNT_MENU_DROPDOWN_CLASS_CSS}-active .dropdown-links {
+      display: block;
+    }
   }
 
   :hover {

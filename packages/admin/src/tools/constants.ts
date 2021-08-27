@@ -90,3 +90,5 @@ export const BUILD_SEARCH_INDEX_FAILURE = "BUILD_SEARCH_INDEX_FAILURE";
 
 // Media queries
 export const MOBILE = `(max-width: 768px)`;
+
+export const DESKTOP = `(min-width: 768px)`;
