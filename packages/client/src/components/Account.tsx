@@ -11,7 +11,7 @@ import {
   ExternalLink,
 } from "./SharedComponents";
 import { COLORS } from "tools/constants";
-import { SSO, Payment } from "@pairwise/common";
+import { SSO, Payment, canDisconnectAccountRequest } from "@pairwise/common";
 import {
   capitalize,
   formatDate,
@@ -21,6 +21,7 @@ import {
 import { EMAIL_VERIFICATION_STATUS } from "modules/user/store";
 import { themeColor } from "./ThemeContainer";
 import { ConnectedAccountButtons } from "./SingleSignOnModal";
+import toaster from "../tools/toast-utils";
 
 /** ===========================================================================
  * Types & Config
@@ -373,18 +374,24 @@ class Account extends React.Component<IProps, IState> {
 
   /**
    * Account click handler.
-   *
-   * This could call an API which will clear a connected SSO account
-   * to "disconnect" it (set the account id field back to null), if
-   * that was so desired at some point.
    */
   onClickConnectedAccount = (sso: SSO | "email") => {
     const profile = this.props.user.profile;
+
     if (sso === "email") {
       if (profile && !profile.emailVerified) {
         this.setState({ alert: "email" });
       }
     } else {
+      if (profile) {
+        if (!canDisconnectAccountRequest(profile)) {
+          toaster.warn(
+            "You cannot disconnect all social accounts without a verified email.",
+          );
+          return;
+        }
+      }
+
       this.setState({ sso, alert: "sso" });
     }
   };

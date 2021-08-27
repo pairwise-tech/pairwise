@@ -16,6 +16,7 @@ import {
   IUserDto,
   UserProfile,
   ILastActiveIdsDto,
+  canDisconnectAccountRequest,
 } from "@pairwise/common";
 import validator from "validator";
 import { BadRequestException } from "@nestjs/common";
@@ -392,5 +393,17 @@ export const validateFeedbackDto = (feedbackDto: IFeedbackDto) => {
     throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
   } else if (!feedbackTypeSet.has(feedbackDto.type)) {
     throw new BadRequestException(ERROR_CODES.INVALID_FEEDBACK_TYPE);
+  }
+};
+
+/**
+ * Do not allow a user to disconnect all their social accounts without
+ * a verified email.
+ */
+export const validateDisconnectAccountRequest = (profile: UserProfile) => {
+  if (!canDisconnectAccountRequest(profile)) {
+    throw new BadRequestException(
+      "You cannot disconnect all social accounts without a verified email.",
+    );
   }
 };

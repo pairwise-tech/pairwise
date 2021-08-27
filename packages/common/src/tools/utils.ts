@@ -1,4 +1,5 @@
 import { Course, Challenge } from "../types/courses";
+import { UserProfile } from "../types/dto";
 
 /**
  * Assert a condition cannot occur. Used for writing exhaustive switch
@@ -79,4 +80,24 @@ export const createInverseChallengeMapping = (
   }, {});
 
   return result;
+};
+
+/**
+ * Do not allow a user to disconnect all their social accounts without
+ * a verified email.
+ */
+export const canDisconnectAccountRequest = (profile: UserProfile) => {
+  const { emailVerified, googleAccountId, githubAccountId, facebookAccountId } =
+    profile;
+
+  const count = (id: string | null): number => (id === null ? 0 : 1);
+  const counts = [googleAccountId, githubAccountId, facebookAccountId]
+    .map(count)
+    .reduce((total, x) => total + x, 0);
+
+  if (counts === 1 && !emailVerified) {
+    return false;
+  }
+
+  return true;
 };

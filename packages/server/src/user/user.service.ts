@@ -18,6 +18,7 @@ import { RequestUser } from "../types";
 import {
   validateUserUpdateDetails,
   validateLastActiveChallengeIdsPayload,
+  validateDisconnectAccountRequest,
 } from "../tools/validation-utils";
 import { ProgressService } from "../progress/progress.service";
 import { ERROR_CODES, SUCCESS_CODES } from "../tools/constants";
@@ -164,8 +165,13 @@ export class UserService {
   /**
    * Handle setting a connected user SSO account id back to null to
    * disconnect that account.2
+   *
+   * TODO: Add e2e tests.
    */
   public async handleDisconnectAccount(userProfile: UserProfile, sso: SSO) {
+    // Validate the request first
+    validateDisconnectAccountRequest(userProfile);
+
     switch (sso) {
       case "google": {
         return this.updateGoogleAccountId(userProfile, null);
