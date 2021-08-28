@@ -37,6 +37,9 @@ class PaymentSuccessModal extends React.Component<IProps, IState> {
     }
 
     const firstChallengeId = paymentSuccessCourse.modules[0].challenges[0].id;
+    const lastActiveChallenge = user.lastActiveChallengeIds.lastActiveChallenge;
+    const { hasCoachingSession } = profile;
+    const id = lastActiveChallenge || firstChallengeId;
 
     return (
       <Dialog
@@ -48,13 +51,22 @@ class PaymentSuccessModal extends React.Component<IProps, IState> {
         <ModalContainer>
           <ModalTitleText>Thank you, {profile.displayName}!</ModalTitleText>
           <ModalSubText style={{ maxWidth: 450 }}>
-            Fantastic! Thank you for purchasing the{" "}
+            Thank you for purchasing the{" "}
             <CourseTitle>{paymentSuccessCourse.title}</CourseTitle> and taking
-            the first big step to learning to code and becoming a software
-            developer. We know you're excited so let's just get right to it!
-            Click the button to get started!
+            the first big step in becoming a software developer.
           </ModalSubText>
-          <Link to={`workspace/${firstChallengeId}`}>
+          {hasCoachingSession && (
+            <ModalSubText style={{ maxWidth: 450 }}>
+              Since you are an early adopter, we've given you a free 30 minute
+              career coaching session with a professional developer. To schedule
+              this at anytime reach out to us at{" "}
+              <a target="__blank" href="mailto:coaching@pairwise.tech">
+                <b>coaching@pairwise.tech</b>
+              </a>
+              .
+            </ModalSubText>
+          )}
+          <Link to={`workspace/${id}`}>
             <Button
               large
               intent="success"
@@ -62,7 +74,7 @@ class PaymentSuccessModal extends React.Component<IProps, IState> {
               onClick={this.handleOnCloseModal}
               id="payment-success-modal-get-started"
             >
-              Let's get started!
+              {lastActiveChallenge ? "Continue Coding" : "Start Coding"}
             </Button>
           </Link>
         </ModalContainer>

@@ -7,6 +7,7 @@ import { composeWithProps } from "tools/utils";
 import { ModalContainer, ModalTitleText, Loading } from "./SharedComponents";
 import { COLORS } from "tools/constants";
 import { EMAIL_VERIFICATION_STATUS } from "modules/user/store";
+import { defaultTextColor, themeColor } from "./ThemeContainer";
 
 /** ===========================================================================
  * Types & Config
@@ -63,18 +64,18 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
             <ModalTitleText>Pairwise Beta Launch</ModalTitleText>
             <Text>
               The Pairwise <CourseTitle>{courseToPurchase.title}</CourseTitle>{" "}
-              is currently for sale. If you are reading this, you are one of the
-              early Pairwise users. Thank you for your support! Our goal is to
-              provide you with the best learning experience possible.
+              can teach you everything you need to know to begin a career as a
+              software developer.
             </Text>
             <Text>
               You can now purchase the course for <PriceText>$50 USD</PriceText>
               . This will allow you to lock in full lifetime access to all of
-              the existing and future content.
+              the existing and future content in this course.
             </Text>
             <Text>
-              The HTML & CSS and TypeScript modules will remain free and
-              accessible to everyone.
+              As an early Pairwise adopter, you will also get a{" "}
+              <b>free 30 minute career coaching session</b> with a professional
+              developer with your course purchase.
             </Text>
             <Button
               large
@@ -162,26 +163,26 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
  */
 
 const CourseTitle = styled.b`
-  color: ${COLORS.PRIMARY_GREEN};
+  ${themeColor("color", COLORS.PRIMARY_GREEN, COLORS.TEXT_DARK)};
 `;
 
 const Text = styled.p`
   margin-top: 8px;
   text-align: center;
   font-weight: 300;
-  color: ${COLORS.TEXT_WHITE};
+  ${defaultTextColor};
 `;
 
 const PriceText = styled.b`
   font-weight: bold;
-  color: ${COLORS.SECONDARY_YELLOW};
+  ${themeColor("color", COLORS.SECONDARY_YELLOW, COLORS.PRIMARY_BLUE)};
 `;
 
 const SmallPointText = styled.p`
   font-size: 12px;
   margin-top: 0px;
   font-weight: 100;
-  color: ${COLORS.TEXT_WHITE};
+  ${defaultTextColor};
 `;
 
 const EmailForm = styled.form`
