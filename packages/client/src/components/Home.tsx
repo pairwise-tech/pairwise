@@ -183,7 +183,7 @@ class Home extends React.Component<IProps, {}> {
     const { payments, lastActiveChallengeIds } = user;
     const skeleton = skeletons?.find((c) => c.id === "fpvPtfu7s");
 
-    if (!skeleton || !user.profile) {
+    if (!skeleton) {
       return null;
     }
 
@@ -192,7 +192,9 @@ class Home extends React.Component<IProps, {}> {
     const isCourseFree = skeleton.free;
     const canAccessCourse = paidForCourse || isCourseFree;
     const courseId = skeleton.id;
-    const { hasCoachingSession } = user.profile;
+    const hasCoachingSession = user.profile
+      ? user.profile.hasCoachingSession
+      : false;
 
     if (!firstCourseChallenge) {
       return null;
@@ -216,8 +218,8 @@ class Home extends React.Component<IProps, {}> {
     }
 
     return canAccessCourse ? (
-      <>
-        <Link id={`course-link-0-start`} to={`workspace/${slug}`}>
+      <div>
+        <Link id="course-link-0-start" to={`workspace/${slug}`}>
           <Button
             large
             intent="success"
@@ -240,11 +242,11 @@ class Home extends React.Component<IProps, {}> {
             </p>
           </SpecialBox>
         )}
-      </>
+      </div>
     ) : (
-      <>
+      <div>
         <ButtonsBox>
-          <Link id={`course-link-0-start`} to={`workspace/${slug}`}>
+          <Link id="course-link-0-start" to={`workspace/${slug}`}>
             <Button large intent="success">
               {lastActiveChallengeExists
                 ? "Resume Course"
@@ -253,7 +255,7 @@ class Home extends React.Component<IProps, {}> {
           </Link>
           <Button
             large
-            id={`course-link-0-purchase`}
+            id="course-link-0-purchase"
             onClick={this.handlePurchaseCourse(skeleton.id)}
           >
             Purchase Course
@@ -267,7 +269,7 @@ class Home extends React.Component<IProps, {}> {
             developer.
           </p>
         </SpecialBox>
-      </>
+      </div>
     );
   };
 
