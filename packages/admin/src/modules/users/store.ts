@@ -26,6 +26,7 @@ export interface AdminUserView {
   givenName: string;
   googleAccountId: Nullable<string>;
   lastActiveChallengeIds: any;
+  hasCoachingSession: Nullable<boolean>;
   payments: Payment[];
   settings: UserSettings;
   challengeProgressHistory: UserCourseProgress;
@@ -33,9 +34,23 @@ export interface AdminUserView {
   uuid: string;
 }
 
-const users = createReducer<any[], UsersActionTypes | AuthActionTypes>(
-  [],
-).handleAction(actions.fetchUsersSuccess, (state, action) => action.payload);
+const users = createReducer<
+  AdminUserView[],
+  UsersActionTypes | AuthActionTypes
+>([])
+  .handleAction(actions.fetchUsersSuccess, (state, action) => action.payload)
+  .handleAction(actions.revokeCoachingSessionSuccess, (state, action) => {
+    return state.map((user) => {
+      if (user.uuid === action.payload.userUuid) {
+        return {
+          ...user,
+          hasCoachingSession: false,
+        };
+      } else {
+        return user;
+      }
+    });
+  });
 
 const loading = createReducer<boolean, UsersActionTypes | AuthActionTypes>(
   true,

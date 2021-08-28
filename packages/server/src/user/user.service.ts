@@ -162,6 +162,18 @@ export class UserService {
     await this.userRepository.update({ uuid }, { emailVerified: true });
   }
 
+  public async grantCoachingSessionToUser(uuid: string) {
+    console.log(`Granting coaching session to user, uuid: ${uuid}`);
+    await this.userRepository.update({ uuid }, { hasCoachingSession: true });
+    return SUCCESS_CODES.OK;
+  }
+
+  public async markCoachingSessionAsCompleteForUser(uuid: string) {
+    console.log(`Revoking coaching session for user, uuid: ${uuid}`);
+    await this.userRepository.update({ uuid }, { hasCoachingSession: false });
+    return SUCCESS_CODES.OK;
+  }
+
   /**
    * Handle setting a connected user SSO account id back to null to
    * disconnect that account.2

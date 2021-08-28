@@ -287,6 +287,16 @@ class Api extends BaseApiClass {
     });
   };
 
+  revokeCoachingSessionForUser = async (uuid: string) => {
+    return this.httpHandler(async () => {
+      const { config } = this.getRequestHeaders();
+      return axios.get(
+        `${HOST}/admin/coaching-sessions/revoke/${uuid}`,
+        config,
+      );
+    });
+  };
+
   fetchUserCodeBlobForChallenge = async (uuid: string, challengeId: string) => {
     const { config, authenticated } = this.getRequestHeaders();
 

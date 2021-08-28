@@ -281,10 +281,35 @@ class Account extends React.Component<IProps, IState> {
             {payments.map(this.renderPaymentDetails)}
           </>
         )}
+        <PageTitle style={{ marginTop: 24 }}>Coaching Sessions</PageTitle>
+        {profile.hasCoachingSession ? (
+          <Text style={{ maxWidth: 500 }}>
+            You currently have a 30 minute career coaching session with a
+            professional developer! To schedule this at anytime reach out to us
+            at{" "}
+            <a target="__blank" href="mailto:coaching@pairwise.tech">
+              <b>coaching@pairwise.tech</b>
+            </a>
+            .
+          </Text>
+        ) : (
+          <Text style={{ maxWidth: 500 }}>
+            You have no coaching sessions currently. If you are interested in a
+            30 minute career coaching session with a professional developer,
+            reach out to us at{" "}
+            <a target="__blank" href="mailto:coaching@pairwise.tech">
+              <b>coaching@pairwise.tech</b>
+            </a>
+            .
+          </Text>
+        )}
         <PageTitle style={{ marginTop: 24 }}>Questions</PageTitle>
         <Text>
-          Feel free to reach out to <b>sean@pairwise.tech</b> if you want to
-          contact someone directly.
+          Feel free to reach out to{" "}
+          <a target="__blank" href="mailto:contact@pairwise.tech">
+            <b>contact@pairwise.tech</b>
+          </a>{" "}
+          if you want to contact someone directly.
         </Text>
       </PageContainer>
     );

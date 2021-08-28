@@ -231,6 +231,11 @@ export class PaymentsService {
     const payment = this.createNewPaymentObject(profile, args);
     await this.paymentsRepository.insert(payment);
 
+    /**
+     * NOTE: Currently course payments are granted a free coaching session.
+     */
+    await this.userService.grantCoachingSessionToUser(profile.uuid);
+
     return SUCCESS_CODES.OK;
   }
 
