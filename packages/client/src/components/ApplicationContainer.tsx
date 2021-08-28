@@ -206,12 +206,13 @@ const ApplicationContainer = (props: IProps) => {
     (CODEPRESS || hasMediaContent);
 
   const isLoggedIn = userAuthenticated && user.profile !== null;
+  const isDark = user.settings.appTheme === "dark";
 
   const { prev, next } = nextPrevChallenges;
 
   const toggleAppTheme = () => {
     updateUserSettings({
-      appTheme: user.settings.appTheme === "dark" ? "light" : "dark",
+      appTheme: isDark ? "light" : "dark",
     });
   };
 
@@ -262,7 +263,7 @@ const ApplicationContainer = (props: IProps) => {
       <MenuItem
         icon="lightbulb"
         onClick={toggleAppTheme}
-        text="Toggle App Theme"
+        text={isDark ? "Switch to Light Theme" : "Switch to Dark Theme"}
       />
       <MenuItem
         icon={<Icon icon="video" color={COLORS.YOUTUBE_RED} />}
@@ -364,7 +365,9 @@ const ApplicationContainer = (props: IProps) => {
             <Tooltip2
               usePortal={false}
               position="bottom"
-              content="Toggle App Theme"
+              content={
+                isDark ? "Switch to Light Theme" : "Switch to Dark Theme"
+              }
             >
               <IconButton
                 icon="lightbulb"
@@ -372,8 +375,7 @@ const ApplicationContainer = (props: IProps) => {
                 aria-label="Toggle App Theme"
                 onClick={() =>
                   updateUserSettings({
-                    appTheme:
-                      user.settings.appTheme === "dark" ? "light" : "dark",
+                    appTheme: isDark ? "light" : "dark",
                   })
                 }
               />

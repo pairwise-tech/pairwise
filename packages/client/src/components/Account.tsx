@@ -72,13 +72,14 @@ class Account extends React.Component<IProps, IState> {
     const { sso, alert, editMode: edit } = this.state;
     const { user, skeletons, emailVerificationStatus } = this.props;
 
-    const { payments, profile } = user;
+    const { payments, profile, settings } = user;
     if (!payments || !profile || !skeletons) {
       return null;
     }
 
     const avatarUrl = profile.avatarUrl;
     const usingGravatar = isUsingGravatar(avatarUrl);
+    const isDark = settings.appTheme === "dark";
 
     return (
       <PageContainer>
@@ -86,12 +87,12 @@ class Account extends React.Component<IProps, IState> {
           icon="info-sign"
           canEscapeKeyCancel
           canOutsideClickCancel
-          className="bp3-dark"
           isOpen={alert !== null}
           cancelButtonText="Cancel"
           intent={Intent.DANGER}
           onCancel={this.handleCancelAlert}
           onConfirm={this.handleConfirmAlert}
+          className={isDark ? "bp3-dark" : ""}
           confirmButtonText={alert === "sso" ? "Disconnect Account" : "OK"}
         >
           {alert === "sso" ? (
@@ -378,21 +379,23 @@ class Account extends React.Component<IProps, IState> {
   onClickConnectedAccount = (sso: SSO | "email") => {
     const profile = this.props.user.profile;
 
+    // No op
+    if (!profile) {
+      return;
+    }
+
     if (sso === "email") {
-      if (profile && !profile.emailVerified) {
+      if (!profile.emailVerified) {
         this.setState({ alert: "email" });
       }
     } else {
-      if (profile) {
-        if (!canDisconnectAccountRequest(profile)) {
-          toaster.warn(
-            "You cannot disconnect all social accounts without a verified email.",
-          );
-          return;
-        }
+      if (canDisconnectAccountRequest(profile)) {
+        this.setState({ sso, alert: "sso" });
+      } else {
+        toaster.warn(
+          "You cannot disconnect all social accounts without a verified email.",
+        );
       }
-
-      this.setState({ sso, alert: "sso" });
     }
   };
 
@@ -457,10 +460,6 @@ const InputField = styled.input`
 
 const Controls = styled.div`
   margin-top: 24px;
-`;
-
-const Underline = styled.span`
-  text-decoration: underline;
 `;
 
 /** ===========================================================================

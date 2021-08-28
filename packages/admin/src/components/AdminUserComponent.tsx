@@ -67,6 +67,7 @@ class AdminUserComponent extends React.Component<
 
     const key = `${user.uuid}-${this.state.challengeId}`;
     const blob = challengeBlobCache[key];
+    const isDark = user.settings.appTheme === "dark";
 
     return (
       <DataCard key={user.uuid}>
@@ -74,12 +75,12 @@ class AdminUserComponent extends React.Component<
           icon="dollar"
           canEscapeKeyCancel
           canOutsideClickCancel
-          className="bp3-dark"
           isOpen={alert !== null}
           cancelButtonText="Cancel"
           intent={Intent.DANGER}
           onCancel={this.handleCancel}
           onConfirm={this.handleConfirm}
+          className={isDark ? "bp3-dark" : ""}
           confirmButtonText={alert === "gift" ? "Gift Course" : "Refund Course"}
         >
           {alert === "gift" ? (

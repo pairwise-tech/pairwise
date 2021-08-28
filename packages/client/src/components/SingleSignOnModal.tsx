@@ -456,11 +456,11 @@ const NotConnectedAccount = styled.div`
   margin-left: 4px;
   height: 46px;
   width: 235px;
-  background: rgb(20, 20, 20);
   border-radius: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
+  ${themeColor("background", "rgb(20, 20, 20)", "rgb(150,150,150)")}
 `;
 
 const ConnectedAccount = styled.div`
@@ -468,11 +468,11 @@ const ConnectedAccount = styled.div`
   margin-left: 4px;
   height: 46px;
   width: 235px;
-  background: rgb(50, 50, 50);
   border-radius: 2px;
   display: flex;
   flex-direction: row;
   align-items: center;
+  ${themeColor("background", "rgb(50, 50, 50)", "rgb(150,150,150)")}
 `;
 
 const ConnectedAccountEmail = styled(ConnectedAccount)`
@@ -484,7 +484,7 @@ const ConnectedAccountEmail = styled(ConnectedAccount)`
 
 const SsoText = styled.p`
   margin: 0;
-  color: ${COLORS.WHITE};
+  ${themeColor("color", COLORS.WHITE, COLORS.TEXT_DARK)}
 `;
 
 const SsoTextDisabled = styled.p`
