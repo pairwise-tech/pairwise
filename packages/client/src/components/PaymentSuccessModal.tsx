@@ -36,6 +36,8 @@ class PaymentSuccessModal extends React.Component<IProps, IState> {
       return null;
     }
 
+    const firstChallengeId = paymentSuccessCourse.modules[0].challenges[0].id;
+
     return (
       <Dialog
         isOpen={this.props.modalOpen}
@@ -52,7 +54,7 @@ class PaymentSuccessModal extends React.Component<IProps, IState> {
             developer. We know you're excited so let's just get right to it!
             Click the button to get started!
           </ModalSubText>
-          <Link to={`workspace/${paymentSuccessCourse.id}`}>
+          <Link to={`workspace/${firstChallengeId}`}>
             <Button
               large
               intent="success"
