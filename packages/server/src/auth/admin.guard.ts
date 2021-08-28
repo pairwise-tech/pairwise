@@ -57,6 +57,7 @@ export class AdminAuthGuard extends AuthGuard("jwt") {
           githubAccountId: "admin-account-id",
           facebookAccountId: "admin-account-id",
           googleAccountId: "admin-account-id",
+          hasCoachingSession: false,
         };
 
         const FAKE_ADMIN_USER = {
