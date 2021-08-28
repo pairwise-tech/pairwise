@@ -54,6 +54,9 @@ export class User {
   @Column({ nullable: true })
   public googleAccountId: string;
 
+  @Column()
+  public hasCoachingSession: boolean | null;
+
   @Column({ type: "jsonb" })
   public settings: string;
 
