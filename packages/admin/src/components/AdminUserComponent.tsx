@@ -58,8 +58,13 @@ class AdminUserComponent extends React.Component<
 
   render(): JSX.Element {
     const { alert } = this.state;
-    const { user, adminUserSettings, challengeBlobCache, courseSkeletons } =
-      this.props;
+    const {
+      user,
+      courseSkeletons,
+      adminUserSettings,
+      challengeBlobCache,
+      revokeCoachingSession,
+    } = this.props;
     const isDark = adminUserSettings.appTheme === "dark";
     const showDetails = this.state.uuid === user.uuid;
     const payment = user.payments[0];
@@ -104,6 +109,11 @@ class AdminUserComponent extends React.Component<
           User has completed {challengeTotal}{" "}
           {challengeTotal === 1 ? "challenge" : "challenges"}.
         </SummaryText>
+        {user.hasCoachingSession && (
+          <SummaryText>
+            User currently has a coaching session available.
+          </SummaryText>
+        )}
         <CardButtonRow style={{ marginBottom: 24 }}>
           <CardButton
             icon="info-sign"
@@ -141,6 +151,14 @@ class AdminUserComponent extends React.Component<
             </CardButton>
           ) : (
             <CardButton disabled>Payment has been refunded.</CardButton>
+          )}
+          {user.hasCoachingSession && (
+            <CardButton
+              icon="hat"
+              onClick={() => revokeCoachingSession({ userUuid: user.uuid })}
+            >
+              Revoke Coaching Session
+            </CardButton>
           )}
         </CardButtonRow>
         <Collapse isOpen={showDetails}>
@@ -330,6 +348,7 @@ const dispatchProps = {
   giftCourseForUser: Modules.actions.payments.giftCourseForUser,
   refundCourseForUser: Modules.actions.payments.refundCourseForUser,
   fetchChallengeBlob: Modules.actions.challenges.fetchChallengeBlob,
+  revokeCoachingSession: Modules.actions.users.revokeCoachingSession,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &

@@ -57,7 +57,8 @@ export const OverlaySmallText = styled.p`
 `;
 
 export const SummaryText = styled.p`
-  margin-bottom: 22px;
+  margin-top: 8px;
+  margin-bottom: 8px;
 `;
 
 export const DataCard = styled(Card)`

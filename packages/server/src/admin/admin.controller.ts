@@ -282,6 +282,12 @@ export class AdminController {
   }
 
   @UseGuards(AdminAuthGuard)
+  @Get("coaching-sessions/revoke/:uuid")
+  public async revokeCoachingSession(@Param() params) {
+    return this.userService.markCoachingSessionAsCompleteForUser(params.uuid);
+  }
+
+  @UseGuards(AdminAuthGuard)
   @Get("/pull-requests/:pull")
   async fetchPullRequestFileDiff(@Param() params) {
     const courses = this.contentService.fetchAllCoursesForAdmin();

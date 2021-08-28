@@ -295,7 +295,8 @@ class Account extends React.Component<IProps, IState> {
         ) : (
           <Text style={{ maxWidth: 500 }}>
             You have no coaching sessions currently. If you are interested in a
-            30 minute career coaching session, reach out to us at{" "}
+            30 minute career coaching session with a professional developer,
+            reach out to us at{" "}
             <a target="__blank" href="mailto:coaching@pairwise.tech">
               <b>coaching@pairwise.tech</b>
             </a>

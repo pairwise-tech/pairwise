@@ -30,9 +30,26 @@ const fetchUsersEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+const revokeCoachingSessionEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.revokeCoachingSession)),
+    map((x) => x.payload.userUuid),
+    mergeMap(async (uuid) => {
+      const result = await API.revokeCoachingSessionForUser(uuid);
+      if (result.value) {
+        deps.toaster.success("Coaching session revoked.");
+        return Actions.revokeCoachingSessionSuccess({ userUuid: uuid });
+      } else {
+        deps.toaster.error("Failed to revoke coaching session.");
+        return Actions.revokeCoachingSessionFailure(result.error);
+      }
+    }),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
  */
 
-export default combineEpics(fetchUsersEpic);
+export default combineEpics(fetchUsersEpic, revokeCoachingSessionEpic);

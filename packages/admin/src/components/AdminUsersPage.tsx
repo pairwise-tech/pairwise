@@ -57,9 +57,12 @@ class AdminUsersPage extends React.Component<IProps, IState> {
     const zeroChallengeUsers = [];
     const usersWithProgress = [];
 
-    // Separate users with progress history and those with none
+    // Separate users with progress history and those with none, also
+    // include users with payments.
     for (const user of users) {
-      if (Object.keys(user.challengeProgressHistory).length === 0) {
+      if (user.payments.length > 0) {
+        usersWithProgress.push(user);
+      } else if (Object.keys(user.challengeProgressHistory).length === 0) {
         zeroChallengeUsers.push(user);
       } else {
         usersWithProgress.push(user);
