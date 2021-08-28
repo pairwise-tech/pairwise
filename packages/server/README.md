@@ -90,6 +90,11 @@ Summary: **Export providers, import modules.**
 If you make any change to any database `Entity`, you can generate a new migrations file by running:
 
 ```bash
+# First be sure you are running the database and have an updated app build
+$ yarn db
+$ yarn migration:run
+$ yarn build
+
 # Generate a new migration file
 $ yarn migration:generate MyMigrationName
 
@@ -105,11 +110,6 @@ Where `MyMigrationName` is a name to describe the current migration. The second 
 ## Deployment
 
 ```bash
-# First be sure you are running the database and have an updated app build
-$ yarn db
-$ yarn migration:run
-$ yarn build
-
 # Build the Dockerfile
 $ docker build -t pairwise-server .
 

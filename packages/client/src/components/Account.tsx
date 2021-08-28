@@ -281,6 +281,12 @@ class Account extends React.Component<IProps, IState> {
             {payments.map(this.renderPaymentDetails)}
           </>
         )}
+        <PageTitle style={{ marginTop: 24 }}>Coaching Sessions</PageTitle>
+        {profile.hasCoachingSession ? (
+          <Text>You have a coaching session.</Text>
+        ) : (
+          <Text>You have no coaching sessions.</Text>
+        )}
         <PageTitle style={{ marginTop: 24 }}>Questions</PageTitle>
         <Text>
           Feel free to reach out to <b>sean@pairwise.tech</b> if you want to

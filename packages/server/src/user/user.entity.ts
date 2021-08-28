@@ -30,7 +30,7 @@ export class User {
   @Column({ unique: true, nullable: true })
   public email: string;
 
-  @Column()
+  @Column({ nullable: true })
   public emailVerified: boolean | null;
 
   @Column()
@@ -54,7 +54,7 @@ export class User {
   @Column({ nullable: true })
   public googleAccountId: string;
 
-  @Column()
+  @Column({ nullable: true })
   public hasCoachingSession: boolean | null;
 
   @Column({ type: "jsonb" })
