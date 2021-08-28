@@ -183,7 +183,7 @@ class Home extends React.Component<IProps, {}> {
     const { payments, lastActiveChallengeIds } = user;
     const skeleton = skeletons?.find((c) => c.id === "fpvPtfu7s");
 
-    if (!skeleton) {
+    if (!skeleton || !user.profile) {
       return null;
     }
 
@@ -192,6 +192,7 @@ class Home extends React.Component<IProps, {}> {
     const isCourseFree = skeleton.free;
     const canAccessCourse = paidForCourse || isCourseFree;
     const courseId = skeleton.id;
+    const { hasCoachingSession } = user.profile;
 
     if (!firstCourseChallenge) {
       return null;
@@ -215,32 +216,58 @@ class Home extends React.Component<IProps, {}> {
     }
 
     return canAccessCourse ? (
-      <Link id={`course-link-0-start`} to={`workspace/${slug}`}>
-        <Button
-          large
-          intent="success"
-          style={{ width: 250 }}
-          className="courseLinkContinue"
-        >
-          {lastActiveChallengeExists ? "Resume Course" : "Start Now"}
-        </Button>
-      </Link>
-    ) : (
-      <ButtonsBox>
+      <>
         <Link id={`course-link-0-start`} to={`workspace/${slug}`}>
-          <Button large intent="success">
-            {lastActiveChallengeExists ? "Resume Course" : "Start Now for Free"}
+          <Button
+            large
+            intent="success"
+            style={{ width: 250 }}
+            className="courseLinkContinue"
+          >
+            {lastActiveChallengeExists ? "Resume Course" : "Start Now"}
           </Button>
         </Link>
-        <Button
-          large
-          // intent="success"
-          id={`course-link-0-purchase`}
-          onClick={this.handlePurchaseCourse(skeleton.id)}
-        >
-          Purchase Course
-        </Button>
-      </ButtonsBox>
+        {hasCoachingSession && (
+          <SpecialBox>
+            <p style={{ margin: 0 }}>
+              You currently have a 30 minute career coaching session with a
+              professional developer! To schedule this at anytime reach out to
+              us at{" "}
+              <a target="__blank" href="mailto:coaching@pairwise.tech">
+                <b>coaching@pairwise.tech</b>
+              </a>
+              .
+            </p>
+          </SpecialBox>
+        )}
+      </>
+    ) : (
+      <>
+        <ButtonsBox>
+          <Link id={`course-link-0-start`} to={`workspace/${slug}`}>
+            <Button large intent="success">
+              {lastActiveChallengeExists
+                ? "Resume Course"
+                : "Start Now for Free"}
+            </Button>
+          </Link>
+          <Button
+            large
+            id={`course-link-0-purchase`}
+            onClick={this.handlePurchaseCourse(skeleton.id)}
+          >
+            Purchase Course
+          </Button>
+        </ButtonsBox>
+        <SpecialBox>
+          <p style={{ margin: 0 }}>
+            Pairwise is currently offering a special deal to early adopters like
+            yourself. If you purchase the course now you will also get a
+            complimentary 30 minute coaching session with a professional
+            developer.
+          </p>
+        </SpecialBox>
+      </>
     );
   };
 
@@ -373,6 +400,13 @@ const ButtonsBox = styled.div`
       }
     }
   }
+`;
+
+const SpecialBox = styled.div`
+  margin-top: 12px;
+  padding: 8px;
+  border: 1px solid ${COLORS.SECONDARY_YELLOW};
+  border-radius: 4px;
 `;
 
 /** ===========================================================================

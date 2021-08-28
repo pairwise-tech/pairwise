@@ -68,14 +68,17 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
               software developer.
             </Text>
             <Text>
-              You can now purchase the course for <PriceText>$50 USD</PriceText>
-              . This will allow you to lock in full lifetime access to all of
-              the existing and future content in this course.
+              You can now purchase the course for{" "}
+              <HighlightText>$50 USD</HighlightText>. This will allow you to
+              lock in full lifetime access to all of the existing and future
+              content in this course.
             </Text>
             <Text>
               As an early Pairwise adopter, you will also get a{" "}
-              <b>free 30 minute career coaching session</b> with a professional
-              developer with your course purchase.
+              <HighlightText>
+                free 30 minute career coaching session
+              </HighlightText>{" "}
+              with a professional developer with your course purchase.
             </Text>
             <Button
               large
@@ -173,7 +176,7 @@ const Text = styled.p`
   ${defaultTextColor};
 `;
 
-const PriceText = styled.b`
+const HighlightText = styled.b`
   font-weight: bold;
   ${themeColor("color", COLORS.SECONDARY_YELLOW, COLORS.PRIMARY_BLUE)};
 `;
