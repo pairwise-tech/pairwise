@@ -58,7 +58,9 @@ class AdminUserComponent extends React.Component<
 
   render(): JSX.Element {
     const { alert } = this.state;
-    const { user, challengeBlobCache, courseSkeletons } = this.props;
+    const { user, adminUserSettings, challengeBlobCache, courseSkeletons } =
+      this.props;
+    const isDark = adminUserSettings.appTheme === "dark";
     const showDetails = this.state.uuid === user.uuid;
     const payment = user.payments[0];
     const challengeTotal = progressHistoryToChallengeCount(
@@ -67,7 +69,6 @@ class AdminUserComponent extends React.Component<
 
     const key = `${user.uuid}-${this.state.challengeId}`;
     const blob = challengeBlobCache[key];
-    const isDark = user.settings.appTheme === "dark";
 
     return (
       <DataCard key={user.uuid}>
@@ -321,6 +322,7 @@ const ModuleProgressPercentage = styled.div`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  adminUserSettings: Modules.selectors.admin.adminUserSettings(state),
   courseSkeletons: Modules.selectors.challenges.courseSkeletons(state),
 });
 
