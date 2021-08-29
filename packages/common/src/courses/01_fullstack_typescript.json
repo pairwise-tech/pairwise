@@ -16,10 +16,10 @@
           "title": "Intro",
           "instructions": "",
           "testCode": "test(\"`example` function should...\", () => {\n  pass();\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/d2DShyE37T4",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Welcome to Pairwise, a platform you can learn coding skills and get a job. You can get started coding right away, and our structured curriculum includes video lessons for each challenge in case you get stuck\\!"
+          "content": "Welcome to Pairwise, a platform you can learn coding skills and get a job. You can get started coding right away, and our structured curriculum includes video lessons for each challenge in case you get stuck.\n\n> We are currently running a promotional sale\\! If you purchase the course now, you will also get access to a complimentary 30 minute career coaching session with a professional developer.\n"
         },
         {
           "id": "iSF4BNIl",
