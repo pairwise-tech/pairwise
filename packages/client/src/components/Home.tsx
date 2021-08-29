@@ -265,7 +265,7 @@ class Home extends React.Component<IProps, {}> {
           <p style={{ margin: 0 }}>
             Pairwise is currently offering a special deal to early adopters like
             yourself. If you purchase the course now you will also get a
-            complimentary 30 minute coaching session with a professional
+            complimentary 30 minute career coaching session with a professional
             developer.
           </p>
         </SpecialBox>
