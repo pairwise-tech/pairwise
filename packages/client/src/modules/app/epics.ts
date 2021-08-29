@@ -351,6 +351,75 @@ const locationChangeEpic: EpicSignature = (_, __, deps) => {
   );
 };
 
+export enum GoogleAdConversionTypes {
+  CHALLENGE_COMPLETION = "AW-470847406/65YsCIjX-e8CEK6fwuAB",
+  USER_REGISTRATION = "AW-470847406/Hz_eCKvi-e8CEK6fwuAB",
+  COURSE_PURCHASE = "AW-470847406/N3GkCPCD-u8CEK6fwuAB",
+}
+
+/**
+ * Track conversion events for Google Ads.
+ */
+const googleAdConversionsEpic: EpicSignature = (action$, _, deps) => {
+  const challengeCompletionEvent$ = action$.pipe(
+    filter(isActionOf(Actions.handleAttemptChallenge)),
+    filter((x) => x.payload.complete),
+    map(() =>
+      Actions.trackGoogleAdConversion(
+        GoogleAdConversionTypes.CHALLENGE_COMPLETION,
+      ),
+    ),
+  );
+
+  const userRegistrationEvent$ = action$.pipe(
+    filter(isActionOf(Actions.captureAppInitializationUrl)),
+    map((x) => x.payload.appInitializationType),
+    filter((type) => type === APP_INITIALIZATION_TYPE.ACCOUNT_CREATED),
+    map(() =>
+      Actions.trackGoogleAdConversion(
+        GoogleAdConversionTypes.USER_REGISTRATION,
+      ),
+    ),
+  );
+
+  const paymentSuccess$ = action$.pipe(
+    filter(isActionOf(Actions.captureAppInitializationUrl)),
+    map((x) => x.payload.appInitializationType),
+    filter((type) => type === APP_INITIALIZATION_TYPE.PAYMENT_SUCCESS),
+    map(() =>
+      Actions.trackGoogleAdConversion(GoogleAdConversionTypes.COURSE_PURCHASE),
+    ),
+  );
+
+  const trackConversion$ = action$.pipe(
+    filter(isActionOf(Actions.trackGoogleAdConversion)),
+    pluck("payload"),
+    tap((conversionType) => {
+      try {
+        // Should be defined by script loaded in index.html
+        // @ts-ignore
+        gtag_report_conversion(conversionType);
+      } catch (err) {
+        console.error("Error reporting Google Ad Conversion", err);
+      }
+    }),
+    ignoreElements(),
+  );
+
+  return merge(
+    challengeCompletionEvent$,
+    userRegistrationEvent$,
+    paymentSuccess$,
+    trackConversion$,
+  ).pipe(
+    catchError((err, stream) => {
+      console.warn(`Error tracking Google Ads conversion: ${err.message}`);
+      captureSentryException(err);
+      return stream; // Do not collapse the stream
+    }),
+  );
+};
+
 /** ===========================================================================
  * Analytics Epics
  * ============================================================================
@@ -492,5 +561,6 @@ export default combineEpics(
   promptToAddEmailEpic,
   notifyOnAuthenticationFailureEpic,
   locationChangeEpic,
+  googleAdConversionsEpic,
   analyticsEpic,
 );

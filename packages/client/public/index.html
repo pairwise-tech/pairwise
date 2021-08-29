@@ -133,12 +133,44 @@
         <p>Loading...</p>
       </div>
     </div>
+    <!-- Global site tag (gtag.js) - Google Ads: 470847406 -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=AW-470847406"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "AW-470847406");
+    </script>
+    <!-- 
+      Event snippet for Challenge Completion Conversion conversion page.
+      In your html page, add the snippet and call gtag_report_conversion when
+      someone clicks on the chosen link or button.
+    -->
+    <script>
+      // NOTE: "send_to" is a custom field I added, to make this usable for
+      // multiple conversion types. The event callback is a no-op.
+      function gtag_report_conversion(send_to) {
+        gtag("event", "conversion", {
+          send_to,
+          event_callback: () => null,
+        });
+        return false;
+      }
+    </script>
+
+    <!-- Install Stripe library -->
+    <script async src="https://js.stripe.com/v3/"></script>
     <% if (process.env.REACT_APP_CODEPRESS === "true") { %>
     <!-- 
-      Live Reload was causing issues for us in codepress. Namely it was
-      occasionally reloading before we saved and it would reload on image
-      upload, which would prevent saving. 
-    -->
+        Live Reload was causing issues for us in codepress. Namely it was
+        occasionally reloading before we saved and it would reload on image
+        upload, which would prevent saving. 
+      -->
     <script>
       {
         var WS = window.WebSocket;
@@ -155,6 +187,5 @@
       }
     </script>
     <% } %>
-    <script async src="https://js.stripe.com/v3/"></script>
   </body>
 </html>

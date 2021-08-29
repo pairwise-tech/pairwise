@@ -2,6 +2,7 @@ import { createAction } from "typesafe-actions";
 import { Location as HistoryLocation } from "history";
 import { ParsedQuery } from "query-string";
 import { APP_INITIALIZATION_TYPE } from "tools/utils";
+import { GoogleAdConversionTypes } from "./epics";
 
 /** ===========================================================================
  * Action Types
@@ -20,6 +21,7 @@ enum ActionTypesEnum {
   LOADING_ANIMATION_COMPLETE = "LOADING_ANIMATION_COMPLETE",
   SET_ADMIN_DRAWER_STATE = "SET_ADMIN_DRAWER_STATE",
   SET_ADMIN_PULL_REQUEST_ID = "SET_ADMIN_PULL_REQUEST_ID",
+  TRACK_GOOGLE_AD_CONVERSION = "TRACK_GOOGLE_AD_CONVERSION",
 }
 
 /** ===========================================================================
@@ -76,3 +78,7 @@ export const setAdminDrawerState = createAction(
 export const setAdminPullRequestId = createAction(
   ActionTypesEnum.SET_ADMIN_PULL_REQUEST_ID,
 )<string>();
+
+export const trackGoogleAdConversion = createAction(
+  ActionTypesEnum.TRACK_GOOGLE_AD_CONVERSION,
+)<GoogleAdConversionTypes>();
