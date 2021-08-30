@@ -39,25 +39,23 @@ const CUSTOM_SUCCESS_MESSAGES: { [key: string]: JSX.Element | string } = {
   // challenge id : custom message
   iSF4BNIl: (
     <span>
-      Great job, you solved the first intro challenge! The Pairwise Curriculum
-      is composed of hundreds of small challenges like this because we believe
-      writing code is the best way to learn. Choose{" "}
-      <strong>Next Challenge</strong> to try and solve another.
+      Nice job! That was a basic HTML challenge. HTML is the first important
+      building block of the web. Next, let's tack a look at CSS. Hit the{" "}
+      <strong>Next Challenge</strong> to continue.
     </span>
   ),
   Oqha$qtc: (
     <span>
-      Awesome! Now you've seen a bit of HTML and CSS which are the foundation of
-      the modern web. The next challenge will introduce you to a programming
-      language.
+      Awesome! Together, HTML and CSS make up all the content you see on today's
+      internet. Next, let's dive straight into programming and write your first
+      function.
     </span>
   ),
   Sbb4Nf76s: (
     <span>
-      Excellent! Now you have a taste of HTML, CSS, and TypeScript, which will
-      give you the skills to build modern websites and apps. These challenges
-      are intended as a short demonstration of how the Pairwise curriculum works
-      - there are hundreds of additional challenges ahead waiting for you!
+      Excellent job! These short challenges are a preview of how the Pairwise
+      curriculum works. There are over 500 more challenges ahead waiting for
+      you.
     </span>
   ),
 };
