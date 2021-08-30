@@ -40,7 +40,7 @@ const CUSTOM_SUCCESS_MESSAGES: { [key: string]: JSX.Element | string } = {
   iSF4BNIl: (
     <span>
       Nice job! That was a basic HTML challenge. HTML is the first important
-      building block of the web. Next, let's tack a look at CSS. Hit the{" "}
+      building block of the web. Next, let's take a look at CSS. Hit the{" "}
       <strong>Next Challenge</strong> to continue.
     </span>
   ),
