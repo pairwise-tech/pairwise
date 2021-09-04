@@ -263,6 +263,7 @@ const Title = styled.h2`
 `;
 
 const ControlRow = styled.div`
+  margin-top: 8px;
   display: flex;
   flex-direction: row;
 

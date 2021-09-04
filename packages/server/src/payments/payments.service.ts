@@ -324,6 +324,13 @@ export class PaymentsService {
       courseId: courseMetadata.id,
     };
 
+    const descriptionSuffix =
+      "The premium course includes the following: Three one hour coaching sessions throughout the curriculum, access to our premium Pairwise Slack channel, 1:1 email support throughout the curriculum, and personalized code/project review.";
+
+    const description = IS_PREMIUM
+      ? `${courseMetadata.description} ${descriptionSuffix}`
+      : courseMetadata.description;
+
     // Create a new checkout session with Stripe
     const session = await this.stripe.checkout.sessions.create({
       customer_email: userEmail,
@@ -333,8 +340,8 @@ export class PaymentsService {
         {
           quantity: 1,
           name: title,
+          description,
           amount: price,
-          description: courseMetadata.description,
           currency: this.COURSE_CURRENCY,
           images: [this.PAIRWISE_ICON_URL],
         },
