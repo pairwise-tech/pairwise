@@ -17,6 +17,7 @@ import {
   UserProfile,
   ILastActiveIdsDto,
   canDisconnectAccountRequest,
+  PAYMENT_PLAN,
 } from "@pairwise/common";
 import validator from "validator";
 import { BadRequestException } from "@nestjs/common";
@@ -405,5 +406,16 @@ export const validateDisconnectAccountRequest = (profile: UserProfile) => {
     throw new BadRequestException(
       "You cannot disconnect all social accounts without a verified email.",
     );
+  }
+};
+
+/**
+ * Validate a provided payment plan value.
+ */
+export const validatePaymentPlan = (plan: PAYMENT_PLAN) => {
+  if (plan === "REGULAR" || plan === "PREMIUM") {
+    return true;
+  } else {
+    throw new BadRequestException("Invalid payment plan provided.");
   }
 };

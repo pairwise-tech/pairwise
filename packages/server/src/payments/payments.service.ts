@@ -12,6 +12,7 @@ import { Repository } from "typeorm";
 import { SUCCESS_CODES, ERROR_CODES } from "../tools/constants";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import {
+  validatePaymentPlan,
   validatePaymentRequest,
   validateRefundRequest,
 } from "../tools/validation-utils";
@@ -106,8 +107,11 @@ export class PaymentsService {
     plan: PAYMENT_PLAN,
   ) {
     console.log(
-      `[STRIPE]: Running handleCreatePaymentIntent for user: ${requestUser.profile.uuid} and courseId: ${courseId}`,
+      `[STRIPE]: Running handleCreatePaymentIntent for user: ${requestUser.profile.uuid}, courseId: ${courseId}, plan: ${plan}`,
     );
+
+    // Validate the payment plan
+    validatePaymentPlan(plan);
 
     const courseMetadata = ContentUtility.getCourseMetadata(courseId);
     if (!courseMetadata) {

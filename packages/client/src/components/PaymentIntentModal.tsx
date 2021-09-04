@@ -144,7 +144,7 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
   }
 
   confirmPurchase = (courseId: string) => {
-    this.props.startCheckout({ courseId, plan: "REGULAR" });
+    this.props.startCheckout({ courseId, plan: "PREMIUM" });
   };
 
   setModalState = (state: boolean) => {
