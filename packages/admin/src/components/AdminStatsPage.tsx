@@ -153,7 +153,7 @@ class AdminStatsPage extends React.Component<IProps, IState> {
   }
 
   renderProgressRecords = (progressRecords: ProgressRecords) => {
-    const { status, records } = progressRecords;
+    const { status = "", records = [] } = progressRecords;
     const isDark = this.props.adminUserSettings.appTheme === "dark";
 
     // Sort by challenge completed count
