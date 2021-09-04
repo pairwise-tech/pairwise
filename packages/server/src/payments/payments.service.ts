@@ -243,7 +243,7 @@ export class PaymentsService {
   }
 
   private async handlePurchaseCourseRequest(args: PurchaseCourseRequest) {
-    const { userEmail, courseId } = args;
+    const { userEmail, courseId, plan } = args;
     const user = await this.userService.findUserByEmailGetFullProfile(
       userEmail,
     );
@@ -260,8 +260,11 @@ export class PaymentsService {
 
     /**
      * NOTE: Currently course payments are granted a free coaching session.
+     *
+     * Premium plan purchases receive 3 coaching sessions.
      */
-    await this.userService.grantCoachingSessionToUser(profile.uuid);
+    const sessions = plan === "PREMIUM" ? 3 : 1;
+    await this.userService.grantCoachingSessionToUser(profile.uuid, sessions);
 
     return SUCCESS_CODES.OK;
   }

@@ -162,9 +162,9 @@ export class UserService {
     await this.userRepository.update({ uuid }, { emailVerified: true });
   }
 
-  public async grantCoachingSessionToUser(uuid: string) {
+  public async grantCoachingSessionToUser(uuid: string, sessions: number) {
     console.log(`Granting coaching session to user, uuid: ${uuid}`);
-    await this.userRepository.update({ uuid }, { coachingSessions: 1 });
+    await this.userRepository.update({ uuid }, { coachingSessions: sessions });
     return SUCCESS_CODES.OK;
   }
 
