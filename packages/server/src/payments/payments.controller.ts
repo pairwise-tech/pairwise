@@ -30,6 +30,12 @@ export class PaymentsController {
     );
   }
 
+  @UseGuards(AuthGuard("jwt"))
+  @Post("/cancelled")
+  public paymentCancelledHook(@Req() req: AuthenticatedRequest) {
+    return this.paymentsService.handlePaymentCancelledEvent(req.user);
+  }
+
   // Stripe webhook endpoint. Stripe will send all webhook events here,
   // currently we only rely on this for the checkout session completed
   // event.

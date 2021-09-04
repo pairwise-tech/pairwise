@@ -523,6 +523,13 @@ class Api extends BaseApiClass {
     });
   };
 
+  handlePurchaseCancelledEvent = async () => {
+    const { config } = this.getRequestHeaders();
+    return this.httpHandler(async () => {
+      return axios.post(`${HOST}/payments/cancelled`, {}, config);
+    });
+  };
+
   isUserAdmin = async () => {
     try {
       const { config } = this.getRequestHeaders();

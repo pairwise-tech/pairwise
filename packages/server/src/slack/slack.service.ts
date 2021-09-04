@@ -97,6 +97,13 @@ export class SlackService {
     await this.postMessageToChannel(message, { channel: "production" });
   }
 
+  public async postPurchaseCancelledMessage(email: string) {
+    const sob = ":sob:";
+    const message = `${sob} *Course purchase cancelled by: ${email}...*`;
+    console.log(message);
+    await this.postMessageToChannel(message, { channel: "production" });
+  }
+
   public async postAdminActionAwarenessMessage({
     adminUserEmail,
     config,

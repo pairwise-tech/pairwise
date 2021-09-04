@@ -352,4 +352,8 @@ export class PaymentsService {
 
     return session;
   }
+
+  public handlePaymentCancelledEvent = (requestUser: RequestUser) => {
+    this.slackService.postPurchaseCancelledMessage(requestUser.profile.email);
+  };
 }
