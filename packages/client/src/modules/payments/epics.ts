@@ -108,7 +108,6 @@ const startCheckoutEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.startCheckout)),
     pluck("payload"),
-    pluck("courseId"),
     mergeMap(deps.api.createCheckoutSession),
     map((result) => {
       if (result.value) {

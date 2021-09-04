@@ -4,25 +4,30 @@ import {
   Controller,
   UseGuards,
   Post,
-  Param,
   Req,
+  Body,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthenticatedRequest } from "../types";
 import { PaymentsService } from "./payments.service";
+import { PaymentRequestDto } from "@pairwise/common";
 
 @Controller("payments")
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
   @UseGuards(AuthGuard("jwt"))
-  @Post("/checkout/:courseId")
+  @Post("/checkout")
   public createCoursePaymentIntent(
-    @Param() params,
+    @Body() body: PaymentRequestDto,
     @Req() req: AuthenticatedRequest,
   ) {
-    const { courseId } = params;
-    return this.paymentsService.handleCreatePaymentIntent(req.user, courseId);
+    const { courseId, plan } = body;
+    return this.paymentsService.handleCreatePaymentIntent(
+      req.user,
+      courseId,
+      plan,
+    );
   }
 
   // Stripe webhook endpoint. Stripe will send all webhook events here,

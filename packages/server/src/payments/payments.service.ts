@@ -22,6 +22,7 @@ import {
   UserProfile,
   ContentUtility,
   CourseMetadata,
+  PAYMENT_PLAN,
 } from "@pairwise/common";
 import { UserService } from "../user/user.service";
 import { captureSentryException } from "../tools/sentry-utils";
@@ -46,6 +47,17 @@ interface PurchaseCourseRequest {
   userEmail: string;
   courseId: string;
   isGift?: boolean;
+  plan: PAYMENT_PLAN;
+}
+
+interface CheckoutMetadata {
+  plan: PAYMENT_PLAN;
+  courseId: string;
+}
+
+interface StripeCheckoutObjectData {
+  customer_email: string;
+  metadata: CheckoutMetadata;
 }
 
 /** ===========================================================================
@@ -91,6 +103,7 @@ export class PaymentsService {
   public async handleCreatePaymentIntent(
     requestUser: RequestUser,
     courseId: string,
+    plan: PAYMENT_PLAN,
   ) {
     console.log(
       `[STRIPE]: Running handleCreatePaymentIntent for user: ${requestUser.profile.uuid} and courseId: ${courseId}`,
@@ -106,6 +119,7 @@ export class PaymentsService {
         const session = await this.createStripeCheckoutSession(
           requestUser,
           courseMetadata,
+          plan,
         );
 
         const result: StripeStartCheckoutSuccessResponse = {
@@ -145,16 +159,24 @@ export class PaymentsService {
       );
 
       if (event.type === StripeEventTypes.CHECKOUT_COMPLETED) {
-        const { object } = event.data as any; /* Stripe type is pointless */
+        // Stripe type is pointless
+        const object = event.data.object as unknown as StripeCheckoutObjectData;
+
         const email = object.customer_email;
+        const plan = object.metadata.plan;
         const courseId = object.metadata.courseId;
+
         console.log(
           `[STRIPE]: Checkout session completed event received for user: ${email} and course: ${courseId}`,
         );
-        await this.handlePurchaseCourseRequest({ userEmail: email, courseId });
+        await this.handlePurchaseCourseRequest({
+          plan,
+          courseId,
+          userEmail: email,
+        });
 
         // Post message to Slack
-        this.slackService.postCoursePurchaseMessage(email);
+        this.slackService.postCoursePurchaseMessage(email, plan);
 
         // Send payment confirmation email to the user
         this.emailService.sendPaymentConfirmationEmail(email);
@@ -180,9 +202,10 @@ export class PaymentsService {
       `[ADMIN]: Admin request to purchase course: ${courseId} for user: ${userEmail}`,
     );
     return this.handlePurchaseCourseRequest({
-      userEmail,
       courseId,
+      userEmail,
       isGift: true,
+      plan: "REGULAR",
     });
   }
 
@@ -243,18 +266,24 @@ export class PaymentsService {
     user: UserProfile,
     args: PurchaseCourseRequest,
   ) => {
-    const { courseId, isGift = false } = args;
+    const { plan, courseId, isGift = false } = args;
 
     // Get the metadata for this course
     const courseMetadata = ContentUtility.getCourseMetadata(courseId);
 
+    const IS_PREMIUM = plan === "PREMIUM";
+    const price = IS_PREMIUM
+      ? courseMetadata.premiumPrice
+      : courseMetadata.price;
+
     // Construct the new payment data. Once Stripe is integrated, most of this
     // data will come from Stripe and the actual payment information.
     const payment: Payment = {
+      plan,
       courseId,
       status: "CONFIRMED",
       datePaid: new Date(),
-      amountPaid: courseMetadata.price,
+      amountPaid: price,
       paymentType: isGift ? "ADMIN_GIFT" : "USER_PAID",
     };
 
@@ -269,6 +298,7 @@ export class PaymentsService {
   private async createStripeCheckoutSession(
     requestUser: RequestUser,
     courseMetadata: CourseMetadata,
+    plan: PAYMENT_PLAN,
   ) {
     const userEmail = requestUser.profile.email;
 
@@ -276,18 +306,30 @@ export class PaymentsService {
       // Should not happen, but check just in case.
       throw new BadRequestException(ERROR_CODES.MISSING_EMAIL);
     }
+
+    const IS_PREMIUM = plan === "PREMIUM";
+    const price = IS_PREMIUM
+      ? courseMetadata.premiumPrice
+      : courseMetadata.price;
+    const title = IS_PREMIUM
+      ? `${courseMetadata.title} (PREMIUM)`
+      : courseMetadata.title;
+
+    const metadata: Stripe.MetadataParam = {
+      plan,
+      courseId: courseMetadata.id,
+    };
+
     // Create a new checkout session with Stripe
     const session = await this.stripe.checkout.sessions.create({
       customer_email: userEmail,
-      metadata: {
-        courseId: courseMetadata.id,
-      },
+      metadata,
       payment_method_types: ["card"],
       line_items: [
         {
           quantity: 1,
-          name: courseMetadata.title,
-          amount: courseMetadata.price,
+          name: title,
+          amount: price,
           description: courseMetadata.description,
           currency: this.COURSE_CURRENCY,
           images: [this.PAIRWISE_ICON_URL],

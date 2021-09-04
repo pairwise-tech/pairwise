@@ -23,6 +23,7 @@ import {
   PullRequestCourseContent,
   SSO,
   UserProfile,
+  PaymentRequestDto,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable, lastValueFrom } from "rxjs";
@@ -511,12 +512,12 @@ class Api extends BaseApiClass {
     await localStorageHTTP.persistDataPersistenceForNewAccount();
   };
 
-  createCheckoutSession = async (courseId: string) => {
+  createCheckoutSession = async (paymentRequest: PaymentRequestDto) => {
     const { config } = this.getRequestHeaders();
     return this.httpHandler(async () => {
       return axios.post<StripeStartCheckoutSuccessResponse>(
-        `${HOST}/payments/checkout/${courseId}`,
-        {},
+        `${HOST}/payments/checkout`,
+        paymentRequest,
         config,
       );
     });

@@ -4,6 +4,7 @@ import {
   IFeedbackDto,
   ContentUtility,
   IGenericFeedback,
+  PAYMENT_PLAN,
 } from "@pairwise/common";
 import { RequestUser } from "../types";
 import { GenericUserProfile } from "../user/user.service";
@@ -89,9 +90,10 @@ export class SlackService {
     );
   }
 
-  public async postCoursePurchaseMessage(email: string) {
+  public async postCoursePurchaseMessage(email: string, plan: PAYMENT_PLAN) {
     const fire = ":fire:";
-    const message = `${fire} *Course purchased by: ${email}!!!* ${fire}`;
+    const prefix = plan === "PREMIUM" ? "PREMIUM " : "";
+    const message = `${fire} *${prefix}Course purchased by: ${email}!!!* ${fire}`;
     await this.postMessageToChannel(message, { channel: "production" });
   }
 

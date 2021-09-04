@@ -110,9 +110,15 @@ export interface Payment {
   courseId: string;
   datePaid: Date;
   amountPaid: number;
+  plan: PAYMENT_PLAN;
   status: PAYMENT_STATUS;
   paymentType: PAYMENT_TYPE;
   extraData?: string /* generic json data */;
+}
+
+export interface PaymentRequestDto {
+  courseId: string;
+  plan: PAYMENT_PLAN;
 }
 
 export interface ILastActiveIdsDto {
