@@ -38,7 +38,7 @@ class PaymentSuccessModal extends React.Component<IProps, IState> {
 
     const firstChallengeId = paymentSuccessCourse.modules[0].challenges[0].id;
     const lastActiveChallenge = user.lastActiveChallengeIds.lastActiveChallenge;
-    const { hasCoachingSession } = profile;
+    const hasCoachingSession = profile.coachingSessions > 0;
     const id = lastActiveChallenge || firstChallengeId;
 
     return (

@@ -26,7 +26,7 @@ export interface AdminUserView {
   givenName: string;
   googleAccountId: Nullable<string>;
   lastActiveChallengeIds: any;
-  hasCoachingSession: Nullable<boolean>;
+  coachingSessions: number;
   payments: Payment[];
   settings: UserSettings;
   challengeProgressHistory: UserCourseProgress;
@@ -44,7 +44,7 @@ const users = createReducer<
       if (user.uuid === action.payload.userUuid) {
         return {
           ...user,
-          hasCoachingSession: false,
+          coachingSessions: 0,
         };
       } else {
         return user;

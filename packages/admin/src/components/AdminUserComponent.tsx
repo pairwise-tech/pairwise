@@ -109,7 +109,7 @@ class AdminUserComponent extends React.Component<
           User has completed {challengeTotal}{" "}
           {challengeTotal === 1 ? "challenge" : "challenges"}.
         </SummaryText>
-        {user.hasCoachingSession && (
+        {user.coachingSessions > 0 && (
           <SummaryText>
             User currently has a coaching session available.
           </SummaryText>
@@ -152,7 +152,7 @@ class AdminUserComponent extends React.Component<
           ) : (
             <CardButton disabled>Payment has been refunded.</CardButton>
           )}
-          {user.hasCoachingSession && (
+          {user.coachingSessions > 0 && (
             <CardButton
               icon="hat"
               onClick={() => revokeCoachingSession({ userUuid: user.uuid })}

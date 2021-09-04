@@ -282,7 +282,7 @@ class Account extends React.Component<IProps, IState> {
           </>
         )}
         <PageTitle style={{ marginTop: 24 }}>Coaching Sessions</PageTitle>
-        {profile.hasCoachingSession ? (
+        {profile.coachingSessions > 0 ? (
           <Text style={{ maxWidth: 500 }}>
             You currently have a 30 minute career coaching session with a
             professional developer! To schedule this at anytime reach out to us

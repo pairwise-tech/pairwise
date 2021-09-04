@@ -164,13 +164,13 @@ export class UserService {
 
   public async grantCoachingSessionToUser(uuid: string) {
     console.log(`Granting coaching session to user, uuid: ${uuid}`);
-    await this.userRepository.update({ uuid }, { hasCoachingSession: true });
+    await this.userRepository.update({ uuid }, { coachingSessions: 1 });
     return SUCCESS_CODES.OK;
   }
 
   public async markCoachingSessionAsCompleteForUser(uuid: string) {
     console.log(`Revoking coaching session for user, uuid: ${uuid}`);
-    await this.userRepository.update({ uuid }, { hasCoachingSession: false });
+    await this.userRepository.update({ uuid }, { coachingSessions: 0 });
     return SUCCESS_CODES.OK;
   }
 

@@ -37,7 +37,7 @@ export interface UserProfile {
   givenName: string;
   familyName: string;
   avatarUrl: string;
-  hasCoachingSession: boolean | null;
+  coachingSessions: number;
   googleAccountId: string | null;
   facebookAccountId: string | null;
   githubAccountId: string | null;
