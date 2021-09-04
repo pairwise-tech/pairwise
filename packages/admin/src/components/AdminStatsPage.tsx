@@ -13,18 +13,35 @@ import {
   estimateTotalPaymentsRevenue,
   summarizeUserProgress,
 } from "../tools/admin-utils";
-import { COLORS } from "../tools/constants";
+import { COLORS, MOBILE } from "../tools/constants";
 import { ProgressRecords } from "../modules/stats/store";
 import { Button } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 import { themeText } from "./AdminThemeContainer";
 
 /** ===========================================================================
+ * Types & Config
+ * ============================================================================
+ */
+
+interface IState {
+  filterOnlyRegisteredUsers: boolean;
+}
+
+/** ===========================================================================
  * Home Component
  * ============================================================================
  */
 
-class AdminStatsPage extends React.Component<IProps, {}> {
+class AdminStatsPage extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
+
+    this.state = {
+      filterOnlyRegisteredUsers: true,
+    };
+  }
+
   render(): Nullable<JSX.Element> {
     const {
       usersList,
@@ -138,45 +155,76 @@ class AdminStatsPage extends React.Component<IProps, {}> {
   renderProgressRecords = (progressRecords: ProgressRecords) => {
     const { status, records } = progressRecords;
     const isDark = this.props.adminUserSettings.appTheme === "dark";
+
+    // Sort by challenge completed count
+    const sortedRecords = records.sort(
+      (a, b) => b.challenges.length - a.challenges.length,
+    );
     return (
       <>
         <StatusText>{status}</StatusText>
-        {records ? (
-          records.map((record) => {
-            const IS_REGISTERED_USER = !record.user.includes("Anonymous");
-            return (
-              <DataCard key={record.user}>
-                <KeyValue
-                  allowCopy
-                  label="User"
-                  value={record.user}
-                  code={IS_REGISTERED_USER}
-                />
-                {IS_REGISTERED_USER && (
-                  <CardButton
-                    icon="user"
-                    style={{ marginTop: 12, marginBottom: 16 }}
-                  >
-                    <Link
-                      style={{ color: isDark ? "white" : "black" }}
-                      to={`/search/${record.user}`}
+        <ControlRow>
+          <Button
+            icon="filter"
+            onClick={this.toggleRecordsFilter}
+            style={{ width: 275, marginRight: 8, marginBottom: 8 }}
+          >
+            {this.state.filterOnlyRegisteredUsers
+              ? "Displaying Registered Users Only"
+              : "Displaying All Records"}
+          </Button>
+        </ControlRow>
+        {sortedRecords ? (
+          sortedRecords
+            .filter((record) => {
+              const IS_REGISTERED_USER = !record.user.includes("Anonymous");
+              if (this.state.filterOnlyRegisteredUsers) {
+                return IS_REGISTERED_USER;
+              } else {
+                return true;
+              }
+            })
+            .map((record) => {
+              const IS_REGISTERED_USER = !record.user.includes("Anonymous");
+              return (
+                <DataCard key={record.user}>
+                  <KeyValue
+                    allowCopy
+                    label="User"
+                    value={record.user}
+                    code={IS_REGISTERED_USER}
+                  />
+                  {IS_REGISTERED_USER && (
+                    <CardButton
+                      icon="user"
+                      style={{ marginTop: 12, marginBottom: 16 }}
                     >
-                      View User
-                    </Link>
-                  </CardButton>
-                )}
-                <JsonComponent
-                  title="Challenges Completed:"
-                  data={record.challenges}
-                />
-              </DataCard>
-            );
-          })
+                      <Link
+                        style={{ color: isDark ? "white" : "black" }}
+                        to={`/search/${record.user}`}
+                      >
+                        View User
+                      </Link>
+                    </CardButton>
+                  )}
+                  <JsonComponent
+                    title="Challenges Completed:"
+                    data={record.challenges}
+                  />
+                </DataCard>
+              );
+            })
         ) : (
           <p style={{ color: COLORS.GRAY_TEXT }}>No records yet...</p>
         )}
       </>
     );
+  };
+
+  toggleRecordsFilter = () => {
+    this.setState((ps) => ({
+      filterOnlyRegisteredUsers: !ps.filterOnlyRegisteredUsers,
+    }));
   };
 }
 
@@ -212,6 +260,15 @@ const Row = styled.div`
 
 const Title = styled.h2`
   ${themeText(COLORS.SECONDARY_YELLOW, COLORS.TEXT_LIGHT_THEME)};
+`;
+
+const ControlRow = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  @media ${MOBILE} {
+    flex-direction: column;
+  }
 `;
 
 /** ===========================================================================

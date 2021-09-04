@@ -264,8 +264,18 @@ export class ProgressService {
     };
 
     let count = 0;
+    let moreThanThreeCount = 0;
+    let registeredUserCount = 0;
 
     const data = Object.values(records).map((x) => {
+      if (!x.user.includes("Anonymous")) {
+        registeredUserCount++;
+      }
+
+      if (x.challengeIds.size >= 3) {
+        moreThanThreeCount++;
+      }
+
       const challenges = Array.from(x.challengeIds).map((id) => {
         count++;
 
@@ -282,7 +292,7 @@ export class ProgressService {
 
     const users = Object.keys(records).length;
     const last = hoursSince(this.time);
-    const status = `${count} challenges updated in the last ${last} hours by ${users} users.`;
+    const status = `${count} challenges updated in the last ${last} hours by ${users} users. ${moreThanThreeCount} records include 3 or more challenges. ${registeredUserCount} are registered users.`;
 
     return {
       status,
