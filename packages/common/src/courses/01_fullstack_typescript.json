@@ -6436,6 +6436,17 @@
           "content": "Welcome to the Debugging & Refactoring Projects\\!\n\nHere you will get some practice debugging and refactoring code on some real world projects, including some of the projects you have previously completed in the course."
         },
         {
+          "type": "project",
+          "id": "vZOXZlTHb",
+          "title": "Refactor Previous Challenge Solutions",
+          "instructions": "",
+          "testCode": "test(\"`example` function should...\", () => {\n  pass();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Remember when you worked through the TypeScript Programming module at the start of the curriculum?\n\nA lot of those challenges were probably quite hard to solve at the time.\n\nNow, in retrospect, we expect you will find many of them to be easy by comparison\\!\n\nRevisit this module and choose 3\\-5 challenges which you struggled with and review your solutions.\n\nTry to either refactor or rewrite these now that you have more experience, and reflect on how you solve the challenges now versus on your first attempt.\n\nFinally, collect these new solutions into a new code repository and add a test suite to test your new solutions."
+        },
+        {
           "id": "5VL9dBK0M",
           "type": "project",
           "title": "Refactor a Legacy Project",
