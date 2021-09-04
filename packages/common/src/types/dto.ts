@@ -124,6 +124,8 @@ export type PAYMENT_STATUS = "CONFIRMED" | "REFUNDED";
 
 export type PAYMENT_TYPE = "ADMIN_GIFT" | "USER_PAID";
 
+export type PAYMENT_PLAN = "REGULAR" | "PREMIUM";
+
 export type COURSE_ACCESS_LEVEL = "FREE" | "PAID";
 
 export type SSO = "google" | "github" | "facebook";

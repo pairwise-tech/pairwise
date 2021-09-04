@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { User } from "../user/user.entity";
-import { PAYMENT_STATUS, PAYMENT_TYPE } from "@pairwise/common";
+import { PAYMENT_PLAN, PAYMENT_STATUS, PAYMENT_TYPE } from "@pairwise/common";
 
 /** ===========================================================================
  * Entity
@@ -33,6 +33,9 @@ export class Payments {
 
   @Column()
   public amountPaid: number;
+
+  @Column()
+  public plan: PAYMENT_PLAN;
 
   @Column()
   public status: PAYMENT_STATUS;
