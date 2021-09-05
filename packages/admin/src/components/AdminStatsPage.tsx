@@ -42,6 +42,19 @@ class AdminStatsPage extends React.Component<IProps, IState> {
     };
   }
 
+  componentDidUpdate() {
+    // If there are no registered users, flip the flag to show all records
+    const { progressRecords } = this.props;
+    if (progressRecords && progressRecords.records.length > 0) {
+      const anyRegisteredUser = progressRecords.records.some(
+        (x) => !x.user.includes("Anonymous"),
+      );
+      if (!anyRegisteredUser) {
+        this.setState({ filterOnlyRegisteredUsers: false });
+      }
+    }
+  }
+
   render(): Nullable<JSX.Element> {
     const {
       usersList,
@@ -167,7 +180,7 @@ class AdminStatsPage extends React.Component<IProps, IState> {
           <Button
             icon="filter"
             onClick={this.toggleRecordsFilter}
-            style={{ width: 275, marginRight: 8, marginBottom: 8 }}
+            style={{ width: 275, margin: 8 }}
           >
             {this.state.filterOnlyRegisteredUsers
               ? "Displaying Registered Users Only"
