@@ -107,7 +107,7 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
                     large
                     icon="tick-circle"
                     intent="success"
-                    id="start-checkout-button"
+                    id="start-checkout-button-regular"
                     style={{ marginTop: 18, marginBottom: 18 }}
                     onClick={() =>
                       this.handleSelectPaymentPlan(
@@ -160,7 +160,7 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
                     icon="star"
                     intent="primary"
                     style={{ marginTop: 18, marginBottom: 18 }}
-                    id="start-checkout-button"
+                    id="start-checkout-button-premium"
                     onClick={() =>
                       this.handleSelectPaymentPlan(
                         courseToPurchase.id,
