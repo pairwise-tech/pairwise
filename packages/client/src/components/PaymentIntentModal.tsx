@@ -5,9 +5,10 @@ import { connect } from "react-redux";
 import Modules, { ReduxStoreState } from "modules/root";
 import { composeWithProps } from "tools/utils";
 import { ModalContainer, ModalTitleText, Loading } from "./SharedComponents";
-import { COLORS } from "tools/constants";
+import { COLORS, MOBILE } from "tools/constants";
 import { EMAIL_VERIFICATION_STATUS } from "modules/user/store";
 import { defaultTextColor, themeColor } from "./ThemeContainer";
+import { PAYMENT_PLAN } from "../../../common/dist/main";
 
 /** ===========================================================================
  * Types & Config
@@ -46,9 +47,11 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
     // If the user does not have an email set yet require it
     // before allowing them to proceed with checkout.
     const hasEmail = !!profile.email;
+    const isDark = user.settings.appTheme === "dark";
 
     return (
       <Dialog
+        className={isDark ? Classes.DARK : ""}
         isOpen={this.props.modalOpen}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
@@ -60,42 +63,124 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
             <Loading intent="primary" />
           </ModalContainer>
         ) : hasEmail ? (
-          <ModalContainer>
-            <ModalTitleText>Pairwise Beta Launch</ModalTitleText>
-            <Text>
-              The Pairwise <CourseTitle>{courseToPurchase.title}</CourseTitle>{" "}
-              can teach you everything you need to know to begin a career as a
-              software developer.
-            </Text>
-            <Text>
-              You can now purchase the course for{" "}
-              <HighlightText>$50 USD</HighlightText>. This will allow you to
-              lock in full lifetime access to all of the existing and future
-              content in this course.
-            </Text>
-            <Text>
-              As an early Pairwise adopter, you will also get a{" "}
-              <HighlightText>
-                free 30 minute career coaching session
-              </HighlightText>{" "}
-              with a professional developer with your course purchase.
-            </Text>
-            <Button
-              large
-              intent="primary"
-              id="start-checkout-button"
-              style={{ marginTop: 20, marginBottom: 20 }}
-              onClick={() => this.confirmPurchase(courseToPurchase.id)}
-            >
-              Start Checkout
-            </Button>
+          <PaymentModal>
+            <ModalTitleText style={{ fontSize: 22 }}>
+              Choose a Payment Option
+            </ModalTitleText>
+            <PaymentPlanContainer>
+              <PaymentPlanOne>
+                <PlanTitleContainerOne>
+                  <PlanTitleText>Basic</PlanTitleText>
+                </PlanTitleContainerOne>
+                <PlanContentBox>
+                  <PriceText>
+                    Price: <HighlightText>FREE</HighlightText>
+                  </PriceText>
+                  <Text>• First 3 course modules: HTML, CSS, TypeScript</Text>
+                  <Text>• Video explanations for all 3 modules</Text>
+                </PlanContentBox>
+              </PaymentPlanOne>
+              <PaymentPlanTwo>
+                <PlanTitleContainerTwo>
+                  <PlanTitleText>Member</PlanTitleText>
+                </PlanTitleContainerTwo>
+                <PlanContentBox>
+                  <PriceText>
+                    Price: <HighlightText>$50</HighlightText>
+                  </PriceText>
+                  <Text>• First 3 course modules: HTML, CSS, TypeScript</Text>
+                  <Text>
+                    • Entire paid course content (600 challenges covering
+                    fullstack web+mobile development)
+                  </Text>
+                  <Text>• Video explanations for all challenges</Text>
+                  <Text>
+                    • As an early Pairwise adopter, you will also get a{" "}
+                    <HighlightText>
+                      free 30 minute career coaching session
+                    </HighlightText>{" "}
+                    with a professional developer
+                  </Text>
+                </PlanContentBox>
+                <ButtonContainer>
+                  <Button
+                    large
+                    icon="tick-circle"
+                    intent="success"
+                    id="start-checkout-button"
+                    style={{ marginTop: 18, marginBottom: 18 }}
+                    onClick={() =>
+                      this.handleSelectPaymentPlan(
+                        courseToPurchase.id,
+                        "REGULAR",
+                      )
+                    }
+                  >
+                    Choose Member
+                  </Button>
+                </ButtonContainer>
+              </PaymentPlanTwo>
+              <PaymentPlanThree>
+                <PlanTitleContainerThree
+                  style={{
+                    border: `1px solid ${
+                      isDark ? COLORS.PRIMARY_GREEN : COLORS.PINK
+                    }`,
+                  }}
+                >
+                  <PlanTitleText
+                    style={{
+                      color: isDark ? COLORS.PRIMARY_GREEN : COLORS.PINK,
+                    }}
+                  >
+                    Premium
+                  </PlanTitleText>
+                </PlanTitleContainerThree>
+                <PlanContentBox>
+                  <PriceText>
+                    Price: <HighlightText>$500</HighlightText>
+                  </PriceText>
+                  <Text>• First 3 course modules: HTML, CSS, TypeScript</Text>
+                  <Text>
+                    • Entire paid course content (600 challenges covering
+                    fullstack web+mobile development)
+                  </Text>
+                  <Text>• Video explanations for all challenges</Text>
+                  <Text>
+                    • Three one hour coaching sessions with a professional
+                    developer
+                  </Text>
+                  <Text>• Access to Pairwise Slack/Discord community</Text>
+                  <Text>• 1:1 support throughout your learning experience</Text>
+                  <Text>• Personalized code/project review</Text>
+                </PlanContentBox>
+                <ButtonContainer>
+                  <Button
+                    large
+                    icon="star"
+                    intent="primary"
+                    style={{ marginTop: 18, marginBottom: 18 }}
+                    id="start-checkout-button"
+                    onClick={() =>
+                      this.handleSelectPaymentPlan(
+                        courseToPurchase.id,
+                        "PREMIUM",
+                      )
+                    }
+                  >
+                    Choose Premium
+                  </Button>
+                </ButtonContainer>
+              </PaymentPlanThree>
+            </PaymentPlanContainer>
             <SmallPointText>
               You will be redirected to Stripe to complete the checkout process.
             </SmallPointText>
             <SmallPointText>
-              * Purchases are fully refundable up to 30 days after payment.
+              While Pairwise is in <b>beta</b> you can refund your purchase at
+              anytime.
             </SmallPointText>
-          </ModalContainer>
+          </PaymentModal>
         ) : emailVerificationStatus === EMAIL_VERIFICATION_STATUS.LOADING ? (
           <ModalContainer>
             <ModalTitleText>Sending verification email...</ModalTitleText>
@@ -143,8 +228,8 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
     );
   }
 
-  confirmPurchase = (courseId: string) => {
-    this.props.startCheckout({ courseId, plan: "PREMIUM" });
+  handleSelectPaymentPlan = (courseId: string, plan: PAYMENT_PLAN) => {
+    this.props.startCheckout({ courseId, plan });
   };
 
   setModalState = (state: boolean) => {
@@ -165,26 +250,81 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
  * ============================================================================
  */
 
+const PlanColors = {
+  PAYMENT_PLAN_TITLE_BOX_DARK_1: "rgb(40, 40, 40)",
+  PAYMENT_PLAN_TITLE_BOX_LIGHT_1: "rgb(225, 225, 225)",
+  PAYMENT_PLAN_BOX_DARK_1: "rgb(32, 32, 32)",
+  PAYMENT_PLAN_BOX_LIGHT_1: "rgb(245, 245, 245)",
+
+  PAYMENT_PLAN_TITLE_BOX_DARK_2: "rgb(55, 55, 55)",
+  PAYMENT_PLAN_TITLE_BOX_LIGHT_2: "rgb(215, 215, 215)",
+  PAYMENT_PLAN_BOX_DARK_2: "rgb(42, 42, 42)",
+  PAYMENT_PLAN_BOX_LIGHT_2: "rgb(235, 235, 235)",
+
+  PAYMENT_PLAN_TITLE_BOX_DARK_3: "rgb(80, 80, 80)",
+  PAYMENT_PLAN_TITLE_BOX_LIGHT_3: "rgb(210, 210, 210)",
+  PAYMENT_PLAN_BOX_DARK_3: "rgb(55, 55, 55)",
+  PAYMENT_PLAN_BOX_LIGHT_3: "rgb(205, 205, 205)",
+};
+
+const PaymentModal = styled.div`
+  width: auto;
+  padding: 22px 32px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  outline: none;
+  position: absolute;
+  background: black;
+  border-radius: 6px;
+  border: 1px solid ${COLORS.BORDER_MODAL};
+
+  ${themeColor(
+    "background",
+    COLORS.BACKGROUND_MODAL_DARK,
+    COLORS.BACKGROUND_MODAL_LIGHT,
+  )};
+
+  @media ${MOBILE} {
+    top: 15vh;
+    left: auto;
+    transform: none;
+    width: 95vw;
+    margin-left: 2.5vw;
+  }
+`;
+
 const CourseTitle = styled.b`
   ${themeColor("color", COLORS.PRIMARY_GREEN, COLORS.TEXT_DARK)};
 `;
 
-const Text = styled.p`
-  margin-top: 8px;
+const PriceText = styled.p`
+  margin: 24px;
   text-align: center;
+  font-size: 24px;
+  ${defaultTextColor};
+`;
+
+const Text = styled.p`
+  margin-top: 4px;
+  margin-bottom: 0px;
+  text-align: left;
   font-weight: 300;
+  font-size: 12px;
   ${defaultTextColor};
 `;
 
 const HighlightText = styled.b`
   font-weight: bold;
-  ${themeColor("color", COLORS.SECONDARY_YELLOW, COLORS.PRIMARY_BLUE)};
+  ${themeColor("color", COLORS.SECONDARY_YELLOW, COLORS.PINK)};
 `;
 
 const SmallPointText = styled.p`
   font-size: 12px;
-  margin-top: 0px;
+  margin-top: 4px;
+  margin-bottom: 4px;
   font-weight: 100;
+  text-align: center;
   ${defaultTextColor};
 `;
 
@@ -200,6 +340,108 @@ const InputField = styled.input`
   width: 325px;
   color: ${COLORS.TEXT_HOVER} !important;
   background: ${COLORS.BACKGROUND_CONSOLE_DARK} !important;
+`;
+
+const PaymentPlanContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  padding: 12px;
+
+  @media ${MOBILE} {
+    flex-direction: column;
+  }
+`;
+
+const PaymentPlan = styled.div`
+  padding: 8px 12px;
+  width: 300px;
+  height: 450px;
+  display: block;
+  margin: 6px;
+  border-radius: 6px;
+
+  @media ${MOBILE} {
+    height: auto;
+  }
+`;
+
+const PaymentPlanOne = styled(PaymentPlan)`
+  ${themeColor(
+    "background",
+    PlanColors.PAYMENT_PLAN_BOX_DARK_1,
+    PlanColors.PAYMENT_PLAN_BOX_LIGHT_1,
+  )};
+`;
+
+const PaymentPlanTwo = styled(PaymentPlan)`
+  ${themeColor(
+    "background",
+    PlanColors.PAYMENT_PLAN_BOX_DARK_2,
+    PlanColors.PAYMENT_PLAN_BOX_LIGHT_2,
+  )};
+`;
+
+const PaymentPlanThree = styled(PaymentPlan)`
+  ${themeColor(
+    "background",
+    PlanColors.PAYMENT_PLAN_BOX_DARK_3,
+    PlanColors.PAYMENT_PLAN_BOX_LIGHT_3,
+  )};
+`;
+
+const PlanContentBox = styled.div`
+  height: 265px;
+
+  @media ${MOBILE} {
+    height: auto;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const PlanTitleText = styled.h1`
+  margin: 2px;
+  font-size: 28px;
+  font-weight: 400;
+  text-align: center;
+  font-family: Helvetica Neue, Lato, sans-serif;
+  ${themeColor("color", COLORS.TEXT_WHITE, COLORS.TEXT_LIGHT_THEME)};
+`;
+
+export const PlanTitleContainer = styled.div`
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+`;
+
+export const PlanTitleContainerOne = styled(PlanTitleContainer)`
+  ${themeColor(
+    "background",
+    PlanColors.PAYMENT_PLAN_TITLE_BOX_DARK_1,
+    PlanColors.PAYMENT_PLAN_TITLE_BOX_LIGHT_1,
+  )};
+`;
+
+export const PlanTitleContainerTwo = styled(PlanTitleContainer)`
+  ${themeColor(
+    "background",
+    PlanColors.PAYMENT_PLAN_TITLE_BOX_DARK_2,
+    PlanColors.PAYMENT_PLAN_TITLE_BOX_LIGHT_2,
+  )};
+`;
+
+export const PlanTitleContainerThree = styled(PlanTitleContainer)`
+  ${themeColor(
+    "background",
+    PlanColors.PAYMENT_PLAN_TITLE_BOX_DARK_3,
+    PlanColors.PAYMENT_PLAN_TITLE_BOX_LIGHT_3,
+  )};
 `;
 
 /** ===========================================================================

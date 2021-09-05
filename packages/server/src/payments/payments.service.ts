@@ -328,7 +328,7 @@ export class PaymentsService {
     };
 
     const descriptionSuffix =
-      "The premium course includes the following: Three one hour coaching sessions throughout the curriculum, access to our premium Pairwise Slack channel, 1:1 email support throughout the curriculum, and personalized code/project review.";
+      "The premium course includes the following: Three one hour coaching sessions throughout the curriculum, access to our premium Pairwise Slack/Discord community, 1:1 support throughout the curriculum, and personalized code/project review.";
 
     const description = IS_PREMIUM
       ? `${courseMetadata.description} ${descriptionSuffix}`
