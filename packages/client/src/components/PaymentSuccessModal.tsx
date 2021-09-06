@@ -30,9 +30,9 @@ interface IState {}
 class PaymentSuccessModal extends React.Component<IProps, IState> {
   render(): Nullable<JSX.Element> {
     const { user, paymentSuccessCourse } = this.props;
-    const { profile } = user;
+    const { profile, payments } = user;
 
-    if (!paymentSuccessCourse || !profile) {
+    if (!paymentSuccessCourse || !profile || !payments) {
       return null;
     }
 
@@ -40,6 +40,8 @@ class PaymentSuccessModal extends React.Component<IProps, IState> {
     const lastActiveChallenge = user.lastActiveChallengeIds.lastActiveChallenge;
     const hasCoachingSession = profile.coachingSessions > 0;
     const id = lastActiveChallenge || firstChallengeId;
+    const isDark = user.settings.appTheme === "dark";
+    const IS_PREMIUM = payments.some((x) => x.plan === "PREMIUM");
 
     return (
       <Dialog
@@ -55,7 +57,23 @@ class PaymentSuccessModal extends React.Component<IProps, IState> {
             <CourseTitle>{paymentSuccessCourse.title}</CourseTitle> and taking
             the first big step in becoming a software developer.
           </ModalSubText>
-          {hasCoachingSession && (
+          {IS_PREMIUM && (
+            <ModalSubText style={{ maxWidth: 450 }}>
+              You are a{" "}
+              <span
+                style={{
+                  fontWeight: "bold",
+                  color: isDark ? COLORS.SECONDARY_YELLOW : COLORS.PINK,
+                }}
+              >
+                PREMIUM
+              </span>{" "}
+              member! This means you will have access to one on one coaching
+              sessions and other benefits. We will follow up with you directly
+              via email on the details shortly.
+            </ModalSubText>
+          )}
+          {hasCoachingSession && !IS_PREMIUM && (
             <ModalSubText style={{ maxWidth: 450 }}>
               Since you are an early adopter, we've given you a free 30 minute
               career coaching session with a professional developer. To schedule
