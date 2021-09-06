@@ -28,7 +28,8 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
 
     // Check that the post-login payment modal is visible
     cy.contains("Purchase Course");
-    cy.contains("Start Checkout");
+    cy.contains("Choose Member");
+    cy.contains("Choose Premium");
     cy.get("body").type("{esc}");
 
     // Purchase the course
@@ -67,7 +68,8 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
 
     // Check that the post-login payment modal is visible
     cy.contains("Purchase Course");
-    cy.contains("Start Checkout");
+    cy.contains("Choose Member");
+    cy.contains("Choose Premium");
     cy.get("body").type("{esc}");
 
     // Purchase the course
