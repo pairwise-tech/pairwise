@@ -70,7 +70,7 @@ class AdminUserComponent extends React.Component<
     const isDark = adminUserSettings.appTheme === "dark";
     const showDetails = this.state.uuid === user.uuid;
     const payment = user.payments[0];
-    const IS_PREMIUM = payment.plan === "PREMIUM";
+    const IS_PREMIUM = payment && payment.plan === "PREMIUM";
     const challengeTotal = progressHistoryToChallengeCount(
       user.challengeProgressHistory,
     );
