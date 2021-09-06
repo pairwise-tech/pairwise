@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { AppTheme } from "@pairwise/common";
+import { AppTheme, PAYMENT_PLAN } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import {
   CodeText,
@@ -22,7 +22,7 @@ import {
   computeCourseProgressSummary,
   progressHistoryToChallengeCount,
 } from "../tools/admin-utils";
-import { COLORS } from "../tools/constants";
+import { COLORS, MOBILE } from "../tools/constants";
 import { BlobCache } from "../modules/challenges/store";
 import { themeColor } from "./AdminThemeContainer";
 
@@ -33,6 +33,7 @@ import { themeColor } from "./AdminThemeContainer";
 
 interface AdminUserComponentState {
   challengeId: string;
+  plan: Nullable<PAYMENT_PLAN>;
   uuid: Nullable<string>;
   alert: null | "gift" | "refund";
 }
@@ -52,6 +53,7 @@ class AdminUserComponent extends React.Component<
     this.state = {
       uuid: null,
       alert: null,
+      plan: null,
       challengeId: "",
     };
   }
@@ -63,11 +65,12 @@ class AdminUserComponent extends React.Component<
       courseSkeletons,
       adminUserSettings,
       challengeBlobCache,
-      revokeCoachingSession,
+      markCoachingSessionComplete,
     } = this.props;
     const isDark = adminUserSettings.appTheme === "dark";
     const showDetails = this.state.uuid === user.uuid;
     const payment = user.payments[0];
+    const IS_PREMIUM = payment.plan === "PREMIUM";
     const challengeTotal = progressHistoryToChallengeCount(
       user.challengeProgressHistory,
     );
@@ -91,7 +94,7 @@ class AdminUserComponent extends React.Component<
         >
           {alert === "gift" ? (
             <p>
-              Are you sure you want to gift the course to{" "}
+              Are you sure you want to gift the {this.state.plan} course to{" "}
               <CodeText>{user.email}</CodeText>?
             </p>
           ) : (
@@ -103,16 +106,27 @@ class AdminUserComponent extends React.Component<
             </p>
           )}
         </Alert>
+        {IS_PREMIUM && (
+          <PremiumBadge>
+            <span style={{ fontWeight: 500, color: COLORS.PRIMARY_GREEN }}>
+              PREMIUM USER
+            </span>
+          </PremiumBadge>
+        )}
         <KeyValue label="Email" value={user.email} allowCopy />
         <KeyValue label="uuid" value={user.uuid} code />
         <SummaryText>
           User has completed {challengeTotal}{" "}
           {challengeTotal === 1 ? "challenge" : "challenges"}.
         </SummaryText>
-        {user.coachingSessions > 0 && (
+        {user.coachingSessions > 0 ? (
           <SummaryText>
-            User currently has a coaching session available.
+            User currently has {user.coachingSessions} coaching session
+            {user.coachingSessions > 1 ? "s " : " "}
+            available.
           </SummaryText>
+        ) : (
+          <SummaryText>User has no coaching sessions.</SummaryText>
         )}
         <CardButtonRow style={{ marginBottom: 24 }}>
           <CardButton
@@ -136,12 +150,24 @@ class AdminUserComponent extends React.Component<
             </ExternalLink>
           </CardButton>
           {!payment ? (
-            <CardButton
-              icon="dollar"
-              onClick={() => this.setState({ alert: "gift" })}
-            >
-              Gift Course
-            </CardButton>
+            <>
+              <CardButton
+                icon="dollar"
+                onClick={() =>
+                  this.setState({ alert: "gift", plan: "REGULAR" })
+                }
+              >
+                Gift Course (REGULAR)
+              </CardButton>
+              <CardButton
+                icon="dollar"
+                onClick={() =>
+                  this.setState({ alert: "gift", plan: "PREMIUM" })
+                }
+              >
+                Gift Course (PREMIUM)
+              </CardButton>
+            </>
           ) : payment.status === "CONFIRMED" ? (
             <CardButton
               icon="dollar"
@@ -155,9 +181,11 @@ class AdminUserComponent extends React.Component<
           {user.coachingSessions > 0 && (
             <CardButton
               icon="hat"
-              onClick={() => revokeCoachingSession({ userUuid: user.uuid })}
+              onClick={() =>
+                markCoachingSessionComplete({ userUuid: user.uuid })
+              }
             >
-              Revoke Coaching Session
+              Complete a Coaching Session
             </CardButton>
           )}
         </CardButtonRow>
@@ -206,7 +234,10 @@ class AdminUserComponent extends React.Component<
             }
 
             return (
-              <div style={{ marginTop: 12, marginBottom: 12 }}>
+              <div
+                key={courseSkeleton.id}
+                style={{ marginTop: 12, marginBottom: 12 }}
+              >
                 <p>
                   {courseSkeleton.title} Course Progress Overview (
                   {stats.percentComplete.toFixed(2)}% Complete):
@@ -277,7 +308,12 @@ class AdminUserComponent extends React.Component<
 
   handleConfirm = () => {
     if (this.state.alert === "gift") {
-      this.props.giftCourseForUser(this.props.user.email);
+      // Course id is hard-coded for now.
+      const courseId = "fpvPtfu7s";
+      const userEmail = this.props.user.email;
+      const plan: PAYMENT_PLAN = this.state.plan || "REGULAR";
+      const payload = { plan, userEmail, courseId };
+      this.props.giftCourseForUser(payload);
     } else {
       this.props.refundCourseForUser(this.props.user.email);
     }
@@ -334,6 +370,16 @@ const ModuleProgressPercentage = styled.div`
   ${themeColor("background", COLORS.PROGRESS_BACKGROUND, COLORS.WHITE)}
 `;
 
+const PremiumBadge = styled.div`
+  margin-top: -6px;
+  margin-right: -4px;
+  padding: 4px 8px;
+  float: right;
+  border-radius: 4px;
+  text-align: center;
+  ${themeColor("background", "rgb(35,35,35)", "rgb(75,75,75)")}
+`;
+
 /** ===========================================================================
  * Props & Export
  * ============================================================================
@@ -348,7 +394,8 @@ const dispatchProps = {
   giftCourseForUser: Modules.actions.payments.giftCourseForUser,
   refundCourseForUser: Modules.actions.payments.refundCourseForUser,
   fetchChallengeBlob: Modules.actions.challenges.fetchChallengeBlob,
-  revokeCoachingSession: Modules.actions.users.revokeCoachingSession,
+  markCoachingSessionComplete:
+    Modules.actions.users.markCoachingSessionComplete,
 };
 
 type IProps = ReturnType<typeof mapStateToProps> &

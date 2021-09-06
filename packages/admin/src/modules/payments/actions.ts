@@ -1,3 +1,4 @@
+import { AdminPurchaseCourseDto } from "@pairwise/common";
 import { HttpResponseError } from "modules/api";
 import { createAction } from "typesafe-actions";
 import { PaymentRecord } from "./store";
@@ -40,7 +41,7 @@ export const fetchAllPaymentsFailure = createAction(
 
 export const giftCourseForUser = createAction(
   ActionTypesEnum.GIFT_COURSE_FOR_USER,
-)<string>();
+)<AdminPurchaseCourseDto>();
 
 export const giftCourseForUserSuccess = createAction(
   ActionTypesEnum.GIFT_COURSE_FOR_USER_SUCCESS,

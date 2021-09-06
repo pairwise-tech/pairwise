@@ -1,13 +1,18 @@
+import { AdminPurchaseCourseDto, PAYMENT_PLAN } from "@pairwise/common";
 import axios from "axios";
 import querystring from "querystring";
 import request from "supertest";
 import { SERVER } from "./config";
 
 // Use the admin API to handle purchasing a course for a user.
-export const purchaseCourseForUserByAdmin = async (userEmail: string) => {
+export const purchaseCourseForUserByAdmin = async (
+  userEmail: string,
+  plan: PAYMENT_PLAN = "REGULAR",
+) => {
   const accessToken = await getAccessTokenForAdmin();
 
-  const body = {
+  const body: AdminPurchaseCourseDto = {
+    plan,
     userEmail,
     courseId: "fpvPtfu7s",
   };

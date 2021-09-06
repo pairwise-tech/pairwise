@@ -24,6 +24,7 @@ import {
   ContentUtility,
   CourseMetadata,
   PAYMENT_PLAN,
+  AdminPurchaseCourseDto,
 } from "@pairwise/common";
 import { UserService } from "../user/user.service";
 import { captureSentryException } from "../tools/sentry-utils";
@@ -44,11 +45,8 @@ const PRICING_CONSTANTS = {
   ACCEPTED_CURRENCY: "usd",
 };
 
-interface PurchaseCourseRequest {
-  userEmail: string;
-  courseId: string;
+interface PurchaseCourseRequest extends AdminPurchaseCourseDto {
   isGift?: boolean;
-  plan: PAYMENT_PLAN;
 }
 
 interface CheckoutMetadata {
@@ -198,18 +196,14 @@ export class PaymentsService {
     }
   }
 
-  public async handlePurchaseCourseByAdmin(
-    userEmail: string,
-    courseId: string,
-  ) {
+  public async handlePurchaseCourseByAdmin(payload: AdminPurchaseCourseDto) {
+    const { userEmail, courseId } = payload;
     console.log(
       `[ADMIN]: Admin request to purchase course: ${courseId} for user: ${userEmail}`,
     );
     return this.handlePurchaseCourseRequest({
-      courseId,
-      userEmail,
+      ...payload,
       isGift: true,
-      plan: "REGULAR",
     });
   }
 
@@ -249,7 +243,7 @@ export class PaymentsService {
     );
 
     // Will throw error if invalid
-    validatePaymentRequest(user, courseId);
+    validatePaymentRequest(user, courseId, plan);
 
     const { profile } = user;
     console.log(`Purchasing course ${courseId} for user ${profile.email}`);

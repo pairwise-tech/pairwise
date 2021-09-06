@@ -65,6 +65,7 @@ export const DataCard = styled(Card)`
   margin-top: 12px;
   max-width: 825px;
   overflow-x: scroll;
+
   ${themeColor(
     "background",
     COLORS.BACKGROUND_CARD_DARK,

@@ -39,12 +39,12 @@ const users = createReducer<
   UsersActionTypes | AuthActionTypes
 >([])
   .handleAction(actions.fetchUsersSuccess, (state, action) => action.payload)
-  .handleAction(actions.revokeCoachingSessionSuccess, (state, action) => {
+  .handleAction(actions.markCoachingSessionCompleteSuccess, (state, action) => {
     return state.map((user) => {
       if (user.uuid === action.payload.userUuid) {
         return {
           ...user,
-          coachingSessions: 0,
+          coachingSessions: user.coachingSessions - 1,
         };
       } else {
         return user;

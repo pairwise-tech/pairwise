@@ -335,6 +335,7 @@ export const validateAndSanitizeProgressItem = (entity: ProgressEntity) => {
 export const validatePaymentRequest = (
   user: IUserDto<UserProfile>,
   courseId: string,
+  plan: PAYMENT_PLAN,
 ) => {
   // A valid user is required
   if (!user) {
@@ -345,6 +346,9 @@ export const validatePaymentRequest = (
   if (!ContentUtility.courseIdIsValid(courseId)) {
     throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
   }
+
+  // Validate the provided payment plan
+  validatePaymentPlan(plan);
 
   const existingCoursePayment = user.payments.find(
     (p) => p.courseId === courseId,

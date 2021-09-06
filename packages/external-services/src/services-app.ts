@@ -133,8 +133,8 @@ app.get("/google-admin/profile", (req, res) => {
  * Admin API to handle purchasing a course for a user.
  */
 app.post("/admin/purchase-course", async (req, res) => {
-  const { email } = req.body;
-  const result = await purchaseCourseForUserByAdmin(email);
+  const { email, plan } = req.body;
+  const result = await purchaseCourseForUserByAdmin(email, plan);
   res.send(result);
 });
 

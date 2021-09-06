@@ -15,7 +15,7 @@ import AdminUserComponent from "./AdminUserComponent";
  * ============================================================================
  */
 
-type FILTER = "payments" | "challenges" | "updated";
+type FILTER = "payments" | "challenges" | "updated" | "plan";
 type FILTER_DIRECTION = "ASC" | "DESC";
 
 interface IState {
@@ -89,6 +89,11 @@ class AdminUsersPage extends React.Component<IProps, IState> {
             return new Date(user.updatedAt).getTime();
           };
           break;
+        case "plan":
+          getValue = (user: AdminUserView) => {
+            return user.payments.some((x) => x.plan === "PREMIUM") ? 1 : 0;
+          };
+          break;
         default:
           assertUnreachable(filter);
       }
@@ -138,6 +143,13 @@ class AdminUsersPage extends React.Component<IProps, IState> {
             onClick={() => this.handleApplyFilters("payments")}
           >
             Sort by Payments
+          </Button>
+          <Button
+            icon={getSortIcon("plan")}
+            style={{ width: 175, marginRight: 8, marginBottom: 8 }}
+            onClick={() => this.handleApplyFilters("plan")}
+          >
+            Filter Premium
           </Button>
         </ControlRow>
         {sortedUsersList.map(this.renderUsersList)}

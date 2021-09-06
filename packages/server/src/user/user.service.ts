@@ -170,7 +170,12 @@ export class UserService {
 
   public async markCoachingSessionAsCompleteForUser(uuid: string) {
     console.log(`Revoking coaching session for user, uuid: ${uuid}`);
-    await this.userRepository.update({ uuid }, { coachingSessions: 0 });
+    const user = await this.findUserByUuidGetFullProfile(uuid);
+    const { coachingSessions } = user.profile;
+
+    // Reduce by 1, don't go negative
+    const sessions = coachingSessions > 0 ? coachingSessions - 1 : 0;
+    await this.userRepository.update({ uuid }, { coachingSessions: sessions });
     return SUCCESS_CODES.OK;
   }
 

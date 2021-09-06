@@ -45,7 +45,11 @@ class AdminStatsPage extends React.Component<IProps, IState> {
   componentDidUpdate() {
     // If there are no registered users, flip the flag to show all records
     const { progressRecords } = this.props;
-    if (progressRecords && progressRecords.records.length > 0) {
+    if (
+      progressRecords &&
+      progressRecords.records &&
+      progressRecords.records.length > 0
+    ) {
       const anyRegisteredUser = progressRecords.records.some(
         (x) => !x.user.includes("Anonymous"),
       );
@@ -173,6 +177,11 @@ class AdminStatsPage extends React.Component<IProps, IState> {
     const sortedRecords = records.sort(
       (a, b) => b.challenges.length - a.challenges.length,
     );
+
+    if (sortedRecords.length === 0) {
+      return <p style={{ color: COLORS.GRAY_TEXT }}>No records yet...</p>;
+    }
+
     return (
       <>
         <StatusText>{status}</StatusText>

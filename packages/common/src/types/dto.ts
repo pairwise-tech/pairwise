@@ -121,6 +121,12 @@ export interface PaymentRequestDto {
   plan: PAYMENT_PLAN;
 }
 
+export interface AdminPurchaseCourseDto {
+  userEmail: string;
+  courseId: string;
+  plan: PAYMENT_PLAN;
+}
+
 export interface ILastActiveIdsDto {
   courseId: string;
   challengeId: string;

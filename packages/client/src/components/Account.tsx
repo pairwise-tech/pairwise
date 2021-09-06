@@ -284,7 +284,8 @@ class Account extends React.Component<IProps, IState> {
         <PageTitle style={{ marginTop: 24 }}>Coaching Sessions</PageTitle>
         {profile.coachingSessions > 0 ? (
           <Text style={{ maxWidth: 500 }}>
-            You currently have a 30 minute career coaching session with a
+            You currently have {profile.coachingSessions} career coaching
+            session{profile.coachingSessions > 1 ? "s " : " "}with a
             professional developer! To schedule this at anytime reach out to us
             at{" "}
             <a target="__blank" href="mailto:coaching@pairwise.tech">
@@ -316,6 +317,7 @@ class Account extends React.Component<IProps, IState> {
   }
 
   renderPaymentDetails = (payment: Payment, index: number) => {
+    const IS_PREMIUM = payment.plan === "PREMIUM";
     return (
       <React.Fragment key={payment.courseId}>
         <PaymentTitle
@@ -324,6 +326,12 @@ class Account extends React.Component<IProps, IState> {
         >
           {this.getCourseTitleFromId(payment.courseId)}
         </PaymentTitle>
+        {IS_PREMIUM && (
+          <PaymentDetail id="payment-plan-premium-label">
+            • Payment Plan:{" "}
+            <span style={{ color: COLORS.PRIMARY_GREEN }}>PREMIUM</span>.
+          </PaymentDetail>
+        )}
         <PaymentDetail>• Duration: Lifetime Access.</PaymentDetail>
         <PaymentDetail>
           • Date Paid: {formatDate(payment.datePaid)}
