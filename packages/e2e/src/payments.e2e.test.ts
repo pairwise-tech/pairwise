@@ -129,6 +129,7 @@ describe("Payments APIs", () => {
       .send({
         courseId: "asdfafaasdfsa",
         userEmail: user.profile.email,
+        plan: "REGULAR",
       })
       .set("Authorization", authorizationHeader)
       .expect(401)
@@ -144,6 +145,7 @@ describe("Payments APIs", () => {
       .send({
         courseId: "asdfafaasdfsa",
         userEmail: user.profile.email,
+        plan: "REGULAR",
       })
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
@@ -159,6 +161,7 @@ describe("Payments APIs", () => {
       .send({
         courseId: "fpvPtfu7s",
         userEmail: "sean@pairwise.tech",
+        plan: "REGULAR",
       })
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
@@ -174,6 +177,7 @@ describe("Payments APIs", () => {
       .send({
         courseId: "fpvPtfu7s",
         userEmail: user.profile.email,
+        plan: "REGULAR",
       })
       .set("Authorization", adminAuthorizationHeader)
       .expect(201)
@@ -196,6 +200,7 @@ describe("Payments APIs", () => {
     const body = {
       courseId: "fpvPtfu7s",
       userEmail: user.profile.email,
+      plan: "REGULAR",
     };
 
     // Purchase the course
@@ -232,6 +237,7 @@ describe("Payments APIs", () => {
     const body = {
       courseId: "fpvPtfu7s",
       userEmail: user.profile.email,
+      plan: "REGULAR",
     };
 
     // Purchase the course
@@ -277,6 +283,7 @@ describe("Payments APIs", () => {
     const body = {
       courseId: "fpvPtfu7s",
       userEmail: user.profile.email,
+      plan: "REGULAR",
     };
 
     // Refund is not possible yet because no purchase exists
@@ -307,6 +314,7 @@ describe("Payments APIs", () => {
       .send({
         courseId: "sadfasf07sa",
         userEmail: user.profile.email,
+        plan: "REGULAR",
       })
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
@@ -320,6 +328,7 @@ describe("Payments APIs", () => {
       .send({
         courseId: "fpvPtfu7s",
         userEmail: "sean@pairwise.tech",
+        plan: "REGULAR",
       })
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
