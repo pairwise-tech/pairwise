@@ -180,7 +180,7 @@ describe("Payments APIs", () => {
 
   test("/admin/purchase-course (POST) accepts requests from an admin for a valid user and course", async () => {
     const body: AdminPurchaseCourseDto = {
-      courseId: "asdfafaasdfsa",
+      courseId: "fpvPtfu7s",
       userEmail: user.profile.email,
       plan: "REGULAR",
     };
