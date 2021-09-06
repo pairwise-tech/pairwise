@@ -1,3 +1,5 @@
+# To use this commands fill in <token> with a valid admin token.
+
 # Fetch all users from admin API:
 SERVER_URL=https://pairwise-production-server-ous2w5vwba-uc.a.run.app ADMIN_TOKEN<token> SCRIPT_ACTION=GET_USERS node scripts/admin_script.js
 
