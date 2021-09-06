@@ -349,6 +349,12 @@ describe("Payments APIs", () => {
         expect(error.body.message).toBe("No user could be found.");
       });
 
+    body = {
+      courseId: "fpvPtfu7s",
+      userEmail: user.profile.email,
+      plan: "REGULAR",
+    };
+
     // Refund the course
     await request(`${HOST}/admin/refund-course`)
       .post("/")
