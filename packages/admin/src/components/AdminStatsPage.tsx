@@ -42,19 +42,19 @@ class AdminStatsPage extends React.Component<IProps, IState> {
     };
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps: IProps) {
     // If there are no registered users, flip the flag to show all records
     const { progressRecords } = this.props;
-    if (
-      progressRecords &&
-      progressRecords.records &&
-      progressRecords.records.length > 0
-    ) {
-      const anyRegisteredUser = progressRecords.records.some(
-        (x) => !x.user.includes("Anonymous"),
-      );
-      if (!anyRegisteredUser) {
-        this.setState({ filterOnlyRegisteredUsers: false });
+
+    // Only check once the progress records are fetched
+    if (!prevProps.progressRecords && !!progressRecords) {
+      if (progressRecords.records && progressRecords.records.length > 0) {
+        const anyRegisteredUser = progressRecords.records.some(
+          (x) => !x.user.includes("Anonymous"),
+        );
+        if (!anyRegisteredUser) {
+          this.setState({ filterOnlyRegisteredUsers: false });
+        }
       }
     }
   }
