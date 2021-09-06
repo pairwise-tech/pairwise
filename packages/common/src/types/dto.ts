@@ -37,7 +37,7 @@ export interface UserProfile {
   givenName: string;
   familyName: string;
   avatarUrl: string;
-  hasCoachingSession: boolean | null;
+  coachingSessions: number;
   googleAccountId: string | null;
   facebookAccountId: string | null;
   githubAccountId: string | null;
@@ -110,9 +110,21 @@ export interface Payment {
   courseId: string;
   datePaid: Date;
   amountPaid: number;
+  plan: PAYMENT_PLAN;
   status: PAYMENT_STATUS;
   paymentType: PAYMENT_TYPE;
   extraData?: string /* generic json data */;
+}
+
+export interface PaymentRequestDto {
+  courseId: string;
+  plan: PAYMENT_PLAN;
+}
+
+export interface AdminPurchaseCourseDto {
+  userEmail: string;
+  courseId: string;
+  plan: PAYMENT_PLAN;
 }
 
 export interface ILastActiveIdsDto {
@@ -123,6 +135,8 @@ export interface ILastActiveIdsDto {
 export type PAYMENT_STATUS = "CONFIRMED" | "REFUNDED";
 
 export type PAYMENT_TYPE = "ADMIN_GIFT" | "USER_PAID";
+
+export type PAYMENT_PLAN = "REGULAR" | "PREMIUM";
 
 export type COURSE_ACCESS_LEVEL = "FREE" | "PAID";
 

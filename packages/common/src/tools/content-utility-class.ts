@@ -200,6 +200,7 @@ class ContentUtilityClass {
         title: course.title,
         free: course.free,
         price: course.price,
+        premiumPrice: course.premiumPrice,
         description: course.description,
       };
     } else {

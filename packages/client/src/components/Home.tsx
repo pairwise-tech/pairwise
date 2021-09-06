@@ -193,7 +193,7 @@ class Home extends React.Component<IProps, {}> {
     const canAccessCourse = paidForCourse || isCourseFree;
     const courseId = skeleton.id;
     const hasCoachingSession = user.profile
-      ? user.profile.hasCoachingSession
+      ? user.profile.coachingSessions > 0
       : false;
 
     if (!firstCourseChallenge) {

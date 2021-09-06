@@ -4,6 +4,7 @@
   "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
   "free": false,
   "price": 5000,
+  "premiumPrice": 50000,
   "modules": [
     {
       "free": true,

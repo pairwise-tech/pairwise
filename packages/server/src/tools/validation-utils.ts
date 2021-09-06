@@ -17,6 +17,7 @@ import {
   UserProfile,
   ILastActiveIdsDto,
   canDisconnectAccountRequest,
+  PAYMENT_PLAN,
 } from "@pairwise/common";
 import validator from "validator";
 import { BadRequestException } from "@nestjs/common";
@@ -334,6 +335,7 @@ export const validateAndSanitizeProgressItem = (entity: ProgressEntity) => {
 export const validatePaymentRequest = (
   user: IUserDto<UserProfile>,
   courseId: string,
+  plan: PAYMENT_PLAN,
 ) => {
   // A valid user is required
   if (!user) {
@@ -344,6 +346,9 @@ export const validatePaymentRequest = (
   if (!ContentUtility.courseIdIsValid(courseId)) {
     throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
   }
+
+  // Validate the provided payment plan
+  validatePaymentPlan(plan);
 
   const existingCoursePayment = user.payments.find(
     (p) => p.courseId === courseId,
@@ -405,5 +410,16 @@ export const validateDisconnectAccountRequest = (profile: UserProfile) => {
     throw new BadRequestException(
       "You cannot disconnect all social accounts without a verified email.",
     );
+  }
+};
+
+/**
+ * Validate a provided payment plan value.
+ */
+export const validatePaymentPlan = (plan: PAYMENT_PLAN) => {
+  if (plan === "REGULAR" || plan === "PREMIUM") {
+    return true;
+  } else {
+    throw new BadRequestException("Invalid payment plan provided.");
   }
 };

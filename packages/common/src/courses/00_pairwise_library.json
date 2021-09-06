@@ -1,6 +1,7 @@
 {
-  "price": 0,
   "free": true,
+  "price": 0,
+  "premiumPrice": 0,
   "id": "f76shgb2W",
   "title": "Pairwise Library",
   "description": "Free articles and videos on programming topics and getting hired as a software engineer.",

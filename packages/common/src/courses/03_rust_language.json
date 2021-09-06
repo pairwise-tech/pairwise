@@ -1,6 +1,7 @@
 {
-  "price": 0,
   "free": true,
+  "price": 0,
+  "premiumPrice": 0,
   "id": "alosiqu45",
   "title": "Rust",
   "description": "Rust is a statically typed, multi paradigm programming language which excels at performance and safety.",

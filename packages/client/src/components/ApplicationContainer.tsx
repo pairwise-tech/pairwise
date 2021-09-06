@@ -208,6 +208,10 @@ const ApplicationContainer = (props: IProps) => {
   const isLoggedIn = userAuthenticated && user.profile !== null;
   const isDark = user.settings.appTheme === "dark";
 
+  // Check if... any course is under the PREMIUM plan
+  const IS_PREMIUM =
+    user.payments && user.payments.some((x) => x.plan === "PREMIUM");
+
   const { prev, next } = nextPrevChallenges;
 
   const toggleAppTheme = () => {
@@ -515,6 +519,7 @@ const ApplicationContainer = (props: IProps) => {
                   )}
                   <ProfileIcon avatar={user.profile.avatarUrl} />
                   {isUserAdmin && !isMobile && <AdminBadge />}
+                  {IS_PREMIUM && <PremiumBadge />}
                 </UserBio>
                 <div className="dropdown-links">
                   <Link
@@ -973,6 +978,25 @@ const AdminBadge = styled.div`
 
   &:before {
     content: "ADMIN USER";
+  }
+`;
+
+const PremiumBadge = styled.div`
+  top: -3%;
+  right: 15%;
+  display: block;
+  padding: 0px 6px;
+  font-weight: bold;
+  position: absolute;
+  border-radius: 100px;
+  letter-spacing: 1.2px;
+  box-shadow: 0 0 20px rgb(0, 0, 0);
+  color: black;
+  background: ${COLORS.PRIMARY_GREEN};
+  transform: translate(2%, 2%) scale(0.6);
+
+  &:before {
+    content: "PREMIUM";
   }
 `;
 

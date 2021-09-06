@@ -1,7 +1,5 @@
 {
-  "editor.rulers": [
-    80
-  ],
+  "editor.rulers": [80],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
@@ -13,5 +11,6 @@
     "javascriptreact",
     "typescript",
     "typescriptreact"
-  ]
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

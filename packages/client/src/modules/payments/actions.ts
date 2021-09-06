@@ -1,6 +1,9 @@
 import { createAction } from "typesafe-actions";
 import { HttpResponseError } from "modules/api";
-import { StripeStartCheckoutSuccessResponse } from "@pairwise/common";
+import {
+  PaymentRequestDto,
+  StripeStartCheckoutSuccessResponse,
+} from "@pairwise/common";
 
 /** ===========================================================================
  * Action Types
@@ -42,9 +45,9 @@ export const setPaymentCourseId = createAction(
   ActionTypesEnum.SET_PAYMENT_COURSE_ID,
 )<{ courseId: string }>();
 
-export const startCheckout = createAction(ActionTypesEnum.START_CHECKOUT)<{
-  courseId: string;
-}>();
+export const startCheckout = createAction(
+  ActionTypesEnum.START_CHECKOUT,
+)<PaymentRequestDto>();
 
 export const startCheckoutSuccess = createAction(
   ActionTypesEnum.START_CHECKOUT_SUCCESS,

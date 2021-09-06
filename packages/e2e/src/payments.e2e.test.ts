@@ -1,4 +1,5 @@
 import request from "supertest";
+import { AdminPurchaseCourseDto } from "../../common/dist/main";
 import {
   fetchAccessToken,
   HOST,
@@ -33,8 +34,12 @@ describe("Payments APIs", () => {
   });
 
   test("/payments/checkout (POST) should require authentication", async (done) => {
-    request(`${HOST}/payments/checkout/fpvPtfu7s`)
+    request(`${HOST}/payments/checkout`)
       .post("/")
+      .send({
+        courseId: "fpvPtfu7s",
+        plan: "REGULAR",
+      })
       .set("Authorization", "Bearer asd97f8809as7fsa")
       .expect(401)
       .end((error, response) => {
@@ -44,8 +49,12 @@ describe("Payments APIs", () => {
   });
 
   test("/payments/checkout (POST) rejects invalid course ids", async (done) => {
-    request(`${HOST}/payments/checkout/zsdfasfsafsa`)
+    request(`${HOST}/payments/checkout`)
       .post("/")
+      .send({
+        courseId: "zsdfasfsafsa",
+        plan: "REGULAR",
+      })
       .set("Authorization", authorizationHeader)
       .expect(400)
       .end((error, response) => {
@@ -54,9 +63,58 @@ describe("Payments APIs", () => {
       });
   });
 
-  test("/payments/checkout (POST) accepts a request with a valid course id", () => {
-    return request(`${HOST}/payments/checkout/fpvPtfu7s`)
+  test("/payments/checkout (POST) rejects invalid payment plan values", async (done) => {
+    request(`${HOST}/payments/checkout`)
       .post("/")
+      .send({
+        courseId: "fpvPtfu7s",
+        plan: "BONUS",
+      })
+      .set("Authorization", authorizationHeader)
+      .expect(400)
+      .end((error, response) => {
+        expect(response.body.message).toBe("Invalid payment plan provided.");
+        done(error);
+      });
+  });
+
+  test("/payments/checkout (POST) rejects requests which lack a payment plan", async (done) => {
+    request(`${HOST}/payments/checkout`)
+      .post("/")
+      .send({
+        courseId: "fpvPtfu7s",
+      })
+      .set("Authorization", authorizationHeader)
+      .expect(400)
+      .end((error, response) => {
+        expect(response.body.message).toBe("Invalid payment plan provided.");
+        done(error);
+      });
+  });
+
+  test("/payments/checkout (POST) accepts a request with a valid course id", () => {
+    return request(`${HOST}/payments/checkout`)
+      .post("/")
+      .send({
+        courseId: "fpvPtfu7s",
+        plan: "REGULAR",
+      })
+      .set("Authorization", authorizationHeader)
+      .expect(201)
+      .expect((response) => {
+        const { body } = response;
+        expect(body.stripeCheckoutSessionId).toBeDefined();
+        expect(typeof body.stripeCheckoutSessionId).toBe("string");
+      });
+  });
+
+  test("/payments/checkout (POST) accepts a request with a PREMIUM payment plan", () => {
+    return request(`${HOST}/payments/checkout`)
+      .post("/")
+      .send({
+        courseId: "fpvPtfu7s",
+        plan: "PREMIUM",
+      })
       .set("Authorization", authorizationHeader)
       .expect(201)
       .expect((response) => {
@@ -67,12 +125,15 @@ describe("Payments APIs", () => {
   });
 
   test("/admin/purchase-course (POST) requires admin authentication", async (done) => {
+    const body: AdminPurchaseCourseDto = {
+      courseId: "asdfafaasdfsa",
+      userEmail: user.profile.email,
+      plan: "REGULAR",
+    };
+
     request(`${HOST}/admin/purchase-course`)
       .post("/")
-      .send({
-        courseId: "asdfafaasdfsa",
-        userEmail: user.profile.email,
-      })
+      .send(body)
       .set("Authorization", authorizationHeader)
       .expect(401)
       .end((error, response) => {
@@ -82,12 +143,15 @@ describe("Payments APIs", () => {
   });
 
   test("/admin/purchase-course (POST) requires a valid course id", async (done) => {
+    const body: AdminPurchaseCourseDto = {
+      courseId: "asdfafaasdfsa",
+      userEmail: user.profile.email,
+      plan: "REGULAR",
+    };
+
     request(`${HOST}/admin/purchase-course`)
       .post("/")
-      .send({
-        courseId: "asdfafaasdfsa",
-        userEmail: user.profile.email,
-      })
+      .send(body)
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
       .end((error, response) => {
@@ -97,12 +161,15 @@ describe("Payments APIs", () => {
   });
 
   test("/admin/purchase-course (POST) requires the email of an existing user", async (done) => {
+    const body: AdminPurchaseCourseDto = {
+      courseId: "fpvPtfu7s",
+      userEmail: "sean@pairwise.tech",
+      plan: "REGULAR",
+    };
+
     request(`${HOST}/admin/purchase-course`)
       .post("/")
-      .send({
-        courseId: "fpvPtfu7s",
-        userEmail: "sean@pairwise.tech",
-      })
+      .send(body)
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
       .end((error, response) => {
@@ -112,12 +179,15 @@ describe("Payments APIs", () => {
   });
 
   test("/admin/purchase-course (POST) accepts requests from an admin for a valid user and course", async () => {
+    const body: AdminPurchaseCourseDto = {
+      courseId: "fpvPtfu7s",
+      userEmail: user.profile.email,
+      plan: "REGULAR",
+    };
+
     await request(`${HOST}/admin/purchase-course`)
       .post("/")
-      .send({
-        courseId: "fpvPtfu7s",
-        userEmail: user.profile.email,
-      })
+      .send(body)
       .set("Authorization", adminAuthorizationHeader)
       .expect(201)
       .expect((response) => {
@@ -136,9 +206,10 @@ describe("Payments APIs", () => {
     authorizationHeader = `Bearer ${accessToken}`;
     user = await fetchUserWithAccessToken(accessToken);
 
-    const body = {
+    const body: AdminPurchaseCourseDto = {
       courseId: "fpvPtfu7s",
       userEmail: user.profile.email,
+      plan: "REGULAR",
     };
 
     // Purchase the course
@@ -172,9 +243,10 @@ describe("Payments APIs", () => {
     authorizationHeader = `Bearer ${accessToken}`;
     user = await fetchUserWithAccessToken(accessToken);
 
-    const body = {
+    const body: AdminPurchaseCourseDto = {
       courseId: "fpvPtfu7s",
       userEmail: user.profile.email,
+      plan: "REGULAR",
     };
 
     // Purchase the course
@@ -217,9 +289,10 @@ describe("Payments APIs", () => {
     authorizationHeader = `Bearer ${accessToken}`;
     user = await fetchUserWithAccessToken(accessToken);
 
-    const body = {
+    let body: AdminPurchaseCourseDto = {
       courseId: "fpvPtfu7s",
       userEmail: user.profile.email,
+      plan: "REGULAR",
     };
 
     // Refund is not possible yet because no purchase exists
@@ -244,31 +317,43 @@ describe("Payments APIs", () => {
         expect(response.text).toBe("Success");
       });
 
+    body = {
+      courseId: "sadfasf07sa",
+      userEmail: user.profile.email,
+      plan: "REGULAR",
+    };
+
     // Refund requires a valid course id
     await request(`${HOST}/admin/refund-course`)
       .post("/")
-      .send({
-        courseId: "sadfasf07sa",
-        userEmail: user.profile.email,
-      })
+      .send(body)
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
       .expect((error) => {
         expect(error.body.message).toBe("The courseId is invalid.");
       });
 
+    body = {
+      courseId: "fpvPtfu7s",
+      userEmail: "sean@pairwise.tech",
+      plan: "REGULAR",
+    };
+
     // Refund requires a valid user
     await request(`${HOST}/admin/refund-course`)
       .post("/")
-      .send({
-        courseId: "fpvPtfu7s",
-        userEmail: "sean@pairwise.tech",
-      })
+      .send(body)
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
       .expect((error) => {
         expect(error.body.message).toBe("No user could be found.");
       });
+
+    body = {
+      courseId: "fpvPtfu7s",
+      userEmail: user.profile.email,
+      plan: "REGULAR",
+    };
 
     // Refund the course
     await request(`${HOST}/admin/refund-course`)

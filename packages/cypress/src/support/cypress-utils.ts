@@ -1,3 +1,5 @@
+import { PAYMENT_PLAN } from "@pairwise/common";
+
 /** ===========================================================================
  * Shared utils and constants for Cypress tests
  * ============================================================================
@@ -145,7 +147,7 @@ export const checkTestResultStatus = (
  * that, the test does guarantee that Pairwise handles the correct behavior
  * for course payments and locked content.
  */
-export const purchaseCourseForUser = () => {
+export const purchaseCourseForUser = (plan: PAYMENT_PLAN) => {
   // Go to the account page
   cy.get("#account-menu-dropdown").trigger("mouseover");
   click("account-link");
@@ -160,7 +162,7 @@ export const purchaseCourseForUser = () => {
       // Only dispatch a single request
       if (!dispatchedAdminRequest) {
         dispatchedAdminRequest = true;
-        const body = { email };
+        const body = { plan, email };
         const EXTERNAL_SERVICES_ADMIN_PAYMENT_URL = `${EXTERNAL_SERVICES_URL}/admin/purchase-course`;
 
         // You better use cy.request for this and not any other HTTP library

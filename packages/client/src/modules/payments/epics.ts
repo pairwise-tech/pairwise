@@ -108,7 +108,6 @@ const startCheckoutEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.startCheckout)),
     pluck("payload"),
-    pluck("courseId"),
     mergeMap(deps.api.createCheckoutSession),
     map((result) => {
       if (result.value) {
@@ -199,6 +198,7 @@ const handlePaymentCancelledSideEffectEpic: EpicSignature = (
     pluck("appInitializationType"),
     filter((type) => type === APP_INITIALIZATION_TYPE.PAYMENT_CANCELLED),
     tap(() => deps.toaster.warn("Payment flow cancelled.")),
+    tap(() => deps.api.handlePurchaseCancelledEvent()),
     ignoreElements(),
   );
 };

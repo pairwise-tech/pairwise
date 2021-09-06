@@ -1,6 +1,7 @@
 {
-  "price": 0,
   "free": true,
+  "price": 0,
+  "premiumPrice": 0,
   "id": "asiuq8e7l",
   "title": "Python",
   "description": "Python is an interpreted, high-level general-purpose high level programming language.",

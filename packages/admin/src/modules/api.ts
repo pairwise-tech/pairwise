@@ -10,6 +10,7 @@ import {
   IUserDto,
   UserSettings,
   UserUpdateOptions,
+  AdminPurchaseCourseDto,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import * as ENV from "tools/admin-env";
@@ -239,10 +240,9 @@ class Api extends BaseApiClass {
     });
   };
 
-  giftCourseForUser = async (userEmail: string) => {
+  giftCourseForUser = async (payload: AdminPurchaseCourseDto) => {
     return this.httpHandler(async () => {
-      // Course id is hard-coded for now
-      const body = { userEmail, courseId: "fpvPtfu7s" };
+      const body = payload;
       const { config } = this.getRequestHeaders();
       return axios.post<string>(`${HOST}/admin/purchase-course`, body, config);
     });
@@ -291,7 +291,7 @@ class Api extends BaseApiClass {
     return this.httpHandler(async () => {
       const { config } = this.getRequestHeaders();
       return axios.get(
-        `${HOST}/admin/coaching-sessions/revoke/${uuid}`,
+        `${HOST}/admin/coaching-sessions/complete/${uuid}`,
         config,
       );
     });

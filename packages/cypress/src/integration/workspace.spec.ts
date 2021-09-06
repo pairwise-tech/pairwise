@@ -146,7 +146,7 @@ const handleCreateAccountAndPurchaseCourse = () => {
   cy.contains("Welcome to Pairwise!");
   click("login-signup-button");
   click("github-login");
-  purchaseCourseForUser();
+  purchaseCourseForUser("REGULAR");
 };
 
 describe("Workspace Challenges", () => {

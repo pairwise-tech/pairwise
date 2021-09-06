@@ -32,6 +32,7 @@ import {
 import { BlobService } from "../blob/blob.service";
 import { SUCCESS_CODES } from "../tools/constants";
 import { AuthService } from "../auth/auth.service";
+import { AdminPurchaseCourseDto } from "@pairwise/common";
 
 @Controller("admin")
 export class AdminController {
@@ -76,15 +77,13 @@ export class AdminController {
   @UseGuards(AdminAuthGuard)
   @Post("/purchase-course")
   public async purchaseCourseForUser(
-    @Body() body,
+    @Body() body: AdminPurchaseCourseDto,
     @Request() req: AuthenticatedRequest,
   ) {
     const adminUserEmail = req.user.profile.email;
     try {
-      const { userEmail, courseId } = body;
       const result = await this.paymentsService.handlePurchaseCourseByAdmin(
-        userEmail,
-        courseId,
+        body,
       );
       this.slackService.postAdminActionAwarenessMessage({ adminUserEmail });
       return result;
@@ -282,7 +281,7 @@ export class AdminController {
   }
 
   @UseGuards(AdminAuthGuard)
-  @Get("coaching-sessions/revoke/:uuid")
+  @Get("coaching-sessions/complete/:uuid")
   public async revokeCoachingSession(@Param() params) {
     return this.userService.markCoachingSessionAsCompleteForUser(params.uuid);
   }
