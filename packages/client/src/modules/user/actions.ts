@@ -4,6 +4,7 @@ import {
   UserSettings,
   SSO,
   UserProfile,
+  UserLeaderboardDto,
 } from "@pairwise/common";
 import { HttpResponseError } from "modules/api";
 import { createAction } from "typesafe-actions";
@@ -32,6 +33,10 @@ enum ActionTypesEnum {
   UPDATE_USER_SETTINGS = "UPDATE_USER_SETTINGS",
   UPDATE_USER_SETTINGS_SUCCESS = "UPDATE_USER_SETTINGS_SUCCESS",
   UPDATE_USER_SETTINGS_FAILURE = "UPDATE_USER_SETTINGS_FAILURE",
+
+  FETCH_USER_LEADERBOARD = "FETCH_USER_LEADERBOARD",
+  FETCH_USER_LEADERBOARD_SUCCESS = "FETCH_USER_LEADERBOARD_SUCCESS",
+  FETCH_USER_LEADERBOARD_FAILURE = "FETCH_USER_LEADERBOARD_FAILURE",
 
   DISCONNECT_ACCOUNT = "DISCONNECT_ACCOUNT",
   DISCONNECT_ACCOUNT_SUCCESS = "DISCONNECT_ACCOUNT_SUCCESS",
@@ -76,6 +81,18 @@ export const updateUserEmailSuccess = createAction(
 export const updateUserEmailFailure = createAction(
   ActionTypesEnum.UPDATE_USER_EMAIL_FAILURE,
 )();
+
+export const fetchUserLeaderboard = createAction(
+  ActionTypesEnum.FETCH_USER_LEADERBOARD,
+)();
+
+export const fetchUserLeaderboardSuccess = createAction(
+  ActionTypesEnum.FETCH_USER_LEADERBOARD_SUCCESS,
+)<UserLeaderboardDto>();
+
+export const fetchUserLeaderboardFailure = createAction(
+  ActionTypesEnum.FETCH_USER_LEADERBOARD_FAILURE,
+)<HttpResponseError>();
 
 export const setEmailVerificationStatus = createAction(
   ActionTypesEnum.SET_EMAIL_VERIFICATION_STATUS,

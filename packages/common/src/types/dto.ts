@@ -94,6 +94,14 @@ export interface LastActiveChallengeIds {
   lastActiveChallenge?: string;
 }
 
+export interface LeaderboardEntryDto {
+  id: string;
+  isUser: boolean;
+  completedChallenges: number;
+}
+
+export type UserLeaderboardDto = LeaderboardEntryDto[];
+
 /**
  * Only these fields can be updated on the user object by the
  * POST user/profile API. This validation is applied on the server.

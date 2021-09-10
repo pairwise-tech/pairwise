@@ -3,6 +3,7 @@ import {
   CourseList,
   Err,
   IUserDto,
+  UserLeaderboardDto,
   Ok,
   Result,
   UserCourseProgress,
@@ -319,6 +320,13 @@ class Api extends BaseApiClass {
       const { config } = this.getRequestHeaders();
       const body = { email };
       return axios.post<"Success">(`${HOST}/auth/update-email`, body, config);
+    });
+  };
+
+  fetchUserLeaderboard = async () => {
+    return this.httpHandler(async () => {
+      const { config } = this.getRequestHeaders();
+      return axios.get<UserLeaderboardDto>(`${HOST}/user/leaderboard`, config);
     });
   };
 

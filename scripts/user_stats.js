@@ -19,7 +19,7 @@ const courseJSON = JSON.parse(fs.readFileSync(fullstackTypeScript, "utf8"));
 const block = "█";
 const values = {};
 
-const CHALLENGE_SPACER = 5;
+const CHALLENGE_SPACER = 25;
 const COURSE_SPACER = 10;
 const LEADER_COUNT = 10;
 
@@ -79,15 +79,10 @@ let average = totalChallenges / userCount;
 
 let x = 0;
 let current = -1;
-let challengeSummary = {};
 
 // Truncate into blocks for easier visualization
 while (current < maxY) {
   current++;
-
-  if (current in values) {
-    challengeSummary[x] = (challengeSummary[x] || 0) + values[current];
-  }
 
   if (current % CHALLENGE_SPACER === 0) {
     x += CHALLENGE_SPACER;
@@ -109,13 +104,7 @@ for (const [_, v] of ChallengeMap) {
   }
 }
 
-const userProgressData = Object.entries(challengeSummary).reverse();
 const courseProgressData = Object.entries(courseSummary).reverse();
-
-// Get the max completed in the truncated
-for (const [_, y] of userProgressData) {
-  maxChallengeProgress = Math.max(maxChallengeProgress, y);
-}
 
 // Get the max completed in the truncated blocks
 for (const [_, y] of courseProgressData) {
@@ -168,9 +157,7 @@ console.log(
   `- Total Challenges in FullStack TypeScript Course: ${totalCourseChallenges.toLocaleString()}`,
 );
 
-const leaders = Object.entries(leaderboard)
-  .reverse()
-  .slice(0, LEADER_COUNT);
+const leaders = Object.entries(leaderboard).reverse().slice(0, LEADER_COUNT);
 
 console.log("");
 console.log("- Leaderboard:");
@@ -180,21 +167,6 @@ let position = 1;
 for (const [score, name] of leaders) {
   console.log(`${space(position)}: ${name}, score: ${score}`);
   position++;
-}
-
-console.log("\n- User Challenge Progress Distribution:\n");
-
-// Print out the user progress distribution to the console
-for (const [x, y] of userProgressData) {
-  const gap = maxChallengeProgress - y;
-  const suffix = `${" ".repeat(gap)} ${y}`;
-
-  if (x === "0") {
-    console.log(`    ${space(x)}  :  ${block.repeat(y)} ${suffix}`);
-  } else {
-    const count = `${space(x - 4)} - ${space(x, false)}`;
-    console.log(`${count}:  ${block.repeat(y)} ${suffix}`);
-  }
 }
 
 console.log("\n- Overall Course Progress Distribution:\n");

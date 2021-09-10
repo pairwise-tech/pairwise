@@ -52,7 +52,7 @@ const VALID_ACTIONS = new Set([
   DELETE_USER_BY_UUID,
 ]);
 
-const validateActionType = actionType => {
+const validateActionType = (actionType) => {
   if (VALID_ACTIONS.has(actionType)) {
     console.log(`Running Admin script for action type: ${SCRIPT_ACTION}`);
     return true;
@@ -103,18 +103,10 @@ class Log {
 }
 
 const log = new Log(SCRIPT_ACTION);
-
-/**
- * Parse the course progress.
- */
-const formatChallengeProgress = progressHistory => {
-  return progressHistory.map(p => ({ ...p, progress: JSON.parse(p.progress) }));
-};
-
 /**
  * Count the total completed challenges for a user.
  */
-const countCompletedChallenges = progress => {
+const countCompletedChallenges = (progress) => {
   return progress.reduce(
     (summary, courseProgress) => {
       const count = Object.keys(courseProgress.progress).length;
@@ -131,7 +123,7 @@ const countCompletedChallenges = progress => {
 /**
  * Remove some extra user fields to make the JSON output easier to read.
  */
-const removeExcessUserFields = user => {
+const removeExcessUserFields = (user) => {
   return {
     uuid: user.uuid,
     email: user.email,
@@ -162,7 +154,7 @@ const WHITELIST_UUID_LIST = new Set([
 /**
  * Remove ourselves from the user list.
  */
-const filterUsOut = user => {
+const filterUsOut = (user) => {
   const { email, uuid } = user;
   if (!email) {
     return true;
@@ -184,12 +176,9 @@ const filterUsOut = user => {
  * Parse course progress, summarize the progress for each user, and sort
  * the results.
  */
-const summarizeUserProgress = users => {
-  const withProgressSummaries = users.filter(filterUsOut).map(user => {
-    // Format the progress history
-    const formattedProgress = formatChallengeProgress(
-      user.challengeProgressHistory,
-    );
+const summarizeUserProgress = (users) => {
+  const withProgressSummaries = users.filter(filterUsOut).map((user) => {
+    const formattedProgress = user.challengeProgressHistory;
 
     // Get all completed challenges count
     const completedChallenges = countCompletedChallenges(formattedProgress);
@@ -333,7 +322,7 @@ const getAllUsers = async () => {
 };
 
 // Get a single user by email
-const getUserByEmail = async email => {
+const getUserByEmail = async (email) => {
   try {
     if (!email) {
       throw new Error(
@@ -355,7 +344,7 @@ const getUserByEmail = async email => {
 };
 
 // Fully delete a user account by email
-const deleteUserByEmail = async userEmail => {
+const deleteUserByEmail = async (userEmail) => {
   try {
     if (!userEmail) {
       throw new Error(
@@ -373,7 +362,7 @@ const deleteUserByEmail = async userEmail => {
 };
 
 // Fully delete a user account by uuid
-const deleteUserByUuid = async uuid => {
+const deleteUserByUuid = async (uuid) => {
   try {
     if (!uuid) {
       throw new Error(

@@ -33,6 +33,12 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard("jwt"))
+  @Get("leaderboard")
+  public async getUserLeaderboard(@Request() req: AuthenticatedRequest) {
+    return this.userService.getUserLeaderboard(req.user.profile);
+  }
+
+  @UseGuards(AuthGuard("jwt"))
   @Post("disconnect-account/:sso")
   public async disconnectAccount(
     @Param() params,

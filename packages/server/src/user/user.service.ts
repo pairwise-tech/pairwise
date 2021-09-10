@@ -12,6 +12,7 @@ import {
   UserProfile,
   ILastActiveIdsDto,
   SSO,
+  UserLeaderboardDto,
   assertUnreachable,
 } from "@pairwise/common";
 import { RequestUser } from "../types";
@@ -25,6 +26,7 @@ import { ERROR_CODES, SUCCESS_CODES } from "../tools/constants";
 import { SlackService, slackService } from "../slack/slack.service";
 import { SigninStrategy } from "../auth/auth.service";
 import { EmailService, emailService } from "../email/email.service";
+import shortid from "shortid";
 
 export interface GenericUserProfile {
   email: string;
@@ -71,7 +73,6 @@ export class UserService {
   public async adminGetAllUsers() {
     const users = await this.userRepository
       .createQueryBuilder("user")
-      .leftJoinAndSelect("user.payments", "payments")
       .leftJoinAndSelect("user.challengeProgressHistory", "progress")
       .getMany();
 
@@ -89,6 +90,51 @@ export class UserService {
         challengeProgressHistory: progress,
       };
     });
+  }
+
+  public async getUserLeaderboard(
+    userProfile: UserProfile,
+  ): Promise<UserLeaderboardDto> {
+    const users = await this.userRepository
+      .createQueryBuilder("user")
+      .leftJoinAndSelect("user.challengeProgressHistory", "progress")
+      .getMany();
+
+    const result = users
+      .map((x) => {
+        // TODO: Fix typing
+        // @ts-ignore
+        const ts = x.challengeProgressHistory.find(
+          (progress) => progress.courseId === "fpvPtfu7s",
+        );
+
+        const completedChallenges = ts
+          ? Object.keys(JSON.parse(ts.progress)).length
+          : 0;
+
+        // Create anonymous id for this entry
+        const id = shortid();
+        return {
+          id,
+          isUser: x.uuid === userProfile.uuid,
+          updatedAt: x.updatedAt,
+          completedChallenges,
+        };
+      })
+      .sort((a, b) => {
+        return (
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        );
+      })
+      .sort((a, b) => {
+        return b.completedChallenges - a.completedChallenges;
+      })
+      .map((x) => {
+        const { id, completedChallenges, isUser } = x;
+        return { id, completedChallenges, isUser };
+      });
+
+    return result;
   }
 
   public async adminDeleteUserByEmail(email: string) {

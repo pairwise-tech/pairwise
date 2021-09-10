@@ -56,6 +56,7 @@ import NavigationSwipeHandler from "./MobileSwipeHandler";
 import DeepLinkCodeStringAlert from "./DeepLinkCodeStringAlert";
 import { IThemeProps, themeColor, themeText } from "./ThemeContainer";
 import AdminDrawer from "./AdminDrawer";
+import UserLeaderboard from "./UserLeaderboard";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -619,6 +620,11 @@ const ApplicationContainer = (props: IProps) => {
           <Route key="home" path="/home" component={Home} />
           <Route key="404" path="/404" component={LostPage} />
           <Route key="account" path="/account" component={Account} />
+          <Route
+            key="leaderboard"
+            path="/leaderboard"
+            component={UserLeaderboard}
+          />
           {!isLoggedIn && (
             <Route
               key="authenticate"

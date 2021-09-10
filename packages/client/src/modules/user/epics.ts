@@ -103,6 +103,29 @@ const updateUserSettingsEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+const fetchUserLeaderboardEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(
+      isActionOf([
+        Actions.storeAccessTokenSuccess,
+        Actions.fetchUserLeaderboard,
+      ]),
+    ),
+    filter((x) => {
+      // TODO: Refactor
+      return "payload" in x ? x.payload.accessToken !== "" : true;
+    }),
+    mergeMap(API.fetchUserLeaderboard),
+    map((result) => {
+      if (result.value) {
+        return Actions.fetchUserLeaderboardSuccess(result.value);
+      } else {
+        return Actions.fetchUserLeaderboardFailure(result.error);
+      }
+    }),
+  );
+};
+
 const disconnectAccountEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.disconnectAccount)),
@@ -129,5 +152,6 @@ export default combineEpics(
   updateUserEpic,
   updateUserEmailEpic,
   updateUserSettingsEpic,
+  fetchUserLeaderboardEpic,
   disconnectAccountEpic,
 );
