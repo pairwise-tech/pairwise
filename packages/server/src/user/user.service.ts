@@ -73,6 +73,7 @@ export class UserService {
   public async adminGetAllUsers() {
     const users = await this.userRepository
       .createQueryBuilder("user")
+      .leftJoinAndSelect("user.payments", "payments")
       .leftJoinAndSelect("user.challengeProgressHistory", "progress")
       .getMany();
 
