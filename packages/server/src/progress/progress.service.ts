@@ -19,22 +19,19 @@ import {
 } from "../tools/validation-utils";
 import { captureSentryException } from "../tools/sentry-utils";
 import { ChallengeMetaService } from "../challenge-meta/challenge-meta.service";
+import { RedisClientService } from "../redis/redis.service";
 
 type User = "Anonymous User" | "Pairwise User";
 
 @Injectable()
 export class ProgressService {
-  // Real-time user challenge progress tracking:
-  time: number;
-  challenges = 0;
-  uuidMap = new Map<string, string>();
-  progress: { [id: string]: { user: string; challengeIds: Set<string> } } = {};
-
   constructor(
     @InjectRepository(Progress)
     private readonly progressRepository: Repository<Progress>,
 
     private readonly challengeMetaService: ChallengeMetaService,
+
+    private readonly redisClientService: RedisClientService,
   ) {}
 
   public async fetchProgressHistoryForCourse(courseId: string) {
@@ -214,89 +211,104 @@ export class ProgressService {
     return SUCCESS_CODES.OK;
   }
 
-  addToProgressRecord = (uuid: string, user: User, challengeId: string) => {
+  public async addToProgressRecord(
+    uuid: string,
+    user: User,
+    challengeId: string,
+  ) {
     if (!challengeId || !uuid) {
       return;
     }
 
-    if (!this.time) {
-      this.time = Date.now();
-    }
+    const cachedData = await this.redisClientService.getProgressCacheData();
 
-    const records = this.progress;
-
-    let id;
-    if (this.uuidMap.has(uuid)) {
-      id = this.uuidMap.get(uuid);
-    } else {
-      // Generate id for Anonymous users
-      id = user === "Pairwise User" ? uuid : shortid();
-      this.uuidMap.set(uuid, id);
-    }
-
-    if (id in records) {
-      const record = records[id];
-      if (!record.challengeIds.has(challengeId)) {
-        this.challenges++;
-        record.challengeIds.add(challengeId);
+    if (cachedData.value) {
+      const data = cachedData.value;
+      if (!data.time) {
+        data.time = Date.now();
       }
-    } else {
-      this.challenges++;
-      records[id] = {
-        challengeIds: new Set([challengeId]),
-        user: user === "Anonymous User" ? `${user} - ${id}` : id,
-      };
+
+      let id;
+      if (data.uuidMap.has(uuid)) {
+        id = data.uuidMap.get(uuid);
+      } else {
+        // Generate id for Anonymous users
+        id = user === "Pairwise User" ? uuid : shortid();
+        data.uuidMap.set(uuid, id);
+      }
+
+      if (id in data.progress) {
+        const record = data.progress[id];
+        if (!record.challengeIds.has(challengeId)) {
+          data.challenges++;
+          record.challengeIds.add(challengeId);
+        }
+      } else {
+        data.challenges++;
+        data.progress[id] = {
+          challengeIds: new Set([challengeId]),
+          user: user === "Anonymous User" ? `${user} - ${id}` : id,
+        };
+      }
+
+      // Update the cache data
+      this.redisClientService.setProgressCacheData(data);
     }
-  };
+  }
 
   public async retrieveProgressRecords() {
-    const records = this.progress;
+    const cachedData = await this.redisClientService.getProgressCacheData();
 
-    if (!this.time) {
-      return "No records yet...";
-    }
+    if (cachedData.value) {
+      const data = cachedData.value;
+      const records = data.progress;
 
-    const now = Date.now();
-
-    const hoursSince = (time: number) => {
-      const hours = (now - new Date(time).getTime()) / 1000 / 60 / 60;
-      return hours.toFixed(2);
-    };
-
-    let count = 0;
-    let moreThanThreeCount = 0;
-    let registeredUserCount = 0;
-
-    const data = Object.values(records).map((x) => {
-      if (!x.user.includes("Anonymous")) {
-        registeredUserCount++;
+      if (!data.time) {
+        return "No records yet...";
       }
 
-      if (x.challengeIds.size >= 3) {
-        moreThanThreeCount++;
-      }
+      const now = Date.now();
 
-      const challenges = Array.from(x.challengeIds).map((id) => {
-        count++;
+      const hoursSince = (time: number) => {
+        const hours = (now - new Date(time).getTime()) / 1000 / 60 / 60;
+        return hours.toFixed(2);
+      };
 
-        // Add the challenge title for context
-        const { challenge } = ContentUtility.deriveChallengeContextFromId(id);
-        return `${id} - ${challenge.title}`;
+      let count = 0;
+      let moreThanThreeCount = 0;
+      let registeredUserCount = 0;
+
+      const result = Object.values(records).map((x) => {
+        if (!x.user.includes("Anonymous")) {
+          registeredUserCount++;
+        }
+
+        if (x.challengeIds.size >= 3) {
+          moreThanThreeCount++;
+        }
+
+        const challenges = Array.from(x.challengeIds).map((id) => {
+          count++;
+
+          // Add the challenge title for context
+          const { challenge } = ContentUtility.deriveChallengeContextFromId(id);
+          return `${id} - ${challenge.title}`;
+        });
+
+        return {
+          user: x.user,
+          challenges,
+        };
       });
 
+      const users = Object.keys(records).length;
+      const last = hoursSince(data.time);
+      const status = `${count} challenges updated in the last ${last} hours by ${users} users. ${moreThanThreeCount} records include 3 or more challenges. ${registeredUserCount} are registered users.`;
+
       return {
-        user: x.user,
-        challenges,
+        status,
+        records: result,
       };
-    });
-
-    const users = Object.keys(records).length;
-    const last = hoursSince(this.time);
-    const status = `${count} challenges updated in the last ${last} hours by ${users} users. ${moreThanThreeCount} records include 3 or more challenges. ${registeredUserCount} are registered users.`;
-
-    return {
-      status,
-      records: data,
-    };
+    }
   }
 }

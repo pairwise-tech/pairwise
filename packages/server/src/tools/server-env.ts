@@ -30,6 +30,9 @@ const SERVER_HOST_URL = getenv.string("SERVER_HOST_URL");
 const ADMIN_CLIENT_URL = getenv.string("ADMIN_CLIENT_URL");
 const HTTPS = getenv.bool("HTTPS", false);
 
+const REDIS_URL = getenv.string("REDIS_URL");
+const REDIS_PASSWORD = getenv.string("REDIS_PASSWORD");
+
 // Stripe
 const STRIPE_SECRET_KEY = getenv.string("STRIPE_SECRET_KEY");
 const STRIPE_WEBHOOK_SIGNING_SECRET = getenv.string(
@@ -103,6 +106,8 @@ const ENV = {
   CLIENT_URL,
   SERVER_HOST_URL,
   ADMIN_CLIENT_URL,
+  REDIS_URL,
+  REDIS_PASSWORD,
   STRIPE_SECRET_KEY,
   STRIPE_WEBHOOK_SIGNING_SECRET,
   JWT_SECRET,

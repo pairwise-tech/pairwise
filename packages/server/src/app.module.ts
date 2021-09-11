@@ -12,7 +12,9 @@ import { AdminModule } from "./admin/admin.module";
 import { FeedbackModule } from "./feedback/feedback.module";
 import { BlobModule } from "./blob/blob.module";
 import ENV from "./tools/server-env";
+import { RedisModule, RedisModuleOptions } from "nestjs-redis";
 import { ChallengeMetaModule } from "./challenge-meta/challenge-meta.module";
+import { RedisServiceModule } from "./redis/redis.module";
 
 /**
  * NOTE: The TypeORM options are ALL supplied here. You cannot mix and match
@@ -29,10 +31,18 @@ const typeormOptions: TypeOrmModuleOptions = {
   autoLoadEntities: true,
 };
 
+const options: RedisModuleOptions = {
+  name: "redis",
+  url: ENV.REDIS_URL,
+  password: ENV.REDIS_PASSWORD,
+};
+
 @Module({
   imports: [
+    RedisModule.register(options),
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot(typeormOptions),
+    RedisServiceModule,
     AuthModule,
     BlobModule,
     UsersModule,
