@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class AppService {
-  public async getIndex() {
+  public getIndex(): string {
     return "This is Pairwise 😎";
   }
 }
