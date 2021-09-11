@@ -546,6 +546,14 @@ const ApplicationContainer = (props: IProps) => {
                     My Account{isUserAdmin ? " (Admin)" : ""}
                   </Link>
                   <Link
+                    id="leaderboard-link"
+                    to="/leaderboard"
+                    onClick={() => mobileToggleAccountDropdown("close")}
+                  >
+                    <Icon icon="star" style={{ marginRight: 10 }} />
+                    Leaderboard
+                  </Link>
+                  <Link
                     id="pairwise-about-link"
                     target="__blank"
                     to={{ pathname: "https://www.pairwise.tech/" }}

@@ -92,6 +92,9 @@ export class UserService {
     });
   }
 
+  /**
+   * Compute user leaderboard rankings, for a given user.
+   */
   public async getUserLeaderboard(
     userProfile: UserProfile,
   ): Promise<UserLeaderboardDto> {
@@ -102,8 +105,6 @@ export class UserService {
 
     const result = users
       .map((x) => {
-        // TODO: Fix typing
-        // @ts-ignore
         const ts = x.challengeProgressHistory.find(
           (progress) => progress.courseId === "fpvPtfu7s",
         );
@@ -112,15 +113,13 @@ export class UserService {
           ? Object.keys(JSON.parse(ts.progress)).length
           : 0;
 
-        // Create anonymous id for this entry
-        const id = shortid();
         return {
-          id,
           isUser: x.uuid === userProfile.uuid,
           updatedAt: x.updatedAt,
           completedChallenges,
         };
       })
+      .filter((x) => x.completedChallenges > 0)
       .sort((a, b) => {
         return (
           new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
@@ -130,8 +129,8 @@ export class UserService {
         return b.completedChallenges - a.completedChallenges;
       })
       .map((x) => {
-        const { id, completedChallenges, isUser } = x;
-        return { id, completedChallenges, isUser };
+        const { completedChallenges, isUser } = x;
+        return { completedChallenges, isUser };
       });
 
     return result;

@@ -19,6 +19,7 @@ import { YoutubeEmbed } from "./MediaArea";
 class Home extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     const {
+      isAuthenticated,
       userCourseProgressSummary,
       hasPurchasedTypeScriptCourse,
       currentNavigationOverlayCourse,
@@ -81,6 +82,12 @@ class Home extends React.Component<IProps, {}> {
                   out of {userCourseProgressSummary.totalChallenges} challenges
                   in the <b>{currentNavigationOverlayCourse.title} Course</b>.
                 </ContentText>
+                {isAuthenticated && (
+                  <LeaderboardText>
+                    See how you stack up against others in the{" "}
+                    <Link to="leaderboard">leaderboard</Link>.
+                  </LeaderboardText>
+                )}
                 <ProgressBar>
                   <ProgressComplete
                     progress={userCourseProgressSummary.percentComplete}
@@ -285,10 +292,6 @@ class Home extends React.Component<IProps, {}> {
 
 const ContentContainer = styled.div`
   flex: 1;
-
-  p {
-    font-size: 18px;
-  }
 `;
 
 const CourseProgressContainer = styled(ContentContainer)`
@@ -345,6 +348,7 @@ const ModuleProgressPercentage = styled.div`
 
 const ContentText = styled(Text)`
   margin-top: 14px;
+  font-size: 18px;
 `;
 
 const ContentTitle = styled(ContentText)`
@@ -407,8 +411,14 @@ const ButtonsBox = styled.div`
 const SpecialBox = styled.div`
   margin-top: 12px;
   padding: 8px;
-  border: 1px solid ${COLORS.SECONDARY_YELLOW};
   border-radius: 4px;
+  border: 1px solid ${COLORS.SECONDARY_YELLOW};
+`;
+
+const LeaderboardText = styled.p`
+  font-size: 16px;
+  margin-top: 8px;
+  margin-bottom: 8px;
 `;
 
 /** ===========================================================================
@@ -420,6 +430,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
   skeletons: Modules.selectors.challenges.getCourseSkeletons(state),
   challengeMap: Modules.selectors.challenges.getChallengeMap(state),
+  isAuthenticated: Modules.selectors.auth.userAuthenticated(state),
   currentNavigationOverlayCourse:
     Modules.selectors.challenges.getCurrentNavigationOverlayCourseSkeleton(
       state,

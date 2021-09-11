@@ -95,7 +95,6 @@ export interface LastActiveChallengeIds {
 }
 
 export interface LeaderboardEntryDto {
-  id: string;
   isUser: boolean;
   completedChallenges: number;
 }

@@ -72,7 +72,7 @@ export class User {
     (challengeProgressHistory) => challengeProgressHistory.user,
   )
   @JoinColumn()
-  public challengeProgressHistory: Progress;
+  public challengeProgressHistory: Progress[];
 
   @OneToMany((type) => CodeBlob, (codeBlob) => codeBlob.user)
   @JoinColumn()
