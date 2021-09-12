@@ -15,7 +15,7 @@ import { SigninStrategy } from "../auth/auth.service";
  * Types & Config
  * ============================================================================
  */
-type SLACK_CHANNELS = "feedback" | "production";
+type SLACK_CHANNELS = "feedback" | "production" | "sentry-reports";
 
 interface SlackFeedbackMessageData {
   feedbackDto: IFeedbackDto;
@@ -186,6 +186,10 @@ export class SlackService {
   }: SlackAdminErrorMessageData) {
     const message = `:skull_and_crossbones: Admin API request for user: \`${adminUserEmail}\` failed, here's what we know: ${error}`;
     await this.postMessageToChannel(message, { channel: "production" });
+  }
+
+  public async postSentryError(error: string) {
+    await this.postMessageToChannel(error, { channel: "sentry-reports" });
   }
 
   private async postMessageToChannel(
