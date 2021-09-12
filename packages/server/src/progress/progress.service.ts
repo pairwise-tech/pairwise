@@ -256,7 +256,7 @@ export class ProgressService {
       }
 
       // Update the cache data
-      this.redisClientService.setProgressCacheData(data);
+      this.redisClientService.setProgressCacheData(data, challengeId);
     }
   }
 

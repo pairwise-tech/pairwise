@@ -15,6 +15,7 @@ import ENV from "./tools/server-env";
 import { RedisModule, RedisModuleOptions } from "nestjs-redis";
 import { ChallengeMetaModule } from "./challenge-meta/challenge-meta.module";
 import { RedisServiceModule } from "./redis/redis.module";
+import { REDIS_CLIENT_CONFIG } from "./redis/redis.service";
 
 /**
  * NOTE: The TypeORM options are ALL supplied here. You cannot mix and match
@@ -41,11 +42,30 @@ const redisClientOptions: RedisModuleOptions = {
   password: ENV.REDIS_PASSWORD,
 };
 
+/**
+ * Multiple clients are required because clients cannot share
+ * capabilities when using pub/sub.
+ */
+const redisMultiClientOptions: RedisModuleOptions[] = [
+  {
+    ...redisClientOptions,
+    name: REDIS_CLIENT_CONFIG.CLIENT,
+  },
+  {
+    ...redisClientOptions,
+    name: REDIS_CLIENT_CONFIG.PUBLISHER,
+  },
+  {
+    ...redisClientOptions,
+    name: REDIS_CLIENT_CONFIG.SUBSCRIBER,
+  },
+];
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot(typeormOptions),
-    RedisModule.register(redisClientOptions),
+    RedisModule.register(redisMultiClientOptions),
     RedisServiceModule,
     AuthModule,
     BlobModule,
