@@ -61,8 +61,19 @@ export class RedisClientService {
     try {
       const client = await this.redisService.getClient(ENV.REDIS_NAME);
       this.client = client;
+
+      this.initializeListeners(client);
     } catch (err) {
       console.log("Failed to initialize Redis Client, error: ", err);
+    }
+  }
+
+  private async initializeListeners(client: IORedis.Redis) {
+    const listenerCount = client.listenerCount(UPDATE_CHANNEL);
+
+    // Only maintain 1 listener for N server deployments
+    if (listenerCount === 0) {
+      this.client.addListener(UPDATE_CHANNEL, this.handleListenerEvents);
     }
   }
 
@@ -87,8 +98,6 @@ export class RedisClientService {
         await this.initializeProgressCache();
         return this.getProgressCacheData();
       }
-
-      this.client.addListener(UPDATE_CHANNEL, this.handleListenerEvents);
 
       const parsed: RawProgressCacheData = JSON.parse(json);
       const result = this.deserializeProgressCache(parsed);
