@@ -224,9 +224,6 @@ export class ProgressService {
 
     if (cachedData.value) {
       const data = cachedData.value;
-      if (!data.time) {
-        data.time = Date.now();
-      }
 
       let id;
       if (data.uuidMap.has(uuid)) {
@@ -243,9 +240,16 @@ export class ProgressService {
           data.challenges++;
           record.challengeIds.add(challengeId);
         }
+
+        // Updated last updated time
+        data.progress[id] = {
+          ...record,
+          lastUpdated: Date.now(),
+        };
       } else {
         data.challenges++;
         data.progress[id] = {
+          lastUpdated: Date.now(),
           challengeIds: new Set([challengeId]),
           user: user === "Anonymous User" ? `${user} - ${id}` : id,
         };
@@ -263,16 +267,9 @@ export class ProgressService {
       const data = cachedData.value;
       const records = data.progress;
 
-      if (!data.time) {
+      if (data.uuidMap.size === 0) {
         return "No records yet...";
       }
-
-      const now = Date.now();
-
-      const hoursSince = (time: number) => {
-        const hours = (now - new Date(time).getTime()) / 1000 / 60 / 60;
-        return hours.toFixed(2);
-      };
 
       let count = 0;
       let moreThanThreeCount = 0;
@@ -302,8 +299,7 @@ export class ProgressService {
       });
 
       const users = Object.keys(records).length;
-      const last = hoursSince(data.time);
-      const status = `${count} challenges updated in the last ${last} hours by ${users} users. ${moreThanThreeCount} records include 3 or more challenges. ${registeredUserCount} are registered users.`;
+      const status = `${count} challenges updated in the last 24 hours by ${users} users. ${moreThanThreeCount} records include 3 or more challenges. ${registeredUserCount} are registered users.`;
 
       return {
         status,

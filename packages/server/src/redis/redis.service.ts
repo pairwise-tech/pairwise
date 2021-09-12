@@ -5,11 +5,14 @@ import { Ok, Err, Result } from "@pairwise/common";
 import ENV from "../tools/server-env";
 
 enum REDIS_CACHE_KEYS {
-  PROGRESS = "PROGRESS",
+  RECENT_PROGRESS_HISTORY = "RECENT_PROGRESS_HISTORY",
 }
+
+const UPDATE_CHANNEL = "cache-update";
 
 interface ProgressEntry {
   user: string;
+  lastUpdated: number;
   challengeIds: Set<string>;
 }
 
@@ -27,6 +30,7 @@ interface ProgressCacheData {
 interface RawProgressMap {
   [id: string]: {
     user: string;
+    lastUpdated: number;
     challengeIds: Array<string>;
   };
 }
@@ -62,11 +66,19 @@ export class RedisClientService {
     }
   }
 
+  private async handleListenerEvents(event) {
+    console.log("\n -------------------------------------");
+    console.log(event);
+    console.log("-------------------------------------\n");
+  }
+
   public async getProgressCacheData(): Promise<
     Result<ProgressCacheData, Error>
   > {
     try {
-      const json = await this.client.get(REDIS_CACHE_KEYS.PROGRESS);
+      const json = await this.client.get(
+        REDIS_CACHE_KEYS.RECENT_PROGRESS_HISTORY,
+      );
 
       // If no value exists, initialize it and then recurse on the current
       // function. This theoretically should only happen once, on the first
@@ -76,8 +88,11 @@ export class RedisClientService {
         return this.getProgressCacheData();
       }
 
+      this.client.addListener(UPDATE_CHANNEL, this.handleListenerEvents);
+
       const parsed: RawProgressCacheData = JSON.parse(json);
       const result = this.deserializeProgressCache(parsed);
+
       return new Ok(result);
     } catch (err) {
       console.log("Failed to get progress cache data from Redis, err: ", err);
@@ -89,15 +104,23 @@ export class RedisClientService {
     try {
       const client = this.client;
       const json = this.serializeProgressCache(data);
-      client.set(REDIS_CACHE_KEYS.PROGRESS, json);
+
+      // Update cache
+      client.set(REDIS_CACHE_KEYS.RECENT_PROGRESS_HISTORY, json);
+
+      // Publish update event
+      this.client.publish(UPDATE_CHANNEL, JSON.stringify({ data: "HELLO!" }));
     } catch (err) {
       console.log("Failed to set progress cache data in Redis, err: ", err);
     }
   }
 
   private async initializeProgressCache() {
+    // Delete old key, remove this later
+    this.client.del("PROGRESS");
+
     const json = this.serializeProgressCache(progressCacheDefaultData);
-    await this.client.set(REDIS_CACHE_KEYS.PROGRESS, json);
+    await this.client.set(REDIS_CACHE_KEYS.RECENT_PROGRESS_HISTORY, json);
   }
 
   private deserializeProgressCache(
@@ -107,6 +130,7 @@ export class RedisClientService {
     for (const [k, v] of Object.entries(rawData.progress)) {
       const entry: ProgressEntry = {
         user: v.user,
+        lastUpdated: v.lastUpdated,
         challengeIds: new Set(v.challengeIds),
       };
       progress[k] = entry;
@@ -125,11 +149,24 @@ export class RedisClientService {
     const progress: RawProgressMap = {};
 
     for (const [k, v] of Object.entries(data.progress)) {
+      const now = Date.now();
+      const ONE_DAY_TIME = 24 * 60 * 60 * 1000;
+
+      // Skip and exclude the entry if last updated exceeds one day
+      if (now - v.lastUpdated > ONE_DAY_TIME) {
+        // Remove from uuidMap
+        data.uuidMap.delete(k);
+
+        continue;
+      }
+
       progress[k] = {
         user: v.user,
+        lastUpdated: v.lastUpdated,
         challengeIds: Array.from(v.challengeIds),
       };
     }
+
     const result = {
       ...data,
       progress,
