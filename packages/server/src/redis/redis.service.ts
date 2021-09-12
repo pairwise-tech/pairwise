@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import IORedis from "ioredis";
 import { RedisService } from "nestjs-redis";
 import { Ok, Err, Result } from "@pairwise/common";
+import ENV from "../tools/server-env";
 
 enum REDIS_CACHE_KEYS {
   PROGRESS = "PROGRESS",
@@ -54,7 +55,7 @@ export class RedisClientService {
 
   private async initializeClient() {
     try {
-      const client = await this.redisService.getClient("pairwise");
+      const client = await this.redisService.getClient(ENV.REDIS_NAME);
       this.client = client;
     } catch (err) {
       console.log("Failed to initialize Redis Client, error: ", err);

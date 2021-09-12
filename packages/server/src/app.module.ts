@@ -35,7 +35,7 @@ const typeormOptions: TypeOrmModuleOptions = {
  * Configure Redis client.
  */
 const redisClientOptions: RedisModuleOptions = {
-  name: "pairwise",
+  name: ENV.REDIS_NAME,
   port: ENV.REDIS_PORT,
   host: ENV.REDIS_HOST,
   password: ENV.REDIS_PASSWORD,

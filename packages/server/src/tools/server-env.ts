@@ -31,6 +31,7 @@ const ADMIN_CLIENT_URL = getenv.string("ADMIN_CLIENT_URL");
 const HTTPS = getenv.bool("HTTPS", false);
 
 // Redis
+const REDIS_NAME = getenv.string("REDIS_NAME", "pairwise");
 const REDIS_PORT = getenv.int("REDIS_PORT");
 const REDIS_HOST = getenv.string("REDIS_HOST");
 const REDIS_PASSWORD = getenv.string("REDIS_PASSWORD");
@@ -109,8 +110,9 @@ const ENV = {
   CLIENT_URL,
   SERVER_HOST_URL,
   ADMIN_CLIENT_URL,
-  REDIS_HOST,
+  REDIS_NAME,
   REDIS_PORT,
+  REDIS_HOST,
   REDIS_PASSWORD,
   STRIPE_SECRET_KEY,
   STRIPE_WEBHOOK_SIGNING_SECRET,
