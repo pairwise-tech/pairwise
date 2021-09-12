@@ -54,7 +54,7 @@ export class RedisClientService {
 
   private async initializeClient() {
     try {
-      const client = await this.redisService.getClient("redis");
+      const client = await this.redisService.getClient("pairwise");
       this.client = client;
     } catch (err) {
       console.log("Failed to initialize Redis Client, error: ", err);

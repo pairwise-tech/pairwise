@@ -31,16 +31,21 @@ const typeormOptions: TypeOrmModuleOptions = {
   autoLoadEntities: true,
 };
 
-const options: RedisModuleOptions = {
-  name: "redis",
-  url: ENV.REDIS_URL,
+/**
+ * Configure Redis client.
+ */
+const redisClientOptions: RedisModuleOptions = {
+  name: "pairwise",
+  port: ENV.REDIS_PORT,
+  host: ENV.REDIS_HOST,
+  password: ENV.REDIS_PASSWORD,
 };
 
 @Module({
   imports: [
-    RedisModule.register(options),
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot(typeormOptions),
+    RedisModule.register(redisClientOptions),
     RedisServiceModule,
     AuthModule,
     BlobModule,

@@ -16,7 +16,7 @@ services:
   redis:
     image: "bitnami/redis:latest"
     environment:
-      ALLOW_EMPTY_PASSWORD: "yes"
+      REDIS_PASSWORD: redis-dev-password
     ports:
       - 6379:6379
 
@@ -30,7 +30,8 @@ services:
       SERVER_HOST_URL: http://server:9000
       ADMIN_CLIENT_URL: http://admin:3007 # FYI, not a real service
       # Redis
-      REDIS_URL: redis:6379
+      REDIS_PORT: 6379
+      REDIS_HOST: redis
       # Database
       TYPEORM_HOST: db
       TYPEORM_USERNAME: postgres
