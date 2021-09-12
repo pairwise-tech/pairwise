@@ -30,7 +30,7 @@ services:
       SERVER_HOST_URL: http://server:9000
       ADMIN_CLIENT_URL: http://admin:3007 # FYI, not a real service
       # Redis
-      REDIS_RUL: redis:6379
+      REDIS_URL: redis:6379
       # Database
       TYPEORM_HOST: db
       TYPEORM_USERNAME: postgres
