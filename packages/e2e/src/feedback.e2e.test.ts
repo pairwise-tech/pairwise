@@ -1,9 +1,6 @@
 import request from "supertest";
-import {
-  fetchAccessToken,
-  HOST,
-  fetchAdminAccessToken,
-} from "./utils/e2e-utils";
+import ENV from "./utils/e2e-env";
+import { fetchAccessToken, fetchAdminAccessToken } from "./utils/e2e-utils";
 
 /** ===========================================================================
  * e2e Tests for /progress APIs
@@ -20,7 +17,7 @@ describe("User Feedback APIs", () => {
   });
 
   test("/feedback (POST) requires an authenticated user", async (done) => {
-    request(`${HOST}/feedback`)
+    request(`${ENV.HOST}/feedback`)
       .post("/")
       .send({
         feedback: "hi",
@@ -35,7 +32,7 @@ describe("User Feedback APIs", () => {
   });
 
   test("/feedback (POST) rejects invalid challenge ids", async (done) => {
-    request(`${HOST}/feedback`)
+    request(`${ENV.HOST}/feedback`)
       .post("/")
       .send({
         feedback: "hi",
@@ -51,7 +48,7 @@ describe("User Feedback APIs", () => {
   });
 
   test("/feedback (POST) rejects feedback with an invalid feedback type", async (done) => {
-    request(`${HOST}/feedback`)
+    request(`${ENV.HOST}/feedback`)
       .post("/")
       .send({
         feedback: "hi",
@@ -67,7 +64,7 @@ describe("User Feedback APIs", () => {
   });
 
   test("/feedback (POST) inserts feedback entries correctly", async (done) => {
-    await request(`${HOST}/feedback`)
+    await request(`${ENV.HOST}/feedback`)
       .post("/")
       .send({
         type: "TOO_HARD",
@@ -80,7 +77,7 @@ describe("User Feedback APIs", () => {
         expect(response.text).toBe("Success");
       });
 
-    await request(`${HOST}/admin/feedback/9scykDold`)
+    await request(`${ENV.HOST}/admin/feedback/9scykDold`)
       .get("/")
       .set("Authorization", authorizationHeader)
       .expect(401)
@@ -89,7 +86,7 @@ describe("User Feedback APIs", () => {
       });
 
     const adminAccessToken = await fetchAdminAccessToken();
-    await request(`${HOST}/admin/feedback/9scykDold`)
+    await request(`${ENV.HOST}/admin/feedback/9scykDold`)
       .get("/")
       .send({
         type: "TOO_HARD",
@@ -99,7 +96,11 @@ describe("User Feedback APIs", () => {
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(200)
       .expect((response) => {
-        const entry = response.body[0];
+        const entry = response.body.find(
+          (x) => x.feedback === "This challenge is too hard!",
+        );
+
+        expect(entry).toBeDefined();
         expect(entry.type).toBe("TOO_HARD");
         expect(entry.feedback).toBe("This challenge is too hard!");
         expect(entry.challengeId).toBe("9scykDold");

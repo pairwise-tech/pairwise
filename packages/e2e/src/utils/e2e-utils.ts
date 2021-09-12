@@ -2,13 +2,12 @@ import axios from "axios";
 import querystring from "querystring";
 import request from "supertest";
 import { IUserDto } from "@pairwise/common";
+import ENV from "./e2e-env";
 
 /** ===========================================================================
  * e2e Test Utils
  * ============================================================================
  */
-
-export const HOST = process.env.HOST || "http://localhost:9000";
 
 /**
  * Parse the accessToken after successful authentication.
@@ -41,7 +40,7 @@ export const fetchAdminAccessToken = async () => {
  * Helper to fetch a user given an accessToken.
  */
 export const fetchUserWithAccessToken = async (accessToken: string) => {
-  const result = await axios.get<IUserDto>(`${HOST}/user/profile`, {
+  const result = await axios.get<IUserDto>(`${ENV.HOST}/user/profile`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 
@@ -61,7 +60,7 @@ export const createAuthenticatedUser = async (
   let finalRedirect;
   let accessToken;
 
-  await request(`${HOST}/auth/${provider}`)
+  await request(`${ENV.HOST}/auth/${provider}`)
     .get("/")
     .expect(302)
     .then((response) => {
@@ -83,7 +82,7 @@ export const createAuthenticatedUser = async (
       accessToken = getAccessTokenFromRedirect(response.header.location);
     });
 
-  const result = await axios.get(`${HOST}/user/profile`, {
+  const result = await axios.get(`${ENV.HOST}/user/profile`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 

@@ -9,7 +9,7 @@ import faker from "faker";
 const ADMIN_EMAIL = "pairwise-dev-admin-user@pairwise.tech";
 
 // Randomly return true of false
-const yesOrNo = () => Math.floor(Math.random() * 100) > 50;
+const yesOrNo = () => Math.random() < 0.5;
 
 const PAIRWISE = "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4";
 const LINUS = "https://avatars0.githubusercontent.com/u/1024025?s=460&v=4";

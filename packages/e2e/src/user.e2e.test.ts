@@ -1,11 +1,8 @@
 import axios from "axios";
 import request from "supertest";
-import {
-  fetchAccessToken,
-  HOST,
-  fetchUserWithAccessToken,
-} from "./utils/e2e-utils";
+import { fetchAccessToken, fetchUserWithAccessToken } from "./utils/e2e-utils";
 import { LastActiveChallengeIds } from "@pairwise/common";
+import ENV from "./utils/e2e-env";
 
 /** ===========================================================================
  * e2e Tests for /user APIs
@@ -15,7 +12,7 @@ import { LastActiveChallengeIds } from "@pairwise/common";
 describe("User APIs", () => {
   test("/user/profile (GET) a user can fetch their profile", async () => {
     const accessToken = await fetchAccessToken();
-    const result = await axios.get(`${HOST}/user/profile`, {
+    const result = await axios.get(`${ENV.HOST}/user/profile`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
@@ -32,7 +29,7 @@ describe("User APIs", () => {
     const accessToken = await fetchAccessToken();
     const headers = { headers: { Authorization: `Bearer ${accessToken}` } };
 
-    const result = await axios.get(`${HOST}/user/profile`, headers);
+    const result = await axios.get(`${ENV.HOST}/user/profile`, headers);
     const originalProfile = result.data.profile;
     const originalSettings = result.data.settings;
 
@@ -47,7 +44,7 @@ describe("User APIs", () => {
       },
     };
 
-    const update = await axios.post(`${HOST}/user/profile`, body, headers);
+    const update = await axios.post(`${ENV.HOST}/user/profile`, body, headers);
 
     const { profile, settings } = update.data;
     expect(profile.displayName).toBe(displayName);
@@ -70,7 +67,7 @@ describe("User APIs", () => {
       );
     const email = `${randomString}@pairwise.tech`;
 
-    return request(`${HOST}/user/profile`)
+    return request(`${ENV.HOST}/user/profile`)
       .post("/")
       .send({ email })
       .set("Authorization", `Bearer ${accessToken}`)
@@ -90,13 +87,13 @@ describe("User APIs", () => {
       );
     const email = `${randomString}@pairwise.tech`;
 
-    request(`${HOST}/auth/update-email`)
+    request(`${ENV.HOST}/auth/update-email`)
       .post("/")
       .send({ email })
       .set("Authorization", `Bearer ${accessToken}`)
       .expect(200);
 
-    const result = await axios.get(`${HOST}/user/profile`, headers);
+    const result = await axios.get(`${ENV.HOST}/user/profile`, headers);
     const profile = result.data.profile;
 
     // Assert email is not updated yet
@@ -109,14 +106,14 @@ describe("User APIs", () => {
     const headers = { headers: { Authorization: `Bearer ${accessToken}` } };
 
     const handleUpdateUser = async (userUpdate: { [key: string]: any }) => {
-      await request(`${HOST}/user/profile`)
+      await request(`${ENV.HOST}/user/profile`)
         .post("/")
         .send(userUpdate)
         .set("Authorization", `Bearer ${accessToken}`)
         .expect(201);
     };
 
-    let result = await axios.get(`${HOST}/user/profile`, headers);
+    let result = await axios.get(`${ENV.HOST}/user/profile`, headers);
     const originalProfile = result.data.profile;
 
     /**
@@ -129,7 +126,7 @@ describe("User APIs", () => {
       },
     });
 
-    result = await axios.get(`${HOST}/user/profile`, headers);
+    result = await axios.get(`${ENV.HOST}/user/profile`, headers);
     const firstSettings = result.data.settings;
 
     expect(firstSettings.editorTheme).toBe("vs-dark");
@@ -150,7 +147,7 @@ describe("User APIs", () => {
       },
     });
 
-    result = await axios.get(`${HOST}/user/profile`, headers);
+    result = await axios.get(`${ENV.HOST}/user/profile`, headers);
     const secondProfile = result.data.profile;
     const secondSettings = result.data.settings;
 
@@ -172,7 +169,7 @@ describe("User APIs", () => {
       },
     });
 
-    result = await axios.get(`${HOST}/user/profile`, headers);
+    result = await axios.get(`${ENV.HOST}/user/profile`, headers);
     const thirdSettings = result.data.settings;
 
     expect(thirdSettings.editorTheme).toBe("hc-black");
@@ -188,7 +185,7 @@ describe("User APIs", () => {
       },
     });
 
-    result = await axios.get(`${HOST}/user/profile`, headers);
+    result = await axios.get(`${ENV.HOST}/user/profile`, headers);
     const fourthSettings = result.data.settings;
 
     expect(fourthSettings.appTheme).toBe("dark");
@@ -203,7 +200,7 @@ describe("User APIs", () => {
       },
     });
 
-    result = await axios.get(`${HOST}/user/profile`, headers);
+    result = await axios.get(`${ENV.HOST}/user/profile`, headers);
     const fifthSettings = result.data.settings;
 
     expect(fifthSettings.appTheme).toBe("light");
@@ -215,7 +212,7 @@ describe("User APIs", () => {
     const accessToken = await fetchAccessToken();
     const authorizationHeader = `Bearer ${accessToken}`;
 
-    await request(`${HOST}/user/active-challenge-ids`)
+    await request(`${ENV.HOST}/user/active-challenge-ids`)
       .post("/")
       .send({
         courseId: "",
@@ -227,7 +224,7 @@ describe("User APIs", () => {
         expect(error.body.message).toBe("Failed to perform operation.");
       });
 
-    await request(`${HOST}/user/active-challenge-ids`)
+    await request(`${ENV.HOST}/user/active-challenge-ids`)
       .post("/")
       .send({
         courseId: "blegh",
@@ -239,7 +236,7 @@ describe("User APIs", () => {
         expect(error.body.message).toBe("Failed to perform operation.");
       });
 
-    await request(`${HOST}/user/active-challenge-ids`)
+    await request(`${ENV.HOST}/user/active-challenge-ids`)
       .post("/")
       .send({
         courseId: "fpvPtfu7s",
@@ -251,7 +248,7 @@ describe("User APIs", () => {
         expect(error.body.message).toBe("Failed to perform operation.");
       });
 
-    request(`${HOST}/user/active-challenge-ids`)
+    request(`${ENV.HOST}/user/active-challenge-ids`)
       .post("/")
       .send({
         courseId: "fpvPtfu7s",
@@ -281,7 +278,7 @@ describe("User APIs", () => {
         challengeId,
       };
       const result = await axios.post(
-        `${HOST}/user/active-challenge-ids`,
+        `${ENV.HOST}/user/active-challenge-ids`,
         body,
         { headers: { Authorization: authorizationHeader } },
       );

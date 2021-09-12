@@ -1,11 +1,11 @@
 import request from "supertest";
-import { AdminPurchaseCourseDto } from "../../common/dist/main";
+import { AdminPurchaseCourseDto } from "@pairwise/common";
 import {
   fetchAccessToken,
-  HOST,
   fetchAdminAccessToken,
   fetchUserWithAccessToken,
 } from "./utils/e2e-utils";
+import ENV from "./utils/e2e-env";
 
 /** ===========================================================================
  * e2e Tests for /payments APIs
@@ -34,7 +34,7 @@ describe("Payments APIs", () => {
   });
 
   test("/payments/checkout (POST) should require authentication", async (done) => {
-    request(`${HOST}/payments/checkout`)
+    request(`${ENV.HOST}/payments/checkout`)
       .post("/")
       .send({
         courseId: "fpvPtfu7s",
@@ -49,7 +49,7 @@ describe("Payments APIs", () => {
   });
 
   test("/payments/checkout (POST) rejects invalid course ids", async (done) => {
-    request(`${HOST}/payments/checkout`)
+    request(`${ENV.HOST}/payments/checkout`)
       .post("/")
       .send({
         courseId: "zsdfasfsafsa",
@@ -64,7 +64,7 @@ describe("Payments APIs", () => {
   });
 
   test("/payments/checkout (POST) rejects invalid payment plan values", async (done) => {
-    request(`${HOST}/payments/checkout`)
+    request(`${ENV.HOST}/payments/checkout`)
       .post("/")
       .send({
         courseId: "fpvPtfu7s",
@@ -79,7 +79,7 @@ describe("Payments APIs", () => {
   });
 
   test("/payments/checkout (POST) rejects requests which lack a payment plan", async (done) => {
-    request(`${HOST}/payments/checkout`)
+    request(`${ENV.HOST}/payments/checkout`)
       .post("/")
       .send({
         courseId: "fpvPtfu7s",
@@ -93,7 +93,7 @@ describe("Payments APIs", () => {
   });
 
   test("/payments/checkout (POST) accepts a request with a valid course id", () => {
-    return request(`${HOST}/payments/checkout`)
+    return request(`${ENV.HOST}/payments/checkout`)
       .post("/")
       .send({
         courseId: "fpvPtfu7s",
@@ -109,7 +109,7 @@ describe("Payments APIs", () => {
   });
 
   test("/payments/checkout (POST) accepts a request with a PREMIUM payment plan", () => {
-    return request(`${HOST}/payments/checkout`)
+    return request(`${ENV.HOST}/payments/checkout`)
       .post("/")
       .send({
         courseId: "fpvPtfu7s",
@@ -131,7 +131,7 @@ describe("Payments APIs", () => {
       plan: "REGULAR",
     };
 
-    request(`${HOST}/admin/purchase-course`)
+    request(`${ENV.HOST}/admin/purchase-course`)
       .post("/")
       .send(body)
       .set("Authorization", authorizationHeader)
@@ -149,7 +149,7 @@ describe("Payments APIs", () => {
       plan: "REGULAR",
     };
 
-    request(`${HOST}/admin/purchase-course`)
+    request(`${ENV.HOST}/admin/purchase-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
@@ -167,7 +167,7 @@ describe("Payments APIs", () => {
       plan: "REGULAR",
     };
 
-    request(`${HOST}/admin/purchase-course`)
+    request(`${ENV.HOST}/admin/purchase-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
@@ -185,7 +185,7 @@ describe("Payments APIs", () => {
       plan: "REGULAR",
     };
 
-    await request(`${HOST}/admin/purchase-course`)
+    await request(`${ENV.HOST}/admin/purchase-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
@@ -213,7 +213,7 @@ describe("Payments APIs", () => {
     };
 
     // Purchase the course
-    await request(`${HOST}/admin/purchase-course`)
+    await request(`${ENV.HOST}/admin/purchase-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
@@ -223,7 +223,7 @@ describe("Payments APIs", () => {
       });
 
     // Try to purchase it again and expect a failure
-    await request(`${HOST}/admin/purchase-course`)
+    await request(`${ENV.HOST}/admin/purchase-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
@@ -250,7 +250,7 @@ describe("Payments APIs", () => {
     };
 
     // Purchase the course
-    await request(`${HOST}/admin/purchase-course`)
+    await request(`${ENV.HOST}/admin/purchase-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
@@ -265,7 +265,7 @@ describe("Payments APIs", () => {
     expect(course.status).toBe("CONFIRMED");
 
     // Refund the course
-    await request(`${HOST}/admin/refund-course`)
+    await request(`${ENV.HOST}/admin/refund-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
@@ -296,7 +296,7 @@ describe("Payments APIs", () => {
     };
 
     // Refund is not possible yet because no purchase exists
-    await request(`${HOST}/admin/refund-course`)
+    await request(`${ENV.HOST}/admin/refund-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
@@ -308,7 +308,7 @@ describe("Payments APIs", () => {
       });
 
     // Purchase the course
-    await request(`${HOST}/admin/purchase-course`)
+    await request(`${ENV.HOST}/admin/purchase-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
@@ -324,7 +324,7 @@ describe("Payments APIs", () => {
     };
 
     // Refund requires a valid course id
-    await request(`${HOST}/admin/refund-course`)
+    await request(`${ENV.HOST}/admin/refund-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
@@ -340,7 +340,7 @@ describe("Payments APIs", () => {
     };
 
     // Refund requires a valid user
-    await request(`${HOST}/admin/refund-course`)
+    await request(`${ENV.HOST}/admin/refund-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
@@ -356,7 +356,7 @@ describe("Payments APIs", () => {
     };
 
     // Refund the course
-    await request(`${HOST}/admin/refund-course`)
+    await request(`${ENV.HOST}/admin/refund-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
@@ -366,7 +366,7 @@ describe("Payments APIs", () => {
       });
 
     // Refund requires the course is not already refunded
-    await request(`${HOST}/admin/refund-course`)
+    await request(`${ENV.HOST}/admin/refund-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)

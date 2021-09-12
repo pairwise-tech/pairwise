@@ -1,5 +1,5 @@
 import request from "supertest";
-import { HOST } from "./utils/e2e-utils";
+import ENV from "./utils/e2e-env";
 
 /** ===========================================================================
  * e2e Tests for /content APIs
@@ -8,7 +8,7 @@ import { HOST } from "./utils/e2e-utils";
 
 describe("Challenge APIs", () => {
   test("/content/skeletons (GET)", () => {
-    return request(`${HOST}/content/skeletons`)
+    return request(`${ENV.HOST}/content/skeletons`)
       .get("/")
       .expect(200)
       .expect((response) => {
@@ -34,7 +34,7 @@ describe("Challenge APIs", () => {
   });
 
   test("/content/:courseId (GET)", () => {
-    return request(`${HOST}/content/courses`)
+    return request(`${ENV.HOST}/content/courses`)
       .get("/")
       .expect(200)
       .expect((response) => {

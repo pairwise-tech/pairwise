@@ -1,9 +1,6 @@
 import request from "supertest";
-import {
-  createAuthenticatedUser,
-  fetchAccessToken,
-  HOST,
-} from "./utils/e2e-utils";
+import ENV from "./utils/e2e-env";
+import { createAuthenticatedUser, fetchAccessToken } from "./utils/e2e-utils";
 
 /** ===========================================================================
  * e2e Tests for /auth APIs
@@ -57,7 +54,7 @@ describe("Auth APIs", () => {
     const accessToken = await fetchAccessToken();
     const authorizationHeader = `Bearer ${accessToken}`;
 
-    request(`${HOST}/auth/logout`)
+    request(`${ENV.HOST}/auth/logout`)
       .get("/")
       .set("Authorization", authorizationHeader)
       .expect(200)

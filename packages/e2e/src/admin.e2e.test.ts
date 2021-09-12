@@ -1,6 +1,6 @@
 import request from "supertest";
+import ENV from "./utils/e2e-env";
 import {
-  HOST,
   fetchAccessToken,
   fetchAdminAccessToken,
   createAuthenticatedUser,
@@ -13,12 +13,12 @@ import {
 
 describe("Admin (e2e)", () => {
   test("/admin (GET) index route returns 401 for unauthenticated users", () => {
-    return request(`${HOST}/admin`).get("/").expect(401);
+    return request(`${ENV.HOST}/admin`).get("/").expect(401);
   });
 
   test("/admin (GET) index route returns 401 for normal users", async () => {
     const accessToken = await fetchAccessToken();
-    return request(`${HOST}/admin`)
+    return request(`${ENV.HOST}/admin`)
       .get("/")
       .set("Authorization", `Bearer ${accessToken}`)
       .expect(401);
@@ -26,7 +26,7 @@ describe("Admin (e2e)", () => {
 
   test("/admin (GET) index route returns 200 for admin users", async () => {
     const adminAccessToken = await fetchAdminAccessToken();
-    return request(`${HOST}/admin`)
+    return request(`${ENV.HOST}/admin`)
       .get("/")
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(200)
@@ -35,7 +35,7 @@ describe("Admin (e2e)", () => {
 
   test("/users/admin (GET) get all users", async () => {
     const adminAccessToken = await fetchAdminAccessToken();
-    return request(`${HOST}/admin/users`)
+    return request(`${ENV.HOST}/admin/users`)
       .get("/")
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(200)
@@ -56,7 +56,7 @@ describe("Admin (e2e)", () => {
     const userEmail = user.profile.email;
 
     // 2. Get all users and check the user exists
-    await request(`${HOST}/admin/users`)
+    await request(`${ENV.HOST}/admin/users`)
       .get("/")
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(200)
@@ -67,7 +67,7 @@ describe("Admin (e2e)", () => {
       });
 
     // 3. Delete the user
-    await request(`${HOST}/admin/users/delete`)
+    await request(`${ENV.HOST}/admin/users/delete`)
       .post("/")
       .send({ userEmail })
       .set("Authorization", `Bearer ${adminAccessToken}`)
@@ -77,7 +77,7 @@ describe("Admin (e2e)", () => {
       });
 
     // 4. Verify the user no longer exists
-    return request(`${HOST}/admin/users`)
+    return request(`${ENV.HOST}/admin/users`)
       .get("/")
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(200)

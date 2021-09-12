@@ -33,6 +33,7 @@ import { BlobService } from "../blob/blob.service";
 import { SUCCESS_CODES } from "../tools/constants";
 import { AuthService } from "../auth/auth.service";
 import { AdminPurchaseCourseDto } from "@pairwise/common";
+import { captureSentryException } from "../tools/sentry-utils";
 
 @Controller("admin")
 export class AdminController {
@@ -310,6 +311,8 @@ export class AdminController {
 
   // Log the error to Slack and throw an exception in response
   private handleError(err: Error, options: AdminRequestOptions) {
+    captureSentryException(err);
+
     this.slackService.postAdminErrorMessage({ ...options, error: err.message });
     // Rethrow the original error
     throw err;

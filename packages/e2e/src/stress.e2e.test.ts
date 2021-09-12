@@ -1,7 +1,8 @@
-import { HOST, fetchAccessToken } from "./utils/e2e-utils";
+import { fetchAccessToken } from "./utils/e2e-utils";
 import axios from "axios";
 import faker from "faker";
 import { Err, Ok } from "@pairwise/common";
+import ENV from "./utils/e2e-env";
 
 jest.setTimeout(100000);
 
@@ -43,7 +44,7 @@ describe.skip("Stress Test the Server", () => {
           };
 
           try {
-            const response = await axios.post(`${HOST}/blob`, body, {
+            const response = await axios.post(`${ENV.HOST}/blob`, body, {
               headers,
             });
             return new Ok(response.data);

@@ -1,7 +1,8 @@
 import axios from "axios";
 import request from "supertest";
-import { fetchAccessToken, HOST } from "./utils/e2e-utils";
+import { fetchAccessToken } from "./utils/e2e-utils";
 import { IProgressDto } from "@pairwise/common";
+import ENV from "./utils/e2e-env";
 
 /** ===========================================================================
  * e2e Tests for /progress APIs
@@ -18,7 +19,7 @@ describe("User Progress APIs", () => {
   });
 
   test("/progress (POST) should require authentication", async (done) => {
-    request(`${HOST}/progress`)
+    request(`${ENV.HOST}/progress`)
       .post("/")
       .send({
         complete: true,
@@ -35,7 +36,7 @@ describe("User Progress APIs", () => {
   });
 
   test("/progress (POST) rejects invalid courseIds", async (done) => {
-    request(`${HOST}/progress`)
+    request(`${ENV.HOST}/progress`)
       .post("/")
       .send({
         complete: true,
@@ -52,7 +53,7 @@ describe("User Progress APIs", () => {
   });
 
   test("/progress (POST) rejects invalid challengeIds", async (done) => {
-    request(`${HOST}/progress`)
+    request(`${ENV.HOST}/progress`)
       .post("/")
       .send({
         complete: true,
@@ -69,7 +70,7 @@ describe("User Progress APIs", () => {
   });
 
   test("/progress (POST) requires a valid timeCompleted field", async (done) => {
-    request(`${HOST}/progress`)
+    request(`${ENV.HOST}/progress`)
       .post("/")
       .send({
         complete: true,
@@ -88,7 +89,7 @@ describe("User Progress APIs", () => {
   });
 
   test("/progress (POST) requires a valid input object", async (done) => {
-    request(`${HOST}/progress`)
+    request(`${ENV.HOST}/progress`)
       .post("/")
       .send({
         complete: "hi",
@@ -106,7 +107,7 @@ describe("User Progress APIs", () => {
 
   test("/progress (POST) handles valid insertions correctly", async (done) => {
     const updateProgressItem = async (progress: IProgressDto) => {
-      return axios.post(`${HOST}/progress`, progress, {
+      return axios.post(`${ENV.HOST}/progress`, progress, {
         headers: { Authorization: authorizationHeader },
       });
     };
@@ -149,7 +150,7 @@ describe("User Progress APIs", () => {
       timeCompleted: challengeThreeTime,
     });
 
-    request(`${HOST}/progress`)
+    request(`${ENV.HOST}/progress`)
       .get("/")
       .set("Authorization", authorizationHeader)
       .expect(200)

@@ -1,6 +1,7 @@
 import axios from "axios";
 import request from "supertest";
-import { fetchAccessToken, HOST } from "./utils/e2e-utils";
+import ENV from "./utils/e2e-env";
+import { fetchAccessToken } from "./utils/e2e-utils";
 
 /** ===========================================================================
  * e2e Tests for /progress APIs
@@ -17,7 +18,7 @@ describe("User Progress APIs", () => {
   });
 
   test("/challenge (POST) requires an authenticated user", async (done) => {
-    request(`${HOST}/blob`)
+    request(`${ENV.HOST}/blob`)
       .post("/")
       .send({
         challengeId: "9scykDold",
@@ -35,7 +36,7 @@ describe("User Progress APIs", () => {
   });
 
   test("/challenge (GET) rejects invalid challenge ids", async (done) => {
-    request(`${HOST}/blob/fs78dfa79adsf7saf`)
+    request(`${ENV.HOST}/blob/fs78dfa79adsf7saf`)
       .get("/")
       .set("Authorization", authorizationHeader)
       .expect(400)
@@ -46,7 +47,7 @@ describe("User Progress APIs", () => {
   });
 
   test("/challenge (POST) rejects invalid challenge ids", async (done) => {
-    request(`${HOST}/blob`)
+    request(`${ENV.HOST}/blob`)
       .post("/")
       .send({
         challengeId: "sa7sa7f7f",
@@ -66,14 +67,14 @@ describe("User Progress APIs", () => {
   test("/challenge (POST) inserts and updates valid requests", async (done) => {
     // Helper to fetch progress history for a challenge id.
     const fetchProgressHistory = async (challengeId: string) => {
-      const result = await axios.get(`${HOST}/blob/${challengeId}`, {
+      const result = await axios.get(`${ENV.HOST}/blob/${challengeId}`, {
         headers: { Authorization: authorizationHeader },
       });
       return result.data;
     };
 
     // Request returns 404 initially.
-    await request(`${HOST}/blob/9scykDold`)
+    await request(`${ENV.HOST}/blob/9scykDold`)
       .get("/")
       .set("Authorization", authorizationHeader)
       .expect(200)
@@ -82,7 +83,7 @@ describe("User Progress APIs", () => {
       });
 
     // Update the challenge history.
-    await request(`${HOST}/blob`)
+    await request(`${ENV.HOST}/blob`)
       .post("/")
       .send({
         challengeId: "9scykDold",
@@ -107,7 +108,7 @@ describe("User Progress APIs", () => {
     });
 
     // Update again.
-    await request(`${HOST}/blob`)
+    await request(`${ENV.HOST}/blob`)
       .post("/")
       .send({
         challengeId: "9scykDold",
@@ -123,7 +124,7 @@ describe("User Progress APIs", () => {
       });
 
     // Update some other challenge history.
-    await request(`${HOST}/blob`)
+    await request(`${ENV.HOST}/blob`)
       .post("/")
       .send({
         challengeId: "6T3GXc4ap",
@@ -152,7 +153,7 @@ describe("User Progress APIs", () => {
 
     // NOTE: The other course is not available.
     // // Update some challenge history from a different course.
-    // await request(`${HOST}/blob`)
+    // await request(`${ENV.HOST}/blob`)
     //   .post("/")
     //   .send({
     //     challengeId: "t$oXPf22$",

@@ -1,7 +1,8 @@
 import axios from "axios";
 import request from "supertest";
 import { ChallengeMeta, IProgressDto } from "../../common/dist/main";
-import { fetchAccessToken, HOST } from "./utils/e2e-utils";
+import ENV from "./utils/e2e-env";
+import { fetchAccessToken } from "./utils/e2e-utils";
 
 /** ===========================================================================
  * e2e Tests for /challenge-meta APIs
@@ -18,7 +19,7 @@ describe("Challenge Meta APIs", () => {
   });
 
   test("/challenge-meta (GET) requires a valid challengeId", () => {
-    return request(`${HOST}/challenge-meta/asd97f8809as7fsa`)
+    return request(`${ENV.HOST}/challenge-meta/asd97f8809as7fsa`)
       .get("/")
       .set("Authorization", authorizationHeader)
       .expect(400);
@@ -28,7 +29,7 @@ describe("Challenge Meta APIs", () => {
     const getCurrentMetaChallengeCount = async (challengeId: string) => {
       const config = { headers: { Authorization: authorizationHeader } };
       const result = await axios.get<ChallengeMeta>(
-        `${HOST}/challenge-meta/${challengeId}`,
+        `${ENV.HOST}/challenge-meta/${challengeId}`,
         config,
       );
 
@@ -43,7 +44,7 @@ describe("Challenge Meta APIs", () => {
     let count = await getCurrentMetaChallengeCount("hU@oatYsK");
 
     const updateProgressItem = async (progress: IProgressDto) => {
-      return axios.post(`${HOST}/progress`, progress, {
+      return axios.post(`${ENV.HOST}/progress`, progress, {
         headers: { Authorization: authorizationHeader },
       });
     };
@@ -103,7 +104,7 @@ describe("Challenge Meta APIs", () => {
     });
 
     // Check that the numberOfTimesCompleted has updated again
-    request(`${HOST}/challenge-meta/hU@oatYsK`)
+    request(`${ENV.HOST}/challenge-meta/hU@oatYsK`)
       .get("/")
       .set("Authorization", authorizationHeader)
       .expect(200)
