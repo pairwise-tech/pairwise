@@ -32,6 +32,7 @@ services:
       # Redis
       REDIS_PORT: 6379
       REDIS_HOST: redis
+      REDIS_PASSWORD: redis-dev-password
       # Database
       TYPEORM_HOST: db
       TYPEORM_USERNAME: postgres
