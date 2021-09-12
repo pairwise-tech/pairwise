@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
+    "seed": "yarn build && node dist/utils/seed-utils.js",
     "prettier": "prettier --list-different \"src/**/*.ts\" \"src/**/*.test.ts\"",
     "prettier:fix": "prettier --write \"src/**/*.ts\" \"src/**/*.test.ts\"",
     "eslint": "eslint 'src/**/*.{ts,tsx}'",

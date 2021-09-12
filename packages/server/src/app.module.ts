@@ -34,7 +34,6 @@ const typeormOptions: TypeOrmModuleOptions = {
 const options: RedisModuleOptions = {
   name: "redis",
   url: ENV.REDIS_URL,
-  password: ENV.REDIS_PASSWORD,
 };
 
 @Module({

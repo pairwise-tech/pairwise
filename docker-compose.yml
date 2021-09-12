@@ -27,7 +27,7 @@ services:
   redis:
     image: "bitnami/redis:latest"
     environment:
-      - REDIS_PASSWORD=redis-dev-password
+      ALLOW_EMPTY_PASSWORD: "yes"
     ports:
       - 6379:6379
 
@@ -43,6 +43,7 @@ services:
     command: dockerize -wait tcp://db:5432 -timeout 10s yarn pairwise
     environment:
       TYPEORM_HOST: db
+      REDIS_URL: redis:6379
       WHITELISTED_ADMIN_EMAILS: pairwise-dev-admin-user@pairwise.tech
       DANGEROUSLY_WHITELISTED_PUBLIC_ADMIN_ACCESS_TOKEN: test_token
     expose:
