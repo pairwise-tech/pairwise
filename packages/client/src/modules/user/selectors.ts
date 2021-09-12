@@ -17,7 +17,7 @@ export const editorOptions = createSelector(userState, (state) => ({
 
 export const loading = createSelector(userState, (state) => state.loading);
 
-export const userLeaderboard = createSelector(
+export const userLeaderboardState = createSelector(
   userState,
   (state) => state.userLeaderboard,
 );

@@ -26,16 +26,33 @@ class UserLeaderboard extends React.Component<IProps, IState> {
     this.state = {};
   }
 
-  render(): Nullable<JSX.Element> {
-    const { userLeaderboard, fetchUserLeaderboard } = this.props;
+  componentDidMount() {
+    this.props.fetchUserLeaderboard();
+  }
 
-    if (!userLeaderboard) {
+  render(): Nullable<JSX.Element> {
+    const { userLeaderboardState, fetchUserLeaderboard } = this.props;
+    const { loading, error, leaderboard } = userLeaderboardState;
+
+    if (loading || error) {
+      return (
+        <PageContainer>
+          <PageTitle>User Leaderboard Rankings</PageTitle>
+          {loading && <TextItem>Loading Rankings...</TextItem>}
+          {error && (
+            <TextItem>An error occurred loading the leaderboard...</TextItem>
+          )}
+        </PageContainer>
+      );
+    }
+
+    if (!leaderboard) {
       return null;
     }
 
     let userIndex = 0;
     let exists = false;
-    for (const user of userLeaderboard) {
+    for (const user of leaderboard) {
       userIndex++;
       if (user.isUser) {
         exists = true;
@@ -56,7 +73,7 @@ class UserLeaderboard extends React.Component<IProps, IState> {
         ) : (
           <RankTitle>Your position: {userIndex}</RankTitle>
         )}
-        {userLeaderboard.map((x, i) => {
+        {leaderboard.map((x, i) => {
           if (x.isUser) {
             return (
               <UserRank key={i}>
@@ -106,7 +123,7 @@ const RankTitle = styled(Text)`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  userLeaderboard: Modules.selectors.user.userLeaderboard(state),
+  userLeaderboardState: Modules.selectors.user.userLeaderboardState(state),
 });
 
 const dispatchProps = {

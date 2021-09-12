@@ -65,7 +65,7 @@ const initialUserState = {
 export interface State {
   user: UserState;
   loading: boolean;
-  userLeaderboard: Nullable<UserLeaderboardDto>;
+  userLeaderboard: UserLeaderboardState;
   emailVerificationStatus: EMAIL_VERIFICATION_STATUS;
 }
 
@@ -135,13 +135,41 @@ const loading = createReducer<boolean, UserActionTypes | AuthActionTypes>(
   true,
 ).handleAction(actions.fetchUserSuccess, () => false);
 
-const userLeaderboard = createReducer<
-  Nullable<UserLeaderboardDto>,
-  UserActionTypes
->(null).handleAction(
-  actions.fetchUserLeaderboardSuccess,
-  (state, action) => action.payload,
-);
+interface UserLeaderboardState {
+  error: boolean;
+  loading: boolean;
+  leaderboard: Nullable<UserLeaderboardDto>;
+}
+
+const userLeaderboardState: UserLeaderboardState = {
+  error: false,
+  loading: true,
+  leaderboard: null,
+};
+
+const userLeaderboard = createReducer<UserLeaderboardState, UserActionTypes>(
+  userLeaderboardState,
+)
+  .handleAction(actions.fetchUserLeaderboard, (state) => {
+    return {
+      ...state,
+      loading: true,
+    };
+  })
+  .handleAction(actions.fetchUserLeaderboardSuccess, (state, action) => {
+    return {
+      error: false,
+      loading: false,
+      leaderboard: action.payload,
+    };
+  })
+  .handleAction(actions.fetchUserLeaderboardFailure, (state, action) => {
+    return {
+      error: true,
+      loading: false,
+      leaderboard: null,
+    };
+  });
 
 const emailVerificationStatus = createReducer<
   EMAIL_VERIFICATION_STATUS,

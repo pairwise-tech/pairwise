@@ -1,4 +1,3 @@
-import { merge } from "rxjs";
 import { combineEpics } from "redux-observable";
 import { filter, map, mergeMap, pluck } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
@@ -105,16 +104,8 @@ const updateUserSettingsEpic: EpicSignature = (action$, _, deps) => {
 };
 
 const fetchUserLeaderboardEpic: EpicSignature = (action$, _, deps) => {
-  const userAuthenticated$ = action$.pipe(
-    filter(isActionOf(Actions.storeAccessTokenSuccess)),
-    filter((x) => x.payload.accessToken !== ""),
-  );
-
-  const fetchLeaderboard$ = action$.pipe(
+  return action$.pipe(
     filter(isActionOf(Actions.fetchUserLeaderboard)),
-  );
-
-  return merge(userAuthenticated$, fetchLeaderboard$).pipe(
     mergeMap(API.fetchUserLeaderboard),
     map((result) => {
       if (result.value) {
