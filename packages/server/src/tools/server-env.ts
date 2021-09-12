@@ -66,6 +66,7 @@ const GOOGLE_ADMIN_TOKEN_URL = getenv.string("GOOGLE_ADMIN_TOKEN_URL", "");
 // Slack
 const SLACK_API_TOKEN = getenv.string("SLACK_API_TOKEN", "");
 const SLACK_ADMIN_IDS = getenv.array("SLACK_ADMIN_IDS", "string", []);
+const LOG_SLACK_ERRORS = getenv.bool("LOG_SLACK_ERRORS", false);
 
 const GITHUB_API_TOKEN = getenv.string("GITHUB_API_TOKEN", "");
 
@@ -131,6 +132,7 @@ const ENV = {
   GITHUB_API_TOKEN,
   SLACK_API_TOKEN,
   SLACK_ADMIN_IDS,
+  LOG_SLACK_ERRORS,
   ENABLE_EMAILS,
   GOOGLE_EMAIL_ACCOUNT_CLIENT_ID,
   GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY,
