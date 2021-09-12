@@ -211,7 +211,9 @@ export class SlackService {
           `[SLACK INFO]: A message with id ${result.ts} was posed to conversation ${channel}`,
         );
       } else {
-        console.log(`[SLACK ERROR]: ${result.error}`);
+        if (ENV.LOG_SLACK_ERRORS) {
+          console.log(`[SLACK ERROR]: ${result.error}`);
+        }
       }
     } catch (e) {
       this.errorLogUtil(e, "Failed to post message to Slack");
@@ -254,7 +256,9 @@ export class SlackService {
 
   private errorLogUtil(error: any, message: string) {
     if (error.code === ErrorCode.PlatformError) {
-      console.log(`[SLACK ERROR]: ${message}. Error: ${error.message}`);
+      if (ENV.LOG_SLACK_ERRORS) {
+        console.log(`[SLACK ERROR]: ${message}. Error: ${error.message}`);
+      }
     } else {
       captureSentryException(error);
     }

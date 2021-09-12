@@ -24,6 +24,13 @@ services:
     ports:
       - 5432:5432
 
+  redis:
+    image: "bitnami/redis:latest"
+    environment:
+      ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - 6379:6379
+
   stripe:
     image: stripe/stripe-cli
     command: --api-key sk_test_mbG9wVyUhddtlRfqjtLJfRvZ00ZFBbvNDQ listen --forward-to=services:9000/payments/stripe-webhook
@@ -36,6 +43,7 @@ services:
     command: dockerize -wait tcp://db:5432 -timeout 10s yarn pairwise
     environment:
       TYPEORM_HOST: db
+      REDIS_URL: redis:6379
       WHITELISTED_ADMIN_EMAILS: pairwise-dev-admin-user@pairwise.tech
       DANGEROUSLY_WHITELISTED_PUBLIC_ADMIN_ACCESS_TOKEN: test_token
     expose:

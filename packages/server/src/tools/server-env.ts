@@ -30,6 +30,9 @@ const SERVER_HOST_URL = getenv.string("SERVER_HOST_URL");
 const ADMIN_CLIENT_URL = getenv.string("ADMIN_CLIENT_URL");
 const HTTPS = getenv.bool("HTTPS", false);
 
+const REDIS_URL = getenv.string("REDIS_URL");
+const REDIS_PASSWORD = getenv.string("REDIS_PASSWORD");
+
 // Stripe
 const STRIPE_SECRET_KEY = getenv.string("STRIPE_SECRET_KEY");
 const STRIPE_WEBHOOK_SIGNING_SECRET = getenv.string(
@@ -63,6 +66,7 @@ const GOOGLE_ADMIN_TOKEN_URL = getenv.string("GOOGLE_ADMIN_TOKEN_URL", "");
 // Slack
 const SLACK_API_TOKEN = getenv.string("SLACK_API_TOKEN", "");
 const SLACK_ADMIN_IDS = getenv.array("SLACK_ADMIN_IDS", "string", []);
+const LOG_SLACK_ERRORS = getenv.bool("LOG_SLACK_ERRORS", false);
 
 const GITHUB_API_TOKEN = getenv.string("GITHUB_API_TOKEN", "");
 
@@ -103,6 +107,8 @@ const ENV = {
   CLIENT_URL,
   SERVER_HOST_URL,
   ADMIN_CLIENT_URL,
+  REDIS_URL,
+  REDIS_PASSWORD,
   STRIPE_SECRET_KEY,
   STRIPE_WEBHOOK_SIGNING_SECRET,
   JWT_SECRET,
@@ -126,6 +132,7 @@ const ENV = {
   GITHUB_API_TOKEN,
   SLACK_API_TOKEN,
   SLACK_ADMIN_IDS,
+  LOG_SLACK_ERRORS,
   ENABLE_EMAILS,
   GOOGLE_EMAIL_ACCOUNT_CLIENT_ID,
   GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY,
