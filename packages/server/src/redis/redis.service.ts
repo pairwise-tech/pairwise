@@ -3,6 +3,7 @@ import IORedis from "ioredis";
 import { RedisService } from "nestjs-redis";
 import { Ok, Err, Result, assertUnreachable } from "@pairwise/common";
 import ENV from "../tools/server-env";
+import shortid from "shortid";
 
 /** ===========================================================================
  * Redis Types and Config
@@ -11,6 +12,7 @@ import ENV from "../tools/server-env";
 
 enum REDIS_CACHE_KEYS {
   RECENT_PROGRESS_HISTORY = "RECENT_PROGRESS_HISTORY",
+  SERVICE_IDENTIFIER = "SERVICE_IDENTIFIER",
 }
 
 enum PUB_SUB_CHANNELS {
@@ -87,6 +89,12 @@ const progressCacheDefaultData: ProgressCacheData = {
 
 @Injectable()
 export class RedisClientService {
+  /**
+   * Generate a random id to identify this running Cloud run instance. This
+   * is used to keep only a single instance connected with web sockets.
+   */
+  serviceId = shortid();
+
   client: IORedis.Redis | null = null;
   publisherClient: IORedis.Redis | null = null;
   subscriberClient: IORedis.Redis | null = null;
@@ -123,16 +131,16 @@ export class RedisClientService {
     }
   }
 
-  private async initializeRedisSubscriber(client: IORedis.Redis) {
-    const listenerCount = client.listenerCount(
-      PUB_SUB_CHANNELS.CACHE_UPDATE_CHANNEL,
-    );
+  private async initializeRedisSubscriber(subscriberClient: IORedis.Redis) {
+    /**
+     * Only maintain 1 listener for N server deployments, override
+     * whatever service id was already in place.
+     */
+    this.client.set(REDIS_CACHE_KEYS.SERVICE_IDENTIFIER, this.serviceId);
 
-    // Only maintain 1 listener for N server deployments
-    if (listenerCount === 0) {
-      client.on("message", this.handleRedisSubscriptionMessages);
-      client.subscribe(PUB_SUB_CHANNELS.CACHE_UPDATE_CHANNEL);
-    }
+    // Subscribe to messages
+    subscriberClient.on("message", this.handleRedisSubscriptionMessages);
+    subscriberClient.subscribe(PUB_SUB_CHANNELS.CACHE_UPDATE_CHANNEL);
   }
 
   private handlePublishMessage<MessageType>(
@@ -157,10 +165,25 @@ export class RedisClientService {
     }
   }
 
-  private handleRedisSubscriptionMessages = (
+  private handleRedisSubscriptionMessages = async (
     channel: PUB_SUB_CHANNELS,
     message: string,
   ) => {
+    const id = await this.client.get(REDIS_CACHE_KEYS.SERVICE_IDENTIFIER);
+
+    /**
+     * Restrict message handlers to only a single instance, to handle
+     * Cloud Run scaling and restarting the server.
+     */
+    if (String(id) !== this.serviceId) {
+      /**
+       * TODO: If this happens, this instance should disconnect all
+       * web socket connections.
+       */
+      console.log("This is not the primary listener, disregarding event.");
+      return;
+    }
+
     switch (channel) {
       /**
        * Cache updates could be used to trigger realtime user activity
@@ -172,6 +195,7 @@ export class RedisClientService {
           const data = result.value;
           console.log(`Received message from channel ${channel}, data:`);
           console.log(data);
+          // TODO: Integrate web sockets for real time updates to client apps
         }
         break;
       default:
