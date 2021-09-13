@@ -170,6 +170,7 @@ jobs:
         run: |
           docker build \
             --build-arg REACT_APP_HOST=$PRODUCTION_SERVER_URL \
+            --build-arg REACT_APP_WEB_SOCKET_HOST=$REACT_APP_WEB_SOCKET_HOST \
             --build-arg REACT_APP_STRIPE_API_KEY=$STRIPE_PUBLISHABLE_KEY \
             --build-arg REACT_APP_SENTRY_DSN=$CLIENT_SENTRY_DSN \
             -t pairwise-production-client \

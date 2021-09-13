@@ -4,6 +4,7 @@ import { RedisService } from "nestjs-redis";
 import { Ok, Err, Result, assertUnreachable } from "@pairwise/common";
 import ENV from "../tools/server-env";
 import shortid from "shortid";
+import ws, { Server as WebSocketServerDef } from "ws";
 
 /** ===========================================================================
  * Redis Types and Config
@@ -98,10 +99,28 @@ export class RedisClientService {
   client: IORedis.Redis | null = null;
   publisherClient: IORedis.Redis | null = null;
   subscriberClient: IORedis.Redis | null = null;
+  ws: ws | null = null;
 
   constructor(private readonly redisService: RedisService) {
     this.initializePrimaryClient();
     this.initializePubSubClients();
+    this.initializeWebSocketServer();
+  }
+
+  private initializeWebSocketServer() {
+    // @ts-ignore - types are wrong
+    const WebSocketServer = ws.WebSocketServer;
+    const wss: WebSocketServerDef = new WebSocketServer({ port: 8080 });
+
+    wss.on("connection", (ws) => {
+      this.ws = ws;
+    });
+  }
+
+  private broadcastMessageToWebSocketClients(data: any) {
+    if (this.ws) {
+      this.ws.send(JSON.stringify(data));
+    }
   }
 
   private async initializePrimaryClient() {
@@ -180,6 +199,9 @@ export class RedisClientService {
        * TODO: If this happens, this instance should disconnect all
        * web socket connections.
        */
+      this.ws.removeAllListeners();
+      this.ws.close();
+
       console.log("This is not the primary listener, disregarding event.");
       return;
     }
@@ -195,7 +217,7 @@ export class RedisClientService {
           const data = result.value;
           console.log(`Received message from channel ${channel}, data:`);
           console.log(data);
-          // TODO: Integrate web sockets for real time updates to client apps
+          this.broadcastMessageToWebSocketClients(data);
         }
         break;
       default:

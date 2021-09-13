@@ -13,6 +13,10 @@ export const DEV = getenv.bool("REACT_APP_DEV", false);
 export const CODEPRESS = getenv.bool("REACT_APP_CODEPRESS", false);
 export const HIDE_EMBEDS = getenv.bool("REACT_APP_HIDE_EMBEDS", false);
 export const HOST = getenv.string("REACT_APP_HOST", "http://localhost:9000");
+export const REACT_APP_WEB_SOCKET_HOST = getenv.string(
+  "REACT_APP_WEB_SOCKET_HOST",
+  "ws://localhost:8080",
+);
 
 export const CODEPRESS_PORT = getenv.string("REACT_APP_CODEPRESS_PORT", "3001");
 export const CODEPRESS_HOST = getenv.string(

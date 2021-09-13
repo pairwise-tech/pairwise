@@ -54,6 +54,7 @@
     "@slack/web-api": "5.7.0",
     "@types/morgan": "1.7.37",
     "@types/validator": "12.0.1",
+    "@types/ws": "^7.4.7",
     "class-transformer": "0.3.1",
     "class-validator": "0.11.0",
     "clone-buffer": "1.0.0",
@@ -82,7 +83,8 @@
     "ts-node": "9.1.1",
     "typeorm": "0.2.34",
     "typescript": "4.3.4",
-    "validator": "12.1.0"
+    "validator": "12.1.0",
+    "ws": "^8.2.2"
   },
   "devDependencies": {
     "@nestjs/schematics": "6.7.6",

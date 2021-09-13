@@ -6,13 +6,16 @@ import Modules, { ReduxStoreState } from "modules/root";
 import { PageContainer, Text, PageTitle } from "./SharedComponents";
 import { COLORS } from "tools/constants";
 import { themeColor } from "./ThemeContainer";
+import { REACT_APP_WEB_SOCKET_HOST } from "../tools/client-env";
 
 /** ===========================================================================
  * Types & Config
  * ============================================================================
  */
 
-interface IState {}
+interface IState {
+  realtimeChallengeSolvedId: Nullable<string>;
+}
 
 /** ===========================================================================
  * Account
@@ -20,17 +23,70 @@ interface IState {}
  */
 
 class UserLeaderboard extends React.Component<IProps, IState> {
+  timer: Nullable<NodeJS.Timeout> = null;
+  socket: Nullable<WebSocket> = null;
+
   constructor(props: IProps) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      realtimeChallengeSolvedId: null,
+    };
   }
 
   componentDidMount() {
     this.props.fetchUserLeaderboard();
+    this.initializeWebSocketConnection();
   }
 
+  componentWillUnmount() {
+    if (this.socket) {
+      this.socket.close();
+      this.socket = null;
+    }
+
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+  }
+
+  initializeWebSocketConnection = () => {
+    // Create WebSocket connection.
+    const socket = new WebSocket(REACT_APP_WEB_SOCKET_HOST);
+
+    // Connection opened
+    socket.addEventListener("open", (event) => {
+      console.log("WebSocket connection established.");
+    });
+
+    // Listen for messages
+    socket.addEventListener("message", (event) => {
+      try {
+        const message = JSON.parse(event.data);
+        const { challengeId } = message.data;
+        if (challengeId) {
+          this.setState(
+            { realtimeChallengeSolvedId: challengeId },
+            this.setCancelTimeoutOnChallengeUpdate,
+          );
+        }
+      } catch (err) {
+        // No op
+        console.log(err);
+      }
+    });
+
+    this.socket = socket;
+  };
+
+  setCancelTimeoutOnChallengeUpdate = () => {
+    this.timer = setTimeout(() => {
+      this.setState({ realtimeChallengeSolvedId: null });
+    }, 5000);
+  };
+
   render(): Nullable<JSX.Element> {
+    const { realtimeChallengeSolvedId } = this.state;
     const { userLeaderboardState, fetchUserLeaderboard } = this.props;
     const { loading, error, leaderboard } = userLeaderboardState;
 
@@ -68,6 +124,21 @@ class UserLeaderboard extends React.Component<IProps, IState> {
           text="Refresh Rankings"
           onClick={fetchUserLeaderboard}
         />
+        {
+          <>
+            <RankTitle>Recent Challenge Updates:</RankTitle>
+            {realtimeChallengeSolvedId ? (
+              <TextItem
+                style={{ color: COLORS.PRIMARY_GREEN, fontWeight: "bold" }}
+              >
+                Challenge ID <code>{realtimeChallengeSolvedId}</code> just
+                solved!
+              </TextItem>
+            ) : (
+              <TextItem>No recent updates...</TextItem>
+            )}
+          </>
+        }
         {!exists ? (
           <RankTitle>Complete some challenges to enter the rankings.</RankTitle>
         ) : (
