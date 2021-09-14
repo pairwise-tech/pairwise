@@ -8,6 +8,11 @@ import { COLORS } from "tools/constants";
 import { themeColor } from "./ThemeContainer";
 import { REACT_APP_WEB_SOCKET_HOST } from "../tools/client-env";
 import io, { Socket } from "socket.io-client";
+import {
+  assertUnreachable,
+  SocketEvents,
+  SocketEventTypes,
+} from "@pairwise/common";
 
 /** ===========================================================================
  * Types & Config
@@ -115,15 +120,24 @@ class UserLeaderboard extends React.Component<IProps, IState> {
       });
 
       // Listen for messages
-      socket.on("message", (event) => {
+      socket.on("message", (event: SocketEvents) => {
         try {
-          const message = event.data;
-          const { challengeId } = message;
-          if (challengeId) {
-            this.setState(
-              { realtimeChallengeSolvedId: challengeId },
-              this.setCancelTimeoutOnChallengeUpdate,
-            );
+          switch (event.type) {
+            case SocketEventTypes.REAL_TIME_CHALLENGE_UPDATE: {
+              const message = event.payload.data;
+              const { challengeId } = message;
+              if (challengeId) {
+                this.setState(
+                  { realtimeChallengeSolvedId: challengeId },
+                  this.setCancelTimeoutOnChallengeUpdate,
+                );
+              }
+              break;
+            }
+
+            default: {
+              assertUnreachable(event.type);
+            }
           }
         } catch (err) {
           // No op

@@ -18,6 +18,11 @@ import {
   parseInitialUrlToInitializationType,
   APP_INITIALIZATION_TYPE,
 } from "tools/admin-utils";
+import {
+  assertUnreachable,
+  SocketEvents,
+  SocketEventTypes,
+} from "@pairwise/common";
 import io, { Socket } from "socket.io-client";
 import { HOST } from "../../tools/admin-env";
 import shortid from "shortid";
@@ -200,18 +205,26 @@ const connectSocketIOEpic: EpicSignature = (action$, state, deps) => {
         });
 
         // Listen for messages
-        // TODO: Add type information/checking for event objects
-        socket.on("message", (event) => {
+        socket.on("message", (event: SocketEvents) => {
           try {
-            const message = event.data;
-            const action = Actions.addRealTimeChallengeUpdate({
-              id: shortid(),
-              challengeId: message.challengeId,
-            });
+            switch (event.type) {
+              case SocketEventTypes.REAL_TIME_CHALLENGE_UPDATE: {
+                const message = event.payload.data;
+                const action = Actions.addRealTimeChallengeUpdate({
+                  id: shortid(),
+                  challengeId: message.challengeId,
+                });
 
-            // Use store dispatch function to dispatch actions in response
-            // to socket messages
-            deps.dispatch(action);
+                // Use store dispatch function to dispatch actions in response
+                // to socket messages
+                deps.dispatch(action);
+                break;
+              }
+
+              default: {
+                assertUnreachable(event.type);
+              }
+            }
           } catch (err) {
             console.log("Error handling WebSocket message", err);
           }

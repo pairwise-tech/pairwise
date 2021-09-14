@@ -1,4 +1,10 @@
 import {
+  CacheUpdateMessage,
+  RealTimeUpdateEvent,
+  SocketEvents,
+  SocketEventTypes,
+} from "@pairwise/common";
+import {
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
@@ -22,17 +28,28 @@ export class WebSocketsGatewayService {
   }
 
   /**
-   * TODO: Create shared type information for possible socket events.
+   * Handling broadcasting event.
    */
-  public broadcastMessage(message: any) {
-    this.server.send(message);
+  private broadcastMessage(event: SocketEvents) {
+    this.server.send(event);
+  }
+
+  /**
+   * Broadcast realtime update.
+   */
+  public broadcastRealTimeUpdate(update: CacheUpdateMessage) {
+    const event: RealTimeUpdateEvent = {
+      type: SocketEventTypes.REAL_TIME_CHALLENGE_UPDATE,
+      payload: update,
+    };
+    this.broadcastMessage(event);
   }
 
   /**
    * Example handler for Socket messages defined as "event".
    */
   @SubscribeMessage("event")
-  async handleEvent(@MessageBody() data: any): Promise<WsResponse<any>> {
+  public async handleEvent(@MessageBody() data: any): Promise<WsResponse<any>> {
     return data;
   }
 }

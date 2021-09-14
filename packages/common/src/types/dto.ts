@@ -317,3 +317,29 @@ export interface PullRequestCourseContent {
   courseList: CourseList;
   courseSkeletonList: CourseSkeletonList;
 }
+
+/** ===========================================================================
+ * Redis & Web Socket type definitions
+ * ============================================================================
+ */
+
+export interface PublishedMessage<MessagePayload> {
+  data: MessagePayload;
+}
+
+export type CacheUpdateMessage = PublishedMessage<{
+  challengeId: string;
+}>;
+
+export enum SocketEventTypes {
+  REAL_TIME_CHALLENGE_UPDATE = "REAL_TIME_CHALLENGE_UPDATE",
+}
+
+export interface SocketEvent<T> {
+  type: SocketEventTypes.REAL_TIME_CHALLENGE_UPDATE;
+  payload: T;
+}
+
+export type RealTimeUpdateEvent = SocketEvent<CacheUpdateMessage>;
+
+export type SocketEvents = RealTimeUpdateEvent;

@@ -1,7 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import IORedis from "ioredis";
 import { RedisService } from "nestjs-redis";
-import { Ok, Err, Result, assertUnreachable } from "@pairwise/common";
+import {
+  CacheUpdateMessage,
+  Ok,
+  Err,
+  Result,
+  assertUnreachable,
+} from "@pairwise/common";
 import ENV from "../tools/server-env";
 import shortid from "shortid";
 import ws, { Server as WebSocketServerDef } from "ws";
@@ -26,14 +32,6 @@ export const REDIS_CLIENT_CONFIG = {
   PUBLISHER: `${ENV.REDIS_NAME}-publisher`,
   SUBSCRIBER: `${ENV.REDIS_NAME}-subscriber`,
 };
-
-interface PublishedMessage<MessagePayload> {
-  data: MessagePayload;
-}
-
-type CacheUpdateMessage = PublishedMessage<{
-  challengeId: string;
-}>;
 
 /** ===========================================================================
  * Progress Updates Types and Config
@@ -214,8 +212,7 @@ export class RedisClientService {
           this.handleDeserializeMessage<CacheUpdateMessage>(message);
 
         if (result.value) {
-          const data = result.value;
-          this.websocketsService.broadcastMessage(data);
+          this.websocketsService.broadcastRealTimeUpdate(result.value);
         }
         break;
       default:
