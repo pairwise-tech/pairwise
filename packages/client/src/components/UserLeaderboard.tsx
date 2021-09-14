@@ -79,7 +79,7 @@ class UserLeaderboard extends React.Component<IProps, IState> {
 
       this.socket = socket;
     } catch (err) {
-      console.log(err);
+      console.log("Error initializing web socket connection", err);
       throw err;
     }
   };
