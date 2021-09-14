@@ -110,7 +110,7 @@ export class RedisClientService {
   private initializeWebSocketServer() {
     // @ts-ignore - types are wrong
     const WebSocketServer = ws.WebSocketServer;
-    const wss: WebSocketServerDef = new WebSocketServer({ port: 8080 });
+    const wss: WebSocketServerDef = new WebSocketServer({ port: 8001 });
 
     wss.on("connection", (ws) => {
       this.ws = ws;
