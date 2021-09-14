@@ -23,8 +23,10 @@ interface IState {
  */
 
 class UserLeaderboard extends React.Component<IProps, IState> {
-  timer: Nullable<NodeJS.Timeout> = null;
+  timer_one: Nullable<NodeJS.Timeout> = null;
+  timer_two: Nullable<NodeJS.Timeout> = null;
   socket: Nullable<WebSocket> = null;
+  socketCloseUnmountReason = "componentWillUnmount";
 
   constructor(props: IProps) {
     super(props);
@@ -41,23 +43,59 @@ class UserLeaderboard extends React.Component<IProps, IState> {
 
   componentWillUnmount() {
     if (this.socket) {
-      this.socket.close();
+      // Close code reference: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent/code
+      this.socket.close(1000, this.socketCloseUnmountReason);
       this.socket = null;
     }
 
-    if (this.timer) {
-      clearTimeout(this.timer);
+    if (this.timer_one) {
+      clearTimeout(this.timer_one);
+    }
+
+    if (this.timer_two) {
+      clearTimeout(this.timer_two);
     }
   }
 
-  initializeWebSocketConnection = () => {
+  initializeWebSocketConnection = async (retries = 5) => {
+    // Cancel if retries reach 0
+    if (retries === 0) {
+      console.log(
+        "Retry limited exceeded, aborting WebSocket reconnection attempt.",
+      );
+      return;
+    }
+
     try {
       // Create WebSocket connection.
       const socket = new WebSocket(REACT_APP_WEB_SOCKET_HOST);
 
       // Connection opened
-      socket.addEventListener("open", (event) => {
+      socket.addEventListener("open", (event: Event) => {
         console.log("WebSocket connection established.");
+      });
+
+      socket.addEventListener("close", (event: CloseEvent) => {
+        const { reason } = event;
+
+        // No op on componentWillUnmount
+        if (reason === this.socketCloseUnmountReason) {
+          return;
+        }
+
+        /**
+         * The connection may disconnect if the Cloud Run server instance
+         * re-deploys and the primary active WebSocket instance changes. In
+         * this case try to reconnect the client again.
+         */
+        console.log("WebSocket connection disconnected, close event:");
+        console.log(event);
+        console.log("Trying to reconnect...");
+
+        // Wait 1 second before retry
+        this.timer_two = setTimeout(() => {
+          this.initializeWebSocketConnection(retries - 1);
+        }, 1000);
       });
 
       // Listen for messages
@@ -73,19 +111,19 @@ class UserLeaderboard extends React.Component<IProps, IState> {
           }
         } catch (err) {
           // No op
-          console.log(err);
+          console.log("Error handling WebSocket message", err);
         }
       });
 
       this.socket = socket;
     } catch (err) {
       console.log("Error initializing web socket connection", err);
-      throw err;
+      this.initializeWebSocketConnection(retries - 1);
     }
   };
 
   setCancelTimeoutOnChallengeUpdate = () => {
-    this.timer = setTimeout(() => {
+    this.timer_one = setTimeout(() => {
       this.setState({ realtimeChallengeSolvedId: null });
     }, 5000);
   };
