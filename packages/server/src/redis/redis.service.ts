@@ -118,7 +118,7 @@ export class RedisClientService {
   }
 
   private broadcastMessageToWebSocketClients(data: any) {
-    if (this.ws) {
+    if (this.ws !== null) {
       this.ws.send(JSON.stringify(data));
     }
   }
@@ -196,13 +196,15 @@ export class RedisClientService {
      */
     if (String(id) !== this.serviceId) {
       /**
-       * TODO: If this happens, this instance should disconnect all
-       * web socket connections.
+       * Disconnect any existing web socket clients and close the connection.
        */
       this.ws.removeAllListeners();
       this.ws.close();
+      this.ws = null;
 
-      console.log("This is not the primary listener, disregarding event.");
+      console.log(
+        "This is not the primary Redis subscriber, disregarding event.",
+      );
       return;
     }
 
@@ -212,11 +214,11 @@ export class RedisClientService {
        * push updates to the apps.
        */
       case PUB_SUB_CHANNELS.CACHE_UPDATE_CHANNEL:
-        const result = this.handleDeserializeMessage(message);
+        const result =
+          this.handleDeserializeMessage<CacheUpdateMessage>(message);
+
         if (result.value) {
           const data = result.value;
-          console.log(`Received message from channel ${channel}, data:`);
-          console.log(data);
           this.broadcastMessageToWebSocketClients(data);
         }
         break;

@@ -1,0 +1,41 @@
+version: "3.5"
+
+# This docker compose launches all the backend services expect for the
+# main server. It launches the external services, db redis, and the stripe
+# cli.
+
+services:
+  db:
+    image: postgres:11.2
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+
+  redis:
+    image: "bitnami/redis:latest"
+    environment:
+      REDIS_PASSWORD: redis-dev-password
+    expose:
+      - 5432
+    ports:
+      - 6379:6379
+
+  stripe:
+    image: stripe/stripe-cli
+    command: --api-key sk_test_mbG9wVyUhddtlRfqjtLJfRvZ00ZFBbvNDQ listen --forward-to=services:9000/payments/stripe-webhook
+
+  services:
+    build:
+      context: .
+      dockerfile: docker/Runtime.Dockerfile
+    image: pairwise-dev-runtime
+    command: yarn services:start
+    expose:
+      - 7000
+    ports:
+      - 7000:7000
