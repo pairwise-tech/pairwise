@@ -18,6 +18,7 @@ enum ActionTypesEnum {
   LOCATION_CHANGE = "LOCATION_CHANGE",
 
   SOCKET_IO_CONNECT = "SOCKET_IO_CONNECT",
+  SOCKET_IO_CHECK_RECONNECTION = "SOCKET_IO_CHECK_RECONNECTION",
   SOCKET_IO_CONNECT_SUCCESS = "SOCKET_IO_CONNECT_SUCCESS",
   SOCKET_IO_CONNECT_FAILURE = "SOCKET_IO_CONNECT_FAILURE",
   SOCKET_IO_DISCONNECT = "SOCKET_IO_DISCONNECT",
@@ -67,6 +68,10 @@ export const captureAppInitializationUrl = createAction(
 
 export const connectSocketIO = createAction(
   ActionTypesEnum.SOCKET_IO_CONNECT,
+)();
+
+export const checkSocketIOReconnection = createAction(
+  ActionTypesEnum.SOCKET_IO_CHECK_RECONNECTION,
 )();
 
 export const connectSocketIOSuccess = createAction(

@@ -21,6 +21,9 @@ export class WebSocketsGatewayService {
     this.server.close();
   }
 
+  /**
+   * TODO: Create shared type information for possible socket events.
+   */
   public broadcastMessage(message: any) {
     this.server.send(message);
   }

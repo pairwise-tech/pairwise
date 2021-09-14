@@ -97,19 +97,21 @@ class UserLeaderboard extends React.Component<IProps, IState> {
         // No op on componentWillUnmount
         if (reason === "io client disconnect") {
           return;
+        } else if (reason === "transport close") {
+          /**
+           * The connection may disconnect if the Cloud Run server instance
+           * re-deploys and the primary active WebSocket instance changes. In
+           * this case try to reconnect the client again.
+           */
+          console.log(
+            "WebSocket connection disconnected, trying to reconnect:",
+          );
+
+          // Wait 1 second before retry
+          this.timer_two = setTimeout(() => {
+            this.initializeWebSocketConnection(retries - 1);
+          }, 1000);
         }
-
-        /**
-         * The connection may disconnect if the Cloud Run server instance
-         * re-deploys and the primary active WebSocket instance changes. In
-         * this case try to reconnect the client again.
-         */
-        console.log("WebSocket connection disconnected, trying to reconnect:");
-
-        // Wait 1 second before retry
-        this.timer_two = setTimeout(() => {
-          this.initializeWebSocketConnection(retries - 1);
-        }, 1000);
       });
 
       // Listen for messages

@@ -8,7 +8,7 @@ import {
   delay,
   mapTo,
 } from "rxjs/operators";
-import { Observable } from "rxjs";
+import { merge, Observable } from "rxjs";
 import { isActionOf } from "typesafe-actions";
 import { Location } from "history";
 import { combineEpics } from "redux-observable";
@@ -18,7 +18,7 @@ import {
   parseInitialUrlToInitializationType,
   APP_INITIALIZATION_TYPE,
 } from "tools/admin-utils";
-import io from "socket.io-client";
+import io, { Socket } from "socket.io-client";
 import { HOST } from "../../tools/admin-env";
 import shortid from "shortid";
 
@@ -139,26 +139,68 @@ const locationChangeEpic: EpicSignature = (_, __, deps) => {
   }).pipe(map(Actions.locationChange));
 };
 
+/**
+ * Web Socket connection epic.
+ */
 const connectSocketIOEpic: EpicSignature = (action$, state, deps) => {
-  return action$.pipe(
-    filter(isActionOf([Actions.initializeApp, Actions.connectSocketIO])),
+  const init$ = action$.pipe(
+    filter(isActionOf(Actions.initializeApp)),
+    map(() => Actions.connectSocketIO()),
+  );
+
+  const openConnection$ = action$.pipe(
+    filter(isActionOf(Actions.connectSocketIO)),
+  );
+
+  const setSocket = (s: Nullable<Socket>) => {
+    deps.socket = s;
+  };
+
+  const handleConnectionFailure = () => {
+    deps.dispatch(Actions.connectSocketIOFailure());
+    deps.dispatch(Actions.checkSocketIOReconnection());
+  };
+
+  return merge(init$, openConnection$).pipe(
     map(() => {
       try {
         // Create WebSocket connection.
         const socket = io(HOST, {
           transports: ["websocket"],
+          reconnectionAttempts: 5,
+          reconnectionDelay: 2000,
         });
 
         socket.on("connect", () => {
-          console.log("WebSocket connection established.");
+          if (socket.connected === false) {
+            handleConnectionFailure();
+          } else {
+            // Assign socket handler to deps to use in other epics
+            setSocket(socket);
+            console.log("WebSocket connection established.");
+            deps.dispatch(Actions.connectSocketIOSuccess());
+          }
         });
 
-        socket.on("disconnect", () => {
+        socket.on("disconnect", (reason: string) => {
           console.warn("WebSocket connection disconnected!");
-          // TODO: Add re-connect logic here if server disconnects
+
+          if (reason === "io client disconnect") {
+            // No op
+            return;
+          } else if (reason === "transport close") {
+            /**
+             * This should occur when the server disconnects, which can happen
+             * if the Cloud Run instance is rotated. In that case, try to
+             * reconnect the socket listener.
+             */
+            setSocket(null);
+            handleConnectionFailure();
+          }
         });
 
         // Listen for messages
+        // TODO: Add type information/checking for event objects
         socket.on("message", (event) => {
           try {
             const message = event.data;
@@ -175,10 +217,7 @@ const connectSocketIOEpic: EpicSignature = (action$, state, deps) => {
           }
         });
 
-        // Assign socket handler to deps to use in other epics
-        deps.socket = socket;
-
-        return Actions.connectSocketIOSuccess();
+        return Actions.empty("SocketIO epic placeholder completion action.");
       } catch (err) {
         const msg =
           "Failed to initialize web socket connection, check console for details.";
@@ -187,6 +226,24 @@ const connectSocketIOEpic: EpicSignature = (action$, state, deps) => {
         return Actions.connectSocketIOFailure();
       }
     }),
+  );
+};
+
+/**
+ * Delayed check for socket reconnection after a disconnect or connection
+ * failure occurs.
+ */
+const checkSocketReconnectionEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(
+      isActionOf([Actions.initializeApp, Actions.checkSocketIOReconnection]),
+    ),
+    delay(12500),
+    filter(() => !state$.value.app.socketIOConnected),
+    tap(() => {
+      deps.toaster.warn("Failed to re-establish web socket connection.");
+    }),
+    mapTo(Actions.connectSocketIOFailure()),
   );
 };
 
@@ -215,5 +272,6 @@ export default combineEpics(
   notifyOnAuthenticationFailureEpic,
   locationChangeEpic,
   connectSocketIOEpic,
+  checkSocketReconnectionEpic,
   removeRealTimeChallengeUpdateEpic,
 );

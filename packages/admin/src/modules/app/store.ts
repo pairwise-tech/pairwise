@@ -17,6 +17,7 @@ export interface State {
   location: string;
   initializationError: boolean;
   screensaver: boolean;
+  socketIOConnected: boolean;
   realtimeChallengeUpdates: RealTimeChallengeUpdate[];
 }
 
@@ -25,6 +26,7 @@ const initialState = {
   location: "",
   initializationError: false,
   screensaver: false,
+  socketIOConnected: false,
   realtimeChallengeUpdates: [],
 };
 
@@ -48,6 +50,14 @@ const app = createReducer<State, AppActionTypes>(initialState)
     realtimeChallengeUpdates: state.realtimeChallengeUpdates.filter(
       (x) => x.id !== action.payload.id,
     ),
+  }))
+  .handleAction(actions.connectSocketIOSuccess, (state, action) => ({
+    ...state,
+    socketIOConnected: true,
+  }))
+  .handleAction(actions.connectSocketIOFailure, (state, action) => ({
+    ...state,
+    socketIOConnected: false,
   }))
   .handleAction(actions.locationChange, (state, action) => ({
     ...state,
