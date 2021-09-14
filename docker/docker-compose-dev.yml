@@ -31,8 +31,8 @@ services:
 
   services:
     build:
-      context: .
-      dockerfile: docker/Runtime.Dockerfile
+      context: ../
+      dockerfile: docker/Dev.Dockerfile
     image: pairwise-dev-runtime
     command: yarn services:start
     expose:
