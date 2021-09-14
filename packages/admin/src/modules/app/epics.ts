@@ -18,6 +18,9 @@ import {
   parseInitialUrlToInitializationType,
   APP_INITIALIZATION_TYPE,
 } from "tools/admin-utils";
+import io from "socket.io-client";
+import { HOST } from "../../tools/admin-env";
+import shortid from "shortid";
 
 /** ===========================================================================
  * Epics
@@ -136,6 +139,68 @@ const locationChangeEpic: EpicSignature = (_, __, deps) => {
   }).pipe(map(Actions.locationChange));
 };
 
+const connectSocketIOEpic: EpicSignature = (action$, state, deps) => {
+  return action$.pipe(
+    filter(isActionOf([Actions.initializeApp, Actions.connectSocketIO])),
+    map(() => {
+      try {
+        // Create WebSocket connection.
+        const socket = io(HOST, {
+          transports: ["websocket"],
+        });
+
+        socket.on("connect", () => {
+          console.log("WebSocket connection established.");
+        });
+
+        socket.on("disconnect", () => {
+          console.warn("WebSocket connection disconnected!");
+          // TODO: Add re-connect logic here if server disconnects
+        });
+
+        // Listen for messages
+        socket.on("message", (event) => {
+          try {
+            const message = event.data;
+            const action = Actions.addRealTimeChallengeUpdate({
+              id: shortid(),
+              challengeId: message.challengeId,
+            });
+
+            // Use store dispatch function to dispatch actions in response
+            // to socket messages
+            deps.dispatch(action);
+          } catch (err) {
+            console.log("Error handling WebSocket message", err);
+          }
+        });
+
+        // Assign socket handler to deps to use in other epics
+        deps.socket = socket;
+
+        return Actions.connectSocketIOSuccess();
+      } catch (err) {
+        const msg =
+          "Failed to initialize web socket connection, check console for details.";
+        deps.toaster.warn(msg);
+        console.error(msg, err);
+        return Actions.connectSocketIOFailure();
+      }
+    }),
+  );
+};
+
+/**
+ * Triggers the removal of a real time update after a delay.
+ */
+const removeRealTimeChallengeUpdateEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.addRealTimeChallengeUpdate)),
+    delay(5000),
+    map((x) => Actions.removeRealTimeChallengeUpdate(x.payload)),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -149,4 +214,6 @@ export default combineEpics(
   emailUpdateSuccessToastEpic,
   notifyOnAuthenticationFailureEpic,
   locationChangeEpic,
+  connectSocketIOEpic,
+  removeRealTimeChallengeUpdateEpic,
 );

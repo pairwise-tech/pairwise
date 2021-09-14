@@ -1,8 +1,9 @@
 import { History } from "history";
-import { combineReducers } from "redux";
+import { combineReducers, Dispatch } from "redux";
 import { combineEpics, Epic } from "redux-observable";
 import { catchError } from "rxjs/operators";
 import API from "./api";
+import { Socket } from "socket.io-client";
 import toaster from "tools/toast-utils";
 
 /** ===========================================================================
@@ -100,9 +101,11 @@ const rootReducer = combineReducers({
 export interface EpicDependencies {
   router: History<any>;
   api: typeof API;
+  socket: Nullable<Socket>;
   toaster: typeof toaster;
   selectors: typeof selectors;
   storage: typeof Storage;
+  dispatch: Dispatch | (() => void);
 }
 
 export type EpicSignature = Epic<

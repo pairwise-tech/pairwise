@@ -2,6 +2,7 @@ import { createAction } from "typesafe-actions";
 import { Location as HistoryLocation } from "history";
 import { ParsedQuery } from "query-string";
 import { APP_INITIALIZATION_TYPE } from "tools/admin-utils";
+import { RealTimeChallengeUpdate } from "./store";
 
 /** ===========================================================================
  * Action Types
@@ -15,6 +16,14 @@ enum ActionTypesEnum {
   APP_INITIALIZATION_FAILED = "APP_INITIALIZATION_FAILED",
   CAPTURE_APP_INITIALIZATION_URL = "CAPTURE_APP_INITIALIZATION_URL",
   LOCATION_CHANGE = "LOCATION_CHANGE",
+
+  SOCKET_IO_CONNECT = "SOCKET_IO_CONNECT",
+  SOCKET_IO_CONNECT_SUCCESS = "SOCKET_IO_CONNECT_SUCCESS",
+  SOCKET_IO_CONNECT_FAILURE = "SOCKET_IO_CONNECT_FAILURE",
+  SOCKET_IO_DISCONNECT = "SOCKET_IO_DISCONNECT",
+
+  ADD_REAL_TIME_CHALLENGE_UPDATE = "ADD_REAL_TIME_CHALLENGE_UPDATE",
+  REMOVE_REAL_TIME_CHALLENGE_UPDATE = "REMOVE_REAL_TIME_CHALLENGE_UPDATE",
 }
 
 /** ===========================================================================
@@ -55,3 +64,27 @@ export const captureAppInitializationUrl = createAction(
   params: ParsedQuery<string>;
   appInitializationType: APP_INITIALIZATION_TYPE;
 }>();
+
+export const connectSocketIO = createAction(
+  ActionTypesEnum.SOCKET_IO_CONNECT,
+)();
+
+export const connectSocketIOSuccess = createAction(
+  ActionTypesEnum.SOCKET_IO_CONNECT_SUCCESS,
+)();
+
+export const connectSocketIOFailure = createAction(
+  ActionTypesEnum.SOCKET_IO_CONNECT_FAILURE,
+)();
+
+export const disconnectSocketIO = createAction(
+  ActionTypesEnum.SOCKET_IO_DISCONNECT,
+)();
+
+export const addRealTimeChallengeUpdate = createAction(
+  ActionTypesEnum.ADD_REAL_TIME_CHALLENGE_UPDATE,
+)<RealTimeChallengeUpdate>();
+
+export const removeRealTimeChallengeUpdate = createAction(
+  ActionTypesEnum.REMOVE_REAL_TIME_CHALLENGE_UPDATE,
+)<RealTimeChallengeUpdate>();

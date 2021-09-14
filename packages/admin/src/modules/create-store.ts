@@ -2,7 +2,6 @@ import { createBrowserHistory } from "history";
 import { applyMiddleware, createStore, Middleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { createEpicMiddleware } from "redux-observable";
-
 import * as ENV from "../tools/admin-env";
 import api from "./api";
 import {
@@ -28,12 +27,20 @@ const history = createBrowserHistory();
  * ============================================================================
  */
 
+const mockDispatchFn = () => {
+  console.warn(
+    "[WARNING]: Dispatch function not assigned to epic middleware yet!",
+  );
+};
+
 const dependencies: EpicDependencies = {
   api,
   toaster,
   selectors,
+  socket: null,
   router: history,
   storage: Storage,
+  dispatch: mockDispatchFn,
 };
 
 const epicMiddleware = createEpicMiddleware({
@@ -65,6 +72,9 @@ const configureStore = () => {
  */
 
 const store = configureStore();
+
+// Assign dispatch function to epic dependencies
+dependencies.dispatch = store.dispatch;
 
 /** ===========================================================================
  * Export

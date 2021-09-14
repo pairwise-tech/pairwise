@@ -14,6 +14,11 @@ export const appState = (state: ReduxStoreState) => {
 
 export const appSelector = createSelector([appState], identity);
 
+export const realtimeChallengeUpdates = createSelector(
+  [appState],
+  (appState) => appState.realtimeChallengeUpdates,
+);
+
 export const locationSelector = createSelector(
   appSelector,
   (app) => app.location,

@@ -22,7 +22,7 @@ import {
   computeCourseProgressSummary,
   progressHistoryToChallengeCount,
 } from "../tools/admin-utils";
-import { COLORS, MOBILE } from "../tools/constants";
+import { COLORS } from "../tools/constants";
 import { BlobCache } from "../modules/challenges/store";
 import { themeColor } from "./AdminThemeContainer";
 

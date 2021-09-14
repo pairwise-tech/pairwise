@@ -7,11 +7,17 @@ import { AppActionTypes } from "./index";
  * ============================================================================
  */
 
+export interface RealTimeChallengeUpdate {
+  id: string;
+  challengeId: string;
+}
+
 export interface State {
   initialized: boolean;
   location: string;
   initializationError: boolean;
   screensaver: boolean;
+  realtimeChallengeUpdates: RealTimeChallengeUpdate[];
 }
 
 const initialState = {
@@ -19,6 +25,7 @@ const initialState = {
   location: "",
   initializationError: false,
   screensaver: false,
+  realtimeChallengeUpdates: [],
 };
 
 const app = createReducer<State, AppActionTypes>(initialState)
@@ -29,6 +36,18 @@ const app = createReducer<State, AppActionTypes>(initialState)
   .handleAction(actions.appInitializationFailed, (state) => ({
     ...state,
     initializationError: true,
+  }))
+  .handleAction(actions.addRealTimeChallengeUpdate, (state, action) => ({
+    ...state,
+    realtimeChallengeUpdates: state.realtimeChallengeUpdates.concat(
+      action.payload,
+    ),
+  }))
+  .handleAction(actions.removeRealTimeChallengeUpdate, (state, action) => ({
+    ...state,
+    realtimeChallengeUpdates: state.realtimeChallengeUpdates.filter(
+      (x) => x.id !== action.payload.id,
+    ),
   }))
   .handleAction(actions.locationChange, (state, action) => ({
     ...state,

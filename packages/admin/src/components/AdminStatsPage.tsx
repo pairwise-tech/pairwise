@@ -67,6 +67,7 @@ class AdminStatsPage extends React.Component<IProps, IState> {
       courseSkeletons,
       progressRecords,
       usersListLoading,
+      realtimeChallengeUpdates,
     } = this.props;
 
     // Wait for stats and users list to load
@@ -134,6 +135,20 @@ class AdminStatsPage extends React.Component<IProps, IState> {
             <Stat>
               <b>Total Course Revenue:</b>{" "}
               <Value>${totalRevenue.toFixed(0)}</Value>
+            </Stat>
+            <Stat>
+              <b>Real Time Challenge Updates:</b>{" "}
+              {realtimeChallengeUpdates.length === 0 ? (
+                <Value>No updates...</Value>
+              ) : (
+                <Value>
+                  {
+                    realtimeChallengeUpdates[
+                      realtimeChallengeUpdates.length - 1
+                    ].challengeId
+                  }
+                </Value>
+              )}
             </Stat>
             <Title>Course Summaries:</Title>
             {courseSkeletons && courseSkeletons.length > 0 && (
@@ -301,12 +316,14 @@ const ControlRow = styled.div`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   usersList: Modules.selectors.users.usersState(state).users,
-  adminUserSettings: Modules.selectors.admin.adminUserSettings(state),
   statsLoading: Modules.selectors.stats.statsLoadingSelector(state),
+  adminUserSettings: Modules.selectors.admin.adminUserSettings(state),
   usersListLoading: Modules.selectors.users.usersState(state).loading,
+  courseSkeletons: Modules.selectors.challenges.courseSkeletons(state),
   progressRecords: Modules.selectors.stats.progressRecordsSelector(state),
   paymentRecords: Modules.selectors.payments.paymentRecordsSelector(state),
-  courseSkeletons: Modules.selectors.challenges.courseSkeletons(state),
+  realtimeChallengeUpdates:
+    Modules.selectors.app.realtimeChallengeUpdates(state),
 });
 
 const dispatchProps = {
