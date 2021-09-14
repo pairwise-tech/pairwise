@@ -51,32 +51,37 @@ class UserLeaderboard extends React.Component<IProps, IState> {
   }
 
   initializeWebSocketConnection = () => {
-    // Create WebSocket connection.
-    const socket = new WebSocket(REACT_APP_WEB_SOCKET_HOST);
+    try {
+      // Create WebSocket connection.
+      const socket = new WebSocket(REACT_APP_WEB_SOCKET_HOST);
 
-    // Connection opened
-    socket.addEventListener("open", (event) => {
-      console.log("WebSocket connection established.");
-    });
+      // Connection opened
+      socket.addEventListener("open", (event) => {
+        console.log("WebSocket connection established.");
+      });
 
-    // Listen for messages
-    socket.addEventListener("message", (event) => {
-      try {
-        const message = JSON.parse(event.data);
-        const { challengeId } = message.data;
-        if (challengeId) {
-          this.setState(
-            { realtimeChallengeSolvedId: challengeId },
-            this.setCancelTimeoutOnChallengeUpdate,
-          );
+      // Listen for messages
+      socket.addEventListener("message", (event) => {
+        try {
+          const message = JSON.parse(event.data);
+          const { challengeId } = message.data;
+          if (challengeId) {
+            this.setState(
+              { realtimeChallengeSolvedId: challengeId },
+              this.setCancelTimeoutOnChallengeUpdate,
+            );
+          }
+        } catch (err) {
+          // No op
+          console.log(err);
         }
-      } catch (err) {
-        // No op
-        console.log(err);
-      }
-    });
+      });
 
-    this.socket = socket;
+      this.socket = socket;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   };
 
   setCancelTimeoutOnChallengeUpdate = () => {
