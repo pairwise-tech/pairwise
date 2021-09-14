@@ -1,6 +1,6 @@
 import { HttpResponseError } from "modules/api";
 import { createAction } from "typesafe-actions";
-import { ProgressRecords } from "./store";
+import { RecentProgressAdminDto } from "@pairwise/common";
 
 /** ===========================================================================
  * Action Types
@@ -28,7 +28,7 @@ export const fetchProgressRecords = createAction(
 
 export const fetchProgressRecordsSuccess = createAction(
   ActionTypesEnum.FETCH_PROGRESS_RECORDS_SUCCESS,
-)<ProgressRecords>();
+)<RecentProgressAdminDto>();
 
 export const fetchProgressRecordsFailure = createAction(
   ActionTypesEnum.FETCH_PROGRESS_RECORDS_FAILURE,

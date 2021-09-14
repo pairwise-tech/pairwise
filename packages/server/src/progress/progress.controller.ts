@@ -65,4 +65,9 @@ export class ProgressController {
 
     return SUCCESS_CODES.OK;
   }
+
+  @Get("/recent")
+  public fetchRecentProgressUpdates() {
+    return this.progressService.fetchRecentProgressRecordsForWorkspace();
+  }
 }

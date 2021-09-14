@@ -319,6 +319,34 @@ export interface PullRequestCourseContent {
 }
 
 /** ===========================================================================
+ * Recent Progress DTOs
+ * ============================================================================
+ */
+
+export interface RecentProgressRecord {
+  user: string;
+  challenges: string[];
+}
+
+export interface RecentProgressPublicStats {
+  totalUsersCount: number;
+  completedChallengesCount: number;
+}
+
+export interface RecentProgressAdminStats {
+  totalUsersCount: number;
+  completedChallengesCount: number;
+  moreThanThreeCount: number;
+  registeredUserCount: number;
+}
+
+export interface RecentProgressAdminDto {
+  statusMessage: string;
+  stats: RecentProgressAdminStats;
+  records: RecentProgressRecord[];
+}
+
+/** ===========================================================================
  * Redis & Web Socket type definitions
  * ============================================================================
  */

@@ -1,4 +1,5 @@
 import { createReducer } from "typesafe-actions";
+import { RecentProgressPublicStats } from "../../../../common/dist/main";
 import * as actions from "./actions";
 import { AppActionTypes } from "./index";
 
@@ -15,9 +16,11 @@ export interface State {
   loadingAnimationComplete: boolean;
   adminDrawerOpen: boolean;
   adminPullRequestId: string;
+  loadingRecentProgressStats: boolean;
+  recentProgressStats: Nullable<RecentProgressPublicStats>;
 }
 
-const initialState = {
+const initialState: State = {
   initialized: false,
   location: "",
   initializationError: false,
@@ -25,6 +28,8 @@ const initialState = {
   loadingAnimationComplete: false,
   adminDrawerOpen: false,
   adminPullRequestId: "",
+  loadingRecentProgressStats: false,
+  recentProgressStats: null,
 };
 
 const app = createReducer<State, AppActionTypes>(initialState)
@@ -51,6 +56,21 @@ const app = createReducer<State, AppActionTypes>(initialState)
   .handleAction(actions.setAdminPullRequestId, (state, action) => ({
     ...state,
     adminPullRequestId: action.payload,
+  }))
+  .handleAction(actions.fetchRecentProgressRecords, (state, action) => ({
+    ...state,
+    recentProgressStats: null,
+    loadingRecentProgressStats: true,
+  }))
+  .handleAction(actions.fetchRecentProgressRecordsFailure, (state, action) => ({
+    ...state,
+    recentProgressStats: null,
+    loadingRecentProgressStats: false,
+  }))
+  .handleAction(actions.fetchRecentProgressRecordsSuccess, (state, action) => ({
+    ...state,
+    loadingRecentProgressStats: true,
+    recentProgressStats: action.payload,
   }))
   .handleAction(actions.locationChange, (state, action) => ({
     ...state,

@@ -25,6 +25,7 @@ import {
   SSO,
   UserProfile,
   PaymentRequestDto,
+  RecentProgressPublicStats,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable, lastValueFrom } from "rxjs";
@@ -369,6 +370,14 @@ class Api extends BaseApiClass {
       const result = localStorageHTTP.fetchUserProgress();
       return new Ok(result);
     }
+  };
+
+  fetchRecentProgressRecords = async (): Promise<
+    Result<RecentProgressPublicStats, HttpResponseError>
+  > => {
+    return this.httpHandler(async () => {
+      return axios.get<RecentProgressPublicStats>(`${HOST}/progress/recent`);
+    });
   };
 
   updateUserProgress = async (

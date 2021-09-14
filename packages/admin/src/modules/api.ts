@@ -11,6 +11,7 @@ import {
   UserSettings,
   UserUpdateOptions,
   AdminPurchaseCourseDto,
+  RecentProgressAdminDto,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import * as ENV from "tools/admin-env";
@@ -22,7 +23,6 @@ import toaster from "tools/toast-utils";
 import { wait, mapCourseSkeletonInDev } from "tools/admin-utils";
 import { UserStoreState } from "./admin/store";
 import { AdminUserView } from "./users/store";
-import { ProgressRecords } from "./stats/store";
 import { FeedbackRecord } from "./feedback/store";
 import { PaymentRecord } from "./payments/store";
 
@@ -208,7 +208,10 @@ class Api extends BaseApiClass {
   fetchProgressRecords = async () => {
     return this.httpHandler(async () => {
       const { config } = this.getRequestHeaders();
-      return axios.get<ProgressRecords>(`${HOST}/admin/progress`, config);
+      return axios.get<RecentProgressAdminDto>(
+        `${HOST}/admin/progress`,
+        config,
+      );
     });
   };
 

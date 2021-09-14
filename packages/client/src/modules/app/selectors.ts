@@ -18,6 +18,16 @@ export const locationSelector = createSelector(
   (app) => app.location,
 );
 
+export const recentProgressRecordStats = createSelector(
+  appSelector,
+  (app) => app.recentProgressStats,
+);
+
+export const loadingRecentProgressStats = createSelector(
+  appSelector,
+  (app) => app.loadingRecentProgressStats,
+);
+
 export const loadingAnimationComplete = createSelector(
   appSelector,
   (app) => app.loadingAnimationComplete,

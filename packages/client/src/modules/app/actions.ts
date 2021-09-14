@@ -3,6 +3,7 @@ import { Location as HistoryLocation } from "history";
 import { ParsedQuery } from "query-string";
 import { APP_INITIALIZATION_TYPE } from "tools/utils";
 import { GoogleAdConversionTypes } from "./epics";
+import { RecentProgressPublicStats } from "../../../../common/dist/main";
 
 /** ===========================================================================
  * Action Types
@@ -22,6 +23,10 @@ enum ActionTypesEnum {
   SET_ADMIN_DRAWER_STATE = "SET_ADMIN_DRAWER_STATE",
   SET_ADMIN_PULL_REQUEST_ID = "SET_ADMIN_PULL_REQUEST_ID",
   TRACK_GOOGLE_AD_CONVERSION = "TRACK_GOOGLE_AD_CONVERSION",
+
+  FETCH_RECENT_PROGRESS_RECORDS = "FETCH_RECENT_PROGRESS_RECORDS",
+  FETCH_RECENT_PROGRESS_RECORDS_SUCCESS = "FETCH_RECENT_PROGRESS_RECORDS_SUCCESS",
+  FETCH_RECENT_PROGRESS_RECORDS_FAILURE = "FETCH_RECENT_PROGRESS_RECORDS_FAILURE",
 }
 
 /** ===========================================================================
@@ -82,3 +87,15 @@ export const setAdminPullRequestId = createAction(
 export const trackGoogleAdConversion = createAction(
   ActionTypesEnum.TRACK_GOOGLE_AD_CONVERSION,
 )<GoogleAdConversionTypes>();
+
+export const fetchRecentProgressRecords = createAction(
+  ActionTypesEnum.FETCH_RECENT_PROGRESS_RECORDS,
+)();
+
+export const fetchRecentProgressRecordsSuccess = createAction(
+  ActionTypesEnum.FETCH_RECENT_PROGRESS_RECORDS_SUCCESS,
+)<RecentProgressPublicStats>();
+
+export const fetchRecentProgressRecordsFailure = createAction(
+  ActionTypesEnum.FETCH_RECENT_PROGRESS_RECORDS_FAILURE,
+)();

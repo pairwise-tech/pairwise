@@ -10,6 +10,7 @@ import {
   catchError,
   distinct,
   mapTo,
+  mergeMap,
 } from "rxjs/operators";
 import { Observable, merge, defer, of, combineLatest } from "rxjs";
 import { isActionOf } from "typesafe-actions";
@@ -326,6 +327,20 @@ const notifyOnAuthenticationFailureEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+const fetchRecentProgressRecordsEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.fetchRecentProgressRecords)),
+    mergeMap(deps.api.fetchRecentProgressRecords),
+    map((result) => {
+      if (result.value) {
+        return Actions.fetchRecentProgressRecordsSuccess(result.value);
+      } else {
+        return Actions.fetchPullRequestCourseListFailure(result.error);
+      }
+    }),
+  );
+};
+
 // This epic creates a new stream of locations the user visits. The tap is just
 // to make google analytics work with our SPA
 const locationChangeEpic: EpicSignature = (_, __, deps) => {
@@ -559,6 +574,7 @@ export default combineEpics(
   stripInitialParameters,
   emailUpdateSuccessToastEpic,
   promptToAddEmailEpic,
+  fetchRecentProgressRecordsEpic,
   notifyOnAuthenticationFailureEpic,
   locationChangeEpic,
   googleAdConversionsEpic,

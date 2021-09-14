@@ -163,7 +163,12 @@ class UserLeaderboard extends React.Component<IProps, IState> {
 
   render(): Nullable<JSX.Element> {
     const { realtimeChallengeSolvedId } = this.state;
-    const { userLeaderboardState, fetchUserLeaderboard } = this.props;
+    const {
+      userLeaderboardState,
+      fetchUserLeaderboard,
+      recentProgressRecordStats,
+      loadingRecentProgressStats,
+    } = this.props;
     const { loading, error, leaderboard } = userLeaderboardState;
 
     if (loading || error) {
@@ -200,21 +205,30 @@ class UserLeaderboard extends React.Component<IProps, IState> {
           text="Refresh Rankings"
           onClick={fetchUserLeaderboard}
         />
-        {
-          <>
-            <RankTitle>Recent Challenge Updates:</RankTitle>
-            {realtimeChallengeSolvedId ? (
-              <TextItem
-                style={{ color: COLORS.PRIMARY_GREEN, fontWeight: "bold" }}
-              >
-                Challenge ID <code>{realtimeChallengeSolvedId}</code> just
-                solved!
+        <RecentStatsBox>
+          <RankTitle>Recent Challenge Updates:</RankTitle>
+          {realtimeChallengeSolvedId ? (
+            <TextItem
+              style={{ color: COLORS.PRIMARY_GREEN, fontWeight: "bold" }}
+            >
+              Challenge ID <code>{realtimeChallengeSolvedId}</code> just solved!
+            </TextItem>
+          ) : (
+            <TextItem>No recent updates...</TextItem>
+          )}
+          {loadingRecentProgressStats ? (
+            <TextItem>Loading recent stats...</TextItem>
+          ) : recentProgressRecordStats === null ? (
+            <TextItem>No recent stats...</TextItem>
+          ) : (
+            <>
+              <TextItem>{recentProgressRecordStats?.totalUsersCount}</TextItem>
+              <TextItem>
+                {recentProgressRecordStats?.completedChallengesCount}
               </TextItem>
-            ) : (
-              <TextItem>No recent updates...</TextItem>
-            )}
-          </>
-        }
+            </>
+          )}
+        </RecentStatsBox>
         {!exists ? (
           <RankTitle>Complete some challenges to enter the rankings.</RankTitle>
         ) : (
@@ -264,6 +278,15 @@ const RankTitle = styled(Text)`
   ${themeColor("color", COLORS.TEXT_CONTENT_BRIGHT)};
 `;
 
+const RecentStatsBox = styled.div`
+  margin-top: 12px;
+  width: 350px;
+  padding: 4px 8px 18px 8px;
+  border-radius: 4px;
+
+  ${themeColor("background", COLORS.BACKGROUND_MODAL_DARK, COLORS.GRAY)};
+`;
+
 /** ===========================================================================
  * Props
  * ============================================================================
@@ -271,6 +294,10 @@ const RankTitle = styled(Text)`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   userLeaderboardState: Modules.selectors.user.userLeaderboardState(state),
+  recentProgressRecordStats:
+    Modules.selectors.app.recentProgressRecordStats(state),
+  loadingRecentProgressStats:
+    Modules.selectors.app.loadingRecentProgressStats(state),
 });
 
 const dispatchProps = {

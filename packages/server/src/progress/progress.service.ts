@@ -5,11 +5,14 @@ import { Repository } from "typeorm";
 import { Progress } from "./progress.entity";
 import { ProgressDto } from "./progress.dto";
 import {
+  RecentProgressRecord,
+  RecentProgressAdminDto,
   ChallengeStatus,
   UserCourseStatus,
   UserCourseProgress,
   IProgressDto,
   ContentUtility,
+  RecentProgressPublicStats,
 } from "@pairwise/common";
 import { SUCCESS_CODES } from "../tools/constants";
 import { RequestUser } from "../types";
@@ -21,7 +24,7 @@ import { captureSentryException } from "../tools/sentry-utils";
 import { ChallengeMetaService } from "../challenge-meta/challenge-meta.service";
 import { RedisClientService } from "../redis/redis.service";
 
-type User = "Anonymous User" | "Pairwise User";
+type ProgressRecordUser = "Anonymous User" | "Pairwise User";
 
 @Injectable()
 export class ProgressService {
@@ -213,7 +216,7 @@ export class ProgressService {
 
   public async addToProgressRecord(
     uuid: string,
-    user: User,
+    user: ProgressRecordUser,
     challengeId: string,
   ) {
     if (!challengeId || !uuid) {
@@ -260,6 +263,18 @@ export class ProgressService {
     }
   }
 
+  public async fetchRecentProgressRecordsForWorkspace() {
+    const records = await this.retrieveProgressRecords();
+    const { totalUsersCount, completedChallengesCount } = records.stats;
+
+    const stats: RecentProgressPublicStats = {
+      totalUsersCount,
+      completedChallengesCount,
+    };
+
+    return stats;
+  }
+
   public async retrieveProgressRecords() {
     const cachedData = await this.redisClientService.getProgressCacheData();
 
@@ -268,14 +283,26 @@ export class ProgressService {
       const records = data.progress;
 
       if (data.uuidMap.size === 0) {
-        return "No records yet...";
+        // Default empty result
+        return {
+          stats: {
+            moreThanThreeCount: 0,
+            registeredUserCount: 0,
+            totalUsersCount: 0,
+            completedChallengesCount: 0,
+          },
+          records: [],
+          statusMessage: "No records yet...",
+        };
       }
 
       let count = 0;
       let moreThanThreeCount = 0;
       let registeredUserCount = 0;
 
-      const result = Object.values(records).map((x) => {
+      const progressRecords: RecentProgressRecord[] = Object.values(
+        records,
+      ).map((x) => {
         if (!x.user.includes("Anonymous")) {
           registeredUserCount++;
         }
@@ -298,13 +325,23 @@ export class ProgressService {
         };
       });
 
-      const users = Object.keys(records).length;
-      const status = `${count} challenges updated in the last 24 hours by ${users} users. ${moreThanThreeCount} records include 3 or more challenges. ${registeredUserCount} are registered users.`;
-
-      return {
-        status,
-        records: result,
+      const usersCount = Object.keys(records).length;
+      const stats = {
+        moreThanThreeCount,
+        registeredUserCount,
+        totalUsersCount: usersCount,
+        completedChallengesCount: count,
       };
+
+      const statusMessage = `${count} challenges updated in the last 24 hours by ${usersCount} users. ${moreThanThreeCount} records include 3 or more challenges. ${registeredUserCount} are registered users.`;
+
+      const result: RecentProgressAdminDto = {
+        stats,
+        statusMessage,
+        records: progressRecords,
+      };
+
+      return result;
     }
   }
 }

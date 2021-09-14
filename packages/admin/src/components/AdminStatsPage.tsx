@@ -14,10 +14,10 @@ import {
   summarizeUserProgress,
 } from "../tools/admin-utils";
 import { COLORS, MOBILE } from "../tools/constants";
-import { ProgressRecords } from "../modules/stats/store";
 import { Button } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 import { themeText } from "./AdminThemeContainer";
+import { RecentProgressAdminDto } from "@pairwise/common";
 
 /** ===========================================================================
  * Types & Config
@@ -184,8 +184,8 @@ class AdminStatsPage extends React.Component<IProps, IState> {
     );
   }
 
-  renderProgressRecords = (progressRecords: ProgressRecords) => {
-    const { status = "", records = [] } = progressRecords;
+  renderProgressRecords = (progressRecords: RecentProgressAdminDto) => {
+    const { statusMessage = "", records = [] } = progressRecords;
     const isDark = this.props.adminUserSettings.appTheme === "dark";
 
     // Sort by challenge completed count
@@ -199,7 +199,7 @@ class AdminStatsPage extends React.Component<IProps, IState> {
 
     return (
       <>
-        <StatusText>{status}</StatusText>
+        <StatusText>{statusMessage}</StatusText>
         <ControlRow>
           <Button
             icon="filter"

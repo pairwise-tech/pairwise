@@ -1,4 +1,5 @@
 import { createReducer } from "typesafe-actions";
+import { RecentProgressAdminDto } from "@pairwise/common";
 import * as actions from "./actions";
 import { StatsActionTypes } from "./index";
 
@@ -7,19 +8,9 @@ import { StatsActionTypes } from "./index";
  * ============================================================================
  */
 
-export interface ProgressRecord {
-  user: string;
-  challenges: string[];
-}
-
-export interface ProgressRecords {
-  status: string;
-  records: ProgressRecord[];
-}
-
 export interface State {
   loading: boolean;
-  progressRecords: Nullable<ProgressRecords>;
+  progressRecords: Nullable<RecentProgressAdminDto>;
 }
 
 const initialState = {
