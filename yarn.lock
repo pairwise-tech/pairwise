@@ -3098,12 +3098,12 @@
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.4.tgz#f0ec25dbf2f0e4b18647313ac031134ca5b24b21"
   integrity sha512-1z8k4wzFnNjVK/tlxvrWuK5WMt6mydWWP7+zvH5eFep4oj+UkrfiJTRtjCeBXNpwaA/FYqqtb4/QS4ianFpIRA==
 
-"@types/morgan@1.7.37":
-  version "1.7.37"
-  resolved "https://registry.yarnpkg.com/@types/morgan/-/morgan-1.7.37.tgz#ebdd0b0f0276073f85283bf4f03c7c54284874df"
-  integrity sha512-tIdEA10BcHcOumMmUiiYdw8lhiVVq62r0ghih5Xpp4WETkfsMiTUZL4w9jCI502BBOrKhFrAOGml9IeELvVaBA==
+"@types/morgan@^1.9.3":
+  version "1.9.3"
+  resolved "https://registry.yarnpkg.com/@types/morgan/-/morgan-1.9.3.tgz#ae04180dff02c437312bc0cfb1e2960086b2f540"
+  integrity sha512-BiLcfVqGBZCyNCnCH3F4o2GmDLrpy0HeBVnNlyZG4fo88ZiE9SoiBe3C+2ezuwbjlEyT+PDZ17//TAlRxAn75Q==
   dependencies:
-    "@types/express" "*"
+    "@types/node" "*"
 
 "@types/node@*", "@types/node@>=8.1.0", "@types/node@>=8.9.0":
   version "15.12.5"
@@ -3435,10 +3435,10 @@
   resolved "https://registry.yarnpkg.com/@types/validator/-/validator-10.11.3.tgz#945799bef24a953c5bc02011ca8ad79331a3ef25"
   integrity sha512-GKF2VnEkMmEeEGvoo03ocrP9ySMuX1ypKazIYMlsjfslfBMhOAtC5dmEWKdJioW4lJN7MZRS88kalTsVClyQ9w==
 
-"@types/validator@12.0.1":
-  version "12.0.1"
-  resolved "https://registry.yarnpkg.com/@types/validator/-/validator-12.0.1.tgz#73dbc7f5f730ff7131754bca682824eb3c260b79"
-  integrity sha512-l57fIANZLMe8DArz+SDb+7ATXnDm15P7u2wHBw5mb0aSMd+UuvmvhouBF2hdLgQPDMJ39sh9g2MJO4GkZ0VAdQ==
+"@types/validator@^13.6.3":
+  version "13.6.3"
+  resolved "https://registry.yarnpkg.com/@types/validator/-/validator-13.6.3.tgz#31ca2e997bf13a0fffca30a25747d5b9f7dbb7de"
+  integrity sha512-fWG42pMJOL4jKsDDZZREnXLjc3UE0R8LOJfARWYg6U966rxDT7TYejYzLnUF5cvSObGg34nd0+H2wHHU5Omdfw==
 
 "@types/webpack-sources@*":
   version "2.1.0"
@@ -3460,13 +3460,6 @@
     "@types/webpack-sources" "*"
     anymatch "^3.0.0"
     source-map "^0.6.0"
-
-"@types/ws@^7.4.7":
-  version "7.4.7"
-  resolved "https://registry.yarnpkg.com/@types/ws/-/ws-7.4.7.tgz#f7c390a36f7a0679aa69de2d501319f4f8d9b702"
-  integrity sha512-JQbbmxZTZehdc2iszGKs5oC3NFnjeay7mtAWrdt7qNtAVK0g19muApzAy4bm9byz79xa2ZnO/BOBC2R8RC5Lww==
-  dependencies:
-    "@types/node" "*"
 
 "@types/yargs-parser@*":
   version "20.2.0"
@@ -20287,11 +20280,6 @@ ws@^7.4.5:
   version "7.5.0"
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.0.tgz#0033bafea031fb9df041b2026fc72a571ca44691"
   integrity sha512-6ezXvzOZupqKj4jUqbQ9tXuJNo+BR2gU8fFRk3XCP3e0G6WT414u5ELe6Y0vtp7kmSJ3F7YWObSNr1ESsgi4vw==
-
-ws@^8.2.2:
-  version "8.2.2"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-8.2.2.tgz#ca684330c6dd6076a737250ed81ac1606cb0a63e"
-  integrity sha512-Q6B6H2oc8QY3llc3cB8kVmQ6pnJWVQbP7Q5algTcIxx7YEpc0oU4NBVHlztA7Ekzfhw2r0rPducMUiCGWKQRzw==
 
 ws@~7.4.2:
   version "7.4.6"

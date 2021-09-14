@@ -10,7 +10,6 @@ import {
 } from "@pairwise/common";
 import ENV from "../tools/server-env";
 import shortid from "shortid";
-import ws, { Server as WebSocketServerDef } from "ws";
 import { WebSocketsGatewayService } from "../websockets/websockets.service";
 
 /** ===========================================================================
@@ -98,7 +97,6 @@ export class RedisClientService {
   client: IORedis.Redis | null = null;
   publisherClient: IORedis.Redis | null = null;
   subscriberClient: IORedis.Redis | null = null;
-  ws: ws | null = null;
 
   constructor(
     private readonly redisService: RedisService,
@@ -106,17 +104,6 @@ export class RedisClientService {
   ) {
     this.initializePrimaryClient();
     this.initializePubSubClients();
-    // this.initializeWebSocketServer();
-  }
-
-  private initializeWebSocketServer() {
-    // @ts-ignore - types are wrong
-    const WebSocketServer = ws.WebSocketServer;
-    const wss: WebSocketServerDef = new WebSocketServer({ port: 8001 });
-
-    wss.on("connection", (ws) => {
-      this.ws = ws;
-    });
   }
 
   private async initializePrimaryClient() {

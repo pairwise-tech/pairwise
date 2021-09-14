@@ -331,10 +331,12 @@ export type CacheUpdateMessage = PublishedMessage<{
   challengeId: string;
 }>;
 
+// Types for various support socket-io events
 export enum SocketEventTypes {
   REAL_TIME_CHALLENGE_UPDATE = "REAL_TIME_CHALLENGE_UPDATE",
 }
 
+// Like a Redux action object
 export interface SocketEvent<T> {
   type: SocketEventTypes.REAL_TIME_CHALLENGE_UPDATE;
   payload: T;
@@ -342,4 +344,5 @@ export interface SocketEvent<T> {
 
 export type RealTimeUpdateEvent = SocketEvent<CacheUpdateMessage>;
 
+// All possible socket-io event objects
 export type SocketEvents = RealTimeUpdateEvent;

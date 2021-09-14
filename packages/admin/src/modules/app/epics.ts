@@ -147,7 +147,8 @@ const locationChangeEpic: EpicSignature = (_, __, deps) => {
 /**
  * Web Socket connection epic.
  */
-const connectSocketIOEpic: EpicSignature = (action$, state, deps) => {
+const connectSocketIOEpic: EpicSignature = (action$, _, deps) => {
+  // Open the connection when the app launches
   const init$ = action$.pipe(
     filter(isActionOf(Actions.initializeApp)),
     map(() => Actions.connectSocketIO()),
@@ -157,10 +158,12 @@ const connectSocketIOEpic: EpicSignature = (action$, state, deps) => {
     filter(isActionOf(Actions.connectSocketIO)),
   );
 
+  // Update socket in epic middleware dependencies
   const setSocket = (s: Nullable<Socket>) => {
     deps.socket = s;
   };
 
+  // Handle socket disconnection events
   const handleConnectionFailure = () => {
     deps.dispatch(Actions.connectSocketIOFailure());
     deps.dispatch(Actions.checkSocketIOReconnection());
@@ -187,13 +190,18 @@ const connectSocketIOEpic: EpicSignature = (action$, state, deps) => {
           }
         });
 
+        // This appear to be the text string codes for client and server
+        // disconnect events
+        const SERVER_DISCONNECT = "transport close";
+        const CLIENT_DISCONNECT = "io client disconnect";
+
         socket.on("disconnect", (reason: string) => {
           console.warn("WebSocket connection disconnected!");
 
-          if (reason === "io client disconnect") {
+          if (reason === CLIENT_DISCONNECT) {
             // No op
             return;
-          } else if (reason === "transport close") {
+          } else if (reason === SERVER_DISCONNECT) {
             /**
              * This should occur when the server disconnects, which can happen
              * if the Cloud Run instance is rotated. In that case, try to
@@ -204,7 +212,8 @@ const connectSocketIOEpic: EpicSignature = (action$, state, deps) => {
           }
         });
 
-        // Listen for messages
+        // Listen for messages, this could be refactored into a separate
+        // function if it gets much larger.
         socket.on("message", (event: SocketEvents) => {
           try {
             switch (event.type) {
