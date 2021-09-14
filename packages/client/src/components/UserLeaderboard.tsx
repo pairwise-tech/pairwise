@@ -58,6 +58,21 @@ class UserLeaderboard extends React.Component<IProps, IState> {
     }
   }
 
+  /**
+   * How to broadcast data from the client to the server.
+   */
+  emitSocketMessage = (event: string, data: any) => {
+    if (this.socket) {
+      this.socket.emit(event, data, (response: any) => {
+        console.log("SocketIO Response: ", response);
+      });
+    }
+  };
+
+  /**
+   * If this is to be used outside of this component, it could be integrated
+   * in the RxJS middleware layer.
+   */
   initializeWebSocketConnection = async (retries = 5) => {
     // Cancel if retries reach 0
     if (retries === 0) {
@@ -122,6 +137,9 @@ class UserLeaderboard extends React.Component<IProps, IState> {
   };
 
   setCancelTimeoutOnChallengeUpdate = () => {
+    /**
+     * Clear the realtime challenge update after a timed delay.
+     */
     this.timer_one = setTimeout(() => {
       this.setState({ realtimeChallengeSolvedId: null });
     }, 5000);

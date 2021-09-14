@@ -121,13 +121,6 @@ export class RedisClientService {
     });
   }
 
-  private broadcastMessageToWebSocketClients(data: any) {
-    this.websocketsService.broadcastMessage(data);
-    // if (this.ws !== null) {
-    //   this.ws.send(JSON.stringify(data));
-    // }
-  }
-
   private async initializePrimaryClient() {
     try {
       const client = await this.redisService.getClient(
@@ -203,9 +196,7 @@ export class RedisClientService {
       /**
        * Disconnect any existing web socket clients and close the connection.
        */
-      // this.ws.removeAllListeners();
-      // this.ws.close();
-      // this.ws = null;
+      this.websocketsService.disconnectServer();
 
       console.log(
         "This is not the primary Redis subscriber, disregarding event.",
@@ -224,7 +215,7 @@ export class RedisClientService {
 
         if (result.value) {
           const data = result.value;
-          this.broadcastMessageToWebSocketClients(data);
+          this.websocketsService.broadcastMessage(data);
         }
         break;
       default:

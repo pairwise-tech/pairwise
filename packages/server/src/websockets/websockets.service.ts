@@ -5,29 +5,31 @@ import {
   WebSocketServer,
   WsResponse,
 } from "@nestjs/websockets";
-import { from, Observable } from "rxjs";
-import { map } from "rxjs/operators";
 import { Server } from "socket.io";
 
+/**
+ * NestJS websocket gateway.
+ *
+ * https://docs.nestjs.com/websockets/gateways
+ */
 @WebSocketGateway()
 export class WebSocketsGatewayService {
   @WebSocketServer()
   server: Server;
 
-  public broadcastMessage(message: string) {
-    console.log("Broadcasting message: ", message);
+  public disconnectServer() {
+    this.server.close();
+  }
+
+  public broadcastMessage(message: any) {
     this.server.send(message);
   }
 
-  @SubscribeMessage("events")
-  findAll(@MessageBody() data: any): Observable<WsResponse<number>> {
-    return from([1, 2, 3]).pipe(
-      map((item) => ({ event: "events", data: item })),
-    );
-  }
-
-  @SubscribeMessage("identity")
-  async identity(@MessageBody() data: number): Promise<number> {
+  /**
+   * Example handler for Socket messages defined as "event".
+   */
+  @SubscribeMessage("event")
+  async handleEvent(@MessageBody() data: any): Promise<WsResponse<any>> {
     return data;
   }
 }
