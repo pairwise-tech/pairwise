@@ -16,6 +16,7 @@ import { RedisModule, RedisModuleOptions } from "nestjs-redis";
 import { ChallengeMetaModule } from "./challenge-meta/challenge-meta.module";
 import { RedisServiceModule } from "./redis/redis.module";
 import { REDIS_CLIENT_CONFIG } from "./redis/redis.service";
+import { WebSocketsModule } from "./websockets/websockets.module";
 
 /**
  * NOTE: The TypeORM options are ALL supplied here. You cannot mix and match
@@ -67,6 +68,7 @@ const redisMultiClientOptions: RedisModuleOptions[] = [
     TypeOrmModule.forRoot(typeormOptions),
     RedisModule.register(redisMultiClientOptions),
     RedisServiceModule,
+    WebSocketsModule,
     AuthModule,
     BlobModule,
     UsersModule,

@@ -7,6 +7,7 @@ import { PageContainer, Text, PageTitle } from "./SharedComponents";
 import { COLORS } from "tools/constants";
 import { themeColor } from "./ThemeContainer";
 import { REACT_APP_WEB_SOCKET_HOST } from "../tools/client-env";
+import io, { Socket } from "socket.io-client";
 
 /** ===========================================================================
  * Types & Config
@@ -25,7 +26,7 @@ interface IState {
 class UserLeaderboard extends React.Component<IProps, IState> {
   timer_one: Nullable<NodeJS.Timeout> = null;
   timer_two: Nullable<NodeJS.Timeout> = null;
-  socket: Nullable<WebSocket> = null;
+  socket: Nullable<Socket> = null;
   socketCloseUnmountReason = "componentWillUnmount";
 
   constructor(props: IProps) {
@@ -44,7 +45,7 @@ class UserLeaderboard extends React.Component<IProps, IState> {
   componentWillUnmount() {
     if (this.socket) {
       // Close code reference: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent/code
-      this.socket.close(1000, this.socketCloseUnmountReason);
+      this.socket.disconnect();
       this.socket = null;
     }
 
@@ -68,18 +69,18 @@ class UserLeaderboard extends React.Component<IProps, IState> {
 
     try {
       // Create WebSocket connection.
-      const socket = new WebSocket(REACT_APP_WEB_SOCKET_HOST);
+      const socket = io(REACT_APP_WEB_SOCKET_HOST, {
+        transports: ["websocket"],
+      });
 
       // Connection opened
-      socket.addEventListener("open", (event: Event) => {
+      socket.on("connect", () => {
         console.log("WebSocket connection established.");
       });
 
-      socket.addEventListener("close", (event: CloseEvent) => {
-        const { reason } = event;
-
+      socket.on("disconnect", (reason: string) => {
         // No op on componentWillUnmount
-        if (reason === this.socketCloseUnmountReason) {
+        if (reason === "io client disconnect") {
           return;
         }
 
@@ -88,9 +89,7 @@ class UserLeaderboard extends React.Component<IProps, IState> {
          * re-deploys and the primary active WebSocket instance changes. In
          * this case try to reconnect the client again.
          */
-        console.log("WebSocket connection disconnected, close event:");
-        console.log(event);
-        console.log("Trying to reconnect...");
+        console.log("WebSocket connection disconnected, trying to reconnect:");
 
         // Wait 1 second before retry
         this.timer_two = setTimeout(() => {
@@ -99,10 +98,10 @@ class UserLeaderboard extends React.Component<IProps, IState> {
       });
 
       // Listen for messages
-      socket.addEventListener("message", (event) => {
+      socket.on("message", (event) => {
         try {
-          const message = JSON.parse(event.data);
-          const { challengeId } = message.data;
+          const message = event.data;
+          const { challengeId } = message;
           if (challengeId) {
             this.setState(
               { realtimeChallengeSolvedId: challengeId },

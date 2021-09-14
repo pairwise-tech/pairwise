@@ -15,7 +15,7 @@ export const HIDE_EMBEDS = getenv.bool("REACT_APP_HIDE_EMBEDS", false);
 export const HOST = getenv.string("REACT_APP_HOST", "http://localhost:9000");
 export const REACT_APP_WEB_SOCKET_HOST = getenv.string(
   "REACT_APP_WEB_SOCKET_HOST",
-  "ws://localhost:8001",
+  "http://localhost:9000",
 );
 
 export const CODEPRESS_PORT = getenv.string("REACT_APP_CODEPRESS_PORT", "3001");

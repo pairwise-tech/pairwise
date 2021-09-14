@@ -5,6 +5,7 @@ import { Ok, Err, Result, assertUnreachable } from "@pairwise/common";
 import ENV from "../tools/server-env";
 import shortid from "shortid";
 import ws, { Server as WebSocketServerDef } from "ws";
+import { WebSocketsGatewayService } from "../websockets/websockets.service";
 
 /** ===========================================================================
  * Redis Types and Config
@@ -101,10 +102,13 @@ export class RedisClientService {
   subscriberClient: IORedis.Redis | null = null;
   ws: ws | null = null;
 
-  constructor(private readonly redisService: RedisService) {
+  constructor(
+    private readonly redisService: RedisService,
+    private readonly websocketsService: WebSocketsGatewayService,
+  ) {
     this.initializePrimaryClient();
     this.initializePubSubClients();
-    this.initializeWebSocketServer();
+    // this.initializeWebSocketServer();
   }
 
   private initializeWebSocketServer() {
@@ -118,9 +122,10 @@ export class RedisClientService {
   }
 
   private broadcastMessageToWebSocketClients(data: any) {
-    if (this.ws !== null) {
-      this.ws.send(JSON.stringify(data));
-    }
+    this.websocketsService.broadcastMessage(data);
+    // if (this.ws !== null) {
+    //   this.ws.send(JSON.stringify(data));
+    // }
   }
 
   private async initializePrimaryClient() {
@@ -198,9 +203,9 @@ export class RedisClientService {
       /**
        * Disconnect any existing web socket clients and close the connection.
        */
-      this.ws.removeAllListeners();
-      this.ws.close();
-      this.ws = null;
+      // this.ws.removeAllListeners();
+      // this.ws.close();
+      // this.ws = null;
 
       console.log(
         "This is not the primary Redis subscriber, disregarding event.",
