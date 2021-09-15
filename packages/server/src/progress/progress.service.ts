@@ -298,20 +298,22 @@ export class ProgressService {
 
       let count = 0;
       let moreThanThreeCount = 0;
+      let moreThanThreeTotalChallenges = 0;
       let registeredUserCount = 0;
 
       const progressRecords: RecentProgressRecord[] = Object.values(
         records,
-      ).map((x) => {
-        if (!x.user.includes("Anonymous")) {
+      ).map((entry) => {
+        if (!entry.user.includes("Anonymous")) {
           registeredUserCount++;
         }
 
-        if (x.challengeIds.size >= 3) {
+        if (entry.challengeIds.size >= 3) {
           moreThanThreeCount++;
+          moreThanThreeTotalChallenges += entry.challengeIds.size;
         }
 
-        const challenges = Array.from(x.challengeIds).map((id) => {
+        const challenges = Array.from(entry.challengeIds).map((id) => {
           count++;
 
           // Add the challenge title for context
@@ -320,8 +322,8 @@ export class ProgressService {
         });
 
         return {
-          user: x.user,
           challenges,
+          user: entry.user,
         };
       });
 
@@ -333,7 +335,7 @@ export class ProgressService {
         completedChallengesCount: count,
       };
 
-      const statusMessage = `${count} challenges updated in the last 24 hours by ${usersCount} users. ${moreThanThreeCount} records include 3 or more challenges. ${registeredUserCount} are registered users.`;
+      const statusMessage = `${count} challenges updated in the last 24 hours by ${usersCount} users. ${moreThanThreeCount} records include 3 or more challenges (for a total of ${moreThanThreeTotalChallenges} challenges). ${registeredUserCount} are registered users.`;
 
       const result: RecentProgressAdminDto = {
         stats,
