@@ -1,113 +1,20 @@
-import axios from "axios";
-import faker from "faker";
 import {
-  AdminPurchaseCourseDto,
-  Challenge,
-  ContentUtility,
+  createAuthenticatedUser,
+  postFeedback,
+  purchaseCourseByAdmin,
+  saveBlobForChallenge,
+  updateProgressForChallenge,
+  yesOrNo,
+} from "./e2e-utils";
+import ENV from "./e2e-env";
+import {
   Course,
+  ContentUtility,
   createInverseChallengeMapping,
 } from "@pairwise/common";
-import { createAuthenticatedUser, fetchAdminAccessToken } from "./e2e-utils";
-import ENV from "./e2e-env";
-
-/** ===========================================================================
- * Types & Config
- * ============================================================================
- */
 
 const course: Course = ContentUtility.getCourseContent("fpvPtfu7s", "PAID");
 const challengeIdList = Object.values(createInverseChallengeMapping([course]));
-
-const getText = (count = 15) => faker.lorem.words(count);
-
-// Randomly return true of false, tend to return true
-const yesOrNo = () => Math.random() < 0.8;
-
-const getHeaders = (token: string) => {
-  return {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-};
-
-/** ===========================================================================
- * e2e Seed Utils
- * ----------------------------------------------------------------------------
- * These utils will hit the server APIs to create a ton of fake user data.
- * ============================================================================
- */
-
-/**
- *
- */
-const purchaseCourseByAdmin = async (email: string, courseId: string) => {
-  const token = await fetchAdminAccessToken();
-  const plan = yesOrNo ? "REGULAR" : "PREMIUM";
-  const body: AdminPurchaseCourseDto = {
-    plan,
-    courseId,
-    userEmail: email,
-  };
-
-  console.log(`- Purchasing ${plan} course for user: ${email}`);
-  await axios.post(
-    `${ENV.HOST}/admin/purchase-course`,
-    body,
-    getHeaders(token),
-  );
-};
-
-/**
- * Post feedback for a challenge.
- */
-const postFeedback = async (token: string, challengeId: string) => {
-  const body = {
-    challengeId,
-    type: "TOO_HARD",
-    feedback: getText(),
-  };
-  console.log(`- Posting feedback for challenge id: ${challengeId}`);
-  await axios.post(`${ENV.HOST}/feedback`, body, getHeaders(token));
-};
-
-/**
- * Update user challenge progress.
- */
-const updateProgressForChallenge = async (
-  token: string,
-  challengeId: string,
-  courseId: string,
-) => {
-  const body = {
-    complete: true,
-    challengeId,
-    courseId,
-    timeCompleted: new Date(),
-  };
-
-  console.log(`- Updating progress for challenge id: ${challengeId}`);
-  await axios.post(`${ENV.HOST}/progress`, body, getHeaders(token));
-};
-
-/**
- * Save a code blob for a challenge.
- */
-const saveBlobForChallenge = async (token: string, challenge: Challenge) => {
-  const { id, solutionCode } = challenge;
-  if (solutionCode) {
-    const body = {
-      challengeId: id,
-      dataBlob: {
-        type: "challenge",
-        code: solutionCode,
-      },
-    };
-
-    console.log(`- Solving challenge id: ${id}`);
-    await axios.post(`${ENV.HOST}/blob`, body, getHeaders(token));
-  }
-};
 
 /**
  * Handle creating users and solve a series of challenges for each
@@ -143,8 +50,14 @@ const createUsers = async (count: number) => {
       if (challenge.solutionCode !== "") {
         // Handle additional actions for each user
         console.log("");
+
+        console.log(`- Solving challenge id: ${challenge.id}`);
         await saveBlobForChallenge(token, challenge);
+
+        console.log(`- Updating progress for challenge id: ${challenge.id}`);
         await updateProgressForChallenge(token, challenge.id, courseId);
+
+        console.log(`- Posting feedback for challenge id: ${challenge.id}`);
         await postFeedback(token, challenge.id);
 
         solved++;

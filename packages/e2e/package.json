@@ -15,10 +15,11 @@
     "format": "yarn prettier:fix && yarn eslint:fix",
     "lint": "yarn prettier && yarn eslint",
     "test": "yarn lint",
+    "test:watch": "yarn jest --watch --config ./jest-config-api.json",
     "seed:e2e": "USER_COUNT=25 USER_CHALLENGE_COUNT=10 yarn seed",
-    "test:e2e": "yarn seed:e2e && yarn jest --config ./jest-config.json",
-    "test:watch": "yarn test:e2e --watch",
-    "test:debug": "yarn test:e2e --watch -f src/user.e2e.test.ts"
+    "test:api": "yarn jest --config ./jest-config-api.json",
+    "test:socket-io": "yarn jest --config ./jest-config-socket-io.json --runTestsByPath src/socket-io.e2e.test.ts",
+    "test:e2e": "yarn seed:e2e && yarn test:api && yarn test:socket-io"
   },
   "dependencies": {
     "@types/jest": "26.0.19",
@@ -32,6 +33,7 @@
     "getenv": "^1.0.0",
     "jest": "26.6.3",
     "prettier": "2.3.1",
+    "socket.io-client": "^4.2.0",
     "supertest": "4.0.2",
     "typescript": "4.3.4"
   },
