@@ -4,7 +4,10 @@
   "testEnvironment": "node",
   "testRegex": ".test.ts$",
   "setupFiles": ["./src/utils/setup.ts"],
-  "testPathIgnorePatterns": ["src/socket-io.e2e.test.ts"],
+  "testPathIgnorePatterns": [
+    "src/socket-io.e2e.test.ts",
+    "src/realtime-activity.test.ts"
+  ],
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   }

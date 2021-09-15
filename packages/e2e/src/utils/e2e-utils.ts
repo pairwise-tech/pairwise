@@ -174,6 +174,13 @@ export const postFeedback = async (token: string, challengeId: string) => {
 };
 
 /**
+ * Get recent progress updates
+ */
+export const fetchRecentProgressUpdates = async (token: string) => {
+  return axios.get(`${ENV.HOST}/progress/recent`, getHeaders(token));
+};
+
+/**
  * Update user challenge progress.
  */
 export const updateProgressForChallenge = async (
