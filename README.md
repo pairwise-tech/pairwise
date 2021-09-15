@@ -29,7 +29,7 @@ We use the following libraries across the codebase, here are some quick links to
 - [Redux Observable](https://redux-observable.js.org/): Truly epic.
 - [React Router](https://reacttraining.com/react-router/web/guides/quick-start): Meh.
 - [BlueprintJS](https://blueprintjs.com/): Modern, fashionable.
-- [NestJS](https://docs.nestjs.com/): Server frameworks!
+- [NestJS](https://docs.nestjs.com/): Feels like SpringBoot.
 - [Redis](https://redis.io/): Shared state and data caching layer.
 - [SocketIO](https://docs.nestjs.com/): Real time server events.
 - [TypeORM](https://typeorm.io/#/): Postgres ORM.
