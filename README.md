@@ -30,6 +30,8 @@ We use the following libraries across the codebase, here are some quick links to
 - [React Router](https://reacttraining.com/react-router/web/guides/quick-start): Meh.
 - [BlueprintJS](https://blueprintjs.com/): Modern, fashionable.
 - [NestJS](https://docs.nestjs.com/): Server frameworks!
+- [Redis](https://redis.io/): Shared state and data caching layer.
+- [SocketIO](https://docs.nestjs.com/): Real time server events.
 - [TypeORM](https://typeorm.io/#/): Postgres ORM.
 - [Passport](http://www.passportjs.org/docs/): (Easy) authentication.
 - [Jest](https://jestjs.io/docs/en/getting-started): The Test Runner.
@@ -92,6 +94,9 @@ To run all the services separately:
 # Start the database
 $ yarn db
 
+# Start Redis
+$ yarn redis
+
 # Start the server
 $ yarn server:dev
 
@@ -130,7 +135,7 @@ We use Codepress to develop course content. Codepress is an internal CMS tool bu
 
 ## 🚧 Tests
 
-Each package contains unit tests relevant to that package. The backend APIs are tested with a series of e2e tests which are located in the `e2e/` package, and the entire application is also tested using Cypress.
+Each package contains unit tests relevant to that package. The backend APIs are tested with a series of e2e tests which are located in the `e2e/` package, and the entire application is also tested using Cypress. The e2e tests include tests for APIs which depend on Redis and SocketIO.
 
 ```bash
 # Use Lerna to run the test script for each package
@@ -226,7 +231,7 @@ We follow a normal git workflow. Commit your changes to a branch, make a pull re
 
 ## ✈️ Production
 
-The client workspace is deployed using [Netlify](https://www.netlify.com/) and the backend server is deployed using [Google Cloud Run](https://cloud.google.com/run), which should provide generous scaling benefits. Updates are shipped continuously by commits to the `main` branch, and configured in the `deploy-production.yml` GitHub Actions workflow file. Some additional services are deployed separately and managed in other `pairwise/` repositories. You can simulate the production backend deployment locally by running the following commands:
+The client workspace is deployed using [Netlify](https://www.netlify.com/) and the backend server is deployed using [Google Cloud Run](https://cloud.google.com/run), which should provide generous scaling benefits. The backend also relies on a Redis instance deployed on [Redis Labs](https://app.redislabs.com/). Updates are shipped continuously by commits to the `main` branch, and configured in the `deploy-production.yml` GitHub Actions workflow file. Some additional services are deployed separately and managed in other `pairwise/` repositories. You can simulate the production backend deployment locally by running the following commands:
 
 ```bash
 # Build the production server container

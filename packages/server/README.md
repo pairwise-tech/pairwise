@@ -4,7 +4,7 @@ This is the [Nest](https://github.com/nestjs/nest) server application for Pairwi
 
 ## Description
 
-To become familiar with the APIs feel free to run the server and access the generated Swagger documentation at `http://localhost:9000/api`.
+To become familiar with the APIs feel free to run the server and access the generated Swagger documentation at `http://localhost:9000/api`. Note that this server also depends on Redis which needs to be running (run with `yarn redis` from the root level of the project or using the development docker compose files).
 
 ## Setup
 

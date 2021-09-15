@@ -14,4 +14,18 @@ $ yarn up
 
 # Run the e2e tests in watch mode
 $ yarn test:watch
+
+# Run the test suite which tests the backend APIs which rely on Redis
+$ yarn test:realtime
+
+# Test features which rely on SocketIO
+$ yarn test:socket-io
+
+# Run seed data script which hits the APIs creating users and solving challenges
+$ yarn seed
+
+# Run the full e2e test suite which is run in CI/CD
+$ yarn test:e2e
 ```
+
+Note that the tests for realtime activity and SocketIO need to be run in isolation (not in conjunction with the other running tests). In addition, the realtime activity tests needs to be run against an empty Redis instance (or we should add an admin API which can clear Redis and employ that in the test suite).
