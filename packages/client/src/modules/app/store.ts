@@ -69,7 +69,7 @@ const app = createReducer<State, AppActionTypes>(initialState)
   }))
   .handleAction(actions.fetchRecentProgressRecordsSuccess, (state, action) => ({
     ...state,
-    loadingRecentProgressStats: true,
+    loadingRecentProgressStats: false,
     recentProgressStats: action.payload,
   }))
   .handleAction(actions.locationChange, (state, action) => ({

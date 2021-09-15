@@ -199,14 +199,16 @@ class UserLeaderboard extends React.Component<IProps, IState> {
 
     return (
       <PageContainer>
-        <PageTitle>User Leaderboard Rankings</PageTitle>
+        <PageTitle>Recent Activity Updates</PageTitle>
         <Button
           icon="refresh"
-          text="Refresh Rankings"
+          text="Refresh Data"
           onClick={fetchUserLeaderboard}
         />
         <RecentStatsBox>
-          <RankTitle>Recent Challenge Updates:</RankTitle>
+          <TextItem style={{ fontWeight: "bold", textDecoration: "underline" }}>
+            Realtime Challenge Updates:
+          </TextItem>
           {realtimeChallengeSolvedId ? (
             <TextItem
               style={{ color: COLORS.PRIMARY_GREEN, fontWeight: "bold" }}
@@ -214,7 +216,9 @@ class UserLeaderboard extends React.Component<IProps, IState> {
               Challenge ID <code>{realtimeChallengeSolvedId}</code> just solved!
             </TextItem>
           ) : (
-            <TextItem>No recent updates...</TextItem>
+            <TextItem style={{ color: COLORS.LIGHT_GREY }}>
+              Watching for challenge updates...
+            </TextItem>
           )}
           {loadingRecentProgressStats ? (
             <TextItem>Loading recent stats...</TextItem>
@@ -222,15 +226,26 @@ class UserLeaderboard extends React.Component<IProps, IState> {
             <TextItem>No recent stats...</TextItem>
           ) : (
             <>
-              <TextItem>{recentProgressRecordStats?.totalUsersCount}</TextItem>
+              <TextItem
+                style={{ fontWeight: "bold", textDecoration: "underline" }}
+              >
+                Previous 24 Hour Stats:
+              </TextItem>
               <TextItem>
-                {recentProgressRecordStats?.completedChallengesCount}
+                {recentProgressRecordStats?.totalUsersCount} total users active
+              </TextItem>
+              <TextItem>
+                {recentProgressRecordStats?.completedChallengesCount} total
+                completed challenges
               </TextItem>
             </>
           )}
         </RecentStatsBox>
+        <PageTitle>User Leaderboard Rankings</PageTitle>
         {!exists ? (
-          <RankTitle>Complete some challenges to enter the rankings.</RankTitle>
+          <TextItem style={{ fontStyle: "italic" }}>
+            Complete some challenges to enter the rankings.
+          </TextItem>
         ) : (
           <RankTitle>Your position: {userIndex}</RankTitle>
         )}
@@ -280,8 +295,9 @@ const RankTitle = styled(Text)`
 
 const RecentStatsBox = styled.div`
   margin-top: 12px;
+  margin-bottom: 12px;
   width: 350px;
-  padding: 4px 8px 18px 8px;
+  padding: 4px 12px 18px 12px;
   border-radius: 4px;
 
   ${themeColor("background", COLORS.BACKGROUND_MODAL_DARK, COLORS.GRAY)};
