@@ -11,6 +11,7 @@ import {
 import ENV from "../tools/server-env";
 import shortid from "shortid";
 import { WebSocketsGatewayService } from "../websockets/websockets.service";
+import { ProgressDto } from "../progress/progress.dto";
 
 /** ===========================================================================
  * Redis Types and Config
@@ -235,9 +236,10 @@ export class RedisClientService {
 
   public async setProgressCacheData(
     data: ProgressCacheData,
-    updatedChallengeId: string,
+    progressDto: ProgressDto,
   ) {
     try {
+      const { complete, challengeId } = progressDto;
       const client = this.client;
       const json = this.serializeProgressCache(data);
 
@@ -246,7 +248,8 @@ export class RedisClientService {
 
       const message: CacheUpdateMessage = {
         data: {
-          challengeId: updatedChallengeId,
+          complete,
+          challengeId,
         },
       };
 
@@ -261,9 +264,6 @@ export class RedisClientService {
   }
 
   private async initializeProgressCache() {
-    // Delete old key, remove this later
-    this.client.del("PROGRESS");
-
     const json = this.serializeProgressCache(progressCacheDefaultData);
     await this.client.set(REDIS_CACHE_KEYS.RECENT_PROGRESS_HISTORY, json);
   }

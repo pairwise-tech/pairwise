@@ -162,7 +162,11 @@ export class ProgressService {
     };
 
     // Track user progress record
-    this.addToProgressRecord(user.profile.uuid, "Pairwise User", challengeId);
+    this.addToProgressRecord(
+      user.profile.uuid,
+      "Pairwise User",
+      challengeProgressDto,
+    );
 
     return result;
   }
@@ -172,10 +176,9 @@ export class ProgressService {
     challengeProgressDto: ProgressDto,
   ): Promise<string> {
     validateChallengeProgressDto(challengeProgressDto);
-    const { challengeId } = challengeProgressDto;
 
     // Track user progress record
-    this.addToProgressRecord(uuid, "Anonymous User", challengeId);
+    this.addToProgressRecord(uuid, "Anonymous User", challengeProgressDto);
 
     return SUCCESS_CODES.OK;
   }
@@ -217,8 +220,10 @@ export class ProgressService {
   public async addToProgressRecord(
     uuid: string,
     user: ProgressRecordUser,
-    challengeId: string,
+    progressDto: ProgressDto,
   ) {
+    const { challengeId } = progressDto;
+
     if (!challengeId || !uuid) {
       return;
     }
@@ -259,7 +264,7 @@ export class ProgressService {
       }
 
       // Update the cache data
-      this.redisClientService.setProgressCacheData(data, challengeId);
+      this.redisClientService.setProgressCacheData(data, progressDto);
     }
   }
 
