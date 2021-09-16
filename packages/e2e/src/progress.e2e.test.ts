@@ -114,7 +114,7 @@ describe("User Progress APIs", () => {
 
     const challengeOneTime = new Date();
     await updateProgressItem({
-      complete: false,
+      complete: true,
       challengeId: "5ziJI35f",
       courseId: "fpvPtfu7s",
       timeCompleted: challengeOneTime,
