@@ -13,7 +13,6 @@ export class ChallengeMetaService {
   ) {}
 
   private async lookupChallengeMeta(challengeId: string) {
-    // Verify the challenge id is valid
     if (!ContentUtility.challengeIdIsValid(challengeId)) {
       throw new BadRequestException(ERROR_CODES.INVALID_PARAMETERS);
     }
@@ -38,7 +37,24 @@ export class ChallengeMetaService {
   }
 
   public async incrementChallengeAttemptedCount(challengeId: string) {
-    console.log("[TODO]: challenge attempted: ", challengeId);
+    const result = await this.lookupChallengeMeta(challengeId);
+
+    if (!result) {
+      const meta = {
+        challengeId,
+        numberOfTimesAttempted: 1,
+      };
+      await this.challengeMetaRepository.insert(meta);
+    } else {
+      const count = result.numberOfTimesAttempted + 1;
+
+      await this.challengeMetaRepository
+        .createQueryBuilder("challengeMeta")
+        .update(ChallengeMeta)
+        .where({ uuid: result.uuid })
+        .set({ numberOfTimesAttempted: count })
+        .execute();
+    }
   }
 
   public async incrementChallengeCompletionCount(challengeId: string) {

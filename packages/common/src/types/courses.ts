@@ -88,6 +88,7 @@ export interface Challenge {
 
 export interface ChallengeMeta {
   challengeId: string;
+  numberOfTimesAttempted: number;
   numberOfTimesCompleted: number;
 }
 

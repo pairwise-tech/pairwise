@@ -10,6 +10,7 @@ import {
   BreakLine,
   LabelRow,
   ExternalLink,
+  SummaryTitle,
 } from "./AdminComponents";
 import { COLORS } from "../tools/constants";
 
@@ -102,10 +103,14 @@ interface ChallengeContextCardProps {
 export const ChallengeContextCard = (props: ChallengeContextCardProps) => {
   const { challenge, courseId, moduleId, isMobile, challengeMeta } = props;
 
+  let numberOfTimesAttempted = null;
   let numberOfTimeCompleted = null;
   if (challengeMeta && challengeMeta.challengeId === challenge.id) {
+    numberOfTimesAttempted = challengeMeta.numberOfTimesAttempted;
     numberOfTimeCompleted = challengeMeta.numberOfTimesCompleted;
   }
+
+  const displayChallengeMeta = numberOfTimesAttempted || numberOfTimeCompleted;
 
   return (
     <DataCard key={challenge.id}>
@@ -121,6 +126,9 @@ export const ChallengeContextCard = (props: ChallengeContextCardProps) => {
       <KeyValue label="moduleId" value={moduleId} code allowCopy />
       <KeyValue label="courseId" value={courseId} code allowCopy />
       <BreakLine />
+      <SummaryTitle style={{ fontSize: 22, fontWeight: "bold" }}>
+        Challenge Links:
+      </SummaryTitle>
       <LabelRow>
         <ExternalLink
           link={`https://app.pairwise.tech/workspace/${challenge.id}`}
@@ -137,10 +145,24 @@ export const ChallengeContextCard = (props: ChallengeContextCardProps) => {
           </ExternalLink>
         </LabelRow>
       )}
-      {!numberOfTimeCompleted !== null && (
-        <LabelRow style={{ marginTop: 8 }}>
-          This challenge has been completed {numberOfTimeCompleted} times.
-        </LabelRow>
+      {displayChallengeMeta && (
+        <>
+          <SummaryTitle style={{ fontSize: 22, fontWeight: "bold" }}>
+            Challenge Meta Stats:
+          </SummaryTitle>
+          {challenge.type === "media" ? (
+            <LabelRow style={{ marginTop: 8 }}>
+              This challenge has been completed {numberOfTimeCompleted || 0}{" "}
+              times. These numbers include anonymous and registered users.
+            </LabelRow>
+          ) : (
+            <LabelRow style={{ marginTop: 8 }}>
+              This challenge has been attempted {numberOfTimesAttempted || 0}{" "}
+              times, and completed {numberOfTimeCompleted || 0} times. These
+              numbers include anonymous and registered users.
+            </LabelRow>
+          )}
+        </>
       )}
     </DataCard>
   );

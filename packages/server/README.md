@@ -98,6 +98,9 @@ $ yarn build
 # Generate a new migration file
 $ yarn migration:generate MyMigrationName
 
+# Rebuild server
+$ yarn build
+
 # Run any pending migrations
 $ yarn migration:run
 

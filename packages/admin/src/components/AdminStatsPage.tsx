@@ -190,7 +190,7 @@ class AdminStatsPage extends React.Component<IProps, IState> {
     const challengeMap = createInverseChallengeMapping(courses);
 
     return realtimeChallengeUpdates.length === 0 ? (
-      <StatusText>Waiting for updates...</StatusText>
+      <StatusText>Watching for updates...</StatusText>
     ) : (
       realtimeChallengeUpdates.map((update) => {
         const { challenge } = challengeMap[update.challengeId];

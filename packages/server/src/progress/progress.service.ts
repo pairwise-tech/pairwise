@@ -66,6 +66,7 @@ export class ProgressService {
       `Updating challengeProgress for courseId: ${courseId}, challengeId: ${challengeId}`,
     );
 
+    // Record challenge attempt, but nothing else
     if (!complete) {
       this.challengeMetaService.incrementChallengeAttemptedCount(challengeId);
       return;

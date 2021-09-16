@@ -61,6 +61,13 @@ export const SummaryText = styled.p`
   margin-bottom: 8px;
 `;
 
+export const SummaryTitle = styled.p`
+  margin-top: 8px;
+  margin-bottom: 12px;
+  font-size: 24px;
+  font-weight: bold;
+`;
+
 export const DataCard = styled(Card)`
   margin-top: 12px;
   max-width: 825px;

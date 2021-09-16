@@ -11,7 +11,8 @@ import {
  * Challenge Meta Entity
  * ----------------------------------------------------------------------------
  * This represents metadata associated with challenges, such as the total
- * number of times a challenge has been completed.
+ * number of times a challenge has been attempted and completed. These
+ * numbers include anonymous and registered users.
  * ============================================================================
  */
 
@@ -24,7 +25,10 @@ export class ChallengeMeta {
   @Column()
   public challengeId: string;
 
-  @Column()
+  @Column({ default: 0 })
+  public numberOfTimesAttempted: number;
+
+  @Column({ default: 0 })
   public numberOfTimesCompleted: number;
 
   @CreateDateColumn({ type: "timestamp" })
