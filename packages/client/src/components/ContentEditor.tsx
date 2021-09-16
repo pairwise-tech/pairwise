@@ -75,7 +75,7 @@ interface PWEditorComponentProps {
 
 const StyledButton = styled(Button)`
   .bp3-icon {
-    color: #da3a13 !important;
+    color: ${COLORS.YOUTUBE_RED} !important;
   }
 `;
 

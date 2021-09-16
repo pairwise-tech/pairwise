@@ -13,12 +13,19 @@ import {
   DefaultVideoWrapper,
   VideoWrapper,
 } from "./SharedComponents";
-import { EditableText, Callout, Classes, Button } from "@blueprintjs/core";
+import {
+  EditableText,
+  Callout,
+  Classes,
+  Button,
+  Icon,
+} from "@blueprintjs/core";
 import { NextChallengeCard } from "./ChallengeControls";
 import {
   PROSE_MAX_WIDTH,
   CONTENT_SERIALIZE_DEBOUNCE,
   MOBILE,
+  COLORS,
 } from "tools/constants";
 import { SlatePlugin } from "rich-markdown-editor";
 import TableOfContents from "./TableOfContents";
@@ -304,23 +311,52 @@ export const YoutubeEmbed = (props: { url: string }) => {
     parsedURL.searchParams.set("origin", getEmbedOrigin());
 
     return (
-      <VideoWrapper>
-        <iframe
-          id={VIDEO_DOM_ID}
-          title="Youtube Embed"
-          width={width}
-          height={height}
-          src={parsedURL.href}
-          frameBorder="0"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
-      </VideoWrapper>
+      <>
+        <VideoWrapper>
+          <iframe
+            id={VIDEO_DOM_ID}
+            title="Youtube Embed"
+            width={width}
+            height={height}
+            src={parsedURL.href}
+            frameBorder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </VideoWrapper>
+        <SubscribeBar>
+          <FloatRight>
+            <Button
+              onClick={() => {
+                const url =
+                  "https://www.youtube.com/channel/UCG52QHurjYWfqFBQR_60EUQ";
+                window.open(url, "_blank")?.focus();
+              }}
+              text="Subscribe to Pairwise on YouTube"
+              icon={<Icon icon="video" color={COLORS.YOUTUBE_RED} />}
+            />
+          </FloatRight>
+          <FloatRight>
+            <p style={{ marginTop: 6, fontSize: 12 }}>
+              Pairwise YouTube includes additional helpful video content.
+            </p>
+          </FloatRight>
+        </SubscribeBar>
+      </>
     );
   } catch (err) {
     return null;
   }
 };
+
+const SubscribeBar = styled.div`
+  margin-bottom: 40px;
+`;
+
+const FloatRight = styled.div`
+  display: flex;
+  justify-content: right;
+`;
 
 export const scrollToContentArea = () => {
   const el = document.getElementById(CONTENT_AREA_ID);
