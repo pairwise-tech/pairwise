@@ -81,8 +81,9 @@ export const KeyValueComponent = ({
   isChallengeId,
   renderAsMarkdown,
   setChallengeDetailId,
+  renderChallengeIdOnly,
 }: KeyValueComponentProps) => {
-  const handleCopy = () => {
+  const handleClickEvent = () => {
     if (typeof value !== "string") {
       return;
     }
@@ -96,20 +97,30 @@ export const KeyValueComponent = ({
 
   const canClick = !!allowCopy || !!isChallengeId;
 
+  if (renderChallengeIdOnly) {
+    return (
+      <span>
+        <CodeValue copy={canClick.toString()} onClick={handleClickEvent}>
+          {value}
+        </CodeValue>
+      </span>
+    );
+  }
+
   return (
     <LabelRow>
       <Key>{label}:</Key>
       <span>
         {code ? (
           value ? (
-            <CodeValue copy={canClick.toString()} onClick={handleCopy}>
+            <CodeValue copy={canClick.toString()} onClick={handleClickEvent}>
               {value}
             </CodeValue>
           ) : (
             <Code>null</Code>
           )
         ) : (
-          <ValueContainer copy={canClick.toString()} onClick={handleCopy}>
+          <ValueContainer copy={canClick.toString()} onClick={handleClickEvent}>
             {typeof value === "string" ? (
               renderAsMarkdown ? (
                 <Markdown source={value} />
@@ -132,6 +143,7 @@ interface KeyValueProps {
   allowCopy?: boolean;
   isChallengeId?: boolean;
   renderAsMarkdown?: boolean;
+  renderChallengeIdOnly?: boolean;
   value: number | string | null | undefined;
 }
 

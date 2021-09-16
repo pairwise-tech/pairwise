@@ -8,6 +8,7 @@ import {
   DataCard,
   KeyValue,
   CardButton,
+  LabelRow,
 } from "./AdminComponents";
 import {
   estimateTotalPaymentsRevenue,
@@ -17,7 +18,10 @@ import { COLORS, MOBILE } from "../tools/constants";
 import { Button } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 import { themeText } from "./AdminThemeContainer";
-import { RecentProgressAdminDto } from "@pairwise/common";
+import {
+  createInverseChallengeMapping,
+  RecentProgressAdminDto,
+} from "@pairwise/common";
 
 /** ===========================================================================
  * Types & Config
@@ -67,7 +71,6 @@ class AdminStatsPage extends React.Component<IProps, IState> {
       courseSkeletons,
       progressRecords,
       usersListLoading,
-      realtimeChallengeUpdates,
     } = this.props;
 
     // Wait for stats and users list to load
@@ -114,12 +117,18 @@ class AdminStatsPage extends React.Component<IProps, IState> {
               </Value>
             </Stat>
             <Stat>
-              <b>Average Challenges/User:</b>{" "}
+              <b>Average Challenges/Non-Zero User:</b>{" "}
               <Value>
                 {summary.leaderboard.averageChallengesCompletedPerNonZeroUser >
                 0
                   ? summary.leaderboard.averageChallengesCompletedPerNonZeroUser.toLocaleString()
                   : 0}
+              </Value>
+            </Stat>
+            <Stat>
+              <b>Total Ghost Users (Zero Challenges):</b>{" "}
+              <Value>
+                {summary.leaderboard.numberOfUsersWithZeroChallengesComplete.toLocaleString()}
               </Value>
             </Stat>
             <Stat>
@@ -135,20 +144,6 @@ class AdminStatsPage extends React.Component<IProps, IState> {
             <Stat>
               <b>Total Course Revenue:</b>{" "}
               <Value>${totalRevenue.toFixed(0)}</Value>
-            </Stat>
-            <Stat>
-              <b>Real Time Challenge Updates:</b>{" "}
-              {realtimeChallengeUpdates.length === 0 ? (
-                <Value>No updates...</Value>
-              ) : (
-                <Value>
-                  {
-                    realtimeChallengeUpdates[
-                      realtimeChallengeUpdates.length - 1
-                    ].challengeId
-                  }
-                </Value>
-              )}
             </Stat>
             <Title>Course Summaries:</Title>
             {courseSkeletons && courseSkeletons.length > 0 && (
@@ -172,6 +167,8 @@ class AdminStatsPage extends React.Component<IProps, IState> {
                 </Stat>
               );
             })}
+            <Title>Realtime Challenge Updates:</Title>
+            {this.renderRealTimeUpdates()}
             <Title>Recent Challenge Progress:</Title>
             {progressRecords ? (
               this.renderProgressRecords(progressRecords)
@@ -183,6 +180,44 @@ class AdminStatsPage extends React.Component<IProps, IState> {
       </PageContainer>
     );
   }
+
+  renderRealTimeUpdates = () => {
+    const { realtimeChallengeUpdates, courses } = this.props;
+    if (!courses) {
+      return null;
+    }
+
+    const challengeMap = createInverseChallengeMapping(courses);
+
+    return realtimeChallengeUpdates.length === 0 ? (
+      <StatusText>Waiting for updates...</StatusText>
+    ) : (
+      realtimeChallengeUpdates.map((update) => {
+        const { challenge } = challengeMap[update.challengeId];
+        return (
+          <RealTimeUpdateRow>
+            <p
+              style={{
+                marginTop: 2,
+                marginRight: 6,
+                color: COLORS.PRIMARY_BLUE,
+              }}
+            >
+              "{challenge.title}" Challenge{" "}
+              {update.complete ? "Solved!" : "Attempted"}{" "}
+            </p>
+            <KeyValue
+              code
+              isChallengeId
+              renderChallengeIdOnly
+              label="ChallengeId"
+              value={update.challengeId}
+            />
+          </RealTimeUpdateRow>
+        );
+      })
+    );
+  };
 
   renderProgressRecords = (progressRecords: RecentProgressAdminDto) => {
     const { statusMessage = "", records = [] } = progressRecords;
@@ -295,6 +330,11 @@ const Row = styled.div`
   justify-content: space-between;
 `;
 
+const RealTimeUpdateRow = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
 const Title = styled.h2`
   ${themeText(COLORS.SECONDARY_YELLOW, COLORS.TEXT_LIGHT_THEME)};
 `;
@@ -319,6 +359,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   statsLoading: Modules.selectors.stats.statsLoadingSelector(state),
   adminUserSettings: Modules.selectors.admin.adminUserSettings(state),
   usersListLoading: Modules.selectors.users.usersState(state).loading,
+  courses: Modules.selectors.challenges.courseList(state),
   courseSkeletons: Modules.selectors.challenges.courseSkeletons(state),
   progressRecords: Modules.selectors.stats.progressRecordsSelector(state),
   paymentRecords: Modules.selectors.payments.paymentRecordsSelector(state),

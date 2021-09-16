@@ -221,6 +221,7 @@ const connectSocketIOEpic: EpicSignature = (action$, _, deps) => {
                 const message = event.payload.data;
                 const action = Actions.addRealTimeChallengeUpdate({
                   id: shortid(),
+                  complete: message.complete,
                   challengeId: message.challengeId,
                 });
 
@@ -275,7 +276,7 @@ const checkSocketReconnectionEpic: EpicSignature = (action$, state$, deps) => {
 const removeRealTimeChallengeUpdateEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.addRealTimeChallengeUpdate)),
-    delay(5000),
+    delay(12500),
     map((x) => Actions.removeRealTimeChallengeUpdate(x.payload)),
   );
 };

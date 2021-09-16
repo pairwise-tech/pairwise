@@ -9,6 +9,7 @@ import { AppActionTypes } from "./index";
 
 export interface RealTimeChallengeUpdate {
   id: string;
+  complete: boolean;
   challengeId: string;
 }
 
