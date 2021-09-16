@@ -37,6 +37,10 @@ export class ChallengeMetaService {
     }
   }
 
+  public async incrementChallengeAttemptedCount(challengeId: string) {
+    console.log("[TODO]: challenge attempted: ", challengeId);
+  }
+
   public async incrementChallengeCompletionCount(challengeId: string) {
     const result = await this.lookupChallengeMeta(challengeId);
 

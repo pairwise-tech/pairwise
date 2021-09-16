@@ -880,25 +880,9 @@ const handleAttemptChallengeEpic: EpicSignature = (action$, state$) => {
 const updateUserProgressEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.updateUserProgress)),
-    filter(({ payload }) => {
-      const { progress } = state$.value.user.user;
-      const { challengeId, courseId } = payload;
-
-      // Disregard the Sandbox
-      if (challengeId === SANDBOX_ID) {
-        return false;
-      }
-
-      const challengeProgress = getChallengeProgress(
-        progress,
-        courseId,
-        challengeId,
-      );
-
-      // Only update the progress if the challenge is NOT already complete.
-      return challengeProgress !== "COMPLETE";
-    }),
     pluck("payload"),
+    // Disregard Sandbox challenges
+    filter((payload) => payload.challengeId !== SANDBOX_ID),
     mergeMap(deps.api.updateUserProgress),
     map((result) => {
       if (result.value) {

@@ -59,11 +59,17 @@ export class ProgressService {
 
     const { complete, courseId, challengeId, timeCompleted } =
       challengeProgressDto;
+
     const user = requestUser;
 
     console.log(
       `Updating challengeProgress for courseId: ${courseId}, challengeId: ${challengeId}`,
     );
+
+    if (!complete) {
+      this.challengeMetaService.incrementChallengeAttemptedCount(challengeId);
+      return;
+    }
 
     const existingEntry = await this.progressRepository.findOne({
       courseId,
@@ -176,6 +182,14 @@ export class ProgressService {
     challengeProgressDto: ProgressDto,
   ): Promise<string> {
     validateChallengeProgressDto(challengeProgressDto);
+
+    // Record challenge meta counts for anonymous users too
+    const { complete, challengeId } = challengeProgressDto;
+    if (complete) {
+      this.challengeMetaService.incrementChallengeCompletionCount(challengeId);
+    } else {
+      this.challengeMetaService.incrementChallengeAttemptedCount(challengeId);
+    }
 
     // Track user progress record
     this.addToProgressRecord(uuid, "Anonymous User", challengeProgressDto);
