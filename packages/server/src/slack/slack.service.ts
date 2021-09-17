@@ -180,6 +180,11 @@ export class SlackService {
     }
   }
 
+  public async postUserAccountDeletionMessage(email: string, uuid: string) {
+    const message = `:skull: User account deleted, email: ${email}, uuid: ${uuid}.`;
+    await this.postMessageToChannel(message, { channel: "production" });
+  }
+
   public async postAdminErrorMessage({
     error,
     adminUserEmail,

@@ -28,6 +28,10 @@ enum ActionTypesEnum {
   UPDATE_USER_EMAIL_SUCCESS = "UPDATE_USER_EMAIL_SUCCESS",
   UPDATE_USER_EMAIL_FAILURE = "UPDATE_USER_EMAIL_FAILURE",
 
+  DELETE_USER = "DELETE_USER",
+  DELETE_USER_SUCCESS = "DELETE_USER_SUCCESS",
+  DELETE_USER_FAILURE = "DELETE_USER_FAILURE",
+
   SET_EMAIL_VERIFICATION_STATUS = "SET_EMAIL_VERIFICATION_STATUS",
 
   UPDATE_USER_SETTINGS = "UPDATE_USER_SETTINGS",
@@ -81,6 +85,16 @@ export const updateUserEmailSuccess = createAction(
 export const updateUserEmailFailure = createAction(
   ActionTypesEnum.UPDATE_USER_EMAIL_FAILURE,
 )();
+
+export const deleteUserAccount = createAction(ActionTypesEnum.DELETE_USER)();
+
+export const deleteUserAccountSuccess = createAction(
+  ActionTypesEnum.DELETE_USER_SUCCESS,
+)();
+
+export const deleteUserAccountFailure = createAction(
+  ActionTypesEnum.DELETE_USER_FAILURE,
+)<HttpResponseError>();
 
 export const fetchUserLeaderboard = createAction(
   ActionTypesEnum.FETCH_USER_LEADERBOARD,

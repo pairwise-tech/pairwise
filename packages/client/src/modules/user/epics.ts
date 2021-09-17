@@ -1,5 +1,5 @@
 import { combineEpics } from "redux-observable";
-import { filter, map, mergeMap, pluck } from "rxjs/operators";
+import { delay, filter, map, mapTo, mergeMap, pluck } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import API from "modules/api";
 import { EpicSignature } from "../root";
@@ -133,6 +133,34 @@ const disconnectAccountEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+const deleteUserAccountEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.deleteUserAccount)),
+    mergeMap(API.deleteUserAccount),
+    map((result) => {
+      if (result.value) {
+        deps.toaster.warn(
+          "Your account has been permanently deleted. You will be logged out now.",
+        );
+        return Actions.deleteUserAccountSuccess();
+      } else {
+        deps.toaster.warn(
+          "An issued occurred. Please try again or email contact@pairwise.tech for help.",
+        );
+        return Actions.deleteUserAccountFailure(result.error);
+      }
+    }),
+  );
+};
+
+const deleteUserAccountLogoutEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.deleteUserAccountSuccess)),
+    delay(2500),
+    mapTo(Actions.logoutUser({ shouldReloadPage: true })),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -145,4 +173,6 @@ export default combineEpics(
   updateUserSettingsEpic,
   fetchUserLeaderboardEpic,
   disconnectAccountEpic,
+  deleteUserAccountEpic,
+  deleteUserAccountLogoutEpic,
 );

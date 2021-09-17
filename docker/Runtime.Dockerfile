@@ -6,6 +6,9 @@ FROM pairwise-dependencies
 
 COPY . .
 
+# Update dependencies
+RUN yarn
+
 RUN echo "[NOTICE]: Using existing project .env files."
 
 # Build common

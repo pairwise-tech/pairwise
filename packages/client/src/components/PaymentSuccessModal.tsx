@@ -51,7 +51,11 @@ class PaymentSuccessModal extends React.Component<IProps, IState> {
         onClose={this.handleOnCloseModal}
       >
         <ModalContainer>
-          <ModalTitleText>Thank you, {profile.displayName}!</ModalTitleText>
+          <ModalTitleText>
+            {profile.givenName
+              ? `Thank you, ${profile.givenName}!`
+              : "Thank you!"}
+          </ModalTitleText>
           <ModalSubText style={{ maxWidth: 450 }}>
             Thank you for purchasing the{" "}
             <CourseTitle>{paymentSuccessCourse.title}</CourseTitle> and taking

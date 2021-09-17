@@ -37,6 +37,7 @@ interface IState {
   displayName: string;
   editMode: boolean;
   editedEmail: boolean;
+  showDeleteUserAlert: boolean;
   editAvatarUseGravatar: boolean;
 }
 
@@ -58,6 +59,7 @@ class Account extends React.Component<IProps, IState> {
       displayName: "",
       editMode: false,
       editedEmail: false,
+      showDeleteUserAlert: false,
       editAvatarUseGravatar: false,
     };
   }
@@ -69,7 +71,7 @@ class Account extends React.Component<IProps, IState> {
   }
 
   render(): Nullable<JSX.Element> {
-    const { sso, alert, editMode: edit } = this.state;
+    const { sso, alert, editMode: edit, showDeleteUserAlert } = this.state;
     const { user, skeletons, emailVerificationStatus } = this.props;
 
     const { payments, profile, settings } = user;
@@ -107,6 +109,24 @@ class Account extends React.Component<IProps, IState> {
               with Email".
             </p>
           )}
+        </Alert>
+        <Alert
+          icon="trash"
+          canEscapeKeyCancel
+          canOutsideClickCancel
+          isOpen={showDeleteUserAlert}
+          cancelButtonText="Cancel"
+          intent={Intent.DANGER}
+          onCancel={this.handleCancelDeleteUser}
+          onConfirm={this.handleConfirmDeleteUser}
+          className={isDark ? "bp3-dark" : ""}
+          confirmButtonText={"Delete My Account"}
+        >
+          <p>
+            Are you sure? This action cannot be undone and will permanently
+            delete all of your account activity, course progress, and any
+            existing payment history.
+          </p>
         </Alert>
         <PageTitle>Account</PageTitle>
         <ProfileIcon
@@ -319,10 +339,11 @@ class Account extends React.Component<IProps, IState> {
           undone.
         </Text>
         <Button
-          style={{ marginTop: 12 }}
+          icon="trash"
           text="Delete my Account"
           intent={Intent.DANGER}
-          icon="trash"
+          style={{ marginTop: 12 }}
+          onClick={this.openDeleteUserAlert}
         />
       </PageContainer>
     );
@@ -462,6 +483,18 @@ class Account extends React.Component<IProps, IState> {
 
     this.setState({ alert: null, sso: null });
   };
+
+  openDeleteUserAlert = () => {
+    this.setState({ showDeleteUserAlert: true });
+  };
+
+  handleCancelDeleteUser = () => {
+    this.setState({ showDeleteUserAlert: false });
+  };
+
+  handleConfirmDeleteUser = () => {
+    this.props.deleteUserAccount();
+  };
 }
 
 /** ===========================================================================
@@ -524,6 +557,7 @@ const dispatchProps = {
   updateUser: Modules.actions.user.updateUser,
   updateUserEmail: Modules.actions.user.updateUserEmail,
   disconnectAccount: Modules.actions.user.disconnectAccount,
+  deleteUserAccount: Modules.actions.user.deleteUserAccount,
   setEmailVerificationStatus: Modules.actions.user.setEmailVerificationStatus,
 };
 

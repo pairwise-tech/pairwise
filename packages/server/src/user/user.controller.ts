@@ -6,6 +6,7 @@ import {
   Body,
   Post,
   Param,
+  Delete,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { AuthGuard } from "@nestjs/passport";
@@ -57,5 +58,11 @@ export class UserController {
     @Request() req: AuthenticatedRequest,
   ) {
     return this.userService.updateLastActiveChallengeIds(req.user, activeIds);
+  }
+
+  @UseGuards(AuthGuard("jwt"))
+  @Delete("account")
+  public async deleteUserAccount(@Request() req: AuthenticatedRequest) {
+    return this.userService.deleteUserAccount(req.user.profile);
   }
 }

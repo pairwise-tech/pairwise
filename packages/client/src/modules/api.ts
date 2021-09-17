@@ -324,6 +324,13 @@ class Api extends BaseApiClass {
     });
   };
 
+  deleteUserAccount = async () => {
+    return this.httpHandler(async () => {
+      const { config } = this.getRequestHeaders();
+      return axios.delete(`${HOST}/user/account`, config);
+    });
+  };
+
   fetchUserLeaderboard = async () => {
     return this.httpHandler(async () => {
       const { config } = this.getRequestHeaders();

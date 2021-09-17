@@ -156,6 +156,17 @@ export class UserService {
     return SUCCESS_CODES.OK;
   }
 
+  public async deleteUserAccount(profile: UserProfile) {
+    const { uuid, email } = profile;
+    await this.userRepository.delete({ uuid });
+    console.warn(
+      `[DELETE ACCOUNT]: User account deleted successfully for user uuid: ${uuid}, email: ${email}`,
+    );
+
+    await this.slackService.postUserAccountDeletionMessage(uuid, email);
+    return SUCCESS_CODES.OK;
+  }
+
   public async findUserByEmail(emailString: string) {
     const email = this.standardizeEmail(emailString);
     const user = await this.userRepository.findOne({ email });
