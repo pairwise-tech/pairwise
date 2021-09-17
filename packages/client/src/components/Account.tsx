@@ -312,6 +312,18 @@ class Account extends React.Component<IProps, IState> {
           </a>{" "}
           if you want to contact someone directly.
         </Text>
+        <PageTitle style={{ marginTop: 24 }}>Danger Zone</PageTitle>
+        <Text style={{ maxWidth: 500 }}>
+          Deleting your account will erase all records of your account from
+          Pairwise, including any course purchase history. This cannot be
+          undone.
+        </Text>
+        <Button
+          style={{ marginTop: 12 }}
+          text="Delete my Account"
+          intent={Intent.DANGER}
+          icon="trash"
+        />
       </PageContainer>
     );
   }
