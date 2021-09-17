@@ -111,6 +111,7 @@ class UserLeaderboard extends React.Component<IProps, IState> {
       socket.on("disconnect", (reason: string) => {
         // No op on componentWillUnmount
         if (reason === "io client disconnect") {
+          console.log("WebSocket connection closed by the client.");
           return;
         } else if (reason === "transport close") {
           /**

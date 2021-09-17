@@ -338,7 +338,6 @@ const fetchRecentProgressRecordsEpic: EpicSignature = (action$, _, deps) => {
     mergeMap(deps.api.fetchRecentProgressRecords),
     map((result) => {
       if (result.value) {
-        console.log(result);
         return Actions.fetchRecentProgressRecordsSuccess(result.value);
       } else {
         return Actions.fetchPullRequestCourseListFailure(result.error);
