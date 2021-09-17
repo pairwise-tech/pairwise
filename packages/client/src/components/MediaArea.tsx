@@ -148,7 +148,13 @@ ID (video ID)
           multiline
         />
       </TitleHeader>
-      {challenge.videoUrl && <YoutubeEmbed url={challenge.videoUrl} />}
+      {challenge.videoUrl && (
+        <YoutubeEmbed
+          showSubscribeButton
+          showSubscribeButtonText
+          url={challenge.videoUrl}
+        />
+      )}
       <Suspense fallback={<Loading />}>
         <ContentEditor
           toc={false /* Turn off so we can use our own */}
@@ -269,6 +275,12 @@ const getEmbedOrigin = () => {
   }
 };
 
+interface YoutubeEmbedProps {
+  url: string;
+  showSubscribeButton?: boolean;
+  showSubscribeButtonText?: boolean;
+}
+
 /**
  * Copied the iframe props form the share sheet on youtube.
  *
@@ -278,7 +290,7 @@ const getEmbedOrigin = () => {
  * clutters up the network panel with a bunch of requests we're not interested
  * in.
  */
-export const YoutubeEmbed = (props: { url: string }) => {
+export const YoutubeEmbed = (props: YoutubeEmbedProps) => {
   const width = 728;
   const height = 410;
 
@@ -325,22 +337,26 @@ export const YoutubeEmbed = (props: { url: string }) => {
           />
         </VideoWrapper>
         <SubscribeBar>
-          <FloatRight>
-            <Button
-              onClick={() => {
-                const url =
-                  "https://www.youtube.com/channel/UCG52QHurjYWfqFBQR_60EUQ";
-                window.open(url, "_blank")?.focus();
-              }}
-              text="Subscribe to Pairwise on YouTube"
-              icon={<Icon icon="video" color={COLORS.YOUTUBE_RED} />}
-            />
-          </FloatRight>
-          <FloatRight>
-            <p style={{ marginTop: 6, fontSize: 12 }}>
-              Pairwise YouTube includes additional helpful video content.
-            </p>
-          </FloatRight>
+          {props.showSubscribeButton && (
+            <FloatRight>
+              <Button
+                onClick={() => {
+                  const url =
+                    "https://www.youtube.com/channel/UCG52QHurjYWfqFBQR_60EUQ";
+                  window.open(url, "_blank")?.focus();
+                }}
+                text="Subscribe to Pairwise on YouTube"
+                icon={<Icon icon="video" color={COLORS.YOUTUBE_RED} />}
+              />
+            </FloatRight>
+          )}
+          {props.showSubscribeButtonText && (
+            <FloatRight>
+              <p style={{ marginTop: 6, fontSize: 12 }}>
+                Pairwise YouTube includes additional helpful video content.
+              </p>
+            </FloatRight>
+          )}
         </SubscribeBar>
       </>
     );

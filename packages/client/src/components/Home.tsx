@@ -34,7 +34,10 @@ class Home extends React.Component<IProps, {}> {
         <FlexContainer>
           <ContentContainer style={{ paddingRight: 50, marginBottom: 25 }}>
             <PageTitle>Welcome to Pairwise!</PageTitle>
-            <YoutubeEmbed url="https://www.youtube.com/embed/d2DShyE37T4" />
+            <YoutubeEmbed
+              showSubscribeButton
+              url="https://www.youtube.com/embed/d2DShyE37T4"
+            />
             {hasPurchasedTypeScriptCourse ? (
               <ContentText>
                 Thank you for purchasing the Pairwise Course! Please enjoy the

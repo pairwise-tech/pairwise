@@ -524,7 +524,7 @@ export const VideoWrapper = styled.div`
   padding-bottom: 56.25%; /* See NOTE  */
   padding-top: 25px;
   height: 0;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
   border: 1px solid #444444;
   border-radius: 5px;
   overflow: hidden;
