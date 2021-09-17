@@ -38,8 +38,12 @@ interface IState {
   editMode: boolean;
   editedEmail: boolean;
   showDeleteUserAlert: boolean;
+  userDeletionTextConfirmation: string;
   editAvatarUseGravatar: boolean;
+  accountDeletionProcessing: boolean;
 }
+
+const DELETE_CONFIRMATION_TEXT = "Please delete me";
 
 /** ===========================================================================
  * Account
@@ -61,6 +65,8 @@ class Account extends React.Component<IProps, IState> {
       editedEmail: false,
       showDeleteUserAlert: false,
       editAvatarUseGravatar: false,
+      userDeletionTextConfirmation: "",
+      accountDeletionProcessing: false,
     };
   }
 
@@ -71,7 +77,13 @@ class Account extends React.Component<IProps, IState> {
   }
 
   render(): Nullable<JSX.Element> {
-    const { sso, alert, editMode: edit, showDeleteUserAlert } = this.state;
+    const {
+      sso,
+      alert,
+      editMode: edit,
+      showDeleteUserAlert,
+      accountDeletionProcessing,
+    } = this.state;
     const { user, skeletons, emailVerificationStatus } = this.props;
 
     const { payments, profile, settings } = user;
@@ -122,11 +134,25 @@ class Account extends React.Component<IProps, IState> {
           className={isDark ? "bp3-dark" : ""}
           confirmButtonText={"Delete My Account"}
         >
+          <p>Are you sure?</p>
           <p>
-            Are you sure? This action cannot be undone and will permanently
-            delete all of your account activity, course progress, and any
-            existing payment history.
+            This action cannot be undone and will permanently delete all of your
+            account activity, course progress, and any existing payment history.
           </p>
+          <p>To confirm, type "{DELETE_CONFIRMATION_TEXT}":</p>
+          <InputField
+            type="text"
+            style={{ width: 275, marginTop: 6, marginBottom: 8 }}
+            id="user-account-deletion-confirmation-input"
+            placeholder="Confirm account deletion"
+            className={Classes.INPUT}
+            value={this.state.userDeletionTextConfirmation}
+            onChange={(event) =>
+              this.setState({
+                userDeletionTextConfirmation: event.target.value,
+              })
+            }
+          />
         </Alert>
         <PageTitle>Account</PageTitle>
         <ProfileIcon
@@ -343,6 +369,7 @@ class Account extends React.Component<IProps, IState> {
           text="Delete my Account"
           intent={Intent.DANGER}
           style={{ marginTop: 12 }}
+          disabled={accountDeletionProcessing}
           onClick={this.openDeleteUserAlert}
         />
       </PageContainer>
@@ -493,7 +520,18 @@ class Account extends React.Component<IProps, IState> {
   };
 
   handleConfirmDeleteUser = () => {
-    this.props.deleteUserAccount();
+    const { userDeletionTextConfirmation } = this.state;
+    if (userDeletionTextConfirmation === DELETE_CONFIRMATION_TEXT) {
+      this.setState(
+        {
+          showDeleteUserAlert: false,
+          accountDeletionProcessing: true,
+        },
+        this.props.deleteUserAccount,
+      );
+    } else {
+      toaster.warn("The text does not match.");
+    }
   };
 }
 
