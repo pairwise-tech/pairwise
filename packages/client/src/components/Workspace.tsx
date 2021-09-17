@@ -132,6 +132,7 @@ interface IState {
   testResultsLoading: boolean;
   shouldRefreshLayout: boolean;
   isPreviewTestResults: boolean;
+  userTriggeredTestRun: boolean;
   monacoInitializationError: boolean;
   testResults: ReadonlyArray<TestCase>;
   dimensions: ReturnType<typeof getDimensions>;
@@ -226,6 +227,7 @@ class Workspace extends React.Component<IProps, IState> {
       hideSuccessModal: true,
       testResultsLoading: false,
       shouldRefreshLayout: false,
+      userTriggeredTestRun: false,
       mobileDevicePreviewType: "ios",
       monacoInitializationError: false,
     };
@@ -1340,12 +1342,16 @@ class Workspace extends React.Component<IProps, IState> {
      * their intent to attempt the challenge. This will correctly ignore
      * Workspace initiated test runs on challenge load.
      */
-    if (this.state.code !== this.props.challenge.starterCode) {
-      this.props.handleAttemptChallenge({
-        challengeId: this.props.challenge.id,
-        complete: correct,
-      });
+    if (this.state.userTriggeredTestRun) {
+      if (this.state.code !== this.props.challenge.starterCode) {
+        this.props.handleAttemptChallenge({
+          challengeId: this.props.challenge.id,
+          complete: correct,
+        });
+      }
     }
+
+    this.setState({ userTriggeredTestRun: false });
   };
 
   iframeRenderPreview = async (): Promise<void> => {
@@ -1396,15 +1402,20 @@ class Workspace extends React.Component<IProps, IState> {
    * key combination or by clicking the Run button.
    */
   handleUserTriggeredTestRun = () => {
-    this.setState({ hideSuccessModal: false });
-    this.runChallengeTests();
+    this.setState(
+      { hideSuccessModal: false, userTriggeredTestRun: true },
+      () => {
+        this.runChallengeTests();
 
-    // Slide the preview window into view. Only applicable on mobile
-    if (this.props.isMobileView) {
-      document
-        .getElementById(MOBILE_SCROLL_PANEL_ID)
-        ?.scrollTo({ left: this.state.dimensions.w * 2, behavior: "smooth" });
-    }
+        // Slide the preview window into view. Only applicable on mobile
+        if (this.props.isMobileView) {
+          document.getElementById(MOBILE_SCROLL_PANEL_ID)?.scrollTo({
+            left: this.state.dimensions.w * 2,
+            behavior: "smooth",
+          });
+        }
+      },
+    );
   };
 
   // NOTE We manage the false loading state where test results are received. The
@@ -1459,15 +1470,18 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   cancelTestRun = () => {
-    this.setState({ testResultsLoading: false }, () => {
-      const timeout = this.getTestTimeout();
-      const seconds = timeout / 1000;
-      toaster.warn(
-        `${
-          this.props.challenge.id === SANDBOX_ID ? "Code execution" : "Tests"
-        } cancelled because your code took longer than ${seconds} seconds to complete running. Check your code for problems and make sure your internet connection is stable!`,
-      );
-    });
+    this.setState(
+      { testResultsLoading: false, userTriggeredTestRun: false },
+      () => {
+        const timeout = this.getTestTimeout();
+        const seconds = timeout / 1000;
+        toaster.warn(
+          `${
+            this.props.challenge.id === SANDBOX_ID ? "Code execution" : "Tests"
+          } cancelled because your code took longer than ${seconds} seconds to complete running. Check your code for problems and make sure your internet connection is stable!`,
+        );
+      },
+    );
   };
 
   compileAndTransformCodeString = async () => {
