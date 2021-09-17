@@ -241,7 +241,6 @@ class UserLeaderboard extends React.Component<IProps, IState> {
                       color: update.complete
                         ? COLORS.PRIMARY_GREEN
                         : COLORS.SECONDARY_YELLOW,
-                      fontWeight: "bold",
                     }}
                   >
                     "{challenge.title}" Challenge{" "}
@@ -331,7 +330,7 @@ const RankTitle = styled(Text)`
 const RecentStatsBox = styled.div`
   margin-top: 12px;
   margin-bottom: 12px;
-  width: 350px;
+  max-width: 450px;
   padding: 4px 12px 18px 12px;
   border-radius: 4px;
 
