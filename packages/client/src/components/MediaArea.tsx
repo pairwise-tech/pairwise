@@ -142,10 +142,10 @@ ID (video ID)
       <Breadcrumbs type="media" />
       <TitleHeader>
         <EditableText
+          multiline
           value={title}
           onChange={handleTitle}
           disabled={!isEditMode}
-          multiline
         />
       </TitleHeader>
       {challenge.videoUrl && (

@@ -5,8 +5,8 @@ FROM docker.pkg.github.com/pairwise-tech/pairwise/pairwise-dependencies:latest A
 # Copy everything
 COPY . .
 
-# Install Zeit ncc
-RUN npm i -g @zeit/ncc
+# Install Vercel ncc
+RUN npm i -g @vercel/ncc
 
 # Build common
 RUN yarn common:build
