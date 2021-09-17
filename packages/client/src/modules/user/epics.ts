@@ -1,5 +1,13 @@
 import { combineEpics } from "redux-observable";
-import { delay, filter, map, mapTo, mergeMap, pluck } from "rxjs/operators";
+import {
+  delay,
+  filter,
+  map,
+  mapTo,
+  mergeMap,
+  pluck,
+  tap,
+} from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import API from "modules/api";
 import { EpicSignature } from "../root";
@@ -136,6 +144,7 @@ const disconnectAccountEpic: EpicSignature = (action$, _, deps) => {
 const deleteUserAccountEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.deleteUserAccount)),
+    tap(() => deps.toaster.warn("Deleting user account...")),
     mergeMap(API.deleteUserAccount),
     map((result) => {
       if (result.value) {

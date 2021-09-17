@@ -247,28 +247,21 @@ export class AdminController {
   }
 
   @UseGuards(AdminAuthGuard)
-  @Post("/users/delete")
-  async deleteUser(@Body() body, @Request() req: AuthenticatedRequest) {
+  @Delete("/users/:uuid")
+  async deleteUser(@Param() params, @Request() req: AuthenticatedRequest) {
     const adminUserEmail = req.user.profile.email;
 
-    // Delete supports userEmail or uuid to identify a user for deletion.
-    const { userEmail, uuid } = body;
-
-    if (userEmail && uuid) {
-      throw new BadRequestException(
-        "Please supply only one user identifying parameter at a time.",
-      );
-    }
-
     try {
-      if (userEmail) {
-        const result = await this.userService.adminDeleteUserByEmail(userEmail);
-        this.slackService.postAdminActionAwarenessMessage({ adminUserEmail });
-        return result;
-      } else if (uuid) {
+      const { uuid } = params;
+      if (uuid) {
         const result = await this.userService.adminDeleteUserByUuid(uuid);
-        this.slackService.postAdminActionAwarenessMessage({ adminUserEmail });
+        await this.slackService.postAdminActionAwarenessMessage({
+          adminUserEmail,
+        });
         return result;
+      }
+      {
+        throw new BadRequestException("No uuid provided.");
       }
     } catch (err) {
       this.handleError(err, { adminUserEmail });

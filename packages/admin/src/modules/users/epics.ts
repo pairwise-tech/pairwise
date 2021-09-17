@@ -1,5 +1,5 @@
 import { combineEpics } from "redux-observable";
-import { filter, map, mergeMap } from "rxjs/operators";
+import { filter, map, mergeMap, pluck, tap } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import API from "modules/api";
 import { EpicSignature } from "../root";
@@ -17,6 +17,7 @@ const fetchUsersEpic: EpicSignature = (action$, _, deps) => {
         Actions.fetchUsers,
         Actions.refreshStats,
         Actions.fetchAdminUserSuccess,
+        Actions.deleteUserAccountSuccess,
       ]),
     ),
     mergeMap(API.fetchUsersList),
@@ -47,9 +48,33 @@ const revokeCoachingSessionEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+const deleteUserAccountEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.deleteUserAccount)),
+    tap(() => deps.toaster.warn("Deleting user account...")),
+    map((x) => x.payload.uuid),
+    mergeMap(API.deleteUserAccount),
+    map((result) => {
+      if (result.value) {
+        deps.toaster.success("User account deleted successfully.");
+        return Actions.deleteUserAccountSuccess();
+      } else {
+        deps.toaster.warn(
+          "An issued occurred. Please try again or email contact@pairwise.tech for help.",
+        );
+        return Actions.deleteUserAccountFailure(result.error);
+      }
+    }),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
  */
 
-export default combineEpics(fetchUsersEpic, revokeCoachingSessionEpic);
+export default combineEpics(
+  fetchUsersEpic,
+  revokeCoachingSessionEpic,
+  deleteUserAccountEpic,
+);

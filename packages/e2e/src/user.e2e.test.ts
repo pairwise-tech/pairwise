@@ -10,6 +10,8 @@ import ENV from "./utils/e2e-env";
  */
 
 describe("User APIs", () => {
+  test.todo("[DELETE] /user/account endpoint: test user deletion.");
+
   test("/user/profile (GET) a user can fetch their profile", async () => {
     const accessToken = await fetchAccessToken();
     const result = await axios.get(`${ENV.HOST}/user/profile`, {

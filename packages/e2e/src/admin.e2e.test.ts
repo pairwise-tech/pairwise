@@ -12,6 +12,10 @@ import {
  */
 
 describe("Admin (e2e)", () => {
+  test.todo(
+    "[DELETE] /admin/users endpoint: test user deletion works and deletion cascades to all user related data.",
+  );
+
   test("/admin (GET) index route returns 401 for unauthenticated users", () => {
     return request(`${ENV.HOST}/admin`).get("/").expect(401);
   });
@@ -45,9 +49,6 @@ describe("Admin (e2e)", () => {
       });
   });
 
-  // TODO: This test could be improved by verifying the cascade occurs
-  // correctly when the user is deleted, i.e. no data related to this
-  // user exists in other tables.
   test("/users/admin/delete (DELETE) delete a user", async () => {
     const adminAccessToken = await fetchAdminAccessToken();
 

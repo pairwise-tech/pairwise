@@ -137,20 +137,6 @@ export class UserService {
     return result;
   }
 
-  public async adminDeleteUserByEmail(email: string) {
-    const user = await this.findUserByEmail(email);
-
-    if (!user) {
-      throw new BadRequestException(ERROR_CODES.MISSING_USER);
-    }
-
-    await this.userRepository.delete({
-      uuid: user.profile.uuid,
-    });
-
-    return SUCCESS_CODES.OK;
-  }
-
   public async adminDeleteUserByUuid(uuid: string) {
     await this.userRepository.delete({ uuid });
     return SUCCESS_CODES.OK;

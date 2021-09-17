@@ -198,6 +198,13 @@ class Api extends BaseApiClass {
     });
   };
 
+  deleteUserAccount = async (uuid: string) => {
+    return this.httpHandler(async () => {
+      const { config } = this.getRequestHeaders();
+      return axios.delete(`${HOST}/admin/users/${uuid}`, config);
+    });
+  };
+
   fetchUsersList = async () => {
     return this.httpHandler(async () => {
       const { config } = this.getRequestHeaders();

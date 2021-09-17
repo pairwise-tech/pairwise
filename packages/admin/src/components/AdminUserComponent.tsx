@@ -36,6 +36,7 @@ interface AdminUserComponentState {
   plan: Nullable<PAYMENT_PLAN>;
   uuid: Nullable<string>;
   alert: null | "gift" | "refund";
+  showDeleteUserAlert: boolean;
 }
 
 /** ===========================================================================
@@ -55,11 +56,12 @@ class AdminUserComponent extends React.Component<
       alert: null,
       plan: null,
       challengeId: "",
+      showDeleteUserAlert: false,
     };
   }
 
   render(): JSX.Element {
-    const { alert } = this.state;
+    const { alert, showDeleteUserAlert } = this.state;
     const {
       user,
       courseSkeletons,
@@ -105,6 +107,24 @@ class AdminUserComponent extends React.Component<
               You will also need to refund the payment transaction in Stripe.
             </p>
           )}
+        </Alert>
+        <Alert
+          icon="trash"
+          canEscapeKeyCancel
+          canOutsideClickCancel
+          isOpen={showDeleteUserAlert}
+          cancelButtonText="Cancel"
+          intent={Intent.DANGER}
+          onCancel={this.handleCancelDeleteUser}
+          onConfirm={this.handleConfirmDeleteUser}
+          className={isDark ? "bp3-dark" : ""}
+          confirmButtonText={"Delete User Account"}
+        >
+          <p>
+            Are you sure? This action cannot be undone and will permanently
+            delete all of your account activity, course progress, and any
+            existing payment history.
+          </p>
         </Alert>
         {IS_PREMIUM && (
           <PremiumBadge>
@@ -288,6 +308,12 @@ class AdminUserComponent extends React.Component<
             data={JSON.parse(String(user.settings))}
           />
         </Collapse>
+        <Button
+          icon="trash"
+          text="Delete User Account"
+          intent={Intent.DANGER}
+          onClick={this.openDeleteUserAlert}
+        />
       </DataCard>
     );
   }
@@ -326,6 +352,20 @@ class AdminUserComponent extends React.Component<
     if (uuid && challengeId) {
       this.props.fetchChallengeBlob({ uuid, challengeId });
     }
+  };
+
+  openDeleteUserAlert = () => {
+    this.setState({ showDeleteUserAlert: true });
+  };
+
+  handleCancelDeleteUser = () => {
+    this.setState({ showDeleteUserAlert: false });
+  };
+
+  handleConfirmDeleteUser = () => {
+    this.setState({ showDeleteUserAlert: false }, () => {
+      this.props.deleteUserAccount({ uuid: this.props.user.uuid });
+    });
   };
 }
 
@@ -391,6 +431,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 });
 
 const dispatchProps = {
+  deleteUserAccount: Modules.actions.users.deleteUserAccount,
   giftCourseForUser: Modules.actions.payments.giftCourseForUser,
   refundCourseForUser: Modules.actions.payments.refundCourseForUser,
   fetchChallengeBlob: Modules.actions.challenges.fetchChallengeBlob,
