@@ -181,6 +181,13 @@ export const fetchRecentProgressUpdates = async (token: string) => {
 };
 
 /**
+ * Fetch user leaderboard rankings.
+ */
+export const fetchLeaderboardRankings = async (token: string) => {
+  return axios.get(`${ENV.HOST}/user/leaderboard`, getHeaders(token));
+};
+
+/**
  * Update user challenge progress.
  */
 export const updateProgressForChallenge = async (
