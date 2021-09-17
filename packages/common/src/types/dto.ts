@@ -356,6 +356,7 @@ export interface PublishedMessage<MessagePayload> {
 }
 
 export type CacheUpdateMessage = PublishedMessage<{
+  id: string;
   complete: boolean;
   challengeId: string;
 }>;

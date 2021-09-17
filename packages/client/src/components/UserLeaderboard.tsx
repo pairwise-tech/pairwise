@@ -10,6 +10,7 @@ import { REACT_APP_WEB_SOCKET_HOST } from "../tools/client-env";
 import io, { Socket } from "socket.io-client";
 import {
   assertUnreachable,
+  createInverseChallengeMapping,
   SocketEvents,
   SocketEventTypes,
 } from "@pairwise/common";
@@ -19,9 +20,18 @@ import {
  * ============================================================================
  */
 
-interface IState {
-  realtimeChallengeSolvedId: Nullable<string>;
+export interface RealTimeChallengeUpdate {
+  id: string;
+  complete: boolean;
+  challengeId: string;
 }
+
+interface IState {
+  realtimeChallengeUpdates: RealTimeChallengeUpdate[];
+}
+
+// 12.5 seconds to clear realtime challenge activity updates
+const UPDATE_CANCELLATION_DELAY = 12500;
 
 /** ===========================================================================
  * Account
@@ -29,8 +39,8 @@ interface IState {
  */
 
 class UserLeaderboard extends React.Component<IProps, IState> {
-  timer_one: Nullable<NodeJS.Timeout> = null;
-  timer_two: Nullable<NodeJS.Timeout> = null;
+  socket_io_reconnect_timer: Nullable<NodeJS.Timeout> = null;
+  updates_timers: NodeJS.Timeout[] = [];
   socket: Nullable<Socket> = null;
   socketCloseUnmountReason = "componentWillUnmount";
 
@@ -38,7 +48,7 @@ class UserLeaderboard extends React.Component<IProps, IState> {
     super(props);
 
     this.state = {
-      realtimeChallengeSolvedId: null,
+      realtimeChallengeUpdates: [],
     };
   }
 
@@ -54,12 +64,12 @@ class UserLeaderboard extends React.Component<IProps, IState> {
       this.socket = null;
     }
 
-    if (this.timer_one) {
-      clearTimeout(this.timer_one);
+    if (this.socket_io_reconnect_timer) {
+      clearTimeout(this.socket_io_reconnect_timer);
     }
 
-    if (this.timer_two) {
-      clearTimeout(this.timer_two);
+    for (const timer of this.updates_timers) {
+      clearTimeout(timer);
     }
   }
 
@@ -113,7 +123,7 @@ class UserLeaderboard extends React.Component<IProps, IState> {
           );
 
           // Wait 1 second before retry
-          this.timer_two = setTimeout(() => {
+          this.socket_io_reconnect_timer = setTimeout(() => {
             this.initializeWebSocketConnection(retries - 1);
           }, 1000);
         }
@@ -125,13 +135,15 @@ class UserLeaderboard extends React.Component<IProps, IState> {
           switch (event.type) {
             case SocketEventTypes.REAL_TIME_CHALLENGE_UPDATE: {
               const message = event.payload.data;
-              const { challengeId } = message;
-              if (challengeId) {
-                this.setState(
-                  { realtimeChallengeSolvedId: challengeId },
-                  this.setCancelTimeoutOnChallengeUpdate,
-                );
-              }
+              this.setState(
+                (ps) => ({
+                  realtimeChallengeUpdates:
+                    ps.realtimeChallengeUpdates.concat(message),
+                }),
+                () => {
+                  this.setCancelTimeoutOnChallengeUpdate(message.id);
+                },
+              );
               break;
             }
 
@@ -152,24 +164,35 @@ class UserLeaderboard extends React.Component<IProps, IState> {
     }
   };
 
-  setCancelTimeoutOnChallengeUpdate = () => {
-    /**
-     * Clear the realtime challenge update after a timed delay.
-     */
-    this.timer_one = setTimeout(() => {
-      this.setState({ realtimeChallengeSolvedId: null });
-    }, 5000);
+  /**
+   * Remove the given update by id after a delay.
+   */
+  setCancelTimeoutOnChallengeUpdate = (updateId: string) => {
+    const timer = setTimeout(() => {
+      this.setState((ps) => ({
+        realtimeChallengeUpdates: ps.realtimeChallengeUpdates.filter(
+          (x) => x.id !== updateId,
+        ),
+      }));
+    }, UPDATE_CANCELLATION_DELAY);
+
+    this.updates_timers.push(timer);
   };
 
   render(): Nullable<JSX.Element> {
-    const { realtimeChallengeSolvedId } = this.state;
+    const { realtimeChallengeUpdates } = this.state;
     const {
+      courses,
       userLeaderboardState,
       fetchUserLeaderboard,
       recentProgressRecordStats,
       loadingRecentProgressStats,
     } = this.props;
     const { loading, error, leaderboard } = userLeaderboardState;
+
+    if (!leaderboard || !courses) {
+      return null;
+    }
 
     if (loading || error) {
       return (
@@ -183,9 +206,7 @@ class UserLeaderboard extends React.Component<IProps, IState> {
       );
     }
 
-    if (!leaderboard) {
-      return null;
-    }
+    const challengeMap = createInverseChallengeMapping(courses);
 
     let userIndex = 0;
     let exists = false;
@@ -209,12 +230,25 @@ class UserLeaderboard extends React.Component<IProps, IState> {
           <TextItem style={{ fontWeight: "bold", textDecoration: "underline" }}>
             Realtime Challenge Updates:
           </TextItem>
-          {realtimeChallengeSolvedId ? (
-            <TextItem
-              style={{ color: COLORS.PRIMARY_GREEN, fontWeight: "bold" }}
-            >
-              Challenge ID <code>{realtimeChallengeSolvedId}</code> just solved!
-            </TextItem>
+          {realtimeChallengeUpdates.length > 0 ? (
+            <>
+              {realtimeChallengeUpdates.map((update) => {
+                const { challenge } = challengeMap[update.challengeId];
+                return (
+                  <TextItem
+                    style={{
+                      color: update.complete
+                        ? COLORS.PRIMARY_GREEN
+                        : COLORS.SECONDARY_YELLOW,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    "{challenge.title}" Challenge{" "}
+                    {update.complete ? "Solved!" : "Attempted"}
+                  </TextItem>
+                );
+              })}
+            </>
           ) : (
             <TextItem style={{ color: COLORS.LIGHT_GREY }}>
               Watching for challenge updates...
@@ -309,6 +343,7 @@ const RecentStatsBox = styled.div`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  courses: Modules.selectors.challenges.getCourseList(state),
   userLeaderboardState: Modules.selectors.user.userLeaderboardState(state),
   recentProgressRecordStats:
     Modules.selectors.app.recentProgressRecordStats(state),

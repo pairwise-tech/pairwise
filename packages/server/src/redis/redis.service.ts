@@ -250,6 +250,7 @@ export class RedisClientService {
         data: {
           complete,
           challengeId,
+          id: shortid(),
         },
       };
 

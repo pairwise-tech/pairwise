@@ -219,11 +219,7 @@ const connectSocketIOEpic: EpicSignature = (action$, _, deps) => {
             switch (event.type) {
               case SocketEventTypes.REAL_TIME_CHALLENGE_UPDATE: {
                 const message = event.payload.data;
-                const action = Actions.addRealTimeChallengeUpdate({
-                  id: shortid(),
-                  complete: message.complete,
-                  challengeId: message.challengeId,
-                });
+                const action = Actions.addRealTimeChallengeUpdate(message);
 
                 // Use store dispatch function to dispatch actions in response
                 // to socket messages
