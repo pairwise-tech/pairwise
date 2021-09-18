@@ -82,6 +82,8 @@ class ContentUtilityClass {
       return {
         ...course,
         modules: course.modules.map((courseModule) => {
+          const moduleSkillTags = courseModule.skillTags || [];
+
           return {
             id: courseModule.id,
             title: courseModule.title,
@@ -94,13 +96,22 @@ class ContentUtilityClass {
               // the course skeleton. This is because all users can view
               // the skeleton, but not all course content, so the skeleton
               // must be stripped of the additional content.
+
+              const challengeSkillTags = challenge.skillTags || [];
+
+              // Combine the challenge and module skill tags
+              const combinedSkillSet = new Set(
+                moduleSkillTags.concat(challengeSkillTags),
+              );
+
               return {
                 id: challenge.id,
+                free: challenge.free,
                 type: challenge.type,
                 title: challenge.title,
                 videoUrl: challenge.videoUrl,
                 userCanAccess: courseModule.free,
-                free: challenge.free,
+                skillTags: Array.from(combinedSkillSet),
               };
             }),
           };
@@ -168,6 +179,8 @@ class ContentUtilityClass {
             const isModuleFree = courseModule.free;
             const canAccessModule = canAccessCourse || isModuleFree;
 
+            const moduleSkillTags = courseModule.skillTags || [];
+
             return {
               ...courseModule,
               userCanAccess: canAccessModule,
@@ -178,9 +191,17 @@ class ContentUtilityClass {
                 const isChallengeFree = challenge.free;
                 const canAccessChallenge = canAccessModule || isChallengeFree;
 
+                const challengeSkillTags = challenge.skillTags || [];
+
+                // Combine the challenge and module skill tags
+                const combinedSkillSet = new Set(
+                  moduleSkillTags.concat(challengeSkillTags),
+                );
+
                 return {
                   ...challenge,
                   userCanAccess: canAccessChallenge,
+                  skillTags: Array.from(combinedSkillSet),
                 };
               }),
             };

@@ -1,4 +1,4 @@
-import { Course, Challenge } from "../types/courses";
+import { Challenge, CourseSkeletonList, CourseList } from "../types/courses";
 import { UserProfile } from "../types/dto";
 
 /**
@@ -50,8 +50,9 @@ export interface InverseChallengeMapping {
  * derives all such relationships in one go so it can be referenced later.
  */
 export const createInverseChallengeMapping = (
-  courses: Course[],
+  courses: CourseList | CourseSkeletonList,
 ): InverseChallengeMapping => {
+  // @ts-ignore
   const result = courses.reduce((challengeMap, c) => {
     const courseId = c.id;
     const cx = c.modules.reduce((courseChallengeMap, m) => {

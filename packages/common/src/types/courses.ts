@@ -46,6 +46,7 @@ export interface Module {
   id: string;
   title: string;
   free: boolean;
+  skillTags?: PortfolioSkills[];
   challenges: ChallengeList;
 }
 
@@ -103,6 +104,27 @@ for (let x in PortfolioSkills) {
 
 export const portfolioSkillsList = skills;
 
+export interface PortfolioSkillSummary {
+  total: number;
+  accomplished: number;
+}
+
+type SkillKey = keyof typeof PortfolioSkills;
+type PortfolioSkillSummaryMap = { [key in SkillKey]: PortfolioSkillSummary };
+
+export const getPortfolioSkillsDefaultSummary =
+  (): PortfolioSkillSummaryMap => {
+    return portfolioSkillsList.slice().reduce((summary, skill) => {
+      return {
+        ...summary,
+        [skill]: {
+          total: 0,
+          accomplished: 0,
+        },
+      };
+    }, {} as PortfolioSkillSummaryMap);
+  };
+
 /** ===========================================================================
  * Challenge Meta Database Entity
  * ============================================================================
@@ -136,6 +158,7 @@ export interface ModuleSkeleton {
   title: string;
   free: boolean;
   userCanAccess: boolean;
+  skillTags?: PortfolioSkills[];
   challenges: ChallengeSkeletonList;
 }
 
@@ -147,5 +170,6 @@ export interface ChallengeSkeleton {
   title: string;
   videoUrl?: string;
   userCanAccess: boolean;
+  skillTags?: PortfolioSkills[];
   free?: boolean;
 }

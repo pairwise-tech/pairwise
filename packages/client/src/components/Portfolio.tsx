@@ -11,6 +11,7 @@ import {
   PortfolioSkills,
   portfolioSkillsList,
   assertUnreachable,
+  PortfolioSkillSummary,
 } from "@pairwise/common";
 
 /** ===========================================================================
@@ -44,10 +45,19 @@ class Portfolio extends React.Component<IProps, IState> {
     return (
       <PageContainer>
         <PageTitle>Portfolio and Skills</PageTitle>
-        <Subtitle>Skills are acquired by completing challenges.</Subtitle>
+        <Subtitle>
+          Skills are acquired by completing challenges and projects.
+        </Subtitle>
         <SkillContainer>
-          {portfolioSkillsList.map((x) => {
-            return <PortfolioSkill theme={appTheme} skill={x} />;
+          {portfolioSkillsList.map((skill) => {
+            return (
+              <PortfolioSkill
+                key={skill}
+                skill={skill}
+                theme={appTheme}
+                summary={userPortfolioSkillsSummary[skill]}
+              />
+            );
           })}
         </SkillContainer>
       </PageContainer>
@@ -63,18 +73,24 @@ class Portfolio extends React.Component<IProps, IState> {
 interface PortfolioSkillProps {
   skill: PortfolioSkills;
   theme: AppTheme;
+  summary: PortfolioSkillSummary;
 }
 
 export const PortfolioSkill = (props: PortfolioSkillProps) => {
-  const deviconClassName = mapSkillToDeviconClassName(props.skill, props.theme);
+  const { skill, theme, summary } = props;
+  const { total, accomplished } = summary;
+  const percentComplete =
+    accomplished === 0 ? 0 : ((accomplished / total) * 100).toFixed(2);
+
+  const deviconClassName = mapSkillToDeviconClassName(skill, theme);
   return (
     <Skill>
       <Devicon>
         <i className={deviconClassName}></i>
       </Devicon>
       <SkillInfo>
-        <SkillTitle>{props.skill}</SkillTitle>
-        <SkillDescription>100% complete</SkillDescription>
+        <SkillTitle>{skill}</SkillTitle>
+        <SkillDescription>{percentComplete}% complete</SkillDescription>
       </SkillInfo>
     </Skill>
   );
@@ -85,7 +101,7 @@ const SkillContainer = styled.div`
 `;
 
 const Devicon = styled.div`
-  width: 75px;
+  width: 95px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -100,7 +116,7 @@ const Skill = styled.div`
   margin-bottom: 6px;
   display: flex;
   align-items: center;
-  width: 300px;
+  width: 250px;
   height: 75px;
   padding: 8px;
   border-radius: 5px;

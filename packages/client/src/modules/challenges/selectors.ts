@@ -1,6 +1,10 @@
 import identity from "ramda/es/identity";
 import { createSelector } from "reselect";
-import { CodeChallengeBlob } from "@pairwise/common";
+import {
+  CodeChallengeBlob,
+  createInverseChallengeMapping,
+  getPortfolioSkillsDefaultSummary,
+} from "@pairwise/common";
 import { ReduxStoreState } from "modules/root";
 import prop from "ramda/es/prop";
 import { SANDBOX_ID } from "tools/constants";
@@ -490,6 +494,49 @@ export const getBlobForCurrentChallenge = createSelector(
     }
 
     return blobs[challenge.id]?.dataBlob || null;
+  },
+);
+
+/**
+ * Given user's course progress compute how many skills they have racked
+ * up from completing challenges.
+ */
+export const userPortfolioSkillsSummary = createSelector(
+  [getCourseSkeletons, getCurrentActiveIds, userProgress],
+  (courseSkeletons, activeIds, progress) => {
+    const { currentCourseId } = activeIds;
+
+    if (!courseSkeletons || !currentCourseId || !progress) {
+      return null;
+    }
+
+    // Use the course skeletons to derive the challenge map since they
+    // will include all challenges. This is necessary to get calculate the
+    // correct final values for users who have not purchased the course.
+    const challengeMap = createInverseChallengeMapping(courseSkeletons);
+    const courseProgress = progress[currentCourseId];
+    const skillsSummary = getPortfolioSkillsDefaultSummary();
+
+    if (!courseProgress) {
+      return skillsSummary;
+    }
+
+    for (const [id, mapEntry] of Object.entries(challengeMap)) {
+      const { challenge } = mapEntry;
+
+      if (challenge.skillTags) {
+        for (const skill of challenge.skillTags) {
+          skillsSummary[skill].total++;
+
+          const userProgressEntry = courseProgress[id];
+          if (userProgressEntry && userProgressEntry.complete) {
+            skillsSummary[skill].accomplished++;
+          }
+        }
+      }
+    }
+
+    return skillsSummary;
   },
 );
 
