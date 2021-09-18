@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { Button, Icon } from "@blueprintjs/core";
 import Modules, { ReduxStoreState } from "modules/root";
 import { PageContainer, Text, PageTitle } from "./SharedComponents";
 import { COLORS } from "tools/constants";
@@ -44,7 +43,7 @@ class Portfolio extends React.Component<IProps, IState> {
 
     return (
       <PageContainer>
-        <PageTitle>Portfolio and Skills</PageTitle>
+        <PageTitle>Portfolio Skills</PageTitle>
         <Subtitle>
           Skills are acquired by completing challenges and projects.
         </Subtitle>
