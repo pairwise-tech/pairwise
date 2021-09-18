@@ -104,6 +104,12 @@ for (let x in PortfolioSkills) {
 
 export const portfolioSkillsList = skills;
 
+export const portfolioSkillsSet = new Set(portfolioSkillsList);
+
+export const isValidPortfolioSkill = (skill: any): boolean => {
+  return portfolioSkillsSet.has(skill);
+};
+
 export interface PortfolioSkillSummary {
   total: number;
   accomplished: number;

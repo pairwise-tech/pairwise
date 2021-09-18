@@ -52,7 +52,7 @@ export interface InverseChallengeMapping {
 export const createInverseChallengeMapping = (
   courses: CourseList | CourseSkeletonList,
 ): InverseChallengeMapping => {
-  // @ts-ignore
+  // @ts-ignore - ignore to allow initial argument to be course or skeleton list
   const result = courses.reduce((challengeMap, c) => {
     const courseId = c.id;
     const cx = c.modules.reduce((courseChallengeMap, m) => {
