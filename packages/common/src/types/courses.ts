@@ -59,13 +59,6 @@ export interface Challenges {
 
 export type ChallengeList = Challenge[];
 
-/**
- * TODO: Add potential skill tags in the future which are attached to
- * each challenge and can be used to construct a skills/portfolio overview
- * for a user given the challenges they have completed.
- */
-export type SkillTag = "HTML" | "CSS" | "TypeScript";
-
 export interface Challenge {
   type: CHALLENGE_TYPE;
   id: string;
@@ -78,8 +71,37 @@ export interface Challenge {
   content: string;
   free?: boolean;
   isPaidContent?: boolean;
-  skillTags?: SkillTag[];
+  skillTags?: PortfolioSkills[];
 }
+
+/** ===========================================================================
+ * Skills
+ * ============================================================================
+ */
+
+export enum PortfolioSkills {
+  HTML = "HTML",
+  CSS = "CSS",
+  TypeScript = "TypeScript",
+  Git = "Git",
+  GitHub = "GitHub",
+  React = "React",
+  NodeJS = "NodeJS",
+  Express = "Express",
+  PostgreSQL = "PostgreSQL",
+  Jest = "Jest",
+  Docker = "Docker",
+}
+
+const skills: PortfolioSkills[] = [];
+
+for (let x in PortfolioSkills) {
+  const key = x as PortfolioSkills;
+  const skill: PortfolioSkills = PortfolioSkills[key];
+  skills.push(skill);
+}
+
+export const portfolioSkillsList = skills;
 
 /** ===========================================================================
  * Challenge Meta Database Entity

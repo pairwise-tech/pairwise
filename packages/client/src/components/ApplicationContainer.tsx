@@ -57,6 +57,7 @@ import DeepLinkCodeStringAlert from "./DeepLinkCodeStringAlert";
 import { IThemeProps, themeColor, themeText } from "./ThemeContainer";
 import AdminDrawer from "./AdminDrawer";
 import UserLeaderboard from "./UserLeaderboard";
+import Portfolio from "./Portfolio";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -546,11 +547,22 @@ const ApplicationContainer = (props: IProps) => {
                     My Account{isUserAdmin ? " (Admin)" : ""}
                   </Link>
                   <Link
+                    id="portfolio-link"
+                    to="/portfolio"
+                    onClick={() => mobileToggleAccountDropdown("close")}
+                  >
+                    <Icon icon="box" style={{ marginRight: 10 }} />
+                    Portfolio
+                  </Link>
+                  <Link
                     id="leaderboard-link"
                     to="/leaderboard"
                     onClick={() => mobileToggleAccountDropdown("close")}
                   >
-                    <Icon icon="star" style={{ marginRight: 10 }} />
+                    <Icon
+                      icon="horizontal-bar-chart-asc"
+                      style={{ marginRight: 10 }}
+                    />
                     Leaderboard
                   </Link>
                   <Link
@@ -633,6 +645,7 @@ const ApplicationContainer = (props: IProps) => {
             path="/leaderboard"
             component={UserLeaderboard}
           />
+          <Route key="portfolio" path="/portfolio" component={Portfolio} />
           {!isLoggedIn && (
             <Route
               key="authenticate"
