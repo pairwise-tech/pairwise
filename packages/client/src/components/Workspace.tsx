@@ -1904,7 +1904,7 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
         )}
         {!isSandbox && (CODEPRESS || this.props.showMediaArea) && (
           <LowerSection withHeader={challenge.type === "media"}>
-            <MediaArea challenge={challenge} />
+            <MediaArea isMobileView={isMobileView} challenge={challenge} />
           </LowerSection>
         )}
       </React.Fragment>

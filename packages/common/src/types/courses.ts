@@ -8,6 +8,9 @@
  * ============================================================================
  */
 
+export type CourseGeneric = Course | CourseSkeleton;
+export type CourseGenericList = CourseGeneric[];
+
 export interface CourseBase {
   id: string;
   title: string;

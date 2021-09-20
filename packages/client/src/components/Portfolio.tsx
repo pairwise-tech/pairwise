@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer, Text, PageTitle } from "./SharedComponents";
+import { PageContainer, PageText, PageTitle } from "./SharedComponents";
 import { COLORS } from "tools/constants";
 import { themeColor } from "./ThemeContainer";
 import {
@@ -100,7 +100,7 @@ const SkillContainer = styled.div`
 `;
 
 const Devicon = styled.div`
-  width: 95px;
+  width: 85px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -136,7 +136,7 @@ const SkillDescription = styled.p`
   margin: 2px;
 `;
 
-const Subtitle = styled(Text)`
+const Subtitle = styled(PageText)`
   font-size: 18px;
   margin-top: 12px;
 

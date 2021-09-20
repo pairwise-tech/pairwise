@@ -5,9 +5,13 @@ import React from "react";
 import { connect } from "react-redux";
 import { Breadcrumb, Breadcrumbs, BreadcrumbProps } from "@blueprintjs/core";
 import { Tooltip2 } from "@blueprintjs/popover2";
-import { CHALLENGE_TYPE } from "@pairwise/common";
-import { COLORS } from "tools/constants";
-import { capitalize, isAlternateLanguageChallenge } from "../tools/utils";
+import { AppTheme, CHALLENGE_TYPE, PortfolioSkills } from "@pairwise/common";
+import { COLORS, PROSE_MAX_WIDTH } from "tools/constants";
+import {
+  capitalize,
+  isAlternateLanguageChallenge,
+  mapSkillToDeviconClassName,
+} from "../tools/utils";
 
 /** ===========================================================================
  * Types & Config
@@ -39,10 +43,13 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     const {
       type,
+      appTheme,
       challenge,
       panelId = "",
+      isMobileView,
       toggleCollapsed,
       breadcrumbsPath,
+      displaySkillIcon,
       isInstructionsViewCollapsed,
     } = this.props;
 
@@ -81,10 +88,20 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
             <ContentLabel>Experimental Content</ContentLabel>
           </Tooltip2>
         )}
-        <Breadcrumbs
-          items={this.getBreadcrumbs(breadcrumbsPath)}
-          currentBreadcrumbRenderer={this.renderCurrentBreadcrumb}
-        />
+        <Horizontal>
+          <Breadcrumbs
+            items={this.getBreadcrumbs(breadcrumbsPath)}
+            currentBreadcrumbRenderer={this.renderCurrentBreadcrumb}
+          />
+          {!isMobileView && displaySkillIcon && (
+            <div>
+              {challenge.skillTags &&
+                challenge.skillTags.map((skill) => (
+                  <SkillIcon key={skill} skill={skill} appTheme={appTheme} />
+                ))}
+            </div>
+          )}
+        </Horizontal>
       </BreadcrumbsBar>
     );
   }
@@ -169,10 +186,12 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
  * ============================================================================
  */
 
-const BreadcrumbsBar = styled.div<{
+interface BreadcrumbsBarProps {
   canCollapse: boolean;
   type: BreadcrumbsChallengeType;
-}>`
+}
+
+const BreadcrumbsBar = styled.div<BreadcrumbsBarProps>`
   width: 100%;
   font-weight: normal;
   margin-bottom: 10px;
@@ -184,6 +203,40 @@ const BreadcrumbsBar = styled.div<{
     }
   }
 `;
+
+const Horizontal = styled.div`
+  display: flex;
+  align-items: flex-end;
+  flex-direction: row;
+  justify-content: space-between;
+  width: ${PROSE_MAX_WIDTH}px;
+`;
+
+/**
+ * Render skill icons for each challenge. These are not displayed on mobile.
+ */
+const SkillIcon = (props: { appTheme: AppTheme; skill: PortfolioSkills }) => {
+  const { skill, appTheme } = props;
+  const className = mapSkillToDeviconClassName(skill, appTheme);
+
+  return (
+    <Tooltip2
+      position="bottom"
+      content={`Solving this challenge earns ${skill} skills.`}
+    >
+      <div style={{ paddingBottom: 1 }}>
+        <i
+          style={{
+            fontSize: 20,
+            marginLeft: 2,
+            marginRight: 2,
+          }}
+          className={className}
+        />
+      </div>
+    </Tooltip2>
+  );
+};
 
 const ContentLabel = styled.div`
   display: flex;
@@ -223,6 +276,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
     Modules.selectors.challenges.isInstructionsViewCollapsed(state),
   isCurrentChallengeComplete:
     Modules.selectors.challenges.isCurrentChallengeComplete(state),
+  appTheme: Modules.selectors.user.userSettings(state).appTheme,
 });
 
 const dispatchProps = {
@@ -232,6 +286,8 @@ const dispatchProps = {
 interface ComponentProps {
   type: BreadcrumbsChallengeType;
   panelId?: string;
+  isMobileView: boolean;
+  displaySkillIcon?: boolean;
   toggleCollapsed?: () => void;
 }
 

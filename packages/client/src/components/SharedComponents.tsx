@@ -73,6 +73,10 @@ export const Text = styled.p`
   ${themeText(C.TEXT_CONTENT)};
 `;
 
+export const PageText = styled(Text)`
+  max-width: 500px;
+`;
+
 // NOTE: Trying to bolt mobile styling onto the existing UI without changing any
 // DOM or desktop styles is a bit cumbersome. I regard the app as very much
 // desktop first so I wanted to touch desktop as little as possible. However,

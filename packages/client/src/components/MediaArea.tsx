@@ -57,9 +57,10 @@ export const CONTENT_AREA_ID = "supplementary-content-container";
  * information, without any interactive coding practice.
  */
 const MediaArea = ({
-  challenge,
   title,
+  challenge,
   isEditMode,
+  isMobileView,
   updateChallenge,
 }: MediaAreaProps) => {
   const handleTitle = (x: string) =>
@@ -134,12 +135,17 @@ ID (video ID)
     });
   };
 
+  const IS_MEDIA = challenge.type === "media";
   const IS_PROJECT = challenge.type === "project";
 
   return (
     <SupplementaryContentContainer id={CONTENT_AREA_ID}>
       <div style={{ height: 8 }} /> {/* Add some space */}
-      <Breadcrumbs type="media" />
+      <Breadcrumbs
+        type="media"
+        isMobileView={isMobileView}
+        displaySkillIcon={IS_MEDIA || IS_PROJECT}
+      />
       <TitleHeader>
         <EditableText
           multiline
@@ -431,6 +437,7 @@ type MediaAreaContainerProps = ReturnType<typeof mapStateToProps> &
   typeof dispatchProps;
 
 interface MediaAreaComponentProps {
+  isMobileView: boolean;
   challenge: NonNullable<Challenge>;
 }
 

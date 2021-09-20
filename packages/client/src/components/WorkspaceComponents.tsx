@@ -34,8 +34,7 @@ import {
   themeColor,
   themeText,
 } from "./ThemeContainer";
-import { AppTheme, PortfolioSkills } from "@pairwise/common";
-import { mapSkillToDeviconClassName } from "../tools/utils";
+import { AppTheme } from "@pairwise/common";
 
 const D = getDimensions();
 
@@ -660,12 +659,10 @@ const instructionsMapState = (state: ReduxStoreState) => ({
   instructions:
     Modules.selectors.challenges.getCurrentInstructions(state) || "",
   title: Modules.selectors.challenges.getCurrentTitle(state) || "",
-  skillTags: Modules.selectors.challenges.getCurrentChallengeSkillTags(state),
   isInstructionsViewCollapsed:
     Modules.selectors.challenges.isInstructionsViewCollapsed(state),
   currentId: Modules.selectors.challenges.getCurrentChallengeId(state) || "",
   isEditMode: Modules.selectors.challenges.isEditMode(state),
-  appTheme: Modules.selectors.user.userSettings(state).appTheme,
 });
 
 const instructionsMapDispatch = {
@@ -686,8 +683,6 @@ export const InstructionsViewEdit = connect(
 )((props: InstructionsViewEditProps) => {
   const {
     isMobile,
-    appTheme,
-    skillTags,
     currentId,
     isEditMode,
     toggleInstructionsView,
@@ -759,16 +754,13 @@ export const InstructionsViewEdit = connect(
             <Text>{props.title}</Text>
           </ChallengeTitleContainer>
         ) : (
-          <Horizontal>
-            <Breadcrumbs
-              type="workspace"
-              panelId={INSTRUCTIONS_VIEW_PANEL_ID}
-              toggleCollapsed={toggleInstructionsView}
-            />
-            {skillTags.map((skill) => (
-              <SkillIcon skill={skill} appTheme={appTheme} />
-            ))}
-          </Horizontal>
+          <Breadcrumbs
+            type="workspace"
+            displaySkillIcon
+            isMobileView={!!isMobile}
+            panelId={INSTRUCTIONS_VIEW_PANEL_ID}
+            toggleCollapsed={toggleInstructionsView}
+          />
         )}
       </ChallengeTitleHeading>
       <Suspense fallback={<Loading />}>
@@ -804,30 +796,6 @@ export const InstructionsViewEdit = connect(
     </div>
   );
 });
-
-const Horizontal = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-`;
-
-/**
- * Render skill icons for each challenge. These are not displayed on mobile.
- */
-const SkillIcon = (props: { appTheme: AppTheme; skill: PortfolioSkills }) => {
-  const { skill, appTheme } = props;
-  const className = mapSkillToDeviconClassName(skill, appTheme);
-
-  return (
-    <Tooltip2
-      position="bottom"
-      content={`Solving this challenge earns ${skill} skills.`}
-    >
-      <i className={className} />
-    </Tooltip2>
-  );
-};
 
 const StyledEditableText = styled(EditableText)`
   width: 100%;

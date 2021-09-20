@@ -6,9 +6,11 @@ import Rust from "../courses/03_rust_language.json";
 import Golang from "../courses/04_golang_language.json";
 
 import {
+  CourseGenericList,
   CourseList,
   CourseSkeletonList,
   CourseMetadata,
+  Course,
 } from "src/types/courses";
 import { COURSE_ACCESS_LEVEL, UserCourseAccessMap } from "src/types/dto.js";
 
@@ -78,12 +80,10 @@ class ContentUtilityClass {
      * is necessary to still provide an overview of all the course data to the
      * client.
      */
-    return courses.map((course) => {
+    const result = courses.map((course) => {
       return {
         ...course,
         modules: course.modules.map((courseModule) => {
-          const moduleSkillTags = courseModule.skillTags || [];
-
           return {
             id: courseModule.id,
             title: courseModule.title,
@@ -96,14 +96,6 @@ class ContentUtilityClass {
               // the course skeleton. This is because all users can view
               // the skeleton, but not all course content, so the skeleton
               // must be stripped of the additional content.
-
-              const challengeSkillTags = challenge.skillTags || [];
-
-              // Combine the challenge and module skill tags
-              const combinedSkillSet = new Set(
-                moduleSkillTags.concat(challengeSkillTags),
-              );
-
               return {
                 id: challenge.id,
                 free: challenge.free,
@@ -111,16 +103,17 @@ class ContentUtilityClass {
                 title: challenge.title,
                 videoUrl: challenge.videoUrl,
                 userCanAccess: courseModule.free,
-                skillTags: Array.from(combinedSkillSet),
               };
             }),
           };
         }),
       };
     });
+
+    return this.mapCourseSkillTags<CourseSkeletonList>(result);
   };
 
-  getCourses = (userCourseAccessMap: UserCourseAccessMap) => {
+  getCourses = (userCourseAccessMap: UserCourseAccessMap): CourseList => {
     return this.courses.map((course) => {
       const accessLevel: COURSE_ACCESS_LEVEL =
         course.id in userCourseAccessMap ? "PAID" : "FREE";
@@ -131,6 +124,8 @@ class ContentUtilityClass {
 
   getCourseContent = (courseId: string, accessLevel: COURSE_ACCESS_LEVEL) => {
     const course = this.courses.find((c) => c.id === courseId);
+
+    let result: Course;
 
     if (accessLevel === "FREE") {
       // Transform the course to only include free modules and free
@@ -150,18 +145,20 @@ class ContentUtilityClass {
         }),
       };
 
-      return courseWithFreeContent;
+      result = courseWithFreeContent;
     } else {
       // Return the entire course because the user has paid.
-      return course;
+      result = course;
     }
+
+    return this.mapCourseSkillTags<CourseList>([result])[0];
   };
 
   getCourseNavigationSkeletons = (
     courseAccessMap: UserCourseAccessMap = {},
-  ) => {
-    const skeletonsWithAccessInformation = this.courseNavigationSkeletons.map(
-      (course) => {
+  ): CourseSkeletonList => {
+    const skeletonsWithAccessInformation: CourseSkeletonList =
+      this.courseNavigationSkeletons.map((course) => {
         // The user can access all the content in the course if the course
         // id is included in the provided course access map (which represents
         // the courses the user has purchased) or if the entire course is
@@ -179,8 +176,6 @@ class ContentUtilityClass {
             const isModuleFree = courseModule.free;
             const canAccessModule = canAccessCourse || isModuleFree;
 
-            const moduleSkillTags = courseModule.skillTags || [];
-
             return {
               ...courseModule,
               userCanAccess: canAccessModule,
@@ -191,26 +186,19 @@ class ContentUtilityClass {
                 const isChallengeFree = challenge.free;
                 const canAccessChallenge = canAccessModule || isChallengeFree;
 
-                const challengeSkillTags = challenge.skillTags || [];
-
-                // Combine the challenge and module skill tags
-                const combinedSkillSet = new Set(
-                  moduleSkillTags.concat(challengeSkillTags),
-                );
-
                 return {
                   ...challenge,
                   userCanAccess: canAccessChallenge,
-                  skillTags: Array.from(combinedSkillSet),
                 };
               }),
             };
           }),
         };
-      },
-    );
+      });
 
-    return skeletonsWithAccessInformation;
+    return this.mapCourseSkillTags<CourseSkeletonList>(
+      skeletonsWithAccessInformation,
+    );
   };
 
   getCourseMetadata = (courseId: string): CourseMetadata => {
@@ -285,7 +273,7 @@ class ContentUtilityClass {
    * Map the course lists to reset the userCanAccess permissions for the
    * admin user.
    */
-  mapCoursesToAdmin = (courseList: CourseList | CourseSkeletonList) => {
+  mapCoursesToAdmin = (courseList: CourseGenericList): CourseGenericList => {
     return courseList.map((c) => {
       return {
         ...c,
@@ -304,6 +292,39 @@ class ContentUtilityClass {
         }),
       };
     });
+  };
+
+  /**
+   * "Inherit" skill tags information down the course hierarchy, i.e. if
+   * a module has specific skillTags map those to all individual challenges
+   * in that module.
+   */
+  mapCourseSkillTags = <List extends CourseGenericList>(
+    courseList: List,
+  ): List => {
+    const result = courseList.map((c) => {
+      return {
+        ...c,
+        modules: c.modules.map((m) => {
+          const moduleSkillTags = m.skillTags || [];
+          return {
+            ...m,
+            challenges: m.challenges.map((c) => {
+              const challengeSkillTags = c.skillTags || [];
+              const combinedSkillTags = new Set(
+                moduleSkillTags.concat(challengeSkillTags),
+              );
+              return {
+                ...c,
+                skillTags: Array.from(combinedSkillTags),
+              };
+            }),
+          };
+        }),
+      };
+    });
+
+    return result as List;
   };
 }
 

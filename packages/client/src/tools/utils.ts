@@ -747,6 +747,11 @@ export const getMonacoTheme = (
  * ============================================================================
  */
 
+/**
+ * Map portfolio skill tags to the associated devicon className.
+ *
+ * Reference: https://devicon.dev
+ */
 export const mapSkillToDeviconClassName = (
   skill: PortfolioSkills,
   theme: AppTheme,
