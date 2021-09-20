@@ -12,6 +12,7 @@ export const NODE_ENV = getenv.string("NODE_ENV", UNSPECIFIED_ENV_GUARD);
 export const DEV = getenv.bool("REACT_APP_DEV", false);
 export const CODEPRESS = getenv.bool("REACT_APP_CODEPRESS", false);
 export const HIDE_EMBEDS = getenv.bool("REACT_APP_HIDE_EMBEDS", false);
+export const DISABLE_AD_ANALYTICS = getenv.bool("DISABLE_AD_ANALYTICS", false);
 export const HOST = getenv.string("REACT_APP_HOST", "http://localhost:9000");
 export const REACT_APP_WEB_SOCKET_HOST = getenv.string(
   "REACT_APP_WEB_SOCKET_HOST",

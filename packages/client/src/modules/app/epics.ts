@@ -27,6 +27,7 @@ import {
   getViewedEmailPromptStatus,
   markEmailPromptAsViewed,
 } from "tools/storage-utils";
+import { DISABLE_AD_ANALYTICS } from "../../tools/client-env";
 
 /** ===========================================================================
  * Epics
@@ -381,7 +382,10 @@ export enum GoogleAdConversionTypes {
  * Track conversion events for Google Ads.
  */
 const googleAdConversionsEpic: EpicSignature = (action$, _, deps) => {
+  const enableAds = () => !DISABLE_AD_ANALYTICS;
+
   const challengeCompletionEvent$ = action$.pipe(
+    filter(enableAds),
     filter(isActionOf(Actions.handleAttemptChallenge)),
     filter((x) => x.payload.complete),
     map(() =>
@@ -392,6 +396,7 @@ const googleAdConversionsEpic: EpicSignature = (action$, _, deps) => {
   );
 
   const userRegistrationEvent$ = action$.pipe(
+    filter(enableAds),
     filter(isActionOf(Actions.captureAppInitializationUrl)),
     map((x) => x.payload.appInitializationType),
     filter((type) => type === APP_INITIALIZATION_TYPE.ACCOUNT_CREATED),
@@ -403,6 +408,7 @@ const googleAdConversionsEpic: EpicSignature = (action$, _, deps) => {
   );
 
   const paymentSuccess$ = action$.pipe(
+    filter(enableAds),
     filter(isActionOf(Actions.captureAppInitializationUrl)),
     map((x) => x.payload.appInitializationType),
     filter((type) => type === APP_INITIALIZATION_TYPE.PAYMENT_SUCCESS),
@@ -412,6 +418,7 @@ const googleAdConversionsEpic: EpicSignature = (action$, _, deps) => {
   );
 
   const trackConversion$ = action$.pipe(
+    filter(enableAds),
     filter(isActionOf(Actions.trackGoogleAdConversion)),
     pluck("payload"),
     tap((conversionType) => {

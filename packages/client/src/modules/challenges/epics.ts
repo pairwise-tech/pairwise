@@ -31,6 +31,7 @@ import {
   pairwise,
   withLatestFrom,
   mapTo,
+  throttleTime,
 } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature, ReduxStoreState } from "../root";
@@ -881,8 +882,13 @@ const updateUserProgressEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.updateUserProgress)),
     pluck("payload"),
-    // Disregard Sandbox challenges
+    // Disregard Sandbox
     filter((payload) => payload.challengeId !== SANDBOX_ID),
+    /**
+     * Throttle updates to mitigate user hammering the run code function
+     * on a single challenge.
+     */
+    throttleTime(1500),
     mergeMap(deps.api.updateUserProgress),
     map((result) => {
       if (result.value) {
