@@ -382,7 +382,7 @@ export enum GoogleAdConversionTypes {
  * Track conversion events for Google Ads.
  */
 const googleAdConversionsEpic: EpicSignature = (action$, _, deps) => {
-  const enableAds = () => !DISABLE_AD_ANALYTICS;
+  const enableAds = () => DISABLE_AD_ANALYTICS;
 
   const challengeCompletionEvent$ = action$.pipe(
     filter(enableAds),

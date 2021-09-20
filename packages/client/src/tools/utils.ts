@@ -21,6 +21,7 @@ import {
   getChallengeSlug,
   AppTheme,
   MonacoEditorThemes,
+  PortfolioSkills,
 } from "@pairwise/common";
 import { SANDBOX_ID } from "./constants";
 import { Location } from "history";
@@ -739,4 +740,62 @@ export const getMonacoTheme = (
   }
 
   return theme;
+};
+
+/** ===========================================================================
+ * Utils
+ * ============================================================================
+ */
+
+export const mapSkillToDeviconClassName = (
+  skill: PortfolioSkills,
+  theme: AppTheme,
+): string => {
+  const isDark = theme === "dark";
+
+  switch (skill) {
+    case PortfolioSkills.HTML:
+      return "devicon-html5-plain colored";
+
+    case PortfolioSkills.CSS:
+      return "devicon-css3-plain colored";
+
+    case PortfolioSkills.TypeScript:
+      return "devicon-typescript-plain colored";
+
+    case PortfolioSkills.Git:
+      return "devicon-git-plain colored";
+
+    case PortfolioSkills.GitHub:
+      if (isDark) {
+        return "devicon-github-original-wordmark";
+      } else {
+        return "devicon-github-original-wordmark colored";
+      }
+
+    case PortfolioSkills.React:
+      return "devicon-react-original colored";
+
+    case PortfolioSkills.NodeJS:
+      return "devicon-nodejs-plain colored";
+
+    case PortfolioSkills.Express:
+      if (isDark) {
+        return "devicon-express-original-wordmark";
+      } else {
+        return "devicon-express-original-wordmark colored";
+      }
+
+    case PortfolioSkills.PostgreSQL:
+      return "devicon-postgresql-plain-wordmark colored";
+
+    case PortfolioSkills.Jest:
+      return "devicon-jest-plain colored";
+
+    case PortfolioSkills.Docker:
+      return "devicon-docker-plain-wordmark colored";
+
+    default:
+      assertUnreachable(skill);
+  }
 };

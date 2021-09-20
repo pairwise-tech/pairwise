@@ -618,6 +618,11 @@ export const getCurrentInstructions = createSelector(
   (challenge) => challenge?.instructions,
 );
 
+export const getCurrentChallengeSkillTags = createSelector(
+  [getCurrentChallenge],
+  (challenge) => challenge?.skillTags || [],
+);
+
 export const getHasMediaContent = createSelector(
   [getCurrentChallenge],
   (challenge) => {
