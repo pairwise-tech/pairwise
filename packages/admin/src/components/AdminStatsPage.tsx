@@ -8,7 +8,6 @@ import {
   DataCard,
   KeyValue,
   CardButton,
-  LabelRow,
 } from "./AdminComponents";
 import {
   estimateTotalPaymentsRevenue,
@@ -22,6 +21,7 @@ import {
   createInverseChallengeMapping,
   RecentProgressAdminDto,
 } from "@pairwise/common";
+import TimeSinceRefresh from "./TimeElapsedBar";
 
 /** ===========================================================================
  * Types & Config
@@ -66,6 +66,7 @@ class AdminStatsPage extends React.Component<IProps, IState> {
   render(): Nullable<JSX.Element> {
     const {
       usersList,
+      lastUpdated,
       statsLoading,
       paymentRecords,
       courseSkeletons,
@@ -94,6 +95,7 @@ class AdminStatsPage extends React.Component<IProps, IState> {
             Refresh Stats
           </Button>
         </Row>
+        <TimeSinceRefresh lastUpdated={lastUpdated} />
         {loading ? (
           <p style={{ color: COLORS.GRAY_TEXT }}>Loading Stats...</p>
         ) : (
@@ -192,7 +194,7 @@ class AdminStatsPage extends React.Component<IProps, IState> {
     const challengeMap = createInverseChallengeMapping(courses);
 
     return realtimeChallengeUpdates.length === 0 ? (
-      <StatusText>Watching for updates...</StatusText>
+      <p style={{ color: COLORS.GRAY_TEXT }}>Watching for updates...</p>
     ) : (
       realtimeChallengeUpdates.map((update) => {
         const { challenge } = challengeMap[update.challengeId];
@@ -368,6 +370,8 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   courses: Modules.selectors.challenges.courseList(state),
   courseSkeletons: Modules.selectors.challenges.courseSkeletons(state),
   progressRecords: Modules.selectors.stats.progressRecordsSelector(state),
+  lastUpdated:
+    Modules.selectors.stats.progressRecordsLastUpdatedSelector(state),
   paymentRecords: Modules.selectors.payments.paymentRecordsSelector(state),
   realtimeChallengeUpdates:
     Modules.selectors.app.realtimeChallengeUpdates(state),

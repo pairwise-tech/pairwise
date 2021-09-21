@@ -11,11 +11,13 @@ import { StatsActionTypes } from "./index";
 export interface State {
   loading: boolean;
   progressRecords: Nullable<RecentProgressAdminDto>;
+  progressRecordsLastUpdated: number;
 }
 
 const initialState = {
   loading: true,
   progressRecords: null,
+  progressRecordsLastUpdated: Date.now(),
 };
 
 const stats = createReducer<State, StatsActionTypes>(initialState)
@@ -23,6 +25,7 @@ const stats = createReducer<State, StatsActionTypes>(initialState)
     ...state,
     loading: false,
     progressRecords: action.payload,
+    progressRecordsLastUpdated: Date.now(),
   }))
   .handleAction(actions.fetchProgressRecords, (state, action) => ({
     ...state,
