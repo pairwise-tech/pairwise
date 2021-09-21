@@ -639,9 +639,7 @@ const ApplicationContainer = (props: IProps) => {
           />
           <Route key="home" path="/home" component={Home} />
           <Route key="404" path="/404" component={LostPage} />
-          {isLoggedIn && (
-            <Route key="account" path="/account" component={Account} />
-          )}
+          <Route key="account" path="/account" component={Account} />
           {isLoggedIn && (
             <Route
               key="leaderboard"
