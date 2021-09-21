@@ -348,11 +348,16 @@ export class ProgressService {
       });
 
       const usersCount = Object.keys(records).length;
+
+      const healthRatio = 5;
+
       const stats = {
+        healthRatio,
         moreThanThreeCount,
         registeredUserCount,
         totalUsersCount: usersCount,
         completedChallengesCount: count,
+        moreThanThreeTotalChallenges,
       };
 
       const statusMessage = `${count} challenges updated in the last 24 hours by ${usersCount} users. ${moreThanThreeCount} records include 3 or more challenges (for a total of ${moreThanThreeTotalChallenges} challenges). ${registeredUserCount} are registered users.`;

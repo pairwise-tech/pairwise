@@ -33,7 +33,11 @@ class Portfolio extends React.Component<IProps, IState> {
     this.state = {};
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    // Refetch the user to update user progress (from which the portfolio
+    // is derived).
+    this.props.fetchUser();
+  }
 
   render(): Nullable<JSX.Element> {
     const { userPortfolioSkillsSummary, appTheme } = this.props;
@@ -50,7 +54,8 @@ class Portfolio extends React.Component<IProps, IState> {
         />
         <PageTitle>Portfolio Skills</PageTitle>
         <Subtitle>
-          Skills are acquired by completing challenges and projects.
+          Skills are acquired by completing challenges and projects in each
+          skill category.
         </Subtitle>
         <SkillContainer>
           {portfolioSkillsList.map((skill) => {
@@ -95,6 +100,9 @@ export const PortfolioSkill = (props: PortfolioSkillProps) => {
       <SkillInfo>
         <SkillTitle>{skill}</SkillTitle>
         <SkillDescription>{percentComplete}% complete</SkillDescription>
+        <SkillDescription>
+          {accomplished} total skill points earned
+        </SkillDescription>
       </SkillInfo>
     </Skill>
   );
@@ -120,8 +128,8 @@ const Skill = styled.div`
   margin-bottom: 6px;
   display: flex;
   align-items: center;
-  width: 250px;
-  height: 75px;
+  width: 350px;
+  height: 100px;
   padding: 8px;
   border-radius: 5px;
   background: rgba(5, 5, 5, 0.25);
@@ -135,16 +143,17 @@ const SkillInfo = styled.div`
 const SkillTitle = styled.p`
   margin: 2px;
   font-weight: bold;
+  text-decoration: underline;
 `;
 
 const SkillDescription = styled.p`
   margin: 2px;
+  ${themeColor("color", COLORS.TEXT_GRAY)};
 `;
 
 const Subtitle = styled(PageText)`
   font-size: 18px;
   margin-top: 12px;
-
   ${themeColor("color", COLORS.TEXT_CONTENT_BRIGHT)};
 `;
 
@@ -159,7 +168,9 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   appTheme: Modules.selectors.user.userSettings(state).appTheme,
 });
 
-const dispatchProps = {};
+const dispatchProps = {
+  fetchUser: Modules.actions.user.fetchUser,
+};
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 

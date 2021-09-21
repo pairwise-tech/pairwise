@@ -527,7 +527,6 @@ export const userPortfolioSkillsSummary = createSelector(
       if (challenge.skillTags) {
         for (const skill of challenge.skillTags) {
           skillsSummary[skill].total++;
-
           const userProgressEntry = courseProgress[id];
           if (userProgressEntry && userProgressEntry.complete) {
             skillsSummary[skill].accomplished++;

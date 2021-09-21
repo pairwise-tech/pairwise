@@ -338,6 +338,7 @@ export interface RecentProgressAdminStats {
   completedChallengesCount: number;
   moreThanThreeCount: number;
   registeredUserCount: number;
+  healthRatio: number;
 }
 
 export interface RecentProgressAdminDto {

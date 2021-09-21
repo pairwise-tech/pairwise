@@ -8,7 +8,12 @@ import Modules, { ReduxStoreState } from "modules/root";
 import { PageContainer, Text, PageTitle } from "./SharedComponents";
 import { COLORS, MOBILE } from "tools/constants";
 import SEO from "./SEO";
-import { defaultTextColor, themeColor, themeText } from "./ThemeContainer";
+import {
+  defaultTextColor,
+  IThemeProps,
+  themeColor,
+  themeText,
+} from "./ThemeContainer";
 import { YoutubeEmbed } from "./MediaArea";
 
 /** ===========================================================================
@@ -415,7 +420,12 @@ const SpecialBox = styled.div`
   margin-top: 12px;
   padding: 8px;
   border-radius: 4px;
-  border: 1px solid ${COLORS.SECONDARY_YELLOW};
+  border: ${(props: IThemeProps) => {
+    const color = props.theme.dark
+      ? COLORS.SECONDARY_YELLOW
+      : COLORS.SECONDARY_PINK;
+    return `1px solid ${color}`;
+  }};
 `;
 
 const LeaderboardText = styled.p`

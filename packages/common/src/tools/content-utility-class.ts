@@ -89,6 +89,7 @@ class ContentUtilityClass {
             title: courseModule.title,
             free: courseModule.free,
             userCanAccess: courseModule.free,
+            skillTags: courseModule.skillTags,
             challenges: courseModule.challenges.map((challenge) => {
               // NOTE: The reason for reassigning values specifically like
               // this is to exclude the other challenge information (e.g.
@@ -102,6 +103,7 @@ class ContentUtilityClass {
                 type: challenge.type,
                 title: challenge.title,
                 videoUrl: challenge.videoUrl,
+                skillTags: challenge.skillTags,
                 userCanAccess: courseModule.free,
               };
             }),
@@ -314,6 +316,7 @@ class ContentUtilityClass {
               const combinedSkillTags = new Set(
                 moduleSkillTags.concat(challengeSkillTags),
               );
+
               return {
                 ...c,
                 skillTags: Array.from(combinedSkillTags),
