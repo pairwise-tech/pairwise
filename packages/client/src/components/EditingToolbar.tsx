@@ -217,14 +217,16 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
             appTheme={appTheme}
             items={portfolioSkillsList}
             currentSkillTags={challenge?.skillTags}
-            onItemSelect={(x) => {
+            onItemSelect={(tag) => {
               let skillTags = challenge?.skillTags || [];
-              // Update current tags
-              if (skillTags.includes(x)) {
-                skillTags = skillTags.filter((tag) => tag === x);
+
+              if (skillTags.includes(tag)) {
+                skillTags = skillTags.filter((x) => x !== tag);
               } else {
-                skillTags = skillTags.concat(x);
+                skillTags = skillTags.concat(tag);
               }
+
+              // Update current tags
               props.updateChallenge({
                 id: challenge?.id || "",
                 challenge: { skillTags },
