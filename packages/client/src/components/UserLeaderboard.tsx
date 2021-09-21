@@ -14,6 +14,7 @@ import {
   SocketEvents,
   SocketEventTypes,
 } from "@pairwise/common";
+import SEO from "./SEO";
 
 /** ===========================================================================
  * Types & Config
@@ -221,6 +222,10 @@ class UserLeaderboard extends React.Component<IProps, IState> {
 
     return (
       <PageContainer>
+        <SEO
+          title="User Leaderboard"
+          description="View Pairwise user leaderboard rankings"
+        />
         <PageTitle>Recent Activity Updates</PageTitle>
         <Button
           icon="refresh"

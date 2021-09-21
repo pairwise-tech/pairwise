@@ -1,6 +1,11 @@
 import React from "react";
 import Helmet from "react-helmet";
 
+/** ===========================================================================
+ * Types & Config
+ * ============================================================================
+ */
+
 type MetaProps = JSX.IntrinsicElements["meta"];
 
 interface SEOProps {
@@ -12,11 +17,11 @@ interface SEOProps {
 const DEFAULT_DESCRIPTION =
   "Learn to code with hands-on challenges and projects";
 
-/**
- * SEO component copied largely from our WWW package. That version is using
- * gatsby queries to get some of the data though so it's not compatible with our
- * workspace.
+/** ===========================================================================
+ * SEO Component
+ * ============================================================================
  */
+
 const SEO = ({
   title,
   description = DEFAULT_DESCRIPTION,
@@ -65,5 +70,10 @@ const SEO = ({
     </Helmet>
   );
 };
+
+/** ===========================================================================
+ * Export
+ * ============================================================================
+ */
 
 export default SEO;

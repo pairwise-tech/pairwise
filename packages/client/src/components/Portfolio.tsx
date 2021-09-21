@@ -12,6 +12,7 @@ import {
   PortfolioSkillSummary,
 } from "@pairwise/common";
 import { mapSkillToDeviconClassName } from "../tools/utils";
+import SEO from "./SEO";
 
 /** ===========================================================================
  * Types & Config
@@ -43,6 +44,10 @@ class Portfolio extends React.Component<IProps, IState> {
 
     return (
       <PageContainer>
+        <SEO
+          title="Pairwise Portfolio"
+          description="View your portfolio achievements and skills"
+        />
         <PageTitle>Portfolio Skills</PageTitle>
         <Subtitle>
           Skills are acquired by completing challenges and projects.

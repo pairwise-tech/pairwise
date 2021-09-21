@@ -22,6 +22,7 @@ import { EMAIL_VERIFICATION_STATUS } from "modules/user/store";
 import { themeColor } from "./ThemeContainer";
 import { ConnectedAccountButtons } from "./SingleSignOnModal";
 import toaster from "../tools/toast-utils";
+import SEO from "./SEO";
 
 /** ===========================================================================
  * Types & Config
@@ -97,6 +98,10 @@ class Account extends React.Component<IProps, IState> {
 
     return (
       <PageContainer>
+        <SEO
+          title="My Account"
+          description="Manage your Pairwise user account settings"
+        />
         <Alert
           icon="info-sign"
           canEscapeKeyCancel
