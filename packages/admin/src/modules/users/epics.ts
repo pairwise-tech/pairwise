@@ -1,5 +1,5 @@
 import { combineEpics } from "redux-observable";
-import { filter, map, mergeMap, pluck, tap } from "rxjs/operators";
+import { filter, map, mergeMap, tap } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import API from "modules/api";
 import { EpicSignature } from "../root";

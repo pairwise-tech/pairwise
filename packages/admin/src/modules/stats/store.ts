@@ -24,13 +24,14 @@ const stats = createReducer<State, StatsActionTypes>(initialState)
     loading: false,
     progressRecords: action.payload,
   }))
-  .handleAction(
-    [actions.refreshStats, actions.fetchProgressRecords],
-    (state, action) => ({
-      ...state,
-      loading: true,
-    }),
-  );
+  .handleAction(actions.fetchProgressRecords, (state, action) => ({
+    ...state,
+    loading: true,
+  }))
+  .handleAction([actions.refreshStats], (state, action) => ({
+    ...state,
+    loading: action.payload.disableLoadingState ? state.loading : true,
+  }));
 
 /** ===========================================================================
  * Export

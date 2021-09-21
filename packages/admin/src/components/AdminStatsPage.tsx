@@ -87,7 +87,9 @@ class AdminStatsPage extends React.Component<IProps, IState> {
           <Button
             icon="refresh"
             disabled={statsLoading}
-            onClick={this.props.refreshStats}
+            onClick={() =>
+              this.props.refreshStats({ disableLoadingState: false })
+            }
           >
             Refresh Stats
           </Button>

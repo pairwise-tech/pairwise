@@ -20,7 +20,9 @@ enum ActionTypesEnum {
  * ============================================================================
  */
 
-export const refreshStats = createAction(ActionTypesEnum.REFRESH_STATS)();
+export const refreshStats = createAction(ActionTypesEnum.REFRESH_STATS)<{
+  disableLoadingState?: boolean;
+}>();
 
 export const fetchProgressRecords = createAction(
   ActionTypesEnum.FETCH_PROGRESS_RECORDS,

@@ -1,5 +1,6 @@
 import { combineEpics } from "redux-observable";
-import { filter, mergeMap, map, delay } from "rxjs/operators";
+import { interval } from "rxjs";
+import { filter, map, delay, switchMap, mapTo, take } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
@@ -22,7 +23,7 @@ const fetchProgressRecordsEpic: EpicSignature = (action$, _, deps) => {
       ]),
     ),
     delay(750),
-    mergeMap(deps.api.fetchProgressRecords),
+    switchMap(deps.api.fetchProgressRecords),
     map((result) => {
       if (result.value) {
         return Actions.fetchProgressRecordsSuccess(result.value);
@@ -33,9 +34,27 @@ const fetchProgressRecordsEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+// 3 minutes
+const REFRESH_INTERVAL = 1000 * 60 * 3;
+
+/**
+ * After app launch refresh the app stats on an interval.
+ */
+const refreshStatsEpic: EpicSignature = (action$) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.initializeAppSuccess)),
+    take(1),
+    switchMap(() => {
+      return interval(REFRESH_INTERVAL).pipe(
+        mapTo(Actions.refreshStats({ disableLoadingState: true })),
+      );
+    }),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
  */
 
-export default combineEpics(fetchProgressRecordsEpic);
+export default combineEpics(fetchProgressRecordsEpic, refreshStatsEpic);
