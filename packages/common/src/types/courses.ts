@@ -97,6 +97,8 @@ export enum PortfolioSkills {
   Docker = "Docker",
 }
 
+export type SkillTags = PortfolioSkills[];
+
 const skills: PortfolioSkills[] = [];
 
 for (let x in PortfolioSkills) {

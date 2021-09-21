@@ -103,6 +103,7 @@ const ApplicationContainer = (props: IProps) => {
     location,
     challenge,
     logoutUser,
+    isEditMode,
     initialized,
     isUserAdmin,
     userLoading,
@@ -335,8 +336,10 @@ const ApplicationContainer = (props: IProps) => {
           </ControlsContainer>
         )}
         <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
-          {(!isSandbox || !isMobile) && (
+          {(!isSandbox || !isMobile) && !isEditMode ? (
             <SearchBox onFocus={handleSearchFocus} onBlur={handleSearchBlur} />
+          ) : (
+            <SearchBoxFiller />
           )}
           {adminPullRequestBadgeVisible && !isMobile && (
             <Tooltip2
@@ -1083,6 +1086,13 @@ const LostPage = () => (
   </LostPageContainer>
 );
 
+const SearchBoxFiller = styled.div`
+  position: relative;
+  flex: 1 100%;
+  width: auto;
+  margin-left: 9px;
+`;
+
 /** ===========================================================================
  * Props
  * ============================================================================
@@ -1092,6 +1102,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
   userLoading: Modules.selectors.user.loading(state),
   isUserAdmin: Modules.selectors.auth.isUserAdmin(state),
+  isEditMode: Modules.selectors.challenges.isEditMode(state),
   accessTokenExists: Modules.selectors.auth.accessTokenExists(state),
   isAdminDrawerOpen: Modules.selectors.app.isAdminDrawerOpen(state),
   adminPullRequestId: Modules.selectors.app.adminPullRequestId(state),

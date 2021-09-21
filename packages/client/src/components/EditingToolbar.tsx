@@ -24,6 +24,7 @@ import {
   Challenge,
   ChallengeMetadataIndex,
   ChallengeMetadata,
+  portfolioSkillsList,
 } from "@pairwise/common";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import pipe from "ramda/es/pipe";
@@ -42,6 +43,10 @@ const CONTRIBUTOR_IMAGES = {
  */
 
 const LazyChallengeTypeMenu = React.lazy(() => import("./ChallengeTypeMenu"));
+
+const LazyChallengeSkillTagsMenu = React.lazy(
+  () => import("./ChallengeSkillTagsMenu"),
+);
 
 type EditChallengeControlsConnectProps = ReturnType<typeof mapToolbarState> &
   typeof toolbarDispatchProps;
@@ -93,10 +98,11 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
   const [hidden, setHidden] = React.useState(false);
   const {
     course,
+    isDirty,
+    appTheme,
     challenge,
     activeIds,
     isEditMode,
-    isDirty,
     setEditMode,
     saveCourse,
     overlayVisible,
@@ -204,6 +210,20 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
                 id: challenge?.id || "", // See NOTE
                 challenge: { type: x.value },
               });
+            }}
+          />
+          <LazyChallengeSkillTagsMenu
+            tooltip={false}
+            appTheme={appTheme}
+            items={portfolioSkillsList}
+            currentSkillTags={challenge?.skillTags}
+            currentChallengeType={challenge?.type}
+            onItemSelect={(x) => {
+              console.log("[TODO]: Implement onItemSelect, value: ", x);
+              // props.updateChallenge({
+              //   id: challenge?.id || "", // See NOTE
+              //   challenge: { type: x.value },
+              // });
             }}
           />
         </Suspense>
@@ -561,6 +581,7 @@ const mapToolbarState = (state: ReduxStoreState) => ({
   isEditMode: Modules.selectors.challenges.isEditMode(state),
   isDirty: Modules.selectors.challenges.isDirty(state),
   course: Modules.selectors.challenges.getCurrentCourse(state),
+  appTheme: Modules.selectors.user.userSettings(state).appTheme,
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   activeIds: Modules.selectors.challenges.getCurrentActiveIds(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
