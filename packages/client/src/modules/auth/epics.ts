@@ -115,9 +115,7 @@ const isUserAdminEpic: EpicSignature = (action$, _, deps) => {
       if (result.value) {
         return Actions.userIsAdmin();
       } else {
-        return Actions.empty(
-          "isUserAdminEpic error occurred - user is not an admin.",
-        );
+        return Actions.empty("isUserAdminEpic no-op - user is not an admin.");
       }
     }),
   );

@@ -557,8 +557,18 @@ class Api extends BaseApiClass {
   isUserAdmin = async () => {
     try {
       const { config } = this.getRequestHeaders();
-      await axios.get(`${HOST}/admin`, config);
-      return new Ok(true);
+      const response = await axios.get<boolean>(
+        `${HOST}/user/is-admin`,
+        config,
+      );
+      const result = response.data;
+
+      // Response should be 'true' is user is an admin
+      if (result === true) {
+        return new Ok(true);
+      } else {
+        return new Err(false);
+      }
     } catch (err) {
       return new Err(false);
     }

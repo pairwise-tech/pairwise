@@ -65,4 +65,11 @@ export class UserController {
   public async deleteUserAccount(@Request() req: AuthenticatedRequest) {
     return this.userService.deleteUserAccount(req.user.profile);
   }
+
+  @UseGuards(AuthGuard("jwt"))
+  @Get("is-admin")
+  public async isUserAdmin(@Request() req: AuthenticatedRequest) {
+    const { user } = req;
+    return this.userService.isUserAdmin(user.profile.email);
+  }
 }

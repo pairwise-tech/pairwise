@@ -26,7 +26,7 @@ import { ERROR_CODES, SUCCESS_CODES } from "../tools/constants";
 import { SlackService, slackService } from "../slack/slack.service";
 import { SigninStrategy } from "../auth/auth.service";
 import { EmailService, emailService } from "../email/email.service";
-import shortid from "shortid";
+import { isAdminEmail } from "../auth/admin-auth";
 
 export interface GenericUserProfile {
   email: string;
@@ -65,6 +65,13 @@ export class UserService {
   public async adminGetUser(emailString: string) {
     const email = this.standardizeEmail(emailString);
     return this.findUserByEmailGetFullProfile(email);
+  }
+
+  /**
+   * Check if a given user email is an admin email.
+   */
+  public async isUserAdmin(userEmail: string) {
+    return isAdminEmail(userEmail);
   }
 
   // Return all users and join with payments.
