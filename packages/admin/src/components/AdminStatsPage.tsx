@@ -222,7 +222,8 @@ class AdminStatsPage extends React.Component<IProps, IState> {
   };
 
   renderProgressRecords = (progressRecords: RecentProgressAdminDto) => {
-    const { statusMessage = "", records = [] } = progressRecords;
+    const { statusMessage = "", stats, records = [] } = progressRecords;
+    const { healthRatio } = stats;
     const isDark = this.props.adminUserSettings.appTheme === "dark";
 
     // Sort by challenge completed count
@@ -237,6 +238,9 @@ class AdminStatsPage extends React.Component<IProps, IState> {
     return (
       <>
         <StatusText>{statusMessage}</StatusText>
+        <StatusText style={{ color: COLORS.PRIMARY_BLUE }}>
+          Current Health Ratio = {healthRatio.toFixed(2)}%
+        </StatusText>
         <ControlRow>
           <Button
             icon="filter"

@@ -349,7 +349,10 @@ export class ProgressService {
 
       const usersCount = Object.keys(records).length;
 
-      const healthRatio = 5;
+      // Health ratio is the percent of all challenges comprised by users
+      // completing more than three challenges, i.e. a proxy for stickier
+      // user traction.
+      const healthRatio = (moreThanThreeTotalChallenges / count) * 100;
 
       const stats = {
         healthRatio,
