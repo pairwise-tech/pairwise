@@ -4,6 +4,7 @@ import React, { useEffect, useState, Suspense } from "react";
 import Markdown, { ReactMarkdownProps } from "react-markdown";
 import styled from "styled-components/macro";
 import {
+  PROSE_MAX_WIDTH,
   COLORS as C,
   CONTENT_SERIALIZE_DEBOUNCE,
   SANDBOX_ID,
@@ -26,7 +27,7 @@ import { Tooltip2 } from "@blueprintjs/popover2";
 import { TestCase } from "tools/test-utils";
 import { debounce } from "throttle-debounce";
 import ContentEditor, { editorColors } from "./ContentEditor";
-import Breadcrumbs from "./Breadcrumbs";
+import Breadcrumbs, { ChallengeSkillIcons } from "./Breadcrumbs";
 import { Table, Cell, Column } from "@blueprintjs/table";
 import {
   defaultTextColor,
@@ -661,7 +662,8 @@ const instructionsMapState = (state: ReduxStoreState) => ({
   title: Modules.selectors.challenges.getCurrentTitle(state) || "",
   isInstructionsViewCollapsed:
     Modules.selectors.challenges.isInstructionsViewCollapsed(state),
-  currentId: Modules.selectors.challenges.getCurrentChallengeId(state) || "",
+  challenge: Modules.selectors.challenges.getCurrentChallenge(state),
+  appTheme: Modules.selectors.user.userSettings(state).appTheme,
   isEditMode: Modules.selectors.challenges.isEditMode(state),
 });
 
@@ -683,11 +685,18 @@ export const InstructionsViewEdit = connect(
 )((props: InstructionsViewEditProps) => {
   const {
     isMobile,
-    currentId,
+    appTheme,
+    challenge,
     isEditMode,
     toggleInstructionsView,
     isInstructionsViewCollapsed,
   } = props;
+
+  if (!challenge) {
+    return null;
+  }
+
+  const currentChallengeId = challenge.id;
 
   /**
    * @NOTE The function is memoized so that we're not constantly recreating the
@@ -702,16 +711,16 @@ export const InstructionsViewEdit = connect(
         CONTENT_SERIALIZE_DEBOUNCE,
         (serializeEditorContent: () => string) => {
           props.updateChallenge({
-            id: currentId,
+            id: currentChallengeId,
             challenge: { instructions: serializeEditorContent() },
           });
         },
       ),
-    [currentId, props],
+    [currentChallengeId, props],
   );
 
   const handleTitle = (title: string) =>
-    props.updateChallenge({ id: currentId, challenge: { title } });
+    props.updateChallenge({ id: currentChallengeId, challenge: { title } });
 
   const isCollapsed = isInstructionsViewCollapsed;
 
@@ -741,6 +750,11 @@ export const InstructionsViewEdit = connect(
               value={props.title}
               onChange={handleTitle}
               disabled={!isEditMode}
+            />
+            <ChallengeSkillIcons
+              isEditMode
+              challenge={challenge}
+              appTheme={appTheme}
             />
           </ChallengeTitleContainer>
         ) : isMobile ? (
@@ -798,13 +812,16 @@ export const InstructionsViewEdit = connect(
 });
 
 const StyledEditableText = styled(EditableText)`
-  width: 100%;
+  width: 90%;
 `;
 
 const ChallengeTitleContainer = styled.div`
-  display: flex;
-  align-items: center;
   margin-bottom: 10px;
+  display: flex;
+  align-items: flex-end;
+  flex-direction: row;
+  justify-content: space-between;
+  width: ${PROSE_MAX_WIDTH}px;
 `;
 
 const keyboardStateToProps = (state: ReduxStoreState) => ({

@@ -25,6 +25,7 @@ import {
   ChallengeMetadataIndex,
   ChallengeMetadata,
   portfolioSkillsList,
+  SkillTags,
 } from "@pairwise/common";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import pipe from "ramda/es/pipe";
@@ -213,17 +214,21 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
             }}
           />
           <LazyChallengeSkillTagsMenu
-            tooltip={false}
             appTheme={appTheme}
             items={portfolioSkillsList}
             currentSkillTags={challenge?.skillTags}
-            currentChallengeType={challenge?.type}
             onItemSelect={(x) => {
-              console.log("[TODO]: Implement onItemSelect, value: ", x);
-              // props.updateChallenge({
-              //   id: challenge?.id || "", // See NOTE
-              //   challenge: { type: x.value },
-              // });
+              let skillTags = challenge?.skillTags || [];
+              // Update current tags
+              if (skillTags.includes(x)) {
+                skillTags = skillTags.filter((tag) => tag === x);
+              } else {
+                skillTags = skillTags.concat(x);
+              }
+              props.updateChallenge({
+                id: challenge?.id || "",
+                challenge: { skillTags },
+              });
             }}
           />
         </Suspense>

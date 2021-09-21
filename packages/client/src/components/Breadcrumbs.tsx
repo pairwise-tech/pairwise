@@ -5,7 +5,12 @@ import React from "react";
 import { connect } from "react-redux";
 import { Breadcrumb, Breadcrumbs, BreadcrumbProps } from "@blueprintjs/core";
 import { Tooltip2 } from "@blueprintjs/popover2";
-import { AppTheme, CHALLENGE_TYPE, PortfolioSkills } from "@pairwise/common";
+import {
+  AppTheme,
+  Challenge,
+  CHALLENGE_TYPE,
+  PortfolioSkills,
+} from "@pairwise/common";
 import { COLORS, PROSE_MAX_WIDTH } from "tools/constants";
 import {
   capitalize,
@@ -94,12 +99,11 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
             currentBreadcrumbRenderer={this.renderCurrentBreadcrumb}
           />
           {!isMobileView && displaySkillIcon && (
-            <div>
-              {challenge.skillTags &&
-                challenge.skillTags.map((skill) => (
-                  <SkillIcon key={skill} skill={skill} appTheme={appTheme} />
-                ))}
-            </div>
+            <ChallengeSkillIcons
+              isEditMode={false}
+              appTheme={appTheme}
+              challenge={challenge}
+            />
           )}
         </Horizontal>
       </BreadcrumbsBar>
@@ -212,24 +216,59 @@ const Horizontal = styled.div`
   width: ${PROSE_MAX_WIDTH}px;
 `;
 
+const Row = styled.div`
+  display: flex;
+  align-items: flex-end;
+  flex-direction: row;
+`;
+
+export const ChallengeSkillIcons = (props: {
+  isEditMode: boolean;
+  appTheme: AppTheme;
+  challenge: Challenge;
+}) => {
+  const { isEditMode, appTheme, challenge } = props;
+  return (
+    <Row>
+      {challenge.skillTags &&
+        challenge.skillTags.map((skill) => (
+          <SkillIcon
+            key={skill}
+            skill={skill}
+            appTheme={appTheme}
+            isEditMode={isEditMode}
+          />
+        ))}
+    </Row>
+  );
+};
+
 /**
  * Render skill icons for each challenge. These are not displayed on mobile.
  */
-const SkillIcon = (props: { appTheme: AppTheme; skill: PortfolioSkills }) => {
-  const { skill, appTheme } = props;
+const SkillIcon = (props: {
+  isEditMode: boolean;
+  appTheme: AppTheme;
+  skill: PortfolioSkills;
+}) => {
+  const { skill, appTheme, isEditMode } = props;
   const className = mapSkillToDeviconClassName(skill, appTheme);
 
   return (
     <Tooltip2
       position="bottom"
-      content={`Solving this challenge earns ${skill} skills.`}
+      content={
+        isEditMode
+          ? "Choose skill tag(s) for this challenge. Tags added at the module level will be inherited by all child challenges."
+          : `Solving this challenge earns ${skill} skills.`
+      }
     >
       <div style={{ paddingBottom: 1 }}>
         <i
           style={{
             fontSize: 20,
-            marginLeft: 2,
-            marginRight: 2,
+            marginLeft: 3,
+            marginRight: 3,
           }}
           className={className}
         />
