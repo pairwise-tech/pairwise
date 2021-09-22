@@ -194,7 +194,9 @@ export const validateUserUpdateDetails = (
     return new Ok(sanitizedUpdate);
   } catch (err) {
     captureSentryException(err);
-    return new Err(ERROR_CODES.INVALID_PARAMETERS);
+
+    // Propagate the message in the thrown error
+    return new Err(err.message);
   }
 };
 
@@ -231,9 +233,7 @@ const checkStringField = (
     }
 
     if (value.length > maxLength) {
-      throw new BadRequestException(
-        `Value cannot be greater than ${maxLength} characters!`,
-      );
+      throw new Error(`Value cannot be greater than ${maxLength} characters!`);
     }
 
     return value;

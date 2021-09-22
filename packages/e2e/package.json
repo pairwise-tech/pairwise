@@ -20,6 +20,7 @@
     "test:socket-io": "yarn jest --config ./jest-config-individual-file.json --runTestsByPath src/socket-io.e2e.test.ts",
     "seed:e2e": "USER_COUNT=25 USER_CHALLENGE_COUNT=10 yarn seed",
     "test:api": "yarn jest --verbose --config ./jest-config-primary.json",
+    "test:debug": "yarn jest --verbose --config ./jest-config-primary.json --runTestsByPath src/user.e2e.test.ts",
     "test:e2e": "yarn test:realtime && yarn test:socket-io && yarn seed:e2e && yarn test:api"
   },
   "dependencies": {
