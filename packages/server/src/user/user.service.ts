@@ -362,6 +362,9 @@ export class UserService {
   public async updateUser(user: RequestUser, userDetails: UserUpdateOptions) {
     const validationResult = validateUserUpdateDetails(user, userDetails);
 
+    // TODO: Validate username is unique before allowing updates and convey
+    // result to client.
+
     if (validationResult.error) {
       throw new BadRequestException(validationResult.error);
     } else {

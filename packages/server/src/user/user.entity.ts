@@ -33,8 +33,8 @@ export class User {
   @Column({ nullable: true })
   public emailVerified: boolean | null;
 
-  @Column({ default: "" })
-  public username: string;
+  @Column({ default: null, unique: true })
+  public username: string | null;
 
   @Column()
   public givenName: string;

@@ -300,25 +300,6 @@ class Account extends React.Component<IProps, IState> {
             }
           />
         )}
-        <PublicProfileOptInRow>
-          <TextItem>
-            Enable (only) your username to be shared publicly on the user
-            leaderboard, along with your completed challenges and projects
-            status.
-          </TextItem>
-          <Switch
-            style={{ marginTop: 8 }}
-            checked={profile.optInPublicProfile}
-            label={
-              profile.optInPublicProfile
-                ? "Profile username is publicly viewable"
-                : "Profile username is hidden"
-            }
-            onChange={() =>
-              this.handleSwitchPublicProfile(profile.optInPublicProfile)
-            }
-          />
-        </PublicProfileOptInRow>
         {edit ? (
           <Controls>
             <Button
@@ -339,6 +320,25 @@ class Account extends React.Component<IProps, IState> {
             />
           </Controls>
         )}
+        <PublicProfileOptInRow>
+          <TextItem>
+            Enable (only) your username to be shared publicly on the user
+            leaderboard, along with your completed challenges and projects
+            status.
+          </TextItem>
+          <Switch
+            style={{ marginTop: 8 }}
+            checked={profile.optInPublicProfile}
+            label={
+              profile.optInPublicProfile
+                ? "Profile username is publicly viewable"
+                : "Profile username is hidden"
+            }
+            onChange={() =>
+              this.handleSwitchPublicProfile(profile.optInPublicProfile)
+            }
+          />
+        </PublicProfileOptInRow>
         <PageTitle style={{ marginTop: 24 }}>Connected Accounts</PageTitle>
         <ConnectedAccountButtons
           email={profile.email}

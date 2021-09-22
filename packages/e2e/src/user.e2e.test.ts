@@ -11,6 +11,9 @@ import ENV from "./utils/e2e-env";
 
 describe("User APIs", () => {
   test.todo("[DELETE] /user/account endpoint: test user deletion.");
+  test.todo(
+    "[UPDATE] /user/profile endpoint: test username updates must be unique.",
+  );
 
   test("/user/profile (GET) a user can fetch their profile", async () => {
     const accessToken = await fetchAccessToken();
