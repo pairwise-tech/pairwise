@@ -41,7 +41,7 @@ describe.only("Authentication Flows: signin, profile, and logout", () => {
     click("edit-profile-button");
     type("edit-input-given-name", "Linus");
     type("edit-input-family-name", "Torvalds");
-    type("edit-input-display-name", "Linus Torvalds");
+    type("edit-input-username", "Linus Torvalds");
     click("save-profile-button");
 
     /* Let the updates occur */
@@ -49,13 +49,13 @@ describe.only("Authentication Flows: signin, profile, and logout", () => {
 
     cy.get("#profile-given-name").contains("Linus");
     cy.get("#profile-family-name").contains("Torvalds");
-    cy.get("#profile-display-name").contains("Linus Torvalds");
+    cy.get("#profile-username").contains("Linus Torvalds");
 
     /* Check the updates persist after page reload */
     cy.reload();
     cy.get("#profile-given-name").contains("Linus");
     cy.get("#profile-family-name").contains("Torvalds");
-    cy.get("#profile-display-name").contains("Linus Torvalds");
+    cy.get("#profile-username").contains("Linus Torvalds");
   });
 });
 

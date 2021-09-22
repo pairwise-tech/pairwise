@@ -35,7 +35,7 @@ interface IState {
   email: string;
   givenName: string;
   familyName: string;
-  displayName: string;
+  username: string;
   editMode: boolean;
   editedEmail: boolean;
   showDeleteUserAlert: boolean;
@@ -61,7 +61,7 @@ class Account extends React.Component<IProps, IState> {
       email: "",
       givenName: "",
       familyName: "",
-      displayName: "",
+      username: "",
       editMode: false,
       editedEmail: false,
       showDeleteUserAlert: false,
@@ -231,19 +231,19 @@ class Account extends React.Component<IProps, IState> {
             }
           />
         )}
-        <TextItem id="profile-display-name">
-          <Bold>Display Name:</Bold> {!edit && profile.displayName}
+        <TextItem id="profile-username">
+          <Bold>Username:</Bold> {!edit && profile.username}
         </TextItem>
         {edit && (
           <InputField
             type="text"
-            id="edit-input-display-name"
-            placeholder="Enter a display name"
+            id="edit-input-username"
+            placeholder="Enter a username"
             className={Classes.INPUT}
-            value={this.state.displayName}
+            value={this.state.username}
             onChange={(event) =>
               this.setState({
-                displayName: event.target.value,
+                username: event.target.value,
               })
             }
           />
@@ -430,7 +430,7 @@ class Account extends React.Component<IProps, IState> {
         email: profile.email || "",
         givenName: profile.givenName,
         familyName: profile.familyName,
-        displayName: profile.displayName,
+        username: profile.username,
       });
     }
   };
@@ -456,7 +456,7 @@ class Account extends React.Component<IProps, IState> {
       avatarUrl,
       givenName: this.state.givenName,
       familyName: this.state.familyName,
-      displayName: this.state.displayName,
+      username: this.state.username,
     };
 
     this.props.updateUser(userDetails);
