@@ -314,7 +314,7 @@ const ApplicationContainer = (props: IProps) => {
             content={
               <p style={{ margin: 0 }}>
                 During <b>beta</b> the Pairwise course content remains in
-                development.
+                development and may change.
               </p>
             }
           >

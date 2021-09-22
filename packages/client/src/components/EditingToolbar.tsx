@@ -25,7 +25,6 @@ import {
   ChallengeMetadataIndex,
   ChallengeMetadata,
   portfolioSkillsList,
-  SkillTags,
 } from "@pairwise/common";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import pipe from "ramda/es/pipe";

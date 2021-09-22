@@ -701,14 +701,14 @@
         },
         {
           "id": "GiZqL4Jpk",
-          "type": "media",
+          "type": "markup",
           "title": "Create a Webpage",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
+          "instructions": "Welcome to the first project of the curriculum\\! Scroll down to the additional content below the workspace to see the full instructions. Good luck\\!",
+          "testCode": "const ELEMENT_ID = \"my-custom-webpage\";\n\ntest(`When you are finished add a \\`div\\` with an \\`id\\` of \\`${ELEMENT_ID}\\` to complete the project.`, () => {\n  const element = document.getElementById(\"my-custom-webpage\");\n  expect(element !== null).toBe(true);\n\n  if (element) {\n    expect(element.id).toBe(ELEMENT_ID);\n  }\n});\n",
+          "videoUrl": "https://www.youtube.com/embed/mgRbBNsdoBA",
           "starterCode": "",
-          "solutionCode": "",
-          "content": "Today we're going to creating a full webpage which you can put online and stake out your own corner of the web \\(if you haven't already\\). \n# The Task\n\nCreate a single webpage and style it so it doesn't look terrible to you. The styling part is subjective—no wrong answers here. The goal is just to make something you would be happy to put online, perhaps at `YOUR-NAME.com` or some similar domain.\n# What's the point?\n\nThere are more than one aspects to this challenge, but above all remember that challenges are here to help you get _practice_. ++The more repetitions complete with a given task the better you will be.++ If you write 1000 webpages and put them online you will be pretty good at creating websites, considerably better than someone who's only created one or two.\n\nWith that being said, there is an additional point to this exercise:\n\n* **Create something real**. A website is something real and tangible which you can show to the world.\n\n# Resources\n\n* The [System Fonts Guide in Butterick's Practical Typography](https://practicaltypography.com/system-fonts.html)\n   * If you're wondering about fonts and how to know what fonts work by default without adding any external resources.\n   * Author's note: That site is an amazing resource for all things related to typography. Highly recommended.\n\n",
+          "solutionCode": "<div id=\"my-custom-webpage\">",
+          "content": "Today we're going to creating a full webpage which you can put online and stake out your own corner of the web\\!\n\n> ++NOTE:++ The video above completes this challenge in the Sandbox and suggests you can download the code to a file. That's perfectly fine, but we have since changed this project to include the Pairwise workspace editor above. Feel free to just complete the project in the above code editor.\n# The Task\n\nCreate a single webpage and style it so it doesn't look terrible to you. The styling part is subjective—no wrong answers here. The goal is just to make something you would be happy to put online, perhaps at `YOUR-NAME.com` or some similar domain.\n# What's the point?\n\nThere are more than one aspects to this challenge, but above all remember that challenges are here to help you get _practice_. ++The more repetitions complete with a given task the better you will be.++ If you write 1,000 webpages and put them online you will be pretty good at creating websites, considerably better than someone who's only created one or two.\n\nWith that being said, there is an additional point to this exercise:\n\n* **Create something real**. A website is something real and tangible which you can show to the world.\n\n# Resources\n\n* The [System Fonts Guide in Butterick's Practical Typography](https://practicaltypography.com/system-fonts.html)\n   * If you're wondering about fonts and how to know what fonts work by default without adding any external resources.\n   * Author's note: That site is an amazing resource for all things related to typography. Highly recommended.\n\n",
           "skillTags": [
             "HTML",
             "CSS"
