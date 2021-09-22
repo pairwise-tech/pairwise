@@ -241,6 +241,11 @@ export class ProgressService {
 
     if (!challengeId || !uuid) {
       return;
+    } else if (!ContentUtility.challengeIdIsValid(challengeId)) {
+      captureSentryException(
+        `Invalid challenge ID received in addToProgressRecord: ${challengeId}`,
+      );
+      return;
     }
 
     const cachedData = await this.redisClientService.getProgressCacheData();
