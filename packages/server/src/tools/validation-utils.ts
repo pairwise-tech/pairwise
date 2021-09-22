@@ -181,7 +181,7 @@ export const validateUserUpdateDetails = (
     const updateDetails = {
       settings: settingsJSON,
       username: checkStringField(details.username),
-      avatarUrl: checkStringField(details.avatarUrl),
+      avatarUrl: checkStringField(details.avatarUrl, 100),
       givenName: checkStringField(details.givenName),
       familyName: checkStringField(details.familyName),
       optInPublicProfile: checkBooleanField(details.optInPublicProfile),

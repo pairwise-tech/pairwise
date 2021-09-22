@@ -7,7 +7,7 @@ import { CLIENT_APP_URL, TIMEOUT, click, type } from "../support/cypress-utils";
  * ============================================================================
  */
 
-describe.only("Authentication Flows: signin, profile, and logout", () => {
+describe("Authentication Flows: signin, profile, and logout", () => {
   beforeEach(() => {
     cy.visit(CLIENT_APP_URL);
     cy.wait(TIMEOUT);
@@ -35,13 +35,16 @@ describe.only("Authentication Flows: signin, profile, and logout", () => {
     click("account-link");
     cy.contains("Account");
 
+    // Generate a unique username
+    const username = String(Math.random()).replace(".", "").slice(0, 12);
+
     /* Don't ask */
     cy.wait(TIMEOUT);
 
     click("edit-profile-button");
     type("edit-input-given-name", "Linus");
     type("edit-input-family-name", "Torvalds");
-    type("edit-input-username", "Linus Torvalds");
+    type("edit-input-username", username);
     click("save-profile-button");
 
     /* Let the updates occur */
@@ -49,13 +52,13 @@ describe.only("Authentication Flows: signin, profile, and logout", () => {
 
     cy.get("#profile-given-name").contains("Linus");
     cy.get("#profile-family-name").contains("Torvalds");
-    cy.get("#profile-username").contains("Linus Torvalds");
+    cy.get("#profile-username").contains(username);
 
     /* Check the updates persist after page reload */
     cy.reload();
     cy.get("#profile-given-name").contains("Linus");
     cy.get("#profile-family-name").contains("Torvalds");
-    cy.get("#profile-username").contains("Linus Torvalds");
+    cy.get("#profile-username").contains(username);
   });
 });
 
