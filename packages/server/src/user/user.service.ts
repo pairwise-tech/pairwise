@@ -160,6 +160,10 @@ export class UserService {
     return SUCCESS_CODES.OK;
   }
 
+  public async findUserByUsername(username: string) {
+    return this.userRepository.findOne({ username });
+  }
+
   public async findUserByEmail(emailString: string) {
     const email = this.standardizeEmail(emailString);
     const user = await this.userRepository.findOne({ email });
@@ -362,12 +366,26 @@ export class UserService {
   public async updateUser(user: RequestUser, userDetails: UserUpdateOptions) {
     const validationResult = validateUserUpdateDetails(user, userDetails);
 
-    // TODO: Validate username is unique before allowing updates and convey
-    // result to client.
-
     if (validationResult.error) {
       throw new BadRequestException(validationResult.error);
     } else {
+      /**
+       * If the update includes a username verify if is not taken. If it
+       * is, return an appropriate message to the client. If not, proceed
+       * with the update.
+       */
+      if (userDetails.username) {
+        const existingUserByUsername = await this.findUserByUsername(
+          userDetails.username,
+        );
+
+        if (existingUserByUsername) {
+          throw new BadRequestException(
+            "Username is taken, please try another.",
+          );
+        }
+      }
+
       const { uuid } = user.profile;
       await this.userRepository.update({ uuid }, validationResult.value);
       return await this.findUserByUuidGetFullProfile(uuid);

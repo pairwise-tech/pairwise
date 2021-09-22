@@ -612,7 +612,7 @@ const InputField = styled.input`
 `;
 
 const Controls = styled.div`
-  margin-top: 24px;
+  margin-top: 12px;
 `;
 
 const PublicProfileOptInRow = styled.div`
