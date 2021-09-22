@@ -1,21 +1,24 @@
-import { isMobile } from "react-device-detect";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
-import { Row, KeyValue, SummaryText, PageContainer } from "./AdminComponents";
+import { KeyValue, PageContainer } from "./AdminComponents";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { Button, Card, Switch } from "@blueprintjs/core";
-import { COLORS } from "../tools/constants";
+import { Button, Icon } from "@blueprintjs/core";
+import { COLORS, MOBILE } from "../tools/constants";
 import { composeWithProps } from "../tools/admin-utils";
-import { defaultTextColor, themeColor, themeText } from "./AdminThemeContainer";
+import { defaultTextColor, themeColor } from "./AdminThemeContainer";
 
 /** ===========================================================================
  * Types & Config
  * ============================================================================
  */
 
-interface IState {}
+type SortCategory = "default" | "attempted" | "completed" | "ratio";
+
+interface IState {
+  sortBy: SortCategory;
+}
 
 /** ===========================================================================
  * AdminPullRequestPage Component
@@ -26,23 +29,28 @@ class AdminChallengeAnalytics extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      sortBy: "default",
+    };
   }
 
   render(): Nullable<JSX.Element> {
+    const { sortBy } = this.state;
     const { skeletons, challengeMetaMap, resetChallengeMeta } = this.props;
 
     if (!skeletons) {
       return null;
     }
 
-    return (
-      <PageContainer>
-        <Title>Challenge Analytics</Title>
-        {skeletons.map((skeleton) => {
-          return skeleton.modules.map((module) => {
+    const MetaList = skeletons
+      .map((skeleton) => {
+        return skeleton.modules
+          .map((module) => {
             return module.challenges.map((challenge) => {
               const meta = challengeMetaMap[challenge.id];
+
+              let UI;
+              let ratio = -1;
 
               const TitleBar = (
                 <ChallengeTitleText>
@@ -52,20 +60,20 @@ class AdminChallengeAnalytics extends React.Component<IProps, IState> {
               );
 
               if (meta) {
-                let ratio =
+                ratio =
                   meta.numberOfTimesCompleted === 0
-                    ? "n/a"
-                    : (
-                        meta.numberOfTimesAttempted /
-                        meta.numberOfTimesCompleted
-                      ).toFixed(2);
+                    ? -1
+                    : meta.numberOfTimesAttempted / meta.numberOfTimesCompleted;
 
-                return (
+                UI = (
                   <MetaCard key={challenge.id}>
                     {TitleBar}
                     <Text>Attempted: {meta.numberOfTimesAttempted}</Text>
                     <Text>Completed: {meta.numberOfTimesCompleted}</Text>
-                    <Text>Completion Ratio: {ratio}</Text>
+                    <Text>
+                      Completion Ratio:{" "}
+                      {ratio === -1 ? "n/a" : ratio.toFixed(2)}
+                    </Text>
                     <Text>
                       Challenge ID:{" "}
                       <KeyValue
@@ -85,7 +93,7 @@ class AdminChallengeAnalytics extends React.Component<IProps, IState> {
                   </MetaCard>
                 );
               } else {
-                return (
+                UI = (
                   <MetaCard key={challenge.id}>
                     {TitleBar}
                     <Text>
@@ -94,12 +102,97 @@ class AdminChallengeAnalytics extends React.Component<IProps, IState> {
                   </MetaCard>
                 );
               }
+
+              return {
+                UI,
+                meta,
+                ratio,
+                challengeId: challenge.id,
+              };
             });
+          })
+          .flat();
+      })
+      .flat();
+
+    // Sort the list based on the selected sort category
+    const sorted =
+      sortBy === "default"
+        ? MetaList
+        : MetaList.filter((x) => !!x.meta).sort((a, b) => {
+            if (sortBy === "attempted") {
+              return (
+                // @ts-ignore
+                b.meta.numberOfTimesAttempted - a.meta.numberOfTimesAttempted
+              );
+            } else if (sortBy === "completed") {
+              return (
+                // @ts-ignore
+                b.meta.numberOfTimesCompleted - a.meta.numberOfTimesCompleted
+              );
+            } else if (sortBy === "ratio") {
+              // @ts-ignore
+              return b.meta.ratio - a.meta.ratio;
+            } else {
+              throw new Error(
+                "Invalid sort filter provided to challenge meta list",
+              );
+            }
           });
-        })}
+
+    const getSortIcon = (sortCategory: SortCategory) => {
+      const active = sortBy === sortCategory;
+      if (active) {
+        const icon = "sort-desc";
+        return <Icon icon={icon} color={COLORS.PRIMARY_BLUE} />;
+      } else {
+        return "search-template";
+      }
+    };
+
+    return (
+      <PageContainer>
+        <Title>Challenge Analytics</Title>
+        <ControlRow>
+          <Button
+            icon={getSortIcon("default")}
+            onClick={() => this.handleSortBy("default")}
+            style={{ width: 175, marginRight: 8, marginBottom: 8 }}
+          >
+            Sort by Default
+          </Button>
+          <Button
+            icon={getSortIcon("attempted")}
+            onClick={() => this.handleSortBy("attempted")}
+            style={{ width: 175, marginRight: 8, marginBottom: 8 }}
+          >
+            Sort by Attempted
+          </Button>
+          <Button
+            icon={getSortIcon("completed")}
+            onClick={() => this.handleSortBy("completed")}
+            style={{ width: 175, marginRight: 8, marginBottom: 8 }}
+          >
+            Sort by Completed
+          </Button>
+          <Button
+            icon={getSortIcon("ratio")}
+            onClick={() => this.handleSortBy("ratio")}
+            style={{ width: 175, marginRight: 8, marginBottom: 8 }}
+          >
+            Sort by Ratio
+          </Button>
+        </ControlRow>
+        {sorted.map((x) => (
+          <div key={x.challengeId}>{x.UI}</div>
+        ))}
       </PageContainer>
     );
   }
+
+  handleSortBy = (sortBy: SortCategory) => {
+    this.setState({ sortBy });
+  };
 }
 
 /** ===========================================================================
@@ -124,11 +217,20 @@ const ChallengeTitleText = styled.p`
 `;
 
 const ChallengeTitle = styled.span`
-  color: ${COLORS.SECONDARY_YELLOW};
+  ${themeColor("color", COLORS.SECONDARY_YELLOW, COLORS.SECONDARY_PINK)};
 `;
 
 const Text = styled.p`
   font-size: 12px;
+`;
+
+const ControlRow = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  @media ${MOBILE} {
+    flex-direction: column;
+  }
 `;
 
 /** ===========================================================================

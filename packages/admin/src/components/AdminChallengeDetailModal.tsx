@@ -113,7 +113,8 @@ export const ChallengeContextCard = (props: ChallengeContextCardProps) => {
     numberOfTimeCompleted = meta.numberOfTimesCompleted;
   }
 
-  const displayChallengeMeta = numberOfTimesAttempted || numberOfTimeCompleted;
+  const displayChallengeMeta =
+    !!numberOfTimesAttempted || !!numberOfTimeCompleted;
 
   return (
     <DataCard key={challenge.id}>
