@@ -333,13 +333,27 @@ export class ProgressService {
           moreThanThreeTotalChallenges += entry.challengeIds.size;
         }
 
-        const challenges = Array.from(entry.challengeIds).map((id) => {
-          count++;
+        const challenges = Array.from(entry.challengeIds)
+          .map((id) => {
+            count++;
 
-          // Add the challenge title for context
-          const { challenge } = ContentUtility.deriveChallengeContextFromId(id);
-          return `${id} - ${challenge.title}`;
-        });
+            // Add the challenge title for context
+            const challengeContext =
+              ContentUtility.deriveChallengeContextFromId(id);
+            if (challengeContext) {
+              const { challenge } = challengeContext;
+              return `${id} - ${challenge.title}`;
+            } else {
+              // This shouldn't happen...?
+              captureSentryException(
+                `Received null challenge context: ${JSON.stringify(
+                  challengeContext,
+                )}`,
+              );
+              return null;
+            }
+          })
+          .filter(Boolean);
 
         return {
           challenges,
