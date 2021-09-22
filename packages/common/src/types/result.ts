@@ -11,6 +11,9 @@
  * ============================================================================
  */
 
+// Nullable type
+export type Nullable<T> = T | null;
+
 export interface IOk<T> {
   value: T;
   error?: undefined;

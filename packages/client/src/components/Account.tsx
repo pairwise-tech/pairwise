@@ -620,8 +620,8 @@ const PublicProfileOptInRow = styled.div`
   display: flex;
   max-width: 500px;
   flex-direction: column;
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: 12px;
+  padding-right: 12px;
   border-radius: 6px;
   background: rgba(5, 5, 5, 0.45);
 `;

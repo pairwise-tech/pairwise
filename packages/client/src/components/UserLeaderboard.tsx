@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import { Button, Icon } from "@blueprintjs/core";
@@ -11,6 +12,7 @@ import io, { Socket } from "socket.io-client";
 import {
   assertUnreachable,
   createInverseChallengeMapping,
+  LeaderboardEntryDto,
   SocketEvents,
   SocketEventTypes,
 } from "@pairwise/common";
@@ -288,18 +290,28 @@ class UserLeaderboard extends React.Component<IProps, IState> {
         ) : (
           <RankTitle>Your position: {userIndex}</RankTitle>
         )}
+        <TextItem style={{ marginBottom: 16 }}>
+          Usernames are displayed in blue, for users who choose to share them.
+          To display your username publicly in the leaderboard rankings, visit{" "}
+          <Link to="account">your account page</Link> and enable the option for
+          sharing your public profile.
+        </TextItem>
         {leaderboard.map((x, i) => {
           if (x.isUser) {
             return (
               <UserRank key={i}>
-                Rank {i + 1} ({x.completedChallenges} completed challenges)
+                <Underline>
+                  Rank {i + 1} ({x.completedChallenges} completed challenges)
+                </Underline>
                 <Icon style={{ marginLeft: 4 }} icon="star" />
+                {renderUsername(x)}
               </UserRank>
             );
           } else {
             return (
               <TextItem key={i}>
                 Rank {i + 1} ({x.completedChallenges} completed challenges)
+                {renderUsername(x)}
               </TextItem>
             );
           }
@@ -316,14 +328,31 @@ class UserLeaderboard extends React.Component<IProps, IState> {
 
 const TextItem = styled(Text)`
   margin-top: 12px;
+  max-width: 500px;
   ${themeColor("color", COLORS.TEXT_CONTENT_BRIGHT)};
 `;
 
 const UserRank = styled(Text)`
   margin-top: 12px;
-  text-decoration: underline;
   ${themeColor("color", COLORS.PRIMARY_GREEN, COLORS.PINK)};
 `;
+
+const Underline = styled.span`
+  text-decoration: underline;
+`;
+
+const Username = styled.span`
+  margin-left: 4px;
+  ${themeColor("color", COLORS.PRIMARY_BLUE, COLORS.SECONDARY_PINK)};
+`;
+
+const renderUsername = (x: LeaderboardEntryDto) => {
+  if (x.username !== null) {
+    return <Username>{x.username}</Username>;
+  } else {
+    return "";
+  }
+};
 
 const RankTitle = styled(Text)`
   margin-top: 12px;

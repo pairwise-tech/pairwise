@@ -122,9 +122,10 @@ export class UserService {
           : 0;
 
         return {
-          isUser: x.uuid === userProfile.uuid,
-          updatedAt: x.updatedAt,
           completedChallenges,
+          updatedAt: x.updatedAt,
+          isUser: x.uuid === userProfile.uuid,
+          username: x.optInPublicProfile ? x.username : null,
         };
       })
       .filter((x) => x.completedChallenges > 0)
@@ -137,8 +138,8 @@ export class UserService {
         return b.completedChallenges - a.completedChallenges;
       })
       .map((x) => {
-        const { completedChallenges, isUser } = x;
-        return { completedChallenges, isUser };
+        const { completedChallenges, isUser, username } = x;
+        return { completedChallenges, isUser, username };
       });
 
     return result;

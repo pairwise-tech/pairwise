@@ -68,7 +68,7 @@ const getFakeAdminUser = () => {
     emailVerified: false,
     givenName: "ADMIN",
     familyName: "ADMIN",
-    username: "FIXED ADMIN USER",
+    username: "ADMIN-TOKEN-USER-USERNAME",
     avatarUrl: "ADMIN",
     githubAccountId: "admin-account-id",
     facebookAccountId: "admin-account-id",

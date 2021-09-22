@@ -4,6 +4,7 @@ import {
   CourseList,
   CourseSkeletonList,
 } from "./courses";
+import { Nullable } from "./result";
 
 /** ===========================================================================
  * DTO interfaces
@@ -33,7 +34,7 @@ export interface UserProfile {
   uuid: string;
   email: string | null;
   emailVerified: boolean | null;
-  username: string;
+  username: string | null;
   givenName: string;
   familyName: string;
   avatarUrl: string;
@@ -98,6 +99,7 @@ export interface LastActiveChallengeIds {
 
 export interface LeaderboardEntryDto {
   isUser: boolean;
+  username: Nullable<string>;
   completedChallenges: number;
 }
 
