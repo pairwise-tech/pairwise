@@ -288,7 +288,7 @@ class AdminStatsPage extends React.Component<IProps, IState> {
                     </CardButton>
                   )}
                   <JsonComponent
-                    title="Challenges Completed:"
+                    title={`Challenges Completed (${record.challenges.length}):`}
                     data={record.challenges}
                   />
                 </DataCard>
