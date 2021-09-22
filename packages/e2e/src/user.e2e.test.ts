@@ -1,6 +1,10 @@
 import axios from "axios";
 import request from "supertest";
-import { fetchAccessToken, fetchUserWithAccessToken } from "./utils/e2e-utils";
+import {
+  fetchAccessToken,
+  fetchUserWithAccessToken,
+  getRandomUsername,
+} from "./utils/e2e-utils";
 import { LastActiveChallengeIds } from "@pairwise/common";
 import ENV from "./utils/e2e-env";
 
@@ -11,9 +15,6 @@ import ENV from "./utils/e2e-env";
 
 describe("User APIs", () => {
   test.todo("[DELETE] /user/account endpoint: test user deletion.");
-  test.todo(
-    "[UPDATE] /user/profile endpoint: test username updates must be unique.",
-  );
 
   test("/user/profile (GET) a user can fetch their profile", async () => {
     const accessToken = await fetchAccessToken();
@@ -23,7 +24,7 @@ describe("User APIs", () => {
 
     const { profile, settings } = result.data;
     expect(profile.email).toBeDefined();
-    expect(profile.displayName).toBeDefined();
+    expect(profile.username).toBeDefined();
     expect(profile.givenName).toBeDefined();
     expect(profile.familyName).toBeDefined();
     expect(settings).toBeDefined();
@@ -38,10 +39,10 @@ describe("User APIs", () => {
     const originalProfile = result.data.profile;
     const originalSettings = result.data.settings;
 
-    const displayName = "孫瑪思！";
+    const username = getRandomUsername();
     const avatarUrl = "www.my-new-image.com";
     const body = {
-      displayName,
+      username,
       avatarUrl,
       settings: {
         workspaceFontSize: 18,
@@ -52,7 +53,7 @@ describe("User APIs", () => {
     const update = await axios.post(`${ENV.HOST}/user/profile`, body, headers);
 
     const { profile, settings } = update.data;
-    expect(profile.displayName).toBe(displayName);
+    expect(profile.username).toBe(username);
     expect(profile.avatarUrl).toBe(avatarUrl);
     expect(settings).toBeDefined();
     expect(profile.email).toBe(originalProfile.email);
@@ -61,6 +62,95 @@ describe("User APIs", () => {
     expect(originalSettings.workspaceFontSize).toBe(16);
     expect(settings.workspaceFontSize).toBe(18);
     expect(settings.editorTheme).toBe("hc-black");
+  });
+
+  test("/user/profile (POST) name updates are limited by maximum length", async () => {
+    const accessToken = await fetchAccessToken();
+    await request(`${ENV.HOST}/user/profile`)
+      .post("/")
+      .send({ givenName: "asdfasdfasfasdfasdfasiodfupoasufdopaufopiau" })
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(400)
+      .then((error) => {
+        expect(error.body.message).toBe(
+          "Value cannot be greater than 30 characters!",
+        );
+      });
+
+    return request(`${ENV.HOST}/user/profile`)
+      .post("/")
+      .send({ familyName: "asdfasdfasfasdfasdfasiodfupoasufdopaufopiau" })
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(400)
+      .then((error) => {
+        expect(error.body.message).toBe(
+          "Value cannot be greater than 30 characters!",
+        );
+      });
+  });
+
+  test("/user/profile (POST) username updates are validated correctly", async () => {
+    const accessToken = await fetchAccessToken();
+    await request(`${ENV.HOST}/user/profile`)
+      .post("/")
+      .send({ username: "asfdaf0978as0df7a0sd" })
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(400)
+      .then((error) => {
+        expect(error.body.message).toBe(
+          "Username is limited to 15 characters.",
+        );
+      });
+
+    return request(`${ENV.HOST}/user/profile`)
+      .post("/")
+      .send({ username: "ahfh sadfa" })
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(400)
+      .then((error) => {
+        expect(error.body.message).toBe("Username must not include spaces.");
+      });
+  });
+
+  test("/user/profile (POST) username must be unique", async () => {
+    const accessToken = await fetchAccessToken();
+    const headers = { headers: { Authorization: `Bearer ${accessToken}` } };
+
+    // A user takes a username
+    const username = getRandomUsername();
+    let body = { username };
+    let update = await axios.post(`${ENV.HOST}/user/profile`, body, headers);
+    let { profile } = update.data;
+    expect(profile.username).toBe(username);
+
+    // A different user cannot user it
+    const otherAccessToken = await fetchAccessToken();
+    const otherHeaders = {
+      headers: { Authorization: `Bearer ${otherAccessToken}` },
+    };
+    await request(`${ENV.HOST}/user/profile`)
+      .post("/")
+      .send({ username })
+      .set("Authorization", `Bearer ${otherAccessToken}`)
+      .expect(400)
+      .then((error) => {
+        expect(error.body.message).toBe(
+          "Username is taken, please try another.",
+        );
+      });
+
+    // Original user changes their username
+    const newUsername = getRandomUsername();
+    body = { username: newUsername };
+    update = await axios.post(`${ENV.HOST}/user/profile`, body, headers);
+    profile = update.data.profile;
+    expect(profile.username).toBe(newUsername);
+
+    // The different user can now use the first username
+    body = { username };
+    update = await axios.post(`${ENV.HOST}/user/profile`, body, otherHeaders);
+    profile = update.data.profile;
+    expect(profile.username).toBe(username);
   });
 
   test("/user/profile (POST) rejects email parameters", async () => {
@@ -137,12 +227,14 @@ describe("User APIs", () => {
     expect(firstSettings.editorTheme).toBe("vs-dark");
     expect(firstSettings.workspaceFontSize).toBe(16);
 
+    const username = getRandomUsername();
+
     /**
      * [2] Invalid update values are ignored.
      */
     await handleUpdateUser({
       name: "my special name field",
-      displayName: "Djikstra",
+      username,
       specialField: true,
       value: 5000,
       settings: {
@@ -156,7 +248,7 @@ describe("User APIs", () => {
     const secondProfile = result.data.profile;
     const secondSettings = result.data.settings;
 
-    expect(secondProfile.displayName).toBe("Djikstra");
+    expect(secondProfile.username).toBe(username);
     expect(secondSettings.editorTheme).toBe("vs-dark");
     expect(secondSettings.workspaceFontSize).toBe(28);
     expect(secondProfile.email).toBe(originalProfile.email);

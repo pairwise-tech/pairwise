@@ -22,6 +22,13 @@ const challengeIdList = Object.values(createInverseChallengeMapping([course]));
 
 const getText = (count = 15) => faker.lorem.words(count);
 
+// Generate a random username (usernames must be unique within Pairwise system)
+export const getRandomUsername = () => {
+  return (
+    faker.internet.userName() + Math.random().toFixed(5).replace(".", "")
+  ).slice(0, 12);
+};
+
 // Randomly return true of false, tend to return true
 export const yesOrNo = () => Math.random() < 0.8;
 

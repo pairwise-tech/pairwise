@@ -85,7 +85,7 @@ describe("Auth APIs", () => {
 const checkUser = (user: any) => {
   const { profile, payments } = user;
   expect(profile.email).toBeDefined();
-  expect(profile.displayName).toBeDefined();
+  expect(profile.username).toBeDefined();
   expect(profile.givenName).toBeDefined();
   expect(profile.familyName).toBeDefined();
   expect(Array.isArray(payments)).toBeTruthy();

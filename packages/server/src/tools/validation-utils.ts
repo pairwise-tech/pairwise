@@ -220,10 +220,20 @@ export const validateEmailUpdateRequest = (value: string) => {
   }
 };
 
-const checkStringField = (value: any, rejectEmptyValues = false) => {
+const checkStringField = (
+  value: any,
+  maxLength: number = 30,
+  rejectEmptyValues = false,
+) => {
   if (typeof value === "string") {
     if (rejectEmptyValues && value === "") {
       throw new Error("Field cannot be empty!");
+    }
+
+    if (value.length > maxLength) {
+      throw new BadRequestException(
+        `Value cannot be greater than ${maxLength} characters!`,
+      );
     }
 
     return value;
@@ -280,6 +290,14 @@ const sanitizeObject = (obj: any) => {
   });
 
   return sanitizedObject;
+};
+
+export const validateUsername = (username: string) => {
+  if (username.length > 15) {
+    throw new BadRequestException("Username is limited to 15 characters.");
+  } else if (username.includes(" ")) {
+    throw new BadRequestException("Username must not include spaces.");
+  }
 };
 
 /**

@@ -20,6 +20,7 @@ import {
   validateUserUpdateDetails,
   validateLastActiveChallengeIdsPayload,
   validateDisconnectAccountRequest,
+  validateUsername,
 } from "../tools/validation-utils";
 import { ProgressService } from "../progress/progress.service";
 import { ERROR_CODES, SUCCESS_CODES } from "../tools/constants";
@@ -384,6 +385,8 @@ export class UserService {
           throw new BadRequestException(
             "Username is taken, please try another.",
           );
+        } else {
+          validateUsername(userDetails.username);
         }
       }
 
