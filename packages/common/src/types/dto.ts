@@ -110,8 +110,10 @@ export type UserLeaderboardDto = LeaderboardEntryDto[];
 export interface UserUpdateOptions<SettingsType = Partial<UserSettings>> {
   givenName?: string;
   familyName?: string;
-  displayName?: string;
+  username?: string;
   avatarUrl?: string;
+  optInPublicProfile?: boolean;
+  optInShareAnonymousGeolocationActivity?: boolean;
   settings?: SettingsType;
 }
 

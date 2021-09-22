@@ -179,11 +179,15 @@ export const validateUserUpdateDetails = (
 
     // Does NOT include email:
     const updateDetails = {
+      settings: settingsJSON,
+      username: checkStringField(details.username),
       avatarUrl: checkStringField(details.avatarUrl),
       givenName: checkStringField(details.givenName),
       familyName: checkStringField(details.familyName),
-      displayName: checkStringField(details.displayName),
-      settings: settingsJSON,
+      optInPublicProfile: checkBooleanField(details.optInPublicProfile),
+      optInShareAnonymousGeolocationActivity: checkBooleanField(
+        details.optInShareAnonymousGeolocationActivity,
+      ),
     };
 
     const sanitizedUpdate = sanitizeObject(updateDetails);

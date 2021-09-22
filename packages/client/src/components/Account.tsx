@@ -1,7 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { Alert, Classes, Button, Checkbox, Intent } from "@blueprintjs/core";
+import {
+  Alert,
+  Classes,
+  Button,
+  Checkbox,
+  Intent,
+  Switch,
+} from "@blueprintjs/core";
 import Modules, { ReduxStoreState } from "modules/root";
 import {
   PageContainer,
@@ -231,23 +238,6 @@ class Account extends React.Component<IProps, IState> {
             }
           />
         )}
-        <TextItem id="profile-username">
-          <Bold>Username:</Bold> {!edit && profile.username}
-        </TextItem>
-        {edit && (
-          <InputField
-            type="text"
-            id="edit-input-username"
-            placeholder="Enter a username"
-            className={Classes.INPUT}
-            value={this.state.username}
-            onChange={(event) =>
-              this.setState({
-                username: event.target.value,
-              })
-            }
-          />
-        )}
         {emailVerificationStatus === EMAIL_VERIFICATION_STATUS.LOADING ? (
           <TextItem>* Processing request...</TextItem>
         ) : emailVerificationStatus === EMAIL_VERIFICATION_STATUS.SENT ? (
@@ -293,6 +283,42 @@ class Account extends React.Component<IProps, IState> {
             ) : null}
           </>
         )}
+        <TextItem id="profile-username">
+          <Bold>Username:</Bold> {!edit && profile.username}
+        </TextItem>
+        {edit && (
+          <InputField
+            type="text"
+            id="edit-input-username"
+            placeholder="Enter a username"
+            className={Classes.INPUT}
+            value={this.state.username}
+            onChange={(event) =>
+              this.setState({
+                username: event.target.value,
+              })
+            }
+          />
+        )}
+        <PublicProfileOptInRow>
+          <TextItem>
+            Enable (only) your username to be shared publicly on the user
+            leaderboard, along with your completed challenges and projects
+            status.
+          </TextItem>
+          <Switch
+            style={{ marginTop: 8 }}
+            checked={profile.optInPublicProfile}
+            label={
+              profile.optInPublicProfile
+                ? "Profile username is publicly viewable"
+                : "Profile username is hidden"
+            }
+            onChange={() =>
+              this.handleSwitchPublicProfile(profile.optInPublicProfile)
+            }
+          />
+        </PublicProfileOptInRow>
         {edit ? (
           <Controls>
             <Button
@@ -417,6 +443,12 @@ class Account extends React.Component<IProps, IState> {
 
       return id; /* Shouldn't happen but just fallback to the course id... */
     }
+  };
+
+  handleSwitchPublicProfile = (optInPublicProfile: boolean) => {
+    this.props.updateUser({
+      optInPublicProfile: !optInPublicProfile,
+    });
   };
 
   handleEditProfile = () => {
@@ -581,6 +613,17 @@ const InputField = styled.input`
 
 const Controls = styled.div`
   margin-top: 24px;
+`;
+
+const PublicProfileOptInRow = styled.div`
+  margin-top: 12px;
+  display: flex;
+  max-width: 500px;
+  flex-direction: column;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-radius: 6px;
+  background: rgba(5, 5, 5, 0.45);
 `;
 
 /** ===========================================================================
