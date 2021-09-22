@@ -442,6 +442,8 @@ export const validatePaymentPlan = (plan: PAYMENT_PLAN) => {
   if (plan === "REGULAR" || plan === "PREMIUM") {
     return true;
   } else {
-    throw new BadRequestException("Invalid payment plan provided.");
+    throw new BadRequestException(
+      `Invalid payment plan provided, received: ${plan}`,
+    );
   }
 };

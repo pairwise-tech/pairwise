@@ -73,7 +73,9 @@ describe("Payments APIs", () => {
       .set("Authorization", authorizationHeader)
       .expect(400)
       .end((error, response) => {
-        expect(response.body.message).toBe("Invalid payment plan provided.");
+        expect(response.body.message).toBe(
+          "Invalid payment plan provided, received: BONUS",
+        );
         done(error);
       });
   });
@@ -87,7 +89,9 @@ describe("Payments APIs", () => {
       .set("Authorization", authorizationHeader)
       .expect(400)
       .end((error, response) => {
-        expect(response.body.message).toBe("Invalid payment plan provided.");
+        expect(response.body.message).toBe(
+          "Invalid payment plan provided, received: undefined",
+        );
         done(error);
       });
   });
