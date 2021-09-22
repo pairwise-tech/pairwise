@@ -16,9 +16,13 @@ import { ChallengesActionTypes } from "./index";
  * ============================================================================
  */
 
+// cache keys are: uuid-challengeId
 export interface BlobCache {
-  // cache keys are: uuid-challengeId
   [key: string]: Nullable<ICodeBlobDto>;
+}
+
+export interface ChallengeMetaMap {
+  [id: string]: Nullable<ChallengeMeta>;
 }
 
 export interface State {
@@ -30,7 +34,7 @@ export interface State {
   challengeDetailId: Nullable<string>;
   pullRequestLoading: boolean;
   pullRequestContext: Nullable<PullRequestDiffContext[]>;
-  challengeMeta: Nullable<ChallengeMeta>;
+  challengeMetaMap: ChallengeMetaMap;
   blobCache: BlobCache;
 }
 
@@ -43,7 +47,7 @@ const initialState: State = {
   challengeDetailId: null,
   pullRequestLoading: false,
   pullRequestContext: null,
-  challengeMeta: null,
+  challengeMetaMap: {},
   blobCache: {},
 };
 
@@ -95,9 +99,24 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     ...state,
     courseSkeletons: action.payload,
   }))
-  .handleAction(actions.fetchChallengeMetaSuccess, (state, action) => ({
+  .handleAction(
+    [actions.fetchChallengeMetaSuccess, actions.resetChallengeMetaSuccess],
+    (state, action) => ({
+      ...state,
+      challengeMetaMap: {
+        ...state.challengeMetaMap,
+        [action.payload.challengeId]: action.payload,
+      },
+    }),
+  )
+  .handleAction(actions.fetchAllChallengeMetaSuccess, (state, action) => ({
     ...state,
-    challengeMeta: action.payload,
+    challengeMetaMap: action.payload.reduce((map, meta) => {
+      return {
+        ...map,
+        [meta.challengeId]: meta,
+      };
+    }, {}),
   }))
   .handleAction(actions.fetchChallengeBlobSuccess, (state, { payload }) => ({
     ...state,

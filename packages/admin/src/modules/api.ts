@@ -236,10 +236,28 @@ class Api extends BaseApiClass {
     });
   };
 
-  fetchChallengeMeta = async (id: string) => {
+  fetchChallengeMetaByChallengeId = async (id: string) => {
     return this.httpHandler(async () => {
       const { config } = this.getRequestHeaders();
       return axios.get<ChallengeMeta>(`${HOST}/challenge-meta/${id}`, config);
+    });
+  };
+
+  fetchAllChallengeMeta = async () => {
+    return this.httpHandler(async () => {
+      const { config } = this.getRequestHeaders();
+      return axios.get<ChallengeMeta[]>(`${HOST}/admin/challenge-meta`, config);
+    });
+  };
+
+  resetChallengeMeta = async (id: string) => {
+    return this.httpHandler(async () => {
+      const { config } = this.getRequestHeaders();
+      return axios.post<ChallengeMeta>(
+        `${HOST}/admin/reset-challenge-meta/${id}`,
+        {},
+        config,
+      );
     });
   };
 

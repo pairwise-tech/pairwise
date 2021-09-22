@@ -16,6 +16,7 @@ export const ADMIN_MENU_ITEMS_ROUTES = [
   "feedback",
   "search",
   "pull-requests",
+  "challenge-analytics",
 ];
 
 // Represents the max index for the routes listed in the admin nav menu

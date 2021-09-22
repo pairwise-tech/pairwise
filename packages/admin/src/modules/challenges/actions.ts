@@ -40,6 +40,14 @@ enum ActionTypesEnum {
   FETCH_CHALLENGE_META_SUCCESS = "FETCH_CHALLENGE_META_SUCCESS",
   FETCH_CHALLENGE_META_FAILURE = "FETCH_CHALLENGE_META_FAILURE",
 
+  FETCH_ALL_CHALLENGE_META = "FETCH_ALL_CHALLENGE_META",
+  FETCH_ALL_CHALLENGE_META_SUCCESS = "FETCH_ALL_CHALLENGE_META_SUCCESS",
+  FETCH_ALL_CHALLENGE_META_FAILURE = "FETCH_ALL_CHALLENGE_META_FAILURE",
+
+  RESET_CHALLENGE_META = "RESET_CHALLENGE_META",
+  RESET_CHALLENGE_META_SUCCESS = "RESET_CHALLENGE_META_SUCCESS",
+  RESET_CHALLENGE_META_FAILURE = "RESET_CHALLENGE_META_FAILURE",
+
   FETCH_CHALLENGE_BLOB = "FETCH_CHALLENGE_BLOB",
   FETCH_CHALLENGE_BLOB_SUCCESS = "FETCH_CHALLENGE_BLOB_SUCCESS",
   FETCH_CHALLENGE_BLOB_FAILURE = "FETCH_CHALLENGE_BLOB_FAILURE",
@@ -112,6 +120,30 @@ export const fetchChallengeMetaSuccess = createAction(
 
 export const fetchChallengeMetaFailure = createAction(
   ActionTypesEnum.FETCH_CHALLENGE_META_FAILURE,
+)<HttpResponseError>();
+
+export const fetchAllChallengeMeta = createAction(
+  ActionTypesEnum.FETCH_ALL_CHALLENGE_META,
+)<string>();
+
+export const fetchAllChallengeMetaSuccess = createAction(
+  ActionTypesEnum.FETCH_ALL_CHALLENGE_META_SUCCESS,
+)<ChallengeMeta[]>();
+
+export const fetchAllChallengeMetaFailure = createAction(
+  ActionTypesEnum.FETCH_ALL_CHALLENGE_META_FAILURE,
+)<HttpResponseError>();
+
+export const resetChallengeMeta = createAction(
+  ActionTypesEnum.RESET_CHALLENGE_META,
+)<string>();
+
+export const resetChallengeMetaSuccess = createAction(
+  ActionTypesEnum.RESET_CHALLENGE_META_SUCCESS,
+)<ChallengeMeta>();
+
+export const resetChallengeMetaFailure = createAction(
+  ActionTypesEnum.RESET_CHALLENGE_META_FAILURE,
 )<HttpResponseError>();
 
 export const fetchChallengeBlob = createAction(

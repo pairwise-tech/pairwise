@@ -116,12 +116,48 @@ const fetchChallengeMetaEpic: EpicSignature = (action$, state$, deps) => {
     map((x) => x.payload),
     // @ts-ignore
     filter((x) => x !== null),
-    mergeMap(deps.api.fetchChallengeMeta),
+    mergeMap(deps.api.fetchChallengeMetaByChallengeId),
     map(({ value: meta, error }) => {
       if (meta) {
         return Actions.fetchChallengeMetaSuccess(meta);
       } else {
         return Actions.fetchChallengeMetaFailure(error);
+      }
+    }),
+  );
+};
+
+/**
+ * Fetch all challenge meta.
+ */
+const fetchAllChallengeMetaEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf([Actions.fetchAllChallengeMeta, Actions.initializeApp])),
+    mergeMap(deps.api.fetchAllChallengeMeta),
+    map(({ value: meta, error }) => {
+      if (meta) {
+        return Actions.fetchAllChallengeMetaSuccess(meta);
+      } else {
+        return Actions.fetchAllChallengeMetaFailure(error);
+      }
+    }),
+  );
+};
+
+/**
+ * Reset challenge meta for a challenge.
+ */
+const resetChallengeMetaEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.resetChallengeMeta)),
+    pluck("payload"),
+    mergeMap(deps.api.resetChallengeMeta),
+    map(({ value: meta, error }) => {
+      if (meta) {
+        deps.toaster.success("Challenge Meta Reset");
+        return Actions.resetChallengeMetaSuccess(meta);
+      } else {
+        return Actions.resetChallengeMetaFailure(error);
       }
     }),
   );
@@ -236,6 +272,8 @@ export default combineEpics(
   handleChallengeIdSearchInitializationEpic,
   handleChallengeIdSearchEpic,
   fetchChallengeMetaEpic,
+  fetchAllChallengeMetaEpic,
+  resetChallengeMetaEpic,
   handleFetchChallengeCodeBlob,
   handleSearchPullRequestEpic,
   fetchPullRequestContextEpic,

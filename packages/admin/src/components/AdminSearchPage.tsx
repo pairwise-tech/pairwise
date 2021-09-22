@@ -124,7 +124,7 @@ class AdminSearchPage extends React.Component<IProps, {}> {
             <ChallengeContextCard
               {...mapItem}
               isMobile={isMobile}
-              challengeMeta={this.props.challengeMeta}
+              challengeMetaMap={this.props.challengeMetaMap}
             />
           );
         } else {
@@ -151,8 +151,8 @@ class AdminSearchPage extends React.Component<IProps, {}> {
 const mapStateToProps = (state: ReduxStoreState) => ({
   users: Modules.selectors.users.usersState(state).users,
   userSettings: Modules.selectors.admin.adminUserSettings(state),
-  challengeMeta: Modules.selectors.challenges.challengeMeta(state),
   challengeMap: Modules.selectors.challenges.getChallengeMap(state),
+  challengeMetaMap: Modules.selectors.challenges.challengeMetaMap(state),
   challengeBlobCache: Modules.selectors.challenges.challengeBlobCache(state),
 });
 

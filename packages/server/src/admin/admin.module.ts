@@ -8,6 +8,7 @@ import { ProgressModule } from "../progress/progress.module";
 import { ContentModule } from "../content/content.module";
 import { BlobModule } from "../blob/blob.module";
 import { AuthModule } from "../auth/auth.module";
+import { ChallengeMetaModule } from "../challenge-meta/challenge-meta.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthModule } from "../auth/auth.module";
     ProgressModule,
     BlobModule,
     ContentModule,
+    ChallengeMetaModule,
   ],
   controllers: [AdminController],
   providers: [AdminService],

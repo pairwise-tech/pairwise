@@ -462,7 +462,7 @@ class Account extends React.Component<IProps, IState> {
         email: profile.email || "",
         givenName: profile.givenName,
         familyName: profile.familyName,
-        username: profile.username,
+        username: profile.username || "",
       });
     }
   };

@@ -34,6 +34,7 @@ import { SUCCESS_CODES } from "../tools/constants";
 import { AuthService } from "../auth/auth.service";
 import { AdminPurchaseCourseDto } from "@pairwise/common";
 import { captureSentryException } from "../tools/sentry-utils";
+import { ChallengeMetaService } from "../challenge-meta/challenge-meta.service";
 
 @Controller("admin")
 export class AdminController {
@@ -55,6 +56,8 @@ export class AdminController {
     private readonly blobService: BlobService,
 
     private readonly contentService: ContentService,
+
+    private readonly challengeMetaService: ChallengeMetaService,
   ) {}
 
   /* Placeholder/test admin endpoint */
@@ -275,7 +278,19 @@ export class AdminController {
   }
 
   @UseGuards(AdminAuthGuard)
-  @Get("coaching-sessions/complete/:uuid")
+  @Post("/reset-challenge-meta/:id")
+  public resetChallengeMeta(@Param() params, @Req() req: AuthenticatedRequest) {
+    return this.challengeMetaService.resetChallengeMeta(params.id);
+  }
+
+  @UseGuards(AdminAuthGuard)
+  @Get("/challenge-meta")
+  public fetchAllChallengeMeta(@Req() req: AuthenticatedRequest) {
+    return this.challengeMetaService.fetchAllChallengeMeta();
+  }
+
+  @UseGuards(AdminAuthGuard)
+  @Get("/coaching-sessions/complete/:uuid")
   public async revokeCoachingSession(@Param() params) {
     return this.userService.markCoachingSessionAsCompleteForUser(params.uuid);
   }

@@ -23,9 +23,9 @@ export const challengeDetailId = createSelector(
   (state) => state.challengeDetailId,
 );
 
-export const challengeMeta = createSelector(
+export const challengeMetaMap = createSelector(
   [challengesState],
-  (state) => state.challengeMeta,
+  (state) => state.challengeMetaMap,
 );
 
 export const challengeBlobCache = createSelector(

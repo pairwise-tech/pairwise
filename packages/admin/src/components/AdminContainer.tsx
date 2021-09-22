@@ -31,6 +31,7 @@ import AdminPullRequestPage, {
   PULL_REQUEST_DIFF_VIEW_ID,
 } from "./AdminPullRequestPage";
 import { themeColor, themeText } from "./AdminThemeContainer";
+import AdminChallengeAnalytics from "./AdminChallengeAnalytics";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -129,6 +130,11 @@ const AdminContainer = (props: IProps) => {
       key="pull-requests"
       path="/pull-requests/:pull?"
       component={AdminPullRequestPage}
+    />,
+    <Route
+      key="challenge-analytics"
+      path="/challenge-analytics"
+      component={AdminChallengeAnalytics}
     />,
     <Route key="redirect" component={() => <Redirect to="/stats" />} />,
   ];
@@ -323,7 +329,7 @@ const Header = styled.div`
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 100;
   padding-top: ${BORDER}px;
   padding-bottom: 0px;
   padding-left: 0px;

@@ -13,6 +13,7 @@ import {
   SummaryTitle,
 } from "./AdminComponents";
 import { COLORS } from "../tools/constants";
+import { ChallengeMetaMap } from "../modules/challenges/store";
 
 /** ===========================================================================
  * Types & Config
@@ -31,7 +32,7 @@ class AdminChallengeDetailModal extends React.Component<IProps, IState> {
     const {
       isMobile,
       challengeMap,
-      challengeMeta,
+      challengeMetaMap,
       adminUserSettings,
       challengeDetailId,
       setChallengeDetailId,
@@ -68,7 +69,7 @@ class AdminChallengeDetailModal extends React.Component<IProps, IState> {
           <ChallengeContextCard
             {...result}
             isMobile={isMobile}
-            challengeMeta={challengeMeta}
+            challengeMetaMap={challengeMetaMap}
           />
         ) : (
           <p>
@@ -97,17 +98,19 @@ interface ChallengeContextCardProps {
   moduleId: string;
   challenge: Challenge;
   isMobile: boolean;
-  challengeMeta: Nullable<ChallengeMeta>;
+  challengeMetaMap: ChallengeMetaMap;
 }
 
 export const ChallengeContextCard = (props: ChallengeContextCardProps) => {
-  const { challenge, courseId, moduleId, isMobile, challengeMeta } = props;
+  const { challenge, courseId, moduleId, isMobile, challengeMetaMap } = props;
 
   let numberOfTimesAttempted = null;
   let numberOfTimeCompleted = null;
-  if (challengeMeta && challengeMeta.challengeId === challenge.id) {
-    numberOfTimesAttempted = challengeMeta.numberOfTimesAttempted;
-    numberOfTimeCompleted = challengeMeta.numberOfTimesCompleted;
+
+  const meta = challengeMetaMap[challenge.id];
+  if (meta) {
+    numberOfTimesAttempted = meta.numberOfTimesAttempted;
+    numberOfTimeCompleted = meta.numberOfTimesCompleted;
   }
 
   const displayChallengeMeta = numberOfTimesAttempted || numberOfTimeCompleted;
@@ -174,9 +177,9 @@ export const ChallengeContextCard = (props: ChallengeContextCardProps) => {
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  challengeMeta: Modules.selectors.challenges.challengeMeta(state),
   challengeMap: Modules.selectors.challenges.getChallengeMap(state),
   adminUserSettings: Modules.selectors.admin.adminUserSettings(state),
+  challengeMetaMap: Modules.selectors.challenges.challengeMetaMap(state),
   challengeDetailId: Modules.selectors.challenges.challengeDetailId(state),
 });
 
