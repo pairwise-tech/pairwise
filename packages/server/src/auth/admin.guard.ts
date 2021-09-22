@@ -68,12 +68,14 @@ const getFakeAdminUser = () => {
     emailVerified: false,
     givenName: "ADMIN",
     familyName: "ADMIN",
-    displayName: "FIXED ADMIN USER",
+    username: "FIXED ADMIN USER",
     avatarUrl: "ADMIN",
     githubAccountId: "admin-account-id",
     facebookAccountId: "admin-account-id",
     googleAccountId: "admin-account-id",
     coachingSessions: 0,
+    optInPublicProfile: false,
+    optInShareAnonymousGeolocationActivity: false,
   };
 
   const FAKE_ADMIN_USER = {

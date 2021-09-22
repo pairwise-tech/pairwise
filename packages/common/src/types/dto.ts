@@ -33,7 +33,7 @@ export interface UserProfile {
   uuid: string;
   email: string | null;
   emailVerified: boolean | null;
-  displayName: string;
+  username: string;
   givenName: string;
   familyName: string;
   avatarUrl: string;
@@ -41,6 +41,8 @@ export interface UserProfile {
   googleAccountId: string | null;
   facebookAccountId: string | null;
   githubAccountId: string | null;
+  optInPublicProfile: boolean;
+  optInShareAnonymousGeolocationActivity: boolean;
 }
 
 export type AppTheme = "dark" | "light";

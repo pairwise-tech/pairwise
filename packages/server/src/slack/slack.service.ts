@@ -169,8 +169,8 @@ export class SlackService {
     config,
   }: SlackAccountCreationMessageData) {
     if (accountCreated) {
-      // Display user profile name or default to email
-      const moniker = profile.displayName || profile.email;
+      // Display user profile email or default to username
+      const moniker = profile.email || profile.username;
       const nameSnippet = moniker ? ` for *${moniker}* ` : " ";
       const message = `New account created${nameSnippet}using ${signinStrategy} strategy :tada:`;
       await this.postMessageToChannel(message, {
@@ -255,7 +255,7 @@ export class SlackService {
     let messageBase = `:memo: Feedback for challenge ${challengeLinks} of type \`${feedback.type}\``;
 
     if (user) {
-      messageBase += ` submitted by *${user.profile.displayName}* (${user.profile.email}).`;
+      messageBase += ` submitted by *${user.profile.username}* (${user.profile.email}).`;
     } else {
       messageBase += ` was submitted by an anonymous user.`;
     }

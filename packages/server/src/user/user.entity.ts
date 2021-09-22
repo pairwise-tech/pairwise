@@ -33,8 +33,8 @@ export class User {
   @Column({ nullable: true })
   public emailVerified: boolean | null;
 
-  @Column()
-  public displayName: string;
+  @Column({ default: "" })
+  public username: string;
 
   @Column()
   public givenName: string;
@@ -56,6 +56,12 @@ export class User {
 
   @Column({ default: 0 })
   public coachingSessions: number;
+
+  @Column({ default: false })
+  public optInPublicProfile: boolean;
+
+  @Column({ default: false })
+  public optInShareAnonymousGeolocationActivity: boolean;
 
   @Column({ type: "jsonb" })
   public settings: string;

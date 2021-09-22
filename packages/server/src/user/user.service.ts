@@ -31,7 +31,7 @@ import { isAdminEmail } from "../auth/admin-auth";
 export interface GenericUserProfile {
   email: string;
   emailVerified: boolean;
-  displayName: string;
+  username: string;
   givenName: string;
   familyName: string;
   avatarUrl: string;

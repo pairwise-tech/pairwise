@@ -110,7 +110,7 @@ export class AuthService {
             email,
             emailVerified: true,
             avatarUrl: "",
-            displayName: "",
+            username: "",
             givenName: "",
             familyName: "",
             facebookAccountId: null,
@@ -172,8 +172,6 @@ export class AuthService {
         const { first_name, last_name } = profile;
         const givenName = first_name || "";
         const familyName = last_name || "";
-        const displayName =
-          givenName || familyName ? `${first_name} ${last_name}` : "";
 
         const userProfile: GenericUserProfile = {
           email,
@@ -181,8 +179,8 @@ export class AuthService {
           avatarUrl,
           givenName,
           familyName,
-          displayName,
           facebookAccountId,
+          username: "",
           githubAccountId: null,
           googleAccountId: null,
         };
@@ -234,14 +232,12 @@ export class AuthService {
 
         let firstName = "";
         let lastName = "";
-        let displayName = "";
 
         // profile.name can be null
         if (profile.name) {
           const name = profile.name.split(" ");
           firstName = name[0] || "";
           lastName = name[1] || "";
-          displayName = profile.name;
         }
 
         const avatarUrl = profile.avatar_url;
@@ -249,7 +245,7 @@ export class AuthService {
           email,
           emailVerified: false,
           avatarUrl,
-          displayName,
+          username: "",
           givenName: firstName,
           familyName: lastName,
           githubAccountId,
@@ -307,7 +303,7 @@ export class AuthService {
           email,
           emailVerified: false,
           avatarUrl,
-          displayName: profile.name || "",
+          username: "",
           givenName: profile.given_name || "",
           familyName: profile.family_name || "",
           googleAccountId,
