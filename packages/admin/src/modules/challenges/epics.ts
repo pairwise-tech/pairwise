@@ -154,7 +154,7 @@ const resetChallengeMetaEpic: EpicSignature = (action$, state$, deps) => {
     mergeMap(deps.api.resetChallengeMeta),
     map(({ value: meta, error }) => {
       if (meta) {
-        deps.toaster.success("Challenge Meta Reset");
+        deps.toaster.success(`Challenge id ${meta.challengeId} Meta Reset`);
         return Actions.resetChallengeMetaSuccess(meta);
       } else {
         return Actions.resetChallengeMetaFailure(error);
