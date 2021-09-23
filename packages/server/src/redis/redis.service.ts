@@ -7,6 +7,7 @@ import {
   Err,
   Result,
   assertUnreachable,
+  ContentUtility,
 } from "@pairwise/common";
 import ENV from "../tools/server-env";
 import shortid from "shortid";
@@ -306,10 +307,21 @@ export class RedisClientService {
         continue;
       }
 
+      /**
+       * Filter by only valid challenge ids.
+       *
+       * NOTE: If challenges are deleted, they may disappear from the course
+       * content but remain in the Redis progress cache. This step removes
+       * stale challenge ids such as those.
+       */
+      const challengeIds = Array.from(v.challengeIds).filter(
+        ContentUtility.challengeIdIsValid,
+      );
+
       progress[k] = {
         user: v.user,
+        challengeIds,
         lastUpdated: v.lastUpdated,
-        challengeIds: Array.from(v.challengeIds),
       };
     }
 
