@@ -197,11 +197,12 @@ export class AuthController {
     if (typeof referrerUrl === "string" && referrerUrl.includes(clientUrl)) {
       return referrerUrl;
     } else {
-      captureSentryException(
-        new Error(
-          `Received invalid referrer in user logic redirect! Received: ${referrerUrl}`,
-        ),
-      );
+      // Mute this for now.
+      // captureSentryException(
+      //   new Error(
+      //     `Received invalid referrer in user logic redirect! Received: ${referrerUrl}`,
+      //   ),
+      // );
       return clientUrl;
     }
   };

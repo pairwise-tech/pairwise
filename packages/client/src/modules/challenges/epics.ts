@@ -888,7 +888,7 @@ const updateUserProgressEpic: EpicSignature = (action$, state$, deps) => {
      * Throttle updates to mitigate user hammering the run code function
      * on a single challenge.
      */
-    throttleTime(1500),
+    throttleTime(500),
     mergeMap(deps.api.updateUserProgress),
     map((result) => {
       if (result.value) {

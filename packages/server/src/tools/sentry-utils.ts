@@ -10,7 +10,7 @@ export const captureSentryException = (e: Error | string) => {
   console.error(`[SENTRY ERROR]: Capturing Sentry Error: ${error.message}`);
 
   // Post to Slack manually, until upgrading Sentry plan
-  slackService.postSentryError(error.message);
+  slackService.postSentryError(`\`[SENTRY ERROR]:\` ${error.message}`);
 
   // Send full error to Sentry
   Sentry.captureException(error);

@@ -45,8 +45,7 @@ export class ChallengeMetaService {
       .createQueryBuilder("challengeMeta")
       .update(ChallengeMetaEntity)
       .where({ challengeId })
-      .set({ numberOfTimesAttempted: 0 })
-      .set({ numberOfTimesCompleted: 0 })
+      .set({ numberOfTimesAttempted: 0, numberOfTimesCompleted: 0 })
       .execute();
 
     return this.lookupChallengeMeta(challengeId);
@@ -90,11 +89,11 @@ export class ChallengeMetaService {
     if (!result) {
       const meta = {
         challengeId,
+        numberOfTimesAttempted: 1,
         numberOfTimesCompleted: 1,
       };
       await this.challengeMetaRepository.insert(meta);
     } else {
-      // See NOTE
       const attempted = result.numberOfTimesAttempted + 1;
       const completed = result.numberOfTimesCompleted + 1;
 
@@ -102,8 +101,10 @@ export class ChallengeMetaService {
         .createQueryBuilder("challengeMeta")
         .update(ChallengeMetaEntity)
         .where({ uuid: result.uuid })
-        .set({ numberOfTimesAttempted: attempted })
-        .set({ numberOfTimesCompleted: completed })
+        .set({
+          numberOfTimesAttempted: attempted,
+          numberOfTimesCompleted: completed,
+        })
         .execute();
     }
   }

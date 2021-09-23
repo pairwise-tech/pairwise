@@ -101,8 +101,20 @@ class AdminStatsPage extends React.Component<IProps, IState> {
         ) : (
           <>
             <Stat>
-              <b>Total Users:</b>{" "}
+              <b>Total Registered Users:</b>{" "}
               <Value>{summary.stats.totalUsers.toLocaleString()}</Value>
+            </Stat>
+            <Stat>
+              <b>Total Non-Zero Users:</b>{" "}
+              <Value>
+                {summary.stats.nonZeroChallengeUsers.toLocaleString()}
+              </Value>
+            </Stat>
+            <Stat>
+              <b>Total Ghost Users:</b>{" "}
+              <Value>
+                {summary.leaderboard.numberOfUsersWithZeroChallengesComplete.toLocaleString()}
+              </Value>
             </Stat>
             <Stat>
               <b>New Users in Last 7 Days:</b>{" "}
@@ -127,12 +139,6 @@ class AdminStatsPage extends React.Component<IProps, IState> {
                 0
                   ? summary.leaderboard.averageChallengesCompletedPerNonZeroUser.toLocaleString()
                   : 0}
-              </Value>
-            </Stat>
-            <Stat>
-              <b>Total Ghost Users (Zero Challenges):</b>{" "}
-              <Value>
-                {summary.leaderboard.numberOfUsersWithZeroChallengesComplete.toLocaleString()}
               </Value>
             </Stat>
             <Stat>

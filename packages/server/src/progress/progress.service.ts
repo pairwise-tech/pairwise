@@ -353,7 +353,7 @@ export class ProgressService {
               captureSentryException(
                 `Received null challenge context: ${JSON.stringify(
                   challengeContext,
-                )}`,
+                )}, challenge id: ${id}`,
               );
               return null;
             }

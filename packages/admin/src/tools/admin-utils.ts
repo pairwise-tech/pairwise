@@ -340,6 +340,7 @@ export const summarizeUserProgress = (users: AdminUserView[]) => {
       totalUsers,
       newUsersInLastWeek,
       usersWithoutEmail,
+      nonZeroChallengeUsers,
       totalChallengesCompleted,
       challengesCompletedInLastWeek,
     },
