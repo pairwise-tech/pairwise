@@ -9,10 +9,10 @@ import {
   ChallengeStatus,
   LastActiveChallengeIds,
   UserLeaderboardDto,
-  Result,
   PublicUserProfile,
-  Err,
-  Ok,
+  Option,
+  Some,
+  None,
 } from "@pairwise/common";
 import { AuthActionTypes } from "../auth";
 import { Actions as actions } from "../root-actions";
@@ -68,7 +68,7 @@ const initialUserState = {
 
 interface PublicUserProfileState {
   loading: boolean;
-  data: Result<PublicUserProfile, null>;
+  data: Option<PublicUserProfile>;
 }
 
 export interface State {
@@ -184,24 +184,24 @@ const userLeaderboard = createReducer<UserLeaderboardState, UserActionTypes>(
 const publicUserProfile = createReducer<
   PublicUserProfileState,
   UserActionTypes
->({ loading: false, data: new Err(null) })
+>({ loading: false, data: new None() })
   .handleAction(actions.fetchPublicUserProfile, (state) => {
     return {
       ...state,
       loading: true,
-      data: new Err(null),
+      data: new None(),
     };
   })
   .handleAction(actions.fetchPublicUserProfileSuccess, (state, action) => {
     return {
       loading: false,
-      data: new Ok(action.payload),
+      data: new Some(action.payload),
     };
   })
   .handleAction(actions.fetchPublicUserProfileFailure, (state, action) => {
     return {
       loading: false,
-      data: new Err(null),
+      data: new None(),
     };
   });
 

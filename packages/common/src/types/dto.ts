@@ -106,7 +106,9 @@ export interface LeaderboardEntryDto {
 export type UserLeaderboardDto = LeaderboardEntryDto[];
 
 export interface PublicUserProfile {
+  username: string;
   completedChallenges: number;
+  attemptedChallenges: number;
 }
 
 /**
@@ -274,7 +276,9 @@ export interface CodeBlobBulk {
  * false: incomplete
  * undefined: never attempted
  *
- * Also includes the time a challenge was completed.
+ * Also includes the time a challenge was completed. The timeCompleted
+ * field will disingenuously reflect the time last attempted (not completed),
+ * if the progress update was mode with complete = false.
  */
 export interface ChallengeStatus {
   complete: boolean;

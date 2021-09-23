@@ -22,6 +22,11 @@ export const userLeaderboardState = createSelector(
   (state) => state.userLeaderboard,
 );
 
+export const publicUserProfile = createSelector(
+  userState,
+  (state) => state.publicUserProfile,
+);
+
 export const emailVerificationStatus = createSelector(
   userState,
   (state) => state.emailVerificationStatus,

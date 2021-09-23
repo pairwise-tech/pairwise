@@ -33,7 +33,6 @@ export class UserController {
     return this.userService.updateUser(req.user, updateDetails);
   }
 
-  @UseGuards(AuthGuard("jwt"))
   @Get("public-profiles/:username")
   public async fetchPublicProfileByUsername(@Param() params) {
     return this.userService.fetchPublicProfileByUsername(params.username);

@@ -381,23 +381,38 @@ export class UserService {
       if (user.optInPublicProfile) {
         const userWithChallengeProgress = await this.userRepository
           .createQueryBuilder("user")
-          .leftJoinAndSelect("user.challengeProgressHistory", "progress")
           .where({ uuid: user.uuid })
-          .execute();
+          .leftJoinAndSelect("user.challengeProgressHistory", "progress")
+          .getOne();
 
-        console.log(userWithChallengeProgress);
+        if (userWithChallengeProgress.challengeProgressHistory) {
+          const { challengeProgressHistory } = userWithChallengeProgress;
 
-        if (userWithChallengeProgress) {
-          const challengeCount = 0;
+          let completedChallenges = 0;
+          let attemptedChallenges = 0;
+
+          for (const courseProgress of challengeProgressHistory) {
+            const progress: UserProgressMap = JSON.parse(
+              courseProgress.progress,
+            );
+
+            for (const entry of Object.values(progress)) {
+              attemptedChallenges++;
+
+              if (entry.complete) {
+                completedChallenges++;
+              }
+            }
+          }
 
           const result: PublicUserProfile = {
-            completedChallenges: 5,
+            username,
+            completedChallenges,
+            attemptedChallenges,
           };
 
           return result;
         }
-
-        return user;
       }
     }
 

@@ -58,6 +58,7 @@ import { IThemeProps, themeColor, themeText } from "./ThemeContainer";
 import AdminDrawer from "./AdminDrawer";
 import UserLeaderboard from "./UserLeaderboard";
 import Portfolio from "./Portfolio";
+import PublicUserProfilePage from "./PublicUserProfilePage";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -660,6 +661,7 @@ const ApplicationContainer = (props: IProps) => {
               component={AuthenticationForm}
             />
           )}
+          <Route key="users" path="/users" component={PublicUserProfilePage} />
           <Route
             key="login"
             path="/login"
