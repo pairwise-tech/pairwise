@@ -34,6 +34,12 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard("jwt"))
+  @Get("public-profiles/:username")
+  public async fetchPublicProfileByUsername(@Param() params) {
+    return this.userService.fetchPublicProfileByUsername(params.username);
+  }
+
+  @UseGuards(AuthGuard("jwt"))
   @Get("leaderboard")
   public async getUserLeaderboard(@Request() req: AuthenticatedRequest) {
     return this.userService.getUserLeaderboard(req.user.profile);

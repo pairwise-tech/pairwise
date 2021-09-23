@@ -24,6 +24,7 @@ import {
   PullRequestCourseContent,
   SSO,
   UserProfile,
+  PublicUserProfile,
   PaymentRequestDto,
   RecentProgressPublicStats,
 } from "@pairwise/common";
@@ -288,6 +289,17 @@ class Api extends BaseApiClass {
 
       return new Ok(preAccountUser);
     }
+  };
+
+  fetchUserPublicProfileByUsername = async (username: string) => {
+    const { config, authenticated } = this.getRequestHeaders();
+
+    return this.httpHandler(async () => {
+      return axios.get<PublicUserProfile>(
+        `${HOST}/user/public-profiles/${username}`,
+        config,
+      );
+    });
   };
 
   /**

@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException } from "@nestjs/common";
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from "@nestjs/common";
 import { User } from "./user.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -10,6 +14,7 @@ import {
   UserProgressMap,
   defaultUserSettings,
   UserProfile,
+  PublicUserProfile,
   ILastActiveIdsDto,
   SSO,
   UserLeaderboardDto,
@@ -363,6 +368,40 @@ export class UserService {
       // All good - update the email on this user
       await this.userRepository.update({ uuid }, { email });
     }
+  }
+
+  public async fetchPublicProfileByUsername(username: string) {
+    const user = await this.findUserByUsername(username);
+
+    /**
+     * Only return the user if they exist and have opted into sharing
+     * their public profile.
+     */
+    if (user) {
+      if (user.optInPublicProfile) {
+        const userWithChallengeProgress = await this.userRepository
+          .createQueryBuilder("user")
+          .leftJoinAndSelect("user.challengeProgressHistory", "progress")
+          .where({ uuid: user.uuid })
+          .execute();
+
+        console.log(userWithChallengeProgress);
+
+        if (userWithChallengeProgress) {
+          const challengeCount = 0;
+
+          const result: PublicUserProfile = {
+            completedChallenges: 5,
+          };
+
+          return result;
+        }
+
+        return user;
+      }
+    }
+
+    throw new NotFoundException("404");
   }
 
   public async updateUser(user: RequestUser, userDetails: UserUpdateOptions) {

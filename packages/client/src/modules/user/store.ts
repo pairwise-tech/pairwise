@@ -9,6 +9,10 @@ import {
   ChallengeStatus,
   LastActiveChallengeIds,
   UserLeaderboardDto,
+  Result,
+  PublicUserProfile,
+  Err,
+  Ok,
 } from "@pairwise/common";
 import { AuthActionTypes } from "../auth";
 import { Actions as actions } from "../root-actions";
@@ -62,11 +66,17 @@ const initialUserState = {
   settings: defaultUserSettings,
 };
 
+interface PublicUserProfileState {
+  loading: boolean;
+  data: Result<PublicUserProfile, null>;
+}
+
 export interface State {
   user: UserState;
   loading: boolean;
   userLeaderboard: UserLeaderboardState;
   emailVerificationStatus: EMAIL_VERIFICATION_STATUS;
+  publicUserProfile: PublicUserProfileState;
 }
 
 const user = createReducer<
@@ -171,6 +181,30 @@ const userLeaderboard = createReducer<UserLeaderboardState, UserActionTypes>(
     };
   });
 
+const publicUserProfile = createReducer<
+  PublicUserProfileState,
+  UserActionTypes
+>({ loading: false, data: new Err(null) })
+  .handleAction(actions.fetchPublicUserProfile, (state) => {
+    return {
+      ...state,
+      loading: true,
+      data: new Err(null),
+    };
+  })
+  .handleAction(actions.fetchPublicUserProfileSuccess, (state, action) => {
+    return {
+      loading: false,
+      data: new Ok(action.payload),
+    };
+  })
+  .handleAction(actions.fetchPublicUserProfileFailure, (state, action) => {
+    return {
+      loading: false,
+      data: new Err(null),
+    };
+  });
+
 const emailVerificationStatus = createReducer<
   EMAIL_VERIFICATION_STATUS,
   UserActionTypes
@@ -196,6 +230,7 @@ const rootReducer = combineReducers({
   user,
   loading,
   userLeaderboard,
+  publicUserProfile,
   emailVerificationStatus,
 });
 

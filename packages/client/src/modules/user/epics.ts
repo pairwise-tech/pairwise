@@ -170,6 +170,22 @@ const deleteUserAccountLogoutEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+const fetchPublicUserProfileEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.fetchPublicUserProfile)),
+    pluck("payload"),
+    pluck("username"),
+    mergeMap(API.fetchUserPublicProfileByUsername),
+    map((result) => {
+      if (result.value) {
+        return Actions.fetchPublicUserProfileSuccess(result.value);
+      } else {
+        return Actions.fetchPublicUserProfileFailure(result.error);
+      }
+    }),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -184,4 +200,5 @@ export default combineEpics(
   disconnectAccountEpic,
   deleteUserAccountEpic,
   deleteUserAccountLogoutEpic,
+  fetchPublicUserProfileEpic,
 );

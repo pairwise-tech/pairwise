@@ -5,6 +5,7 @@ import {
   SSO,
   UserProfile,
   UserLeaderboardDto,
+  PublicUserProfile,
 } from "@pairwise/common";
 import { HttpResponseError } from "modules/api";
 import { createAction } from "typesafe-actions";
@@ -45,6 +46,10 @@ enum ActionTypesEnum {
   DISCONNECT_ACCOUNT = "DISCONNECT_ACCOUNT",
   DISCONNECT_ACCOUNT_SUCCESS = "DISCONNECT_ACCOUNT_SUCCESS",
   DISCONNECT_ACCOUNT_FAILURE = "UPDATE_USER_SETTINGS_FAILURE",
+
+  FETCH_PUBLIC_USER_PROFILE = "FETCH_PUBLIC_USER_PROFILE",
+  FETCH_PUBLIC_USER_PROFILE_SUCCESS = "FETCH_PUBLIC_USER_PROFILE_SUCCESS",
+  FETCH_PUBLIC_USER_PROFILE_FAILURE = "FETCH_PUBLIC_USER_PROFILE_FAILURE",
 }
 
 /** ===========================================================================
@@ -134,4 +139,16 @@ export const disconnectAccountSuccess = createAction(
 
 export const disconnectAccountFailure = createAction(
   ActionTypesEnum.DISCONNECT_ACCOUNT_FAILURE,
+)<HttpResponseError>();
+
+export const fetchPublicUserProfile = createAction(
+  ActionTypesEnum.FETCH_PUBLIC_USER_PROFILE,
+)<{ username: string }>();
+
+export const fetchPublicUserProfileSuccess = createAction(
+  ActionTypesEnum.FETCH_PUBLIC_USER_PROFILE_SUCCESS,
+)<PublicUserProfile>();
+
+export const fetchPublicUserProfileFailure = createAction(
+  ActionTypesEnum.FETCH_PUBLIC_USER_PROFILE_FAILURE,
 )<HttpResponseError>();
