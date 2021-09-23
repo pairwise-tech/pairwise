@@ -120,21 +120,11 @@ export interface PortfolioSkillSummary {
   accomplished: number;
 }
 
-type SkillKey = keyof typeof PortfolioSkills;
-type PortfolioSkillSummaryMap = { [key in SkillKey]: PortfolioSkillSummary };
+export type SkillKey = keyof typeof PortfolioSkills;
 
-export const getPortfolioSkillsDefaultSummary =
-  (): PortfolioSkillSummaryMap => {
-    return portfolioSkillsList.slice().reduce((summary, skill) => {
-      return {
-        ...summary,
-        [skill]: {
-          total: 0,
-          accomplished: 0,
-        },
-      };
-    }, {} as PortfolioSkillSummaryMap);
-  };
+export type PortfolioSkillSummaryMap = {
+  [key in SkillKey]: PortfolioSkillSummary;
+};
 
 /** ===========================================================================
  * Challenge Meta Database Entity

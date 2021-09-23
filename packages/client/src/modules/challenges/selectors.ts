@@ -3,7 +3,7 @@ import { createSelector } from "reselect";
 import {
   CodeChallengeBlob,
   createInverseChallengeMapping,
-  getPortfolioSkillsDefaultSummary,
+  computePortfolioSkillsSummary,
 } from "@pairwise/common";
 import { ReduxStoreState } from "modules/root";
 import prop from "ramda/es/prop";
@@ -514,28 +514,7 @@ export const userPortfolioSkillsSummary = createSelector(
     // will include all challenges. This is necessary to get calculate the
     // correct final values for users who have not purchased the course.
     const challengeMap = createInverseChallengeMapping(courseSkeletons);
-    const courseProgress = progress[currentCourseId];
-    const skillsSummary = getPortfolioSkillsDefaultSummary();
-
-    if (!courseProgress) {
-      return skillsSummary;
-    }
-
-    for (const [id, mapEntry] of Object.entries(challengeMap)) {
-      const { challenge } = mapEntry;
-
-      if (challenge.skillTags) {
-        for (const skill of challenge.skillTags) {
-          skillsSummary[skill].total++;
-          const userProgressEntry = courseProgress[id];
-          if (userProgressEntry && userProgressEntry.complete) {
-            skillsSummary[skill].accomplished++;
-          }
-        }
-      }
-    }
-
-    return skillsSummary;
+    return computePortfolioSkillsSummary(challengeMap, progress);
   },
 );
 

@@ -1,5 +1,11 @@
-import { Challenge, CourseSkeletonList, CourseList } from "../types/courses";
-import { UserProfile } from "../types/dto";
+import {
+  Challenge,
+  CourseSkeletonList,
+  CourseList,
+  PortfolioSkillSummaryMap,
+  portfolioSkillsList,
+} from "../types/courses";
+import { UserProfile, UserProgressMap } from "../types/dto";
 
 /**
  * Assert a condition cannot occur. Used for writing exhaustive switch
@@ -101,4 +107,50 @@ export const canDisconnectAccountRequest = (profile: UserProfile) => {
   }
 
   return true;
+};
+
+/**
+ * Generate default skills summary.
+ */
+export const getPortfolioSkillsDefaultSummary =
+  (): PortfolioSkillSummaryMap => {
+    return portfolioSkillsList.slice().reduce((summary, skill) => {
+      return {
+        ...summary,
+        [skill]: {
+          total: 0,
+          accomplished: 0,
+        },
+      };
+    }, {} as PortfolioSkillSummaryMap);
+  };
+
+/**
+ * Derive the total skills summary for a user given their progress and
+ * all the course content.
+ */
+export const computePortfolioSkillsSummary = (
+  challengeMap: InverseChallengeMapping,
+  userProgress: UserProgressMap,
+) => {
+  const skillsSummary = getPortfolioSkillsDefaultSummary();
+
+  for (const [id, mapEntry] of Object.entries(challengeMap)) {
+    const { challenge } = mapEntry;
+
+    if (challenge.skillTags) {
+      for (const skill of challenge.skillTags) {
+        skillsSummary[skill].total++;
+        const courseProgressEntry = userProgress[mapEntry.courseId];
+        if (courseProgressEntry) {
+          const challengeProgressEntry = courseProgressEntry[id];
+          if (challengeProgressEntry && challengeProgressEntry.complete) {
+            skillsSummary[skill].accomplished++;
+          }
+        }
+      }
+    }
+  }
+
+  return skillsSummary;
 };
