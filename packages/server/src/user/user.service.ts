@@ -19,6 +19,9 @@ import {
   SSO,
   UserLeaderboardDto,
   assertUnreachable,
+  ContentUtility,
+  createInverseChallengeMapping,
+  computePortfolioSkillsSummary,
 } from "@pairwise/common";
 import { RequestUser } from "../types";
 import {
@@ -379,24 +382,14 @@ export class UserService {
      */
     if (user) {
       if (user.optInPublicProfile) {
-        const userWithChallengeProgress = await this.userRepository
-          .createQueryBuilder("user")
-          .where({ uuid: user.uuid })
-          .leftJoinAndSelect("user.challengeProgressHistory", "progress")
-          .getOne();
+        const progressMap = await this.getProgressMapForUser(user);
 
-        if (userWithChallengeProgress.challengeProgressHistory) {
-          const { challengeProgressHistory } = userWithChallengeProgress;
-
+        if (progressMap.progress) {
           let completedChallenges = 0;
           let attemptedChallenges = 0;
 
-          for (const courseProgress of challengeProgressHistory) {
-            const progress: UserProgressMap = JSON.parse(
-              courseProgress.progress,
-            );
-
-            for (const entry of Object.values(progress)) {
+          for (const courseProgress of Object.values(progressMap.progress)) {
+            for (const entry of Object.values(courseProgress)) {
               attemptedChallenges++;
 
               if (entry.complete) {
@@ -405,10 +398,18 @@ export class UserService {
             }
           }
 
+          const skeletons = ContentUtility.getCourseNavigationSkeletons();
+          const challengeMap = createInverseChallengeMapping(skeletons);
+          const portfolioSkillsSummary = computePortfolioSkillsSummary(
+            challengeMap,
+            progressMap.progress,
+          );
+
           const result: PublicUserProfile = {
             username,
             completedChallenges,
             attemptedChallenges,
+            portfolioSkillsSummary,
           };
 
           return result;

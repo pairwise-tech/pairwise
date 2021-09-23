@@ -7,6 +7,8 @@ import { PageContainer, Text, PageTitle } from "./SharedComponents";
 import { COLORS } from "tools/constants";
 import { themeColor } from "./ThemeContainer";
 import SEO from "./SEO";
+import { PortfolioSkill } from "./Portfolio";
+import { portfolioSkillsList } from "@pairwise/common";
 
 /** ===========================================================================
  * Types & Config
@@ -37,7 +39,7 @@ class PublicUserProfile extends React.Component<IProps, IState> {
   };
 
   render(): Nullable<JSX.Element> {
-    const { publicUserProfile } = this.props;
+    const { appTheme, publicUserProfile } = this.props;
     const { loading, data } = publicUserProfile;
 
     if (loading) {
@@ -75,9 +77,17 @@ class PublicUserProfile extends React.Component<IProps, IState> {
             Opt-in to sharing your profile progress publicly by enabling the
             setting in your account page.
           </DescriptionText>
-          <FutureText>
-            More updates will be coming here in the future.
-          </FutureText>
+          <Subtitle>User's Skill Progress:</Subtitle>
+          {portfolioSkillsList.map((skill) => {
+            return (
+              <PortfolioSkill
+                key={skill}
+                skill={skill}
+                theme={appTheme}
+                summary={profile.portfolioSkillsSummary[skill]}
+              />
+            );
+          })}
         </PageContainer>
       );
     }
@@ -89,7 +99,7 @@ class PublicUserProfile extends React.Component<IProps, IState> {
  * ============================================================================
  */
 
-const Subtitle = styled(Text)`
+const Subtitle = styled.h3`
   font-weight: bold;
   ${themeColor("color", COLORS.TEXT_CONTENT_BRIGHT)};
 `;
@@ -116,6 +126,7 @@ const FutureText = styled.p`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  appTheme: Modules.selectors.user.userSettings(state).appTheme,
   publicUserProfile: Modules.selectors.user.publicUserProfile(state),
 });
 

@@ -3,6 +3,7 @@ import {
   CHALLENGE_TYPE,
   CourseList,
   CourseSkeletonList,
+  PortfolioSkillSummaryMap,
 } from "./courses";
 import { Nullable } from "./result";
 
@@ -109,6 +110,7 @@ export interface PublicUserProfile {
   username: string;
   completedChallenges: number;
   attemptedChallenges: number;
+  portfolioSkillsSummary: PortfolioSkillSummaryMap;
 }
 
 /**
