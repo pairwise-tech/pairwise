@@ -50,7 +50,7 @@ class PublicUserProfile extends React.Component<IProps, IState> {
       return (
         <PageContainer>
           <SEO
-            title="Public User Profile Page"
+            title="Pairwise User Profile Page"
             description="View user's public progress"
           />
           <p>No profile found.</p>
@@ -62,8 +62,8 @@ class PublicUserProfile extends React.Component<IProps, IState> {
       return (
         <PageContainer>
           <SEO
-            title="Public User Profile"
-            description={`${profile.username}'s public progress'`}
+            title="Pairwise User Profile"
+            description={`${profile.username}'s public Pairwise profile`}
           />
           <PageTitle>{profile.username}'s Profile</PageTitle>
           <Subtitle>User's Challenge Progress:</Subtitle>
