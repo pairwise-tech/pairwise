@@ -13,6 +13,7 @@ import {
   estimateTotalPaymentsRevenue,
   summarizeUserProgress,
 } from "../tools/admin-utils";
+import { getRecentProgressRecordsChartData } from "../tools/admin-chart-utils";
 import { COLORS, MOBILE } from "../tools/constants";
 import { Button } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
@@ -22,6 +23,7 @@ import {
   RecentProgressAdminDto,
 } from "@pairwise/common";
 import TimeSinceRefresh from "./TimeElapsedBar";
+import AdminChartComponent from "./AdminChartComponent";
 
 /** ===========================================================================
  * Types & Config
@@ -179,7 +181,7 @@ class AdminStatsPage extends React.Component<IProps, IState> {
             })}
             <Title>Realtime Challenge Updates:</Title>
             {this.renderRealTimeUpdates()}
-            <Title>Recent Challenge Progress:</Title>
+            <Title>Past 24hr Progress Summary:</Title>
             {progressRecords ? (
               this.renderProgressRecords(progressRecords)
             ) : (
@@ -243,12 +245,23 @@ class AdminStatsPage extends React.Component<IProps, IState> {
       return <p style={{ color: COLORS.GRAY_TEXT }}>No records yet...</p>;
     }
 
+    const chartData = getRecentProgressRecordsChartData(progressRecords);
+
     return (
       <>
         <StatusText>{statusMessage}</StatusText>
         <StatusText style={{ color: COLORS.PRIMARY_BLUE }}>
           Current Health Ratio = {healthRatio.toFixed(2)}%
         </StatusText>
+        <Title>Past 24hr Completed Challenges per User:</Title>
+        <AdminChartComponent
+          data={chartData}
+          xName="Users"
+          yName="Challenges"
+          chartWidth={850}
+          chartHeight={425}
+        />
+        <Title>Past 24hr Progress Records:</Title>
         <ControlRow>
           <Button
             icon="filter"

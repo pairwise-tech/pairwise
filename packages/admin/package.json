@@ -83,6 +83,7 @@
     "react-scripts": "4.0.3",
     "react-string-replace": "0.4.4",
     "react-transition-group": "4.3.0",
+    "recharts": "^2.1.4",
     "redux": "4.1.0",
     "redux-devtools-extension": "2.13.9",
     "redux-logger": "3.0.6",
