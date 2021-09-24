@@ -84,7 +84,7 @@ export const getUsersChartData = (
     if (!progress) {
       return false;
     } else {
-      return Object.keys(progress.progress).length > 0;
+      return Object.keys(progress.progress).length > count;
     }
   };
 
