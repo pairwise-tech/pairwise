@@ -81,15 +81,16 @@ class AdminChartComponent extends React.Component<IProps> {
 
         if (item) {
           const { xValue, yValue, name } = item;
-          const { xName, yName } = this.props;
+          const { xName, yName, xNameTooltipHide, yNameTooltipHide } =
+            this.props;
           return (
             <TooltipContent>
               <TooltipText>{name}</TooltipText>
               <TooltipText>
-                {xValue} {xName}
+                {xValue} {xNameTooltipHide ? "" : xName}
               </TooltipText>
               <TooltipText>
-                {yValue} {yName}{" "}
+                {yValue} {yNameTooltipHide ? "" : yName}{" "}
               </TooltipText>
             </TooltipContent>
           );
@@ -143,15 +144,15 @@ const dispatchProps = {};
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
-interface ChartData {
-  name: string;
-  xValue: number;
-  yValue: number;
-}
-
 interface ChartDimensions {
   chartWidth: number;
   chartHeight: number;
+}
+
+interface ChartData {
+  name: string;
+  yValue: number;
+  xValue: number | string;
 }
 
 export type ChartDataSeries = ChartData[];
@@ -159,6 +160,8 @@ export type ChartDataSeries = ChartData[];
 interface ComponentProps extends ChartDimensions {
   xName: string;
   yName: string;
+  xNameTooltipHide?: boolean;
+  yNameTooltipHide?: boolean;
   data: ChartDataSeries;
 }
 

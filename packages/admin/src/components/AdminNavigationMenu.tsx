@@ -11,6 +11,7 @@ import { defaultTextColor, themeColor } from "./AdminThemeContainer";
 
 export const ADMIN_MENU_ITEMS_ROUTES = [
   "stats",
+  "growth",
   "users",
   "payments",
   "feedback",

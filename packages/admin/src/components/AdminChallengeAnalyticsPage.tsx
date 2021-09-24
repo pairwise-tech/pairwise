@@ -21,11 +21,11 @@ interface IState {
 }
 
 /** ===========================================================================
- * AdminPullRequestPage Component
+ * AdminChallengeAnalyticsPage Component
  * ============================================================================
  */
 
-class AdminChallengeAnalytics extends React.Component<IProps, IState> {
+class AdminChallengeAnalyticsPage extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
@@ -261,5 +261,5 @@ const withProps = connect(mapStateToProps, dispatchProps);
  */
 
 export default composeWithProps<ComponentProps>(withProps)(
-  withRouter(AdminChallengeAnalytics),
+  withRouter(AdminChallengeAnalyticsPage),
 );

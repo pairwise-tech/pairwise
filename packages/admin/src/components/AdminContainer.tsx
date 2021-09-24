@@ -31,7 +31,8 @@ import AdminPullRequestPage, {
   PULL_REQUEST_DIFF_VIEW_ID,
 } from "./AdminPullRequestPage";
 import { themeColor, themeText } from "./AdminThemeContainer";
-import AdminChallengeAnalytics from "./AdminChallengeAnalytics";
+import AdminChallengeAnalytics from "./AdminChallengeAnalyticsPage";
+import AdminGrowthPage from "./AdminGrowthPage";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -122,6 +123,7 @@ const AdminContainer = (props: IProps) => {
 
   const authRoutes = [
     <Route key="stats" path="/stats" component={AdminStatsPage} />,
+    <Route key="growth" path="/growth" component={AdminGrowthPage} />,
     <Route key="users" path="/users" component={AdminUsersPage} />,
     <Route key="payments" path="/payments" component={AdminPaymentsPage} />,
     <Route key="feedback" path="/feedback" component={AdminFeedbackPage} />,
