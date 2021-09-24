@@ -11,29 +11,45 @@ import { AdminUserView } from "../modules/users/store";
 export const getRecentProgressRecordsChartData = (
   progressRecords: RecentProgressAdminDto,
 ): ChartDataSeries => {
+  let max: number = -1;
   const recordsMap = progressRecords.records.reduce((map, entry) => {
     const key = String(entry.challenges.length);
     const existing = key in map ? map[key] : 0;
+    const value = existing + 1;
+    max = Math.max(max, entry.challenges.length);
     return {
       ...map,
-      [key]: existing + 1,
+      [key]: value,
     };
   }, {} as { [key: string]: number });
 
-  const data: ChartDataSeries = [];
-  for (const [key, value] of Object.entries(recordsMap)) {
-    data.push({
-      xValue: value,
-      yValue: Number(key),
-      name: "Completed Challenges",
-    });
+  let current = 0;
+  const normalizedResultsData: ChartDataSeries = [];
+
+  // Normalize data set to fill in all x-axis values
+  while (current <= max) {
+    const key = String(current);
+    const challengeCount = current;
+    if (key in recordsMap) {
+      const totalUsersCount = recordsMap[key];
+
+      normalizedResultsData.push({
+        yValue: totalUsersCount,
+        xValue: challengeCount,
+        name: "Completed Challenges",
+      });
+    } else {
+      normalizedResultsData.push({
+        yValue: 0,
+        xValue: challengeCount,
+        name: "Completed Challenges",
+      });
+    }
+
+    current = current + 1;
   }
 
-  const sortedData = data.sort((a, b) => {
-    return a.yValue - b.yValue;
-  });
-
-  return sortedData;
+  return normalizedResultsData;
 };
 
 /**
@@ -58,11 +74,31 @@ export const getUsersChartData = (users: AdminUserView[]): ChartDataSeries => {
     });
   }
 
-  const sortedData = data.sort((a, b) => {
-    return a.yValue - b.yValue;
-  });
+  let firstDate = new Date(users[0].createdAt);
+  let today = new Date();
+  let normalizedResultsData: ChartDataSeries = [];
+  let current = firstDate;
 
-  return sortedData;
+  let runningTotal = 0;
+
+  while (firstDate <= today) {
+    const key = new Date(current).toDateString();
+    if (key in usersCreatedMap) {
+      const value = usersCreatedMap[key];
+      runningTotal += value;
+    }
+
+    normalizedResultsData.push({
+      yValue: runningTotal,
+      xValue: key,
+      name: "Registered Users",
+    });
+
+    // Advance day by 1
+    current.setDate(current.getDate() + 1);
+  }
+
+  return normalizedResultsData;
 };
 
 /**
@@ -71,11 +107,17 @@ export const getUsersChartData = (users: AdminUserView[]): ChartDataSeries => {
 export const getUsersProgressChartData = (
   progress: AdminProgressChartDto,
 ): ChartDataSeries => {
-  return progress.map((x) => {
+  const chartData = progress.map((x) => {
     return {
-      xValue: x.userCount,
-      yValue: x.progressCount,
+      yValue: x.userCount,
+      xValue: x.progressCount,
       name: "Users Progress Distribution",
     };
   });
+
+  const sortedData = chartData.sort((a, b) => {
+    return a.xValue - b.xValue;
+  });
+
+  return sortedData;
 };

@@ -49,9 +49,12 @@ export class ProgressService {
       .where({ courseId })
       .getMany();
 
+    let max = -1;
     const progressMap = result.reduce((map, entry) => {
       const { progress } = entry;
-      const key = String(Object.keys(JSON.parse(progress)).length);
+      const completedCount = Object.keys(JSON.parse(progress)).length;
+      max = Math.max(completedCount, max);
+      const key = String(completedCount);
       const existing = key in map ? map[key] : 0;
       return {
         ...map,
@@ -67,8 +70,30 @@ export class ProgressService {
       });
     }
 
-    const sortedProgress = data.sort((a, b) => {
-      return a.progressCount - b.progressCount;
+    let completedCount = 0;
+    const normalizedResultsData = [];
+
+    // Normalize data set to fill in all x-axis values
+    while (completedCount <= max) {
+      const key = String(completedCount);
+      if (key in progressMap) {
+        const userCount = progressMap[key];
+        normalizedResultsData.push({
+          userCount,
+          progressCount: completedCount,
+        });
+      } else {
+        normalizedResultsData.push({
+          userCount: 0,
+          progressCount: completedCount,
+        });
+      }
+
+      completedCount = completedCount + 1;
+    }
+
+    const sortedProgress = normalizedResultsData.sort((a, b) => {
+      return a.userCount - b.userCount;
     });
 
     return sortedProgress;

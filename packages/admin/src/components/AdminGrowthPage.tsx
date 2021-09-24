@@ -73,8 +73,8 @@ class AdminGrowthPage extends React.Component<IProps, IState> {
         data={data}
         chartHeight={500}
         chartWidth={1000}
-        xName="Total Users"
-        yName="Challenges Completed"
+        yName="Total Users"
+        xName="Challenges Completed"
       />
     );
   };

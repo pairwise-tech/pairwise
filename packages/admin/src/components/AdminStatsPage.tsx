@@ -246,6 +246,7 @@ class AdminStatsPage extends React.Component<IProps, IState> {
     }
 
     const chartData = getRecentProgressRecordsChartData(progressRecords);
+    console.log(chartData);
 
     return (
       <>
@@ -256,8 +257,8 @@ class AdminStatsPage extends React.Component<IProps, IState> {
         <Title>Past 24hr Completed Challenges per User:</Title>
         <AdminChartComponent
           data={chartData}
-          xName="Users"
-          yName="Challenges"
+          yName="Users"
+          xName="Challenges"
           chartWidth={850}
           chartHeight={425}
         />
