@@ -57,7 +57,7 @@ export const validateCodeBlob = (blob: ICodeBlobDto) => {
 
     if (!BlobTypeSet.has(blob.dataBlob.type)) {
       captureSentryException(
-        `Invalid blob type, received: ${blob.dataBlob.type}`,
+        `Invalid blob type, received blob data: ${blob.dataBlob}`,
       );
       throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
     }
