@@ -68,7 +68,7 @@ export class ProgressService {
     }
 
     const sortedProgress = data.sort((a, b) => {
-      return b.progressCount - a.progressCount;
+      return a.progressCount - b.progressCount;
     });
 
     return sortedProgress;
