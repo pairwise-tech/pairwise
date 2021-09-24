@@ -246,14 +246,13 @@ class AdminStatsPage extends React.Component<IProps, IState> {
     }
 
     const chartData = getRecentProgressRecordsChartData(progressRecords);
-    console.log(chartData);
 
     return (
       <>
-        <StatusText>{statusMessage}</StatusText>
         <StatusText style={{ color: COLORS.PRIMARY_BLUE }}>
           Current Health Ratio = {healthRatio.toFixed(2)}%
         </StatusText>
+        <StatusText>{statusMessage}</StatusText>
         <Title>Past 24hr Completed Challenges per User:</Title>
         <AdminChartComponent
           data={chartData}
@@ -343,6 +342,7 @@ const Stat = styled.p`
 `;
 
 const StatusText = styled.p`
+  max-width: 750px;
   font-style: italic;
   ${themeText(COLORS.WHITE, COLORS.TEXT_LIGHT_THEME)};
 `;
