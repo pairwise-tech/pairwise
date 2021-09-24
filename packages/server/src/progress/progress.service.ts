@@ -62,8 +62,8 @@ export class ProgressService {
     let data = [];
     for (const [key, value] of Object.entries(progressMap)) {
       data.push({
-        progressCount: value,
-        userCount: Number(key),
+        userCount: value,
+        progressCount: Number(key),
       });
     }
 

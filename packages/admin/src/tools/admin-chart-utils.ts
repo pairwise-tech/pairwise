@@ -54,12 +54,12 @@ export const getUsersChartData = (users: AdminUserView[]): ChartDataSeries => {
     data.push({
       xValue: key,
       yValue: value,
-      name: "Created Users",
+      name: "Registered Users",
     });
   }
 
   const sortedData = data.sort((a, b) => {
-    return b.yValue - a.yValue;
+    return a.yValue - b.yValue;
   });
 
   return sortedData;
@@ -75,7 +75,7 @@ export const getUsersProgressChartData = (
     return {
       xValue: x.userCount,
       yValue: x.progressCount,
-      name: "Progress vs. Number of Users",
+      name: "Users Progress Distribution",
     };
   });
 };
