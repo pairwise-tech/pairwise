@@ -28,8 +28,15 @@ type wtfType = any;
 
 class AdminChartComponent extends React.Component<IProps> {
   render() {
-    const { xName, yName, data, appTheme, chartWidth, chartHeight } =
-      this.props;
+    const {
+      xName,
+      yName,
+      data,
+      appTheme,
+      chartWidth,
+      chartHeight,
+      additionalAreaElements,
+    } = this.props;
     return (
       <SizedChartContainer chartWidth={chartWidth} chartHeight={chartHeight}>
         <ResponsiveContainer width="100%" height="100%" minWidth="0">
@@ -38,10 +45,20 @@ class AdminChartComponent extends React.Component<IProps> {
             margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
           >
             <defs>
-              <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="primarySeries" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#27C9DD" stopOpacity={1} />
                 <stop offset="95%" stopColor="#27C9DD" stopOpacity={0.2} />
               </linearGradient>
+              {additionalAreaElements &&
+                additionalAreaElements.map((element) => {
+                  const { id, color } = element;
+                  return (
+                    <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor={color} stopOpacity={1} />
+                      <stop offset="95%" stopColor={color} stopOpacity={0.2} />
+                    </linearGradient>
+                  );
+                })}
             </defs>
             <XAxis
               name={xName}
@@ -63,8 +80,21 @@ class AdminChartComponent extends React.Component<IProps> {
               type="monotone"
               dataKey="yValue"
               stroke="#27C9DD"
-              fill="url(#colorUv)"
+              fill="url(#primarySeries)"
             />
+            {additionalAreaElements &&
+              additionalAreaElements.map((element) => {
+                const { id, color, dataKey } = element;
+                return (
+                  <Area
+                    fillOpacity={1}
+                    type="monotone"
+                    dataKey={dataKey}
+                    stroke={color}
+                    fill={`url(#${id})`}
+                  />
+                );
+              })}
           </AreaChart>
         </ResponsiveContainer>
       </SizedChartContainer>
@@ -73,6 +103,8 @@ class AdminChartComponent extends React.Component<IProps> {
 
   formatTooltip = (props: wtfType) => {
     const { payload } = props;
+    const { additionalAreaElements } = this.props;
+    const additionalElements = additionalAreaElements || [];
 
     if (payload && Array.isArray(payload)) {
       const entry = payload[0];
@@ -80,18 +112,30 @@ class AdminChartComponent extends React.Component<IProps> {
         const item = entry.payload;
 
         if (item) {
-          const { xValue, yValue, name } = item;
+          const { xValue, name } = item;
           const { xName, yName, xNameTooltipHide, yNameTooltipHide } =
             this.props;
+
           return (
             <TooltipContent>
               <TooltipText>{name}</TooltipText>
               <TooltipText>
                 {xValue} {xNameTooltipHide ? "" : xName}
               </TooltipText>
-              <TooltipText>
-                {yValue} {yNameTooltipHide ? "" : yName}{" "}
-              </TooltipText>
+              {payload.map((data) => {
+                // Find the relevant item from the additional data series, if
+                // they exist... not the greatest API of all time here.
+                const additionalSeries = additionalElements.find(
+                  (x) => x.dataKey === data.dataKey,
+                );
+                const label = additionalSeries ? additionalSeries.name : yName;
+
+                return (
+                  <TooltipText key={data.name}>
+                    {data.payload[data.name]} {yNameTooltipHide ? "" : label}{" "}
+                  </TooltipText>
+                );
+              })}
             </TooltipContent>
           );
         }
@@ -155,7 +199,21 @@ interface ChartData {
   xValue: number | string;
 }
 
+export interface UsersChartData extends ChartData {
+  nonZeroRunningTotal: number;
+  moreThanFiveUsersTotal: number;
+}
+
+export type UsersChartDataSeries = UsersChartData[];
+
 export type ChartDataSeries = ChartData[];
+
+interface AdditionalChartDataSeries {
+  id: string;
+  color: string;
+  dataKey: string;
+  name: string;
+}
 
 interface ComponentProps extends ChartDimensions {
   xName: string;
@@ -163,6 +221,7 @@ interface ComponentProps extends ChartDimensions {
   xNameTooltipHide?: boolean;
   yNameTooltipHide?: boolean;
   data: ChartDataSeries;
+  additionalAreaElements?: AdditionalChartDataSeries[];
 }
 
 type IProps = ConnectProps & ComponentProps;

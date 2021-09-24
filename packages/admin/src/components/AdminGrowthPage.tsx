@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
+import { Area } from "recharts";
 import { PageContainer } from "./AdminComponents";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { COLORS } from "../tools/constants";
@@ -18,7 +19,10 @@ import {
  * ============================================================================
  */
 
-interface IState {}
+interface IState {
+  // TODO: Make this configurable with a course select in the future
+  courseId: string;
+}
 
 /** ===========================================================================
  * AdminGrowthPage Component
@@ -26,9 +30,17 @@ interface IState {}
  */
 
 class AdminGrowthPage extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
+
+    this.state = {
+      courseId: "fpvPtfu7s",
+    };
+  }
+
   componentDidMount() {
     // Create course select for this in the future
-    this.props.fetchAllUsersProgress({ courseId: "fpvPtfu7s" });
+    this.props.fetchAllUsersProgress({ courseId: this.state.courseId });
   }
 
   render(): Nullable<JSX.Element> {
@@ -48,7 +60,7 @@ class AdminGrowthPage extends React.Component<IProps, IState> {
       return <p>No data yet...</p>;
     }
 
-    const data = getUsersChartData(users);
+    const data = getUsersChartData(users, this.state.courseId);
     return (
       <AdminChartComponent
         data={data}
@@ -56,7 +68,21 @@ class AdminGrowthPage extends React.Component<IProps, IState> {
         chartHeight={500}
         chartWidth={1000}
         xName="Created At Date"
-        yName="Registered Users"
+        yName="User Growth"
+        additionalAreaElements={[
+          {
+            name: "Non Zero Users",
+            dataKey: "nonZeroRunningTotal",
+            id: "secondarySeries",
+            color: "#49F480",
+          },
+          {
+            name: "More Than Five Challenges",
+            dataKey: "moreThanFiveUsersTotal",
+            id: "tertiarySeries",
+            color: "#F3577A",
+          },
+        ]}
       />
     );
   };

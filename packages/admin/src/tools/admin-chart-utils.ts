@@ -2,7 +2,10 @@ import {
   AdminProgressChartDto,
   RecentProgressAdminDto,
 } from "@pairwise/common";
-import { ChartDataSeries } from "../components/AdminChartComponent";
+import {
+  ChartDataSeries,
+  UsersChartDataSeries,
+} from "../components/AdminChartComponent";
 import { AdminUserView } from "../modules/users/store";
 
 /**
@@ -55,50 +58,90 @@ export const getRecentProgressRecordsChartData = (
 /**
  * Map users list to chart data.
  */
-export const getUsersChartData = (users: AdminUserView[]): ChartDataSeries => {
-  const usersCreatedMap = users.reduce((map, user) => {
+export const getUsersChartData = (
+  users: AdminUserView[],
+  courseId: string,
+): UsersChartDataSeries => {
+  // Map user counts by date
+  const reduceUsersMap = (
+    map: { [key: string]: number },
+    user: AdminUserView,
+  ) => {
     const key = new Date(user.createdAt).toDateString();
     const existing = key in map ? map[key] : 0;
     return {
       ...map,
       [key]: existing + 1,
     };
-  }, {} as { [key: string]: number });
+  };
 
-  const data: ChartDataSeries = [];
-  for (const [key, value] of Object.entries(usersCreatedMap)) {
-    data.push({
-      xValue: key,
-      yValue: value,
-      name: "Registered Users",
-    });
-  }
+  // Filter users list by completed challenge thresholds
+  const filterByChallengeCount = (count: number) => (user: AdminUserView) => {
+    const progress = user.challengeProgressHistory.find(
+      (history) => history.courseId === courseId,
+    );
+
+    if (!progress) {
+      return false;
+    } else {
+      return Object.keys(progress.progress).length > 0;
+    }
+  };
+
+  // Default users map
+  const usersCreatedMap = users.reduce(reduceUsersMap, {});
+
+  // Users with more than zero challenges
+  const nonZeroUsersMap = users
+    .filter(filterByChallengeCount(0))
+    .reduce(reduceUsersMap, {});
+
+  // Users with more than 5 challenges
+  const moreThanFiveUsersMap = users
+    .filter(filterByChallengeCount(5))
+    .reduce(reduceUsersMap, {});
 
   let firstDate = new Date(users[0].createdAt);
-  let today = new Date();
-  let normalizedResultsData: ChartDataSeries = [];
   let current = firstDate;
+  let today = new Date();
+  let normalizedChartData: UsersChartDataSeries = [];
 
   let runningTotal = 0;
+  let nonZeroRunningTotal = 0;
+  let moreThanFiveUsersTotal = 0;
 
+  // Build up chart data array of running total values
   while (firstDate <= today) {
     const key = new Date(current).toDateString();
+
     if (key in usersCreatedMap) {
       const value = usersCreatedMap[key];
       runningTotal += value;
     }
 
-    normalizedResultsData.push({
-      yValue: runningTotal,
+    if (key in nonZeroUsersMap) {
+      const value = nonZeroUsersMap[key];
+      nonZeroRunningTotal += value;
+    }
+
+    if (key in moreThanFiveUsersMap) {
+      const value = moreThanFiveUsersMap[key];
+      moreThanFiveUsersTotal += value;
+    }
+
+    normalizedChartData.push({
       xValue: key,
-      name: "Registered Users",
+      yValue: runningTotal,
+      nonZeroRunningTotal,
+      moreThanFiveUsersTotal,
+      name: "User Growth",
     });
 
     // Advance day by 1
     current.setDate(current.getDate() + 1);
   }
 
-  return normalizedResultsData;
+  return normalizedChartData;
 };
 
 /**
