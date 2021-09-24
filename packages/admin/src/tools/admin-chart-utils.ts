@@ -23,14 +23,14 @@ export const getRecentProgressRecordsChartData = (
   const data: ChartDataSeries = [];
   for (const [key, value] of Object.entries(recordsMap)) {
     data.push({
-      xValue: key,
-      yValue: value,
+      xValue: value,
+      yValue: Number(key),
       name: "Completed Challenges",
     });
   }
 
   const sortedData = data.sort((a, b) => {
-    return b.yValue - b.yValue;
+    return a.yValue - b.yValue;
   });
 
   return sortedData;

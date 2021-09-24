@@ -256,8 +256,8 @@ class AdminStatsPage extends React.Component<IProps, IState> {
         <Title>Past 24hr Completed Challenges per User:</Title>
         <AdminChartComponent
           data={chartData}
-          yName="Users"
-          xName="Challenges"
+          xName="Users"
+          yName="Challenges"
           chartWidth={850}
           chartHeight={425}
         />
