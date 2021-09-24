@@ -23,6 +23,7 @@ import {
 import { captureSentryException } from "../tools/sentry-utils";
 import { ChallengeMetaService } from "../challenge-meta/challenge-meta.service";
 import { RedisClientService } from "../redis/redis.service";
+import { User } from "../user/user.entity";
 
 type ProgressRecordUser = "Anonymous User" | "Pairwise User";
 
@@ -39,6 +40,38 @@ export class ProgressService {
 
   public async fetchProgressHistoryForCourse(courseId: string) {
     return this.progressRepository.findOne({ courseId });
+  }
+
+  public async adminFetchAllUserProgress(courseId: string) {
+    const result = await this.progressRepository
+      .createQueryBuilder("progress")
+      .select("progress.progress")
+      .where({ courseId })
+      .getMany();
+
+    const progressMap = result.reduce((map, entry) => {
+      const { progress } = entry;
+      const key = String(Object.keys(JSON.parse(progress)).length);
+      const existing = key in map ? map[key] : 0;
+      return {
+        ...map,
+        [key]: existing + 1,
+      };
+    }, {} as { [key: string]: number });
+
+    let data = [];
+    for (const [key, value] of Object.entries(progressMap)) {
+      data.push({
+        progressCount: value,
+        userCount: Number(key),
+      });
+    }
+
+    const sortedProgress = data.sort((a, b) => {
+      return b.progressCount - a.progressCount;
+    });
+
+    return sortedProgress;
   }
 
   public async fetchUserProgress(uuid: string) {
@@ -288,7 +321,7 @@ export class ProgressService {
   }
 
   public async fetchRecentProgressRecordsForWorkspace() {
-    const records = await this.retrieveProgressRecords();
+    const records = await this.fetchRecentProgressRecords();
     const { totalUsersCount, completedChallengesCount } = records.stats;
 
     const stats: RecentProgressPublicStats = {
@@ -299,7 +332,7 @@ export class ProgressService {
     return stats;
   }
 
-  public async retrieveProgressRecords() {
+  public async fetchRecentProgressRecords() {
     const cachedData = await this.redisClientService.getProgressCacheData();
 
     if (cachedData.value) {

@@ -12,6 +12,7 @@ import {
   UserUpdateOptions,
   AdminPurchaseCourseDto,
   RecentProgressAdminDto,
+  AdminProgressChartDto,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import * as ENV from "tools/admin-env";
@@ -217,6 +218,16 @@ class Api extends BaseApiClass {
       const { config } = this.getRequestHeaders();
       return axios.get<RecentProgressAdminDto>(
         `${HOST}/admin/progress`,
+        config,
+      );
+    });
+  };
+
+  fetchProgressForAllUsers = async (courseId: string) => {
+    return this.httpHandler(async () => {
+      const { config } = this.getRequestHeaders();
+      return axios.get<AdminProgressChartDto>(
+        `${HOST}/admin/progress/all/${courseId}`,
         config,
       );
     });

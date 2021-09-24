@@ -113,6 +113,13 @@ export interface PublicUserProfile {
   portfolioSkillsSummary: PortfolioSkillSummaryMap;
 }
 
+export interface AdminProgressChartItem {
+  userCount: number;
+  progressCount: number;
+}
+
+export type AdminProgressChartDto = AdminProgressChartItem[];
+
 /**
  * Only these fields can be updated on the user object by the
  * POST user/profile API. This validation is applied on the server.

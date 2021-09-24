@@ -39,8 +39,8 @@ class AdminChartComponent extends React.Component<IProps> {
           >
             <defs>
               <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#8884d8" stopOpacity={1} />
-                <stop offset="95%" stopColor="#8884d8" stopOpacity={0.2} />
+                <stop offset="5%" stopColor="#27C9DD" stopOpacity={1} />
+                <stop offset="95%" stopColor="#27C9DD" stopOpacity={0.2} />
               </linearGradient>
             </defs>
             <XAxis
@@ -62,7 +62,7 @@ class AdminChartComponent extends React.Component<IProps> {
               fillOpacity={1}
               type="monotone"
               dataKey="yValue"
-              stroke="#8884d8"
+              stroke="#27C9DD"
               fill="url(#colorUv)"
             />
           </AreaChart>

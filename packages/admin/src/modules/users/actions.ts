@@ -1,5 +1,6 @@
 import { HttpResponseError } from "modules/api";
 import { createAction } from "typesafe-actions";
+import { AdminProgressChartDto } from "../../../../common/dist/main";
 import { AdminUserView } from "./store";
 
 /** ===========================================================================
@@ -19,6 +20,10 @@ enum ActionTypesEnum {
   DELETE_USER = "DELETE_USER",
   DELETE_USER_SUCCESS = "DELETE_USER_SUCCESS",
   DELETE_USER_FAILURE = "DELETE_USER_FAILURE",
+
+  FETCH_ALL_USERS_PROGRESS = "FETCH_ALL_USERS_PROGRESS",
+  FETCH_ALL_USERS_PROGRESS_SUCCESS = "FETCH_ALL_USERS_PROGRESS_SUCCESS",
+  FETCH_ALL_USERS_PROGRESS_FAILURE = "FETCH_ALL_USERS_PROGRESS_FAILURE",
 }
 
 /** ===========================================================================
@@ -58,4 +63,16 @@ export const deleteUserAccountSuccess = createAction(
 
 export const deleteUserAccountFailure = createAction(
   ActionTypesEnum.DELETE_USER_FAILURE,
+)<HttpResponseError>();
+
+export const fetchAllUsersProgress = createAction(
+  ActionTypesEnum.FETCH_ALL_USERS_PROGRESS,
+)<{ courseId: string }>();
+
+export const fetchAllUsersProgressSuccess = createAction(
+  ActionTypesEnum.FETCH_ALL_USERS_PROGRESS_SUCCESS,
+)<AdminProgressChartDto>();
+
+export const fetchAllUsersProgressFailure = createAction(
+  ActionTypesEnum.FETCH_ALL_USERS_PROGRESS_FAILURE,
 )<HttpResponseError>();

@@ -273,8 +273,14 @@ export class AdminController {
 
   @UseGuards(AdminAuthGuard)
   @Get("/progress")
-  public retrieveLiveProgressRecords() {
-    return this.progressService.retrieveProgressRecords();
+  public fetchLiveProgressRecords() {
+    return this.progressService.fetchRecentProgressRecords();
+  }
+
+  @UseGuards(AdminAuthGuard)
+  @Get("/progress/all/:courseId")
+  public fetchProgressForAllUsers(@Param() params) {
+    return this.progressService.adminFetchAllUserProgress(params.courseId);
   }
 
   @UseGuards(AdminAuthGuard)

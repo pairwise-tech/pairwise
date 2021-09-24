@@ -8,7 +8,10 @@ import { COLORS } from "../tools/constants";
 import { composeWithProps } from "../tools/admin-utils";
 import { themeText } from "./AdminThemeContainer";
 import AdminChartComponent from "./AdminChartComponent";
-import { getUsersChartData } from "../tools/admin-chart-utils";
+import {
+  getUsersChartData,
+  getUsersProgressChartData,
+} from "../tools/admin-chart-utils";
 
 /** ===========================================================================
  * Types & Config
@@ -23,29 +26,58 @@ interface IState {}
  */
 
 class AdminGrowthPage extends React.Component<IProps, IState> {
+  componentDidMount() {
+    // Create course select for this in the future
+    this.props.fetchAllUsersProgress({ courseId: "fpvPtfu7s" });
+  }
+
   render(): Nullable<JSX.Element> {
-    const { skeletons, users } = this.props;
-
-    if (!skeletons) {
-      return null;
-    }
-
-    const data = getUsersChartData(users);
-
     return (
       <PageContainer>
         <Title>Pairwise User Growth</Title>
-        <AdminChartComponent
-          xNameTooltipHide
-          chartHeight={500}
-          chartWidth={1000}
-          data={data}
-          xName="Created At Date"
-          yName="Registered Users"
-        />
+        {this.renderUsersGrowthChart()}
+        <Title>User Course Progress Distribution</Title>
+        {this.renderUsersProgressChart()}
       </PageContainer>
     );
   }
+
+  renderUsersGrowthChart = () => {
+    const { users } = this.props;
+    if (users.length === 0) {
+      return <p>No data yet...</p>;
+    }
+
+    const data = getUsersChartData(users);
+    return (
+      <AdminChartComponent
+        data={data}
+        xNameTooltipHide
+        chartHeight={500}
+        chartWidth={1000}
+        xName="Created At Date"
+        yName="Registered Users"
+      />
+    );
+  };
+
+  renderUsersProgressChart = () => {
+    const { allUsersProgressState } = this.props;
+    if (allUsersProgressState.length === 0) {
+      return <p>No data yet...</p>;
+    }
+
+    const data = getUsersProgressChartData(allUsersProgressState);
+    return (
+      <AdminChartComponent
+        data={data}
+        chartHeight={500}
+        chartWidth={1000}
+        xName="Total Users"
+        yName="Challenges Completed"
+      />
+    );
+  };
 }
 
 /** ===========================================================================
@@ -63,13 +95,14 @@ const Title = styled.h2`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  skeletons: Modules.selectors.challenges.courseSkeletons(state),
-  challengeMetaMap: Modules.selectors.challenges.challengeMetaMap(state),
   users: Modules.selectors.users.usersState(state).users,
   adminUserSettings: Modules.selectors.admin.adminUserSettings(state),
+  allUsersProgressState: Modules.selectors.users.allUsersProgressState(state),
 });
 
-const dispatchProps = {};
+const dispatchProps = {
+  fetchAllUsersProgress: Modules.actions.users.fetchAllUsersProgress,
+};
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 

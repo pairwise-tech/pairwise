@@ -1,4 +1,7 @@
-import { RecentProgressAdminDto } from "@pairwise/common";
+import {
+  AdminProgressChartDto,
+  RecentProgressAdminDto,
+} from "@pairwise/common";
 import { ChartDataSeries } from "../components/AdminChartComponent";
 import { AdminUserView } from "../modules/users/store";
 
@@ -60,4 +63,19 @@ export const getUsersChartData = (users: AdminUserView[]): ChartDataSeries => {
   });
 
   return sortedData;
+};
+
+/**
+ * Map all users progress list to chart data.
+ */
+export const getUsersProgressChartData = (
+  progress: AdminProgressChartDto,
+): ChartDataSeries => {
+  return progress.map((x) => {
+    return {
+      xValue: x.userCount,
+      yValue: x.progressCount,
+      name: "Progress vs. Number of Users",
+    };
+  });
 };

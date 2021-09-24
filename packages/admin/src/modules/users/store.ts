@@ -3,7 +3,12 @@ import { AuthActionTypes } from "../auth";
 import { Actions as actions } from "../root-actions";
 import { UsersActionTypes } from "./index";
 import { combineReducers } from "redux";
-import { Payment, UserCourseProgress, UserSettings } from "@pairwise/common";
+import {
+  AdminProgressChartDto,
+  Payment,
+  UserCourseProgress,
+  UserSettings,
+} from "@pairwise/common";
 
 /** ===========================================================================
  * Users Store
@@ -13,6 +18,7 @@ import { Payment, UserCourseProgress, UserSettings } from "@pairwise/common";
 export interface State {
   users: AdminUserView[];
   loading: boolean;
+  allUserProgress: AdminProgressChartDto;
 }
 
 export interface AdminUserView {
@@ -59,9 +65,17 @@ const loading = createReducer<boolean, UsersActionTypes | AuthActionTypes>(
   () => false,
 );
 
+const allUserProgress = createReducer<AdminProgressChartDto, UsersActionTypes>(
+  [],
+).handleAction(
+  actions.fetchAllUsersProgressSuccess,
+  (state, action) => action.payload,
+);
+
 const rootReducer = combineReducers({
   users,
   loading,
+  allUserProgress,
 });
 
 /** ===========================================================================

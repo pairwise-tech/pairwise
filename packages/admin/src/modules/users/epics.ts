@@ -68,6 +68,21 @@ const deleteUserAccountEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+const fetchAllUsersProgressEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.fetchAllUsersProgress)),
+    map((x) => x.payload.courseId),
+    mergeMap(API.fetchProgressForAllUsers),
+    mergeMap(async (result) => {
+      if (result.value) {
+        return Actions.fetchAllUsersProgressSuccess(result.value);
+      } else {
+        return Actions.fetchAllUsersProgressFailure(result.error);
+      }
+    }),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -77,4 +92,5 @@ export default combineEpics(
   fetchUsersEpic,
   revokeCoachingSessionEpic,
   deleteUserAccountEpic,
+  fetchAllUsersProgressEpic,
 );
