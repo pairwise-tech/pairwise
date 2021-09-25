@@ -19,16 +19,16 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Rust is a powerful programming language which offers the speed of a compiled language like C\\+\\+ but with many of the abstractions and safety guarantees present in higher level languages. It does this with the help of a sophisticated compiler system.\n\nThese Rust challenges in Pairwise are very introductory and experimental. They may be expanded in the future into a more complete course on programming in Rust."
+          "content": "[Rust](https://doc.rust-lang.org/rust-by-example/index.html) is a powerful programming language which offers the speed of a compiled language like C\\+\\+ but with many of the abstractions and safety guarantees present in higher level languages. It does this with the help of a sophisticated compiler system.\n\nFirst we will start with 3 intro challenges which are intended to highlight some of the basics of Rust and give you a quick onboarding to writing some Rust code.\n\nProceed to the next challenge to begin\\!"
         },
         {
           "id": "S@Ghw6X75",
           "type": "rust",
           "title": "Intro to Rust",
-          "instructions": "Write a function using [Rust](https://www.rust-lang.org/) which adds two numbers together. Rust is a fairly new programming language which is growing rapidly in popularity. Rust famously tries to provide the speed of a low level compiled language with the productivity of a richly featured high level language.",
+          "instructions": "Complete the function in the editor which adds two numbers together. [Rust](https://www.rust-lang.org) is a fairly new programming language which is growing rapidly in popularity. Rust famously tries to provide the speed of a low level compiled language with the productivity of a richly featured high level language.",
           "testCode": "test(\"The `add` function should exist and add two numbers together.\", async () => {\n  const RUST_CODE_STRING = __user_code_string__;\n\n  const RUST_TEST_STRING = `\n    fn test() -> bool {\n      let mut result = add(10, 5);\n      let mut expected = 15;\n      if result != expected {\n          return false;\n      }\n\n      result = add(100, 200);\n      expected = 300;\n      if result != expected {\n          return false;\n      }\n\n      result = add(10, 25);\n      expected = 35;\n      if result != expected {\n          return false;\n      }\n\n      result = add(-15, 15);\n      expected = 0;\n      if result != expected {\n          return false;\n      }\n\n      result = add(1000, -2000);\n      expected = -1000;\n      if result != expected {\n          return false;\n      }\n\n      true\n    }\n  `;\n\n  const result = await executeRustChallengeTests(\n    RUST_CODE_STRING,\n    RUST_TEST_STRING\n  );\n\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
           "videoUrl": "",
-          "starterCode": "// Write an add function using Rust\n",
+          "starterCode": "// A function to add two numbers together\nfn add(a: i32, b: i32) -> i32 {\n  // Your code here\n}\n",
           "solutionCode": "// Write an add function using Rust\nfn add(a: i32, b: i32) -> i32 {\n  a + b\n}\n",
           "content": ""
         },
@@ -42,6 +42,50 @@
           "starterCode": "fn get_cost() -> i32 {\n  let cost: i32 = 1000;\n\n  println!(\"[1] The current cost is: {}\", cost);\n\n  // This doesn't compile:\n  cost = 500;\n\n  println!(\"[2] The current cost is: {}\", cost);\n\n  cost\n}",
           "solutionCode": "fn get_cost() -> i32{\n  let mut cost: i32 = 1000;\n\n  println!(\"[1] The current cost is: {}\", cost);\n\n  // This doesn't compile:\n  cost = 500;\n\n  println!(\"[2] The current cost is: {}\", cost);\n\n  cost\n}",
           "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "EknAkk16W",
+          "title": "Rust's Result Type",
+          "instructions": "Some of the most commonly used and powerful types in Rust are the [Option](https://doc.rust-lang.org/rust-by-example/std/option.html) and [Result](https://doc.rust-lang.org/rust-by-example/error/result.html) type\\. These types allow you to represent values that may be in one of two potential states, i.e. \"some\" or \"none\" in the case of the `Option` type and \"valid/ok\" or \"error/failure\" in the case of the `Result` type\\.\n\nThe application of these types in Rust combined with the strictness of the Rust compiler are intended to create a programming experience where all of the \"null point exception\" and \"cannot read property of undefined\" classes of errors are simply not possible because of extensive type checking.\n\nIn the editor below, we have some simple code which explores usage of the Result type. You will see the `is_number_valid` which returns a `Result`. Your job is to add a conditional `if` clause to this function which returns the valid Result, an \"ok\" [unit type](https://doc.rust-lang.org/std/primitive.unit.html), if the provided `num` parameter is less than 25.",
+          "testCode": "const TEST_STRING = `\n    fn test() -> bool {\n      let mut result = true;\n\n      let mut fn_result = is_number_valid(5);\n      match fn_result {\n        Ok(()) => (),\n        Err(e) => {\n          result = false;\n        }\n      }\n\n      fn_result = is_number_valid(50);\n      match fn_result {\n        Ok(()) => {\n          result = false;\n        },\n        Err(e) => (),\n      }\n      \n      return result;\n    }\n  `;\n\ntest(\"The `is_number_valid` function should return a Result unit type `()` if the provided input is less than 25, or an `Err` type otherwise.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Here a simple string type is used to represent the error\n// possibility of a Result type.\ntype NumberValidResult = Result<(), String>;\n\n// Arbitrary check on a number input, which returns a Result type.\nfn is_number_valid(num: i32) -> NumberValidResult {\n  // Your code here\n\n  return Err(\"Number is invalid\".to_string())\n}\n\n// Function which inspects a Result type.\nfn check_result(result: NumberValidResult) {\n  println!(\"\\nChecking Result: {:?}\", result);\n\n  // Idiomatic Rust match statement.\n  match result {\n    Ok(()) => println!(\"Result is valid\"),\n    Err(err) => println!(\"Result is invalid, error: {:?}\", err),\n  }\n}\n\n// Get a valid result:\nlet valid = is_number_valid(50);\ncheck_result(valid);\n\n// Get an invalid result:\nlet invalid = is_number_valid(5);\ncheck_result(invalid);",
+          "solutionCode": "// Here a simple string type is used to represent the error\n// possibility of a Result type.\ntype NumberValidResult = Result<(), String>;\n\n// Arbitrary check on a number input, which returns a Result type.\nfn is_number_valid(num: i32) -> NumberValidResult {\n  if num < 25 {\n    return Ok(())\n  }\n\n  return Err(\"Number is invalid\".to_string())\n}\n\n// Function which inspects a Result type.\nfn check_result(result: NumberValidResult) {\n  println!(\"\\nChecking Result: {:?}\", result);\n\n  // Idiomatic Rust match statement.\n  match result {\n    Ok(()) => println!(\"Result is valid\"),\n    Err(err) => println!(\"Result is invalid, error: {:?}\", err),\n  }\n}\n\n// Get a valid result:\nlet valid = is_number_valid(15);\ncheck_result(valid);\n\n// Get an invalid result:\nlet invalid = is_number_valid(50);\ncheck_result(invalid);",
+          "content": ""
+        },
+        {
+          "type": "section",
+          "id": "6w$q0NkrZ",
+          "title": "Primitives and Types",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Rust is a fully typed language so our discussion should begin by defining the basic data primitives and types you have to work with. That will be the topic of this section."
+        },
+        {
+          "type": "rust",
+          "id": "d8WItf9JW",
+          "title": "Rust Integer Types",
+          "instructions": "Initialize the `my_int` value in `get_integer` function in the editor to return a valid `i8` integer\\.",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  let n = get_integer();\n  let result = 5 + n;\n  let original = result - 5;\n\n  if n != original {\n    return false\n  }\n\n  return true\n}\n`;\n\ntest(\"The `my_int` variable in the `get_integer` should be correctly initialized.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Return an i8 integer value\nfn get_integer() -> i8 {\n  let my_int: i8;\n\n  my_int\n}\n\nlet integer = get_integer();\nprintln!(\"my_int value: {:?}\", integer);\n",
+          "solutionCode": "// Return an i8 integer value\nfn get_integer() -> i8 {\n  let my_int: i8 = 15;\n\n  my_int\n}\n\nlet integer = get_integer();\nprintln!(\"my_int value: {:?}\", integer);\n",
+          "content": ""
+        },
+        {
+          "type": "section",
+          "id": "32C7HdQle",
+          "title": "Practice Challenges",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In this next section \\(and final section before the projects\\) we will cover various Rust programming challenges which are intended to give your more experience writing and working with Rust syntax, data structures, and functions."
         },
         {
           "id": "Flaxrbchq",
@@ -61,7 +105,7 @@
           "instructions": "In Rust you can use a [Vec](https://doc.rust-lang.org/std/vec/struct.Vec.html) struct to represent a list of items. Write a function fillVector which takes a single integer input parameter and returns a vector with containing all of the integers up to and including the input parameter.\n\n```\nfill_vector(10) // -> Vec[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\n\n```\n\n**Note: **You can assume the input will not be negative, but it may be zero.",
           "testCode": "const TEST_STRING = `\n    fn test() -> bool {\n      fn fill_vector_solution(max: i64) -> Vec<i64> {\n        let mut current = 0;\n        let mut v = Vec::new();\n        while current <= max {\n          v.push(current);\n          current = current + 1;\n        }\n        v\n      }\n\n      fn compare_vectors(v1: Vec<i64>, v2: Vec<i64>) -> bool {\n        let mut index = 0;\n        for x in &v1 {\n          let other = &v2[index];\n          if x != other {\n            return false;\n          }\n\n          index = index + 1;\n        }\n        true\n      }\n      \n      fn compare(value: i64) -> bool {\n        let mut result = fill_vector(value);\n        let mut expected = fill_vector_solution(value);\n        if compare_vectors(result.to_owned(), expected.to_owned()) == false {\n          return false;\n        }\n        true\n      }\n      \n      let mut value = 5;\n      let values = vec![0, 1, 6, 12, 15, 26, 88, 900];\n      for v in values {\n        if compare(v) == false {\n          return false;\n        }\n      }\n      true\n    }\n  `;\n\ntest(\"`fill_vector` should accept an integer argument and return a new vector of all of the integers up to and including that integer argument.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
           "videoUrl": "",
-          "starterCode": "// Write your code here:\n",
+          "starterCode": "// Fill up a vector",
           "solutionCode": "// Fill up a vector\nfn fill_vector(max: i64) -> Vec<i64> {\n  let mut current = 0;\n  let mut result = Vec::new();\n  while current <= max {\n    result.push(current);\n    current = current + 1;\n  }\n  return result;\n}\n",
           "content": ""
         },
@@ -69,7 +113,7 @@
           "id": "sLQQLy12e",
           "type": "rust",
           "title": "Create a Struct",
-          "instructions": "Rust [structs](https://doc.rust-lang.org/book/ch05-01-defining-structs.html) provide a way to represent more complex data structures. For this challenge, create a struct to represent a person. The struct should have the following fields: `name`, `age`, `height`, and `siblings`. These should be of type, string, integer, integer, and boolean, respectively.\n\nWrite a function `create_person` which accepts the above values as parameters and returns a new `Person` struct\\.\n",
+          "instructions": "Rust [structs](https://doc.rust-lang.org/book/ch05-01-defining-structs.html) provide a way to represent more complex data structures. For this challenge, create a struct to represent a person. The struct should have the following fields: `name`, `age`, `height`, and `siblings`. These should be of type, string, integer, integer, and boolean, respectively.\n\nWrite a function `create_person` which accepts the above values as parameters and returns a new `Person` struct\\.",
           "testCode": "const TEST_STRING = `\n    fn test() -> bool {\n      let mut person = create_person(String::from(\"Sean\"), 31, 82, true);\n      if person.name.eq(\"Sean\") != true {\n        return false\n      }\n      if person.age != 31 {\n        return false;\n      }\n      if person.height != 82 {\n        return false;\n      }\n      if person.siblings != true {\n        return false;\n      }\n\n       person = create_person(String::from(\"Zakaria\"), 717, 929, false);\n      if person.name.eq(\"Zakaria\") != true {\n        return false\n      }\n      if person.age != 717 {\n        return false;\n      }\n      if person.height != 929 {\n        return false;\n      }\n      if person.siblings != false {\n        return false;\n      }\n\n      true\n    }\n  `;\n\ntest(\"`create_person` should accept the arguments `name`, `age`, `height`, and `siblings` and return a new `Person` struct.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
           "videoUrl": "",
           "starterCode": "// Write your code here:",
