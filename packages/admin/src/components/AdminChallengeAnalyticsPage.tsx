@@ -4,10 +4,12 @@ import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { KeyValue, PageContainer } from "./AdminComponents";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { Button, Icon } from "@blueprintjs/core";
+import { Alert, Button, Icon, Intent } from "@blueprintjs/core";
 import { COLORS, MOBILE } from "../tools/constants";
 import { composeWithProps } from "../tools/admin-utils";
 import { defaultTextColor, themeColor } from "./AdminThemeContainer";
+import { None, Option, Some } from "@pairwise/common";
+import toaster from "../tools/toast-utils";
 
 /** ===========================================================================
  * Types & Config
@@ -17,6 +19,8 @@ import { defaultTextColor, themeColor } from "./AdminThemeContainer";
 type SortCategory = "default" | "attempted" | "completed" | "ratio";
 
 interface IState {
+  alert: boolean;
+  resetChallengeId: Option<string>;
   sortBy: SortCategory;
 }
 
@@ -30,13 +34,18 @@ class AdminChallengeAnalyticsPage extends React.Component<IProps, IState> {
     super(props);
 
     this.state = {
+      alert: false,
+      resetChallengeId: new None(),
       sortBy: "default",
     };
   }
 
   render(): Nullable<JSX.Element> {
-    const { sortBy } = this.state;
-    const { skeletons, challengeMetaMap, resetChallengeMeta } = this.props;
+    const { alert, sortBy } = this.state;
+    const { adminUserSettings, skeletons, challengeMetaMap } = this.props;
+
+    const { appTheme } = adminUserSettings;
+    const isDark = appTheme === "dark";
 
     if (!skeletons) {
       return null;
@@ -88,7 +97,9 @@ class AdminChallengeAnalyticsPage extends React.Component<IProps, IState> {
                       style={{ marginTop: 6, marginBottom: 6, fontSize: 12 }}
                       icon="reset"
                       text="Reset Challenge Meta"
-                      onClick={() => resetChallengeMeta(challenge.id)}
+                      onClick={() =>
+                        this.handleOpenResetChallengeMetaAlert(challenge.id)
+                      }
                     />
                   </MetaCard>
                 );
@@ -152,6 +163,24 @@ class AdminChallengeAnalyticsPage extends React.Component<IProps, IState> {
 
     return (
       <PageContainer>
+        <Alert
+          icon="dollar"
+          isOpen={alert}
+          canEscapeKeyCancel
+          canOutsideClickCancel
+          cancelButtonText="Cancel"
+          intent={Intent.DANGER}
+          onCancel={this.handleCancelResetChallengeMetaAlert}
+          onConfirm={this.handleResetChallengeMeta}
+          className={isDark ? "bp3-dark" : ""}
+          confirmButtonText="Yes, Reset"
+        >
+          <p>
+            This will reset both the challenge attempts and completed history to
+            zero.
+          </p>
+          <p>Are you sure?</p>
+        </Alert>
         <Title>Challenge Analytics</Title>
         <ControlRow>
           <Button
@@ -189,6 +218,32 @@ class AdminChallengeAnalyticsPage extends React.Component<IProps, IState> {
       </PageContainer>
     );
   }
+
+  handleResetChallengeMeta = () => {
+    const { resetChallengeId } = this.state;
+    if (resetChallengeId.some) {
+      this.props.resetChallengeMeta(resetChallengeId.value);
+    } else {
+      toaster.warn("No challenge id to reset...");
+    }
+
+    // In either case, close the alert.
+    this.handleCancelResetChallengeMetaAlert();
+  };
+
+  handleOpenResetChallengeMetaAlert = (id: string) => {
+    this.setState({
+      alert: true,
+      resetChallengeId: new Some(id),
+    });
+  };
+
+  handleCancelResetChallengeMetaAlert = () => {
+    this.setState({
+      alert: false,
+      resetChallengeId: new None(),
+    });
+  };
 
   handleSortBy = (sortBy: SortCategory) => {
     this.setState({ sortBy });
@@ -240,6 +295,7 @@ const ControlRow = styled.div`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   skeletons: Modules.selectors.challenges.courseSkeletons(state),
+  adminUserSettings: Modules.selectors.admin.adminUserSettings(state),
   challengeMetaMap: Modules.selectors.challenges.challengeMetaMap(state),
 });
 
