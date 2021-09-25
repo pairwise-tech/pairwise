@@ -50,21 +50,19 @@ export const validateCodeBlob = (blob: ICodeBlobDto) => {
   try {
     if (!blob.dataBlob.type) {
       captureSentryException(
-        `Missing blob type, received: JSON.stringify(${blob})`,
+        `Missing blob type, received blob: ${JSON.stringify(blob)}`,
       );
       throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
     }
 
     if (!BlobTypeSet.has(blob.dataBlob.type)) {
-      captureSentryException(
-        `Invalid blob type, received blob data: ${blob.dataBlob}`,
-      );
+      captureSentryException(`Invalid blob type, received blob: ${blob}`);
       throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
     }
 
     if (!ContentUtility.challengeIdIsValid(blob.challengeId)) {
       captureSentryException(
-        `Invalid blob type, received: ${blob.challengeId}`,
+        `Invalid blob challengeId, received blob: ${JSON.stringify(blob)}`,
       );
       throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
     }
@@ -76,7 +74,7 @@ export const validateCodeBlob = (blob: ICodeBlobDto) => {
         const { code } = dataBlob;
         if (!code || typeof code !== "string") {
           captureSentryException(
-            `Invalid blob code value, received: ${JSON.stringify(code)}`,
+            `Invalid blob code value, received blob: ${JSON.stringify(blob)}`,
           );
           throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
         }
