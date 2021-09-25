@@ -15,6 +15,7 @@ import {
   themeText,
 } from "./ThemeContainer";
 import { YoutubeEmbed } from "./MediaArea";
+import { CODEPRESS } from "../tools/client-env";
 
 /** ===========================================================================
  * Home Component
@@ -77,8 +78,8 @@ class Home extends React.Component<IProps, {}> {
                 </ContentText>
               </>
             )}
-            {/* Hidden for now: */}
-            {/* {this.props.skeletons?.map(this.renderCourseItem)} */}
+            {/* Currently only available in Codepress */}
+            {CODEPRESS && this.props.skeletons?.map(this.renderCourseItem)}
           </ContentContainer>
           <CourseProgressContainer>
             {userCourseProgressSummary && currentNavigationOverlayCourse && (
