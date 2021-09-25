@@ -71,7 +71,7 @@ class AdminGrowthPage extends React.Component<IProps, IState> {
         yName="User Growth"
         additionalAreaElements={[
           {
-            name: "Non-Zero Users",
+            name: "Non Zero Users",
             dataKey: "nonZeroRunningTotal",
             id: "secondarySeries",
             color: "#49F480",
