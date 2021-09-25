@@ -96,7 +96,18 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "For this project we will build a simple key value store which can be used on the command line.\n\nWrite a Rust program to store key value pairs with the following command line API:\n\n* Set an item: `cargo run set foo bar`.\n* Get an item: `cargo run get foo`.\n* Get all items: `cargo run getAll`.\n* Remove an item: `cargo remove foo`.\n* Remove all items: `cargo removeAll`.\n\n\nYour program will store the cache in memory while it is running. For a bonus, have your program write the cache to disk to be able to persist cache state between sessions.\n"
+          "content": "For this project we will build a simple key value store which can be used on the command line.\n\nWrite a Rust program to store key value pairs with the following command line API:\n\n* Set an item: `cargo run set foo bar`.\n* Get an item: `cargo run get foo`.\n* Get all items: `cargo run getAll`.\n* Remove an item: `cargo remove foo`.\n* Remove all items: `cargo removeAll`.\n\n\nYour program will store the cache in memory while it is running. For a bonus, consider adding input validation and testing for your project. For another bonus, consider having your program write the cache to disk to be able to persist cache state between sessions."
+        },
+        {
+          "type": "project",
+          "id": "NV9DixvF7",
+          "title": "Key Value Web Server",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Here we will expand on our key value command line utility by writing a Rust server with an API for the same functionality.\n\nBuild a server in Rust which exposes a REST API to allow users to set, get, and remove items in a key value store. Unlike the command line utility, this should support set arbitrary JSON data in the `value` field for cache entries. The API should also support retrieving all existing entries, and remove all existing entries.\n\nBonus points:\n\n* Consider adding validation for requests.\n* Consider how you might add tests for your server.\n* Consider how you might add an authentication layer, or separate expose the functionality to multiple different users \\(e.g. N users consume your API, but they each access separate caches\\).\n* Consider how you might persist the cache data more permanently using a database.\n\n"
         }
       ]
     }
