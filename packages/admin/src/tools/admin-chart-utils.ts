@@ -101,6 +101,11 @@ export const getUsersChartData = (
     .filter(filterByChallengeCount(5))
     .reduce(reduceUsersMap, {});
 
+  // Users with more than 25 challenges
+  const moreThanTwentyFiveUsersMap = users
+    .filter(filterByChallengeCount(25))
+    .reduce(reduceUsersMap, {});
+
   let firstDate = new Date(users[0].createdAt);
   let current = firstDate;
   let today = new Date();
@@ -109,6 +114,7 @@ export const getUsersChartData = (
   let runningTotal = 0;
   let nonZeroRunningTotal = 0;
   let moreThanFiveUsersTotal = 0;
+  let moreThanTwentyFiveUsersTotal = 0;
 
   // Build up chart data array of running total values
   while (firstDate <= today) {
@@ -129,11 +135,17 @@ export const getUsersChartData = (
       moreThanFiveUsersTotal += value;
     }
 
+    if (key in moreThanTwentyFiveUsersMap) {
+      const value = moreThanTwentyFiveUsersMap[key];
+      moreThanTwentyFiveUsersTotal += value;
+    }
+
     normalizedChartData.push({
       xValue: key,
       yValue: runningTotal,
       nonZeroRunningTotal,
       moreThanFiveUsersTotal,
+      moreThanTwentyFiveUsersTotal,
       name: "User Growth",
     });
 

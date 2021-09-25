@@ -202,6 +202,7 @@ interface ChartData {
 export interface UsersChartData extends ChartData {
   nonZeroRunningTotal: number;
   moreThanFiveUsersTotal: number;
+  moreThanTwentyFiveUsersTotal: number;
 }
 
 export type UsersChartDataSeries = UsersChartData[];
