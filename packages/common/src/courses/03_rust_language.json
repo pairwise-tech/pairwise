@@ -75,6 +75,28 @@
           "starterCode": "// Write your code here:",
           "solutionCode": "struct Person {\n  name: String,\n  age: u16,\n  height: u16,\n  siblings: bool,\n}\n\nfn create_person(name: String, age: u16, height: u16, siblings: bool) -> Person {\n  Person {\n    name,\n    age,\n    height,\n    siblings,\n  }\n}\n",
           "content": ""
+        },
+        {
+          "type": "section",
+          "id": "tVYCXZbIl",
+          "title": "Projects",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In this section we will build several projects in Rust to round off your Rust learning experience."
+        },
+        {
+          "type": "project",
+          "id": "NCoNBdnxF",
+          "title": "Command Line Key Value Store",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "For this project we will build a simple key value store which can be used on the command line.\n\nWrite a Rust program to store key value pairs with the following command line API:\n\n* Set an item: `cargo run set foo bar`.\n* Get an item: `cargo run get foo`.\n* Get all items: `cargo run getAll`.\n* Remove an item: `cargo remove foo`.\n* Remove all items: `cargo removeAll`.\n\n\nYour program will store the cache in memory while it is running. For a bonus, have your program write the cache to disk to be able to persist cache state between sessions.\n"
         }
       ]
     }

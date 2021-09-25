@@ -227,6 +227,7 @@ export const courseListMetadata = createSelector([challengesState], (state) => {
       description: course.description,
       free: course.free,
       price: course.price,
+      premiumPrice: course.premiumPrice,
     }));
   } else {
     return [];

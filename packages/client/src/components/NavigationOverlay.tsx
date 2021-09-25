@@ -46,6 +46,7 @@ import { IconButton, RotatingIcon } from "./SharedComponents";
 import cx from "classnames";
 import { Select } from "@blueprintjs/select";
 import { defaultTextColor, IThemeProps, themeColor } from "./ThemeContainer";
+import { CODEPRESS } from "../tools/client-env";
 
 /** ===========================================================================
  * Types & Config
@@ -162,45 +163,48 @@ class NavigationOverlay extends React.Component<
           onClick={(e) => e.stopPropagation()}
           className={cx("module-select", { open: this.state.showModuleList })}
         >
-          {/* Disabled while multiple course selection is unavailable */}
-          {/* <ColTitle className="course-select">
-            <CourseSelect
-              filterable={false}
-              items={courseListMetadata}
-              itemDisabled={(c) => c.id === course.id}
-              onItemSelect={({ id }) => {
-                this.props.setNavigationOverlayCurrentCourse(id);
-              }}
-              popoverProps={{
-                onClosed: () => {
-                  // Blur the damn element to avoid keyboard interactions
-                  // opening the select menu again later.
-                  if (document.activeElement) {
-                    // @ts-ignore
-                    document.activeElement.blur();
-                  }
-                },
-              }}
-              itemRenderer={({ title, id }, { handleClick }) => (
-                <ClickableColTitle
-                  key={id}
-                  disabled={id === course.id}
-                  onClick={(e: any) => handleClick(e)}
-                >
-                  {title}
-                </ClickableColTitle>
-              )}
-            >
-              <Button
-                fill
-                rightIcon="chevron-down"
-                className="mobile-shrink"
-                style={{ whiteSpace: "nowrap" }}
-                text={isMobile ? "" : course.title}
-              />
-            </CourseSelect>
-          </ColTitle> */}
-          <ColTitle>{isMobile ? null : <p>{course.title}</p>}</ColTitle>
+          {/* Display course select for Codepress */}
+          {CODEPRESS ? (
+            <ColTitle className="course-select">
+              <CourseSelect
+                filterable={false}
+                items={courseListMetadata}
+                itemDisabled={(c) => c.id === course.id}
+                onItemSelect={({ id }) => {
+                  this.props.setNavigationOverlayCurrentCourse(id);
+                }}
+                popoverProps={{
+                  onClosed: () => {
+                    // Blur the damn element to avoid keyboard interactions
+                    // opening the select menu again later.
+                    if (document.activeElement) {
+                      // @ts-ignore
+                      document.activeElement.blur();
+                    }
+                  },
+                }}
+                itemRenderer={({ title, id }, { handleClick }) => (
+                  <ClickableColTitle
+                    key={id}
+                    disabled={id === course.id}
+                    onClick={(e: any) => handleClick(e)}
+                  >
+                    {title}
+                  </ClickableColTitle>
+                )}
+              >
+                <Button
+                  fill
+                  rightIcon="chevron-down"
+                  className="mobile-shrink"
+                  style={{ whiteSpace: "nowrap" }}
+                  text={isMobile ? "" : course.title}
+                />
+              </CourseSelect>
+            </ColTitle>
+          ) : (
+            <ColTitle>{isMobile ? null : <p>{course.title}</p>}</ColTitle>
+          )}
           <ColScroll>
             {/* In case of no challenges yet, or to add one at the start, here's a button */}
             <div style={{ position: "relative" }}>
