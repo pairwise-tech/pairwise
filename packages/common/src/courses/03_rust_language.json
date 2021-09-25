@@ -108,6 +108,28 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Here we will expand on our key value command line utility by writing a Rust server with an API for the same functionality.\n\nBuild a server in Rust which exposes a REST API to allow users to set, get, and remove items in a key value store. Unlike the command line utility, this should support set arbitrary JSON data in the `value` field for cache entries. The API should also support retrieving all existing entries, and remove all existing entries.\n\nBonus points:\n\n* Consider adding validation for requests.\n* Consider how you might add tests for your server.\n* Consider how you might add an authentication layer, or separate expose the functionality to multiple different users \\(e.g. N users consume your API, but they each access separate caches\\).\n* Consider how you might persist the cache data more permanently using a database.\n\n"
+        },
+        {
+          "type": "project",
+          "id": "UticrWdb1",
+          "title": "Command Line Tic Tac Toe Game",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Let's create a Tic Tac Toe game in Rust. This will be similar to the Tic Tac Toe project in the FullStack TypeScript curriculum, if you completed that previously. Here, however, the game will be totally opened ended for you to design as you see fit. The main requirements are:\n\n* Players can play the computer in Tic Tac Toe.\n* The game will randomly choose who plays first.\n* The computer will choose a random move each round.\n* The game will obey the ordinary rules of Tic Tac Toe, and declare a winner or tie at the end.\n* Once a game completes, the player will have the option to play again.\n* For a given session, the game should get track of overall wins/losses.\n\n\nFor your program, consider edge cases, handling errors, and how you can add tests to verify the game behavior is correct. Good luck\\!\n"
+        },
+        {
+          "type": "project",
+          "id": "s2Ph4e5cp",
+          "title": "Real Time Chat Server",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Build a web server using Rust which provides a real time chat functionality. For the basic implementation, consider a single chatroom which anyone can join and post messages to. The server forwards messages in real time to all connected clients.\n\nFor client implementations, you may disregard implementing a client \\(if you wish\\), or build a simple UI web client, or build a command line client in Rust which allows you to post a message to the chat server and can also subscribe to the server and print out any new messages as they arrive.\n\nFor more challenges, consider how you might change this to persist messages using a database and allow for more advanced chat features \\(e.g. direct messages between users, replies/threads, reactions, etc.\\). Finally, consider how you might test your project."
         }
       ]
     }
