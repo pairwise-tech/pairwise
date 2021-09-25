@@ -248,9 +248,8 @@ class Home extends React.Component<IProps, {}> {
         {hasCoachingSession && (
           <SpecialBox>
             <p style={{ margin: 0 }}>
-              You currently have a 30 minute career coaching session with a
-              professional developer! To schedule this at anytime reach out to
-              us at{" "}
+              You currently have a career coaching session with a professional
+              developer! To schedule this at anytime reach out to us at{" "}
               <a target="__blank" href="mailto:coaching@pairwise.tech">
                 <b>coaching@pairwise.tech</b>
               </a>
