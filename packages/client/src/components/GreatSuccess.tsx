@@ -5,7 +5,7 @@ import { CSSTransition } from "react-transition-group";
 import Confetti from "react-confetti";
 import { IRect } from "react-confetti/dist/types/Rect";
 import { Challenge, getChallengeSlug } from "@pairwise/common";
-import { scrollToVideoAndPlay } from "./MediaArea";
+import { SubscribeToYouTubeButton, scrollToVideoAndPlay } from "./MediaArea";
 import Modules, { ReduxStoreState } from "modules/root";
 import { NextChallengeButton } from "./ChallengeControls";
 import { connect } from "react-redux";
@@ -14,6 +14,7 @@ import { COLORS, MOBILE } from "tools/constants";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
 import { defaultTextColor, themeColor } from "./ThemeContainer";
+import { LoginSignupButton } from "./SharedComponents";
 
 /** ===========================================================================
  * Types & Config
@@ -251,7 +252,7 @@ const GreatSuccess: React.FC<Props> = ({
   nextChallenge,
   ...props
 }) => {
-  const { onClose } = props;
+  const { onClose, isRegisteredUser, setSingleSignOnDialogState } = props;
 
   const handlePlayVideo = React.useCallback(() => {
     onClose();
@@ -266,6 +267,9 @@ const GreatSuccess: React.FC<Props> = ({
     }
   };
 
+  // Move this to a user field which can be updated
+  const showSubscribeToYouTube = true;
+
   return (
     <ConfettiModal {...props}>
       <KeyboardShortcuts
@@ -277,18 +281,34 @@ const GreatSuccess: React.FC<Props> = ({
       <CardTitle>{challenge.title}</CardTitle>
       <SuccessMessageText>{renderSuccessMessage(challenge)}</SuccessMessageText>
       <ButtonActions>
-        <Button
-          large
-          icon="comment"
-          className="feedback-button"
-          onClick={() =>
-            props.setFeedbackDialogState(
-              FEEDBACK_DIALOG_TYPES.CHALLENGE_FEEDBACK,
-            )
-          }
-        >
-          Have feedback?
-        </Button>
+        {!isRegisteredUser ? (
+          <>
+            <LoginSignupButton
+              id="login-signup-button"
+              onClick={() => setSingleSignOnDialogState(true)}
+            >
+              Login or Signup
+            </LoginSignupButton>
+            <RegistrationText>
+              Create an account to track your progress.
+            </RegistrationText>
+          </>
+        ) : showSubscribeToYouTube ? (
+          <SubscribeToYouTubeButton />
+        ) : (
+          <Button
+            large
+            icon="comment"
+            className="feedback-button"
+            onClick={() =>
+              props.setFeedbackDialogState(
+                FEEDBACK_DIALOG_TYPES.CHALLENGE_FEEDBACK,
+              )
+            }
+          >
+            Have feedback?
+          </Button>
+        )}
         <div className="right-buttons">
           {challenge.videoUrl && (
             <Button
@@ -521,17 +541,24 @@ const CardTitleContainer = styled.div`
   }
 `;
 
+const RegistrationText = styled.p`
+  margin: 0;
+  font-size: 12px;
+`;
+
 /** ===========================================================================
  * Props
  * ============================================================================
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  isRegisteredUser: Modules.selectors.auth.userAuthenticated(state),
   nextChallenge: Modules.selectors.challenges.nextPrevChallenges(state).next,
 });
 
 const dispatchProps = {
   setFeedbackDialogState: Modules.actions.feedback.setFeedbackDialogState,
+  setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
 };
 
 /** ===========================================================================

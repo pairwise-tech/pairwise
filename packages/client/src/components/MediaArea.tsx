@@ -342,33 +342,52 @@ export const YoutubeEmbed = (props: YoutubeEmbedProps) => {
             allowFullScreen
           />
         </VideoWrapper>
-        <SubscribeBar>
-          {props.showSubscribeButton && (
-            <FloatRight>
-              <Button
-                onClick={() => {
-                  const url =
-                    "https://www.youtube.com/channel/UCG52QHurjYWfqFBQR_60EUQ";
-                  window.open(url, "_blank")?.focus();
-                }}
-                text="Subscribe to Pairwise on YouTube"
-                icon={<Icon icon="video" color={COLORS.YOUTUBE_RED} />}
-              />
-            </FloatRight>
-          )}
-          {props.showSubscribeButtonText && (
-            <FloatRight>
-              <p style={{ marginTop: 6, fontSize: 12 }}>
-                Pairwise YouTube includes additional helpful video content.
-              </p>
-            </FloatRight>
-          )}
-        </SubscribeBar>
+        <SubscribeToYouTube
+          showSubscribeButton={props.showSubscribeButton}
+          showSubscribeButtonText={props.showSubscribeButtonText}
+        />
       </>
     );
   } catch (err) {
     return null;
   }
+};
+
+interface SubscribeToYouTubeProps {
+  showSubscribeButton?: boolean;
+  showSubscribeButtonText?: boolean;
+}
+
+export const SubscribeToYouTube = (props: SubscribeToYouTubeProps) => {
+  return (
+    <SubscribeBar>
+      {props.showSubscribeButton && (
+        <FloatRight>
+          <SubscribeToYouTubeButton />
+        </FloatRight>
+      )}
+      {props.showSubscribeButtonText && (
+        <FloatRight>
+          <p style={{ marginTop: 6, fontSize: 12 }}>
+            Pairwise YouTube includes additional helpful video content.
+          </p>
+        </FloatRight>
+      )}
+    </SubscribeBar>
+  );
+};
+
+export const SubscribeToYouTubeButton = () => {
+  return (
+    <Button
+      onClick={() => {
+        const url = "https://www.youtube.com/channel/UCG52QHurjYWfqFBQR_60EUQ";
+        window.open(url, "_blank")?.focus();
+      }}
+      text="Subscribe to Pairwise on YouTube"
+      icon={<Icon icon="video" color={COLORS.YOUTUBE_RED} />}
+    />
+  );
 };
 
 const SubscribeBar = styled.div`
