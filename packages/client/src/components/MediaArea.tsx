@@ -377,14 +377,22 @@ export const SubscribeToYouTube = (props: SubscribeToYouTubeProps) => {
   );
 };
 
-export const SubscribeToYouTubeButton = () => {
+export const SubscribeToYouTubeButton = (props: {
+  className?: string;
+  shortName?: boolean;
+}) => {
   return (
     <Button
+      className={props.className}
       onClick={() => {
         const url = "https://www.youtube.com/channel/UCG52QHurjYWfqFBQR_60EUQ";
         window.open(url, "_blank")?.focus();
       }}
-      text="Subscribe to Pairwise on YouTube"
+      text={
+        props.shortName
+          ? "Subscribe on YouTube"
+          : "Subscribe to Pairwise on YouTube"
+      }
       icon={<Icon icon="video" color={COLORS.YOUTUBE_RED} />}
     />
   );

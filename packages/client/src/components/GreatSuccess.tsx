@@ -239,6 +239,7 @@ const ConfettiModal: React.FC<ConfettiModalProps> = (props) => {
  */
 
 interface GreatSuccessProps extends ConfettiModalProps {
+  isMobileView: boolean;
   challenge: Challenge;
   onClose: () => any;
 }
@@ -252,7 +253,12 @@ const GreatSuccess: React.FC<Props> = ({
   nextChallenge,
   ...props
 }) => {
-  const { onClose, isRegisteredUser, setSingleSignOnDialogState } = props;
+  const {
+    onClose,
+    isMobileView,
+    isRegisteredUser,
+    setSingleSignOnDialogState,
+  } = props;
 
   const handlePlayVideo = React.useCallback(() => {
     onClose();
@@ -270,6 +276,28 @@ const GreatSuccess: React.FC<Props> = ({
   // Move this to a user field which can be updated
   const showSubscribeToYouTube = true;
 
+  const LoginSignup = isMobileView ? (
+    <LoginSignupButton
+      id="login-signup-button"
+      className="secondary-button"
+      onClick={() => setSingleSignOnDialogState(true)}
+    >
+      Login or Signup
+    </LoginSignupButton>
+  ) : (
+    <>
+      <LoginSignupButton
+        id="login-signup-button"
+        onClick={() => setSingleSignOnDialogState(true)}
+      >
+        Login or Signup
+      </LoginSignupButton>
+      <RegistrationText>
+        Create an account to track your progress.
+      </RegistrationText>
+    </>
+  );
+
   return (
     <ConfettiModal {...props}>
       <KeyboardShortcuts
@@ -282,24 +310,17 @@ const GreatSuccess: React.FC<Props> = ({
       <SuccessMessageText>{renderSuccessMessage(challenge)}</SuccessMessageText>
       <ButtonActions>
         {!isRegisteredUser ? (
-          <>
-            <LoginSignupButton
-              id="login-signup-button"
-              onClick={() => setSingleSignOnDialogState(true)}
-            >
-              Login or Signup
-            </LoginSignupButton>
-            <RegistrationText>
-              Create an account to track your progress.
-            </RegistrationText>
-          </>
+          LoginSignup
         ) : showSubscribeToYouTube ? (
-          <SubscribeToYouTubeButton />
+          <SubscribeToYouTubeButton
+            shortName={isMobileView}
+            className="secondary-button"
+          />
         ) : (
           <Button
             large
             icon="comment"
-            className="feedback-button"
+            className="secondary-button"
             onClick={() =>
               props.setFeedbackDialogState(
                 FEEDBACK_DIALOG_TYPES.CHALLENGE_FEEDBACK,
@@ -358,8 +379,9 @@ const ButtonActions = styled.div`
       width: 100%;
     }
 
-    .feedback-button {
+    .secondary-button {
       order: 2;
+      margin-top: 4px;
     }
 
     .right-buttons {

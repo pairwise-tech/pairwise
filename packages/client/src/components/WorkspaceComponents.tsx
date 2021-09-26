@@ -9,6 +9,7 @@ import {
   CONTENT_SERIALIZE_DEBOUNCE,
   SANDBOX_ID,
   MOBILE,
+  DESKTOP,
 } from "../tools/constants";
 import { getDimensions, HEADER_HEIGHT } from "../tools/dimensions";
 import KeyboardShortcuts from "./KeyboardShortcuts";
@@ -818,10 +819,13 @@ const StyledEditableText = styled(EditableText)`
 const ChallengeTitleContainer = styled.div`
   margin-bottom: 10px;
   display: flex;
-  align-items: flex-end;
   flex-direction: row;
-  justify-content: space-between;
-  width: ${PROSE_MAX_WIDTH}px;
+
+  @media ${DESKTOP} {
+    width: ${PROSE_MAX_WIDTH}px;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
 `;
 
 const keyboardStateToProps = (state: ReduxStoreState) => ({

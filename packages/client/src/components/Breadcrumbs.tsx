@@ -11,7 +11,7 @@ import {
   CHALLENGE_TYPE,
   PortfolioSkills,
 } from "@pairwise/common";
-import { COLORS, PROSE_MAX_WIDTH } from "tools/constants";
+import { COLORS, DESKTOP, PROSE_MAX_WIDTH } from "tools/constants";
 import {
   capitalize,
   isAlternateLanguageChallenge,
@@ -213,7 +213,10 @@ const Horizontal = styled.div`
   align-items: flex-end;
   flex-direction: row;
   justify-content: space-between;
-  width: ${PROSE_MAX_WIDTH}px;
+
+  @media ${DESKTOP} {
+    width: ${PROSE_MAX_WIDTH}px;
+  }
 `;
 
 const Row = styled.div`

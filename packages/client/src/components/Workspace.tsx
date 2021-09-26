@@ -535,6 +535,7 @@ class Workspace extends React.Component<IProps, IState> {
       <CodeEditorContainer>
         <GreatSuccess
           challenge={challenge}
+          isMobileView={isMobileView}
           isOpen={IS_GREAT_SUCCESS_OPEN}
           onClose={this.handleCloseSuccessModal}
           onClickOutside={this.handleCloseSuccessModal}
