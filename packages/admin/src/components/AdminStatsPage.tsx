@@ -15,7 +15,7 @@ import {
 } from "../tools/admin-utils";
 import { getRecentProgressRecordsChartData } from "../tools/admin-chart-utils";
 import { COLORS, MOBILE } from "../tools/constants";
-import { Button } from "@blueprintjs/core";
+import { Button, Icon } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 import { themeText } from "./AdminThemeContainer";
 import {
@@ -74,6 +74,7 @@ class AdminStatsPage extends React.Component<IProps, IState> {
       courseSkeletons,
       progressRecords,
       usersListLoading,
+      socketIOConnected,
     } = this.props;
 
     // Wait for stats and users list to load
@@ -180,6 +181,9 @@ class AdminStatsPage extends React.Component<IProps, IState> {
               );
             })}
             <Title>Realtime Challenge Updates:</Title>
+            <SocketIOText socketIOConnected={socketIOConnected}>
+              {socketIOConnected ? "Connected" : "Disconnected..."}
+            </SocketIOText>
             {this.renderRealTimeUpdates()}
             <Title>Past 24hr Progress Summary:</Title>
             {progressRecords ? (
@@ -377,17 +381,28 @@ const ControlRow = styled.div`
   }
 `;
 
+const SocketIOText = styled.p<{ socketIOConnected: boolean }>`
+  margin: 0;
+  font-size: 12px;
+  color: ${(props) => {
+    return props.socketIOConnected
+      ? COLORS.PRIMARY_GREEN
+      : COLORS.LIGHT_FAILURE;
+  }};
+`;
+
 /** ===========================================================================
  * Props
  * ============================================================================
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  courses: Modules.selectors.challenges.courseList(state),
   usersList: Modules.selectors.users.usersState(state).users,
   statsLoading: Modules.selectors.stats.statsLoadingSelector(state),
+  socketIOConnected: Modules.selectors.app.socketIOConnected(state),
   adminUserSettings: Modules.selectors.admin.adminUserSettings(state),
   usersListLoading: Modules.selectors.users.usersState(state).loading,
-  courses: Modules.selectors.challenges.courseList(state),
   courseSkeletons: Modules.selectors.challenges.courseSkeletons(state),
   progressRecords: Modules.selectors.stats.progressRecordsSelector(state),
   lastUpdated:

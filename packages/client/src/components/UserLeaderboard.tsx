@@ -30,6 +30,7 @@ export interface RealTimeChallengeUpdate {
 }
 
 interface IState {
+  socketIOConnected: boolean;
   realtimeChallengeUpdates: RealTimeChallengeUpdate[];
 }
 
@@ -51,6 +52,7 @@ class UserLeaderboard extends React.Component<IProps, IState> {
     super(props);
 
     this.state = {
+      socketIOConnected: false,
       realtimeChallengeUpdates: [],
     };
   }
@@ -89,7 +91,8 @@ class UserLeaderboard extends React.Component<IProps, IState> {
 
   /**
    * If this is to be used outside of this component, it could be integrated
-   * in the RxJS middleware layer.
+   * in the RxJS middleware layer. This is how it is setup in the admin app,
+   * see there for details.
    */
   initializeWebSocketConnection = async (retries = 5) => {
     // Cancel if retries reach 0
@@ -109,9 +112,12 @@ class UserLeaderboard extends React.Component<IProps, IState> {
       // Connection opened
       socket.on("connect", () => {
         console.log("WebSocket connection established.");
+        this.setState({ socketIOConnected: true });
       });
 
       socket.on("disconnect", (reason: string) => {
+        this.setState({ socketIOConnected: false });
+
         // No op on componentWillUnmount
         if (reason === "io client disconnect") {
           console.log("WebSocket connection closed by the client.");
@@ -184,7 +190,7 @@ class UserLeaderboard extends React.Component<IProps, IState> {
   };
 
   render(): Nullable<JSX.Element> {
-    const { realtimeChallengeUpdates } = this.state;
+    const { realtimeChallengeUpdates, socketIOConnected } = this.state;
     const {
       courses,
       userLeaderboardState,
@@ -238,6 +244,9 @@ class UserLeaderboard extends React.Component<IProps, IState> {
           <TextItem style={{ fontWeight: "bold", textDecoration: "underline" }}>
             Realtime Challenge Updates:
           </TextItem>
+          <SocketIOText socketIOConnected={socketIOConnected}>
+            {socketIOConnected ? "Connected" : "Disconnected..."}
+          </SocketIOText>
           {realtimeChallengeUpdates.length > 0 ? (
             <>
               {realtimeChallengeUpdates.map((update) => {
@@ -245,6 +254,7 @@ class UserLeaderboard extends React.Component<IProps, IState> {
                 return (
                   <TextItem
                     style={{
+                      marginTop: 0,
                       color: update.complete
                         ? COLORS.PRIMARY_GREEN
                         : COLORS.SECONDARY_YELLOW,
@@ -257,7 +267,7 @@ class UserLeaderboard extends React.Component<IProps, IState> {
               })}
             </>
           ) : (
-            <TextItem style={{ color: COLORS.LIGHT_GREY }}>
+            <TextItem style={{ marginTop: 0, color: COLORS.LIGHT_GREY }}>
               Watching for challenge updates...
             </TextItem>
           )}
@@ -369,6 +379,17 @@ const RecentStatsBox = styled.div`
   border-radius: 4px;
 
   ${themeColor("background", COLORS.BACKGROUND_MODAL_DARK, COLORS.GRAY)};
+`;
+
+const SocketIOText = styled.p<{ socketIOConnected: boolean }>`
+  margin-top: 6px;
+  margin-bottom: 0;
+  font-size: 12px;
+  color: ${(props) => {
+    return props.socketIOConnected
+      ? COLORS.PRIMARY_GREEN
+      : COLORS.LIGHT_FAILURE;
+  }};
 `;
 
 /** ===========================================================================

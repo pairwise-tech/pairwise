@@ -19,6 +19,11 @@ export const realtimeChallengeUpdates = createSelector(
   (appState) => appState.realtimeChallengeUpdates,
 );
 
+export const socketIOConnected = createSelector(
+  [appState],
+  (appState) => appState.socketIOConnected,
+);
+
 export const locationSelector = createSelector(
   appSelector,
   (app) => app.location,
