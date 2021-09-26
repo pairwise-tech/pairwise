@@ -1,4 +1,4 @@
-# This is the same as the Build.Dockerfile but it pulls from the GitHub 
+# This is the same as the Dockerfile.Build but it pulls from the GitHub 
 # container registry which is used to cache docker image build layers in CI,
 # and it omits the client build. This is used for the CI test workflow.
 

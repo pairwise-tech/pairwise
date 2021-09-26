@@ -38,7 +38,7 @@ services:
   services:
     build:
       context: .
-      dockerfile: docker/Runtime.Dockerfile
+      dockerfile: docker/Dockerfile.Runtime
     image: pairwise-dev-runtime
     command: dockerize -wait tcp://db:5432 -timeout 10s yarn pairwise
     environment:
