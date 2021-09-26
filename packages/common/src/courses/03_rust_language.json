@@ -69,11 +69,22 @@
           "type": "rust",
           "id": "d8WItf9JW",
           "title": "Rust Integer Types",
-          "instructions": "Initialize the `my_int` value in `get_integer` function in the editor to return a valid `i8` integer\\.",
+          "instructions": "Initialize the `my_int` value in `get_integer` function in the editor to return a valid `i8` integer, an 8\\-bit signed integer. Rust supports multiple different integer data types, from 8 to 128 bit, each signed or unsigned. A \"signed\" integer is one that may be positive of negative, e.g. `-4` is a signed integer. Unsigned integers are assumed to be positive.",
           "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  let n = get_integer();\n  let result = 5 + n;\n  let original = result - 5;\n\n  if n != original {\n    return false\n  }\n\n  return true\n}\n`;\n\ntest(\"The `my_int` variable in the `get_integer` should be correctly initialized.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
           "videoUrl": "",
           "starterCode": "// Return an i8 integer value\nfn get_integer() -> i8 {\n  let my_int: i8;\n\n  my_int\n}\n\nlet integer = get_integer();\nprintln!(\"my_int value: {:?}\", integer);\n",
           "solutionCode": "// Return an i8 integer value\nfn get_integer() -> i8 {\n  let my_int: i8 = 15;\n\n  my_int\n}\n\nlet integer = get_integer();\nprintln!(\"my_int value: {:?}\", integer);\n",
+          "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "z6DMvoh1T",
+          "title": "Integer Type Sizes",
+          "instructions": "The size of an integer data type refers to how much memory will be required to store the value, and hence, this imposes a limit on the size of the particular integer. An `i8` value, for instance, occupies 8 bits of space and can range from `-128` to `127`.\n\nThe editor below has a function `check_integer_i8_range` which uses the public `i8` constant `MIN` and `MAX` values and the `assert_eq!` macro \\(don't worry, more on all this later\\) to check that an input range falls within the bounds of an acceptable `i8` integer\\.\n\nUpdate the invocation of `check_integer_i8_range` so that the code compiles. Notice how the compiler is about to detect that the current code will fail, and even gives you a helpful hint\\!",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  check_integer_i8_range(-128, 127);\n\n  true\n}\n`;\n\ntest(\"The code should compile and the `check_integer_i8_range` function should be invoked with the minimum and maximum bounds of an `i8` integer.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  expect(\n    CODE_STRING.replace(/ /g, \"\").includes(\"check_integer_i8_range(-128,127)\")\n  ).toBe(true);\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn check_integer_i8_range(min: i8, max: i8) -> () {\n  assert_eq!(i8::MIN, min);\n  assert_eq!(i8::MAX, max);\n  println!(\"Valid i8 Range, min: {:?} max: {:?}\", min, max);\n}\n\n// Update this line:\ncheck_integer_i8_range(-500, 500);\n",
+          "solutionCode": "fn check_integer_i8_range(min: i8, max: i8) -> () {\n  assert_eq!(i8::MIN, min);\n  assert_eq!(i8::MAX, max);\n  println!(\"Valid i8 Range, min: {:?} max: {:?}\", min, max);\n}\n\n// Update this line:\ncheck_integer_i8_range(-128, 127);\n",
           "content": ""
         },
         {
