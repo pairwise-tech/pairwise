@@ -33,7 +33,7 @@ export class BlobController {
   @UseGuards(AuthGuard("jwt"))
   @Post()
   @UsePipes(ValidationPipe)
-  public updateUserChallengeCode(
+  public updateUserChallengeCodeBlob(
     @Body() challengeCodeDto: BlobDto,
     @Req() req: AuthenticatedRequest,
   ) {

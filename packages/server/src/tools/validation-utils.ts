@@ -72,7 +72,8 @@ export const validateCodeBlob = (blob: ICodeBlobDto) => {
     switch (dataBlob.type) {
       case "challenge": {
         const { code } = dataBlob;
-        if (!code || typeof code !== "string") {
+        // Any string type is valid, including empty string
+        if (typeof code !== "string") {
           captureSentryException(
             `Invalid blob code value, received blob: ${JSON.stringify(blob)}`,
           );

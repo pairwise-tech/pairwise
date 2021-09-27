@@ -14,6 +14,9 @@ import {
   CourseList,
   LastActiveChallengeIds,
   getChallengeSlug,
+  Some,
+  None,
+  Option,
 } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
 import { merge, of, combineLatest, Observable, partition } from "rxjs";
@@ -734,21 +737,22 @@ const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
     pluck("previousChallengeId"),
     filter((x) => x !== null),
     map((challengeId) => {
-      const id = challengeId as string; // it's not null
+      const id = challengeId as string; // It's not null
       const blobs = deps.selectors.challenges.getBlobCache(state$.value);
       const cachedItem = blobs[id];
+
       if (cachedItem && cachedItem.dataBlob) {
         const codeBlob: ICodeBlobDto = {
           challengeId: id,
           dataBlob: cachedItem.dataBlob,
         };
-        return new Ok(codeBlob);
+        return new Some(codeBlob);
       } else {
-        return new Err("No blob found");
+        return new None();
       }
     }),
-    map((result) => {
-      if (result.value) {
+    map((result: Option<ICodeBlobDto>) => {
+      if (result.some) {
         return Actions.saveChallengeBlob(result.value);
       } else {
         return Actions.empty("No blob saved");
@@ -775,7 +779,7 @@ const saveCodeBlobEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.saveChallengeBlob)),
     pluck("payload"),
-    mergeMap(deps.api.updateChallengeHistory),
+    mergeMap(deps.api.updateChallengeBlob),
     map((result) => {
       if (result.value) {
         return Actions.saveChallengeBlobSuccess();

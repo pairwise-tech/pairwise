@@ -476,7 +476,7 @@ class Api extends BaseApiClass {
     }
   };
 
-  updateChallengeHistory = async (
+  updateChallengeBlob = async (
     dataBlob: ICodeBlobDto,
   ): Promise<Result<ICodeBlobDto, HttpResponseError>> => {
     /**
