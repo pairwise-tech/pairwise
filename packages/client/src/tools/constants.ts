@@ -68,6 +68,10 @@ export const COLORS = {
   GRADIENT_PINK:
     "linear-gradient( 90deg, rgb(252, 66, 109, 1) 22%, rgb(255, 122, 138, 1) 74%)",
   BORDER_MODAL: "rgb(100,100,100)",
+
+  // For dark matrix terminal theme
+  TERMINAL_DARK_LOGS: "#4cd44e",
+  TERMINAL_DARK_BACKGROUND: "rgb(15, 15, 15)",
 };
 
 export const MONACO_EDITOR_INITIAL_FONT_SIZE = 12;

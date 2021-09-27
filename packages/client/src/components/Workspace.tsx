@@ -420,12 +420,27 @@ class Workspace extends React.Component<IProps, IState> {
       return IS_DARK ? dark : light;
     };
 
+    // See: https://github.com/samdenty/console-feed/blob/master/src/definitions/Styles.d.ts
+    const TERMINAL_LOG_STYLES = {
+      LOG_COLOR: C.TERMINAL_DARK_LOGS,
+      LOG_BACKGROUND: C.TERMINAL_DARK_BACKGROUND,
+    };
+
+    // TODO: Make this an option theme toggle
+    const IS_RUST = challenge.type === "rust";
+
     // Define console-feed component
     const ConsoleComponent = () => (
       <Console
         variant={theme}
         logs={this.state.logs}
-        styles={theme === "light" ? { LOG_COLOR: "black" } : {}}
+        styles={
+          theme === "light"
+            ? { LOG_COLOR: "black" }
+            : IS_RUST
+            ? TERMINAL_LOG_STYLES
+            : {}
+        }
       />
     );
 
@@ -515,7 +530,7 @@ class Workspace extends React.Component<IProps, IState> {
     // Codepress test editor full height
     const TestFullHeightEditor = (
       <Col
-        style={getConsoleRowStyles(theme)}
+        style={getConsoleRowStyles(theme, challenge.type)}
         initialHeight={D.WORKSPACE_HEIGHT}
       >
         {IS_ALTERNATIVE_EDIT_VIEW && WorkspaceTestContainer}
@@ -855,7 +870,7 @@ class Workspace extends React.Component<IProps, IState> {
               </MobileDeviceUI>
             </Row>
             <Row
-              style={getConsoleRowStyles(theme)}
+              style={getConsoleRowStyles(theme, challenge.type)}
               initialHeight={D.PREVIEW_CONSOLE_REACT_NATIVE_HEIGHT}
             >
               {ScrollableWorkspaceConsole}
@@ -873,7 +888,7 @@ class Workspace extends React.Component<IProps, IState> {
               <div style={{ height: "100%" }}>{iFrameNormal}</div>
             </Row>
             <Row
-              style={getConsoleRowStyles(theme)}
+              style={getConsoleRowStyles(theme, challenge.type)}
               initialHeight={D.CONSOLE_HEIGHT}
             >
               {ScrollableWorkspaceConsole}
@@ -882,7 +897,7 @@ class Workspace extends React.Component<IProps, IState> {
         </Col>
       ) : IS_TYPESCRIPT_CHALLENGE ? (
         <Col
-          style={getConsoleRowStyles(theme)}
+          style={getConsoleRowStyles(theme, challenge.type)}
           initialHeight={D.WORKSPACE_HEIGHT}
         >
           <EmptyPreviewCoverPanel
@@ -894,7 +909,7 @@ class Workspace extends React.Component<IProps, IState> {
         </Col>
       ) : IS_ALTERNATE_LANGUAGE_CHALLENGE ? (
         <Col
-          style={getConsoleRowStyles(theme)}
+          style={getConsoleRowStyles(theme, challenge.type)}
           initialHeight={D.WORKSPACE_HEIGHT}
         >
           <EmptyPreviewCoverPanel
