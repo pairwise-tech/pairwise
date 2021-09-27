@@ -137,6 +137,17 @@
           "starterCode": "fn all_should_be_truthy() -> bool {\n  let should_be_true: bool = 50 < 10;\n\n  // Change the variable value, not the if statement\n  if should_be_true == false {\n    return false;\n  }\n\n  let should_be_false: bool = 250 > 50;\n\n  // Change the variable value, not the if statement\n  if should_be_false == true {\n    return false;\n  }\n\n}\n\nprintln!(\"Result should be true, result: {:?}\", all_should_be_truthy());",
           "solutionCode": "fn all_should_be_truthy() -> bool {\n  let should_be_true: bool = 5 < 10;\n\n  if should_be_true == false {\n    return false;\n  }\n\n  let should_be_false: bool = 25 > 50;\n\n  if should_be_false == true {\n    return false;\n  }\n\n  return true;\n}\n\nprintln!(\"Result should be true, result: {:?}\", all_should_be_truthy());",
           "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "R@eJbCV7@",
+          "title": "The Char Type",
+          "instructions": "Next is the `char` data type, which represents a single character. This is the primitive type which is used to build up `str` and `String` types which are more commonly used to represent string values \\(more on these later\\). A `char` value is limited to a single character and represents a Unicode Scalar Value. Note that `char`s are declared using single quotes.\n\nAdjust the `return_a_char_value` function so the code compiles.",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  let _result: char = return_a_char_value();\n\n  true\n}\n`;\n\ntest(\"The `return_a_char_value` function should compile and return a `char` value.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn return_a_char_value() -> char {\n  let character: char = 'xyz';\n\n  character\n}\n\nlet result = return_a_char_value();\nprintln!(\"Character: {:?}\", result);",
+          "solutionCode": "fn return_a_char_value() -> char {\n  let character: char = 'x';\n\n  character\n}\n\nlet result = return_a_char_value();\nprintln!(\"Character: {:?}\", result);",
+          "content": ""
         }
       ],
       "free": false
