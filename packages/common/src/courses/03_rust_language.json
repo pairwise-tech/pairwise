@@ -110,6 +110,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "7ZmqyOC7T",
+          "title": "Rust Arithmetic",
+          "instructions": "Rust supports basic arithmetic similar to many other programming languages, using common operators such as `+`, `-`, `*`, `/`, and `%`. Complete the arithmetic helper functions in the editor with the appropriate operators.",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  let _a = add(23.532, 42.592);\n  let _b: f64 = subtract(23.532, 42.592);\n  let _c: f64 = multiply(23.532, 42.592);\n  let _d: f64 = divide(23.532, 42.592);\n  let _e: f64 = modulus(23.532, 42.592);\n\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn add(a: f64, b: f64) -> f64 {\n  // Your code here\n}\n\nfn subtract(a: f64, b: f64) -> f64 {\n  // Your code here\n}\n\nfn multiply(a: f64, b: f64) -> f64 {\n  // Your code here\n}\n\nfn divide(a: f64, b: f64) -> f64 {\n  // Your code here\n}\n\nfn modulus(a: f64, b: f64) -> f64 {\n  // Your code here\n}\n\nprintln!(\"Rust Arithmetic Results:\");\nprintln!(\"Result add: {:?}\", add(23.532, 42.592));\nprintln!(\"Result subtract: {:?}\", subtract(23.532, 42.592));\nprintln!(\"Result multiply: {:?}\", multiply(23.532, 42.592));\nprintln!(\"Result divide: {:?}\", divide(23.532, 42.592));\nprintln!(\"Result modulus: {:?}\", modulus(23.532, 42.592));",
+          "solutionCode": "fn add(a: f64, b: f64) -> f64 {\n  a + b\n}\n\nfn subtract(a: f64, b: f64) -> f64 {\n  a - b\n}\n\nfn multiply(a: f64, b: f64) -> f64 {\n  a * b\n}\n\nfn divide(a: f64, b: f64) -> f64 {\n  a / b\n}\n\nfn modulus(a: f64, b: f64) -> f64 {\n  a % b\n}\n\nprintln!(\"Rust Arithmetic Results:\");\nprintln!(\"Result add: {:?}\", add(23.532, 42.592));\nprintln!(\"Result subtract: {:?}\", subtract(23.532, 42.592));\nprintln!(\"Result multiply: {:?}\", multiply(23.532, 42.592));\nprintln!(\"Result divide: {:?}\", divide(23.532, 42.592));\nprintln!(\"Result modulus: {:?}\", modulus(23.532, 42.592));",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "32C7HdQle",
           "title": "Practice Challenges",
