@@ -49,6 +49,8 @@ export interface UserProfile {
 
 export type AppTheme = "dark" | "light";
 
+export type ConsoleTheme = "default" | "terminal-dark";
+
 export enum MonacoEditorThemes {
   DEFAULT = "vs-dark",
   DARK = "vs-dark",
@@ -67,6 +69,7 @@ export interface UserSettings {
   fullScreenEditor: boolean;
   appTheme: AppTheme;
   editorTheme: MonacoEditorThemes;
+  consoleTheme: ConsoleTheme;
 }
 
 export const defaultUserSettings: UserSettings = {
@@ -74,6 +77,7 @@ export const defaultUserSettings: UserSettings = {
   fullScreenEditor: false,
   appTheme: "dark",
   editorTheme: MonacoEditorThemes.DEFAULT,
+  consoleTheme: "default",
 };
 
 export interface IUserDto<Profile = UserProfile> {
