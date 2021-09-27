@@ -155,8 +155,8 @@ shortid.characters(
 export const generateEmptyModule = (): Module => ({
   id: shortid.generate(),
   title: "[EMPTY...]",
-  challenges: [],
   free: false /* All challenges are locked by default */,
+  challenges: [],
 });
 
 const starterTestCodeTypeScript = `test("\`example\` function should...", () => {

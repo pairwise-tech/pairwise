@@ -1,14 +1,15 @@
 {
-  "free": true,
-  "price": 0,
-  "premiumPrice": 0,
+  "free": false,
+  "price": 50,
+  "premiumPrice": 500,
   "id": "alosiqu45",
   "title": "Rust",
   "description": "Rust is a statically typed, multi paradigm programming language which excels at performance and safety.",
   "modules": [
     {
       "id": "alosiuqwk",
-      "title": "Rust Basics",
+      "title": "Intro to Rust",
+      "free": true,
       "challenges": [
         {
           "id": "1UMWYNFnEH",
@@ -53,7 +54,13 @@
           "starterCode": "// Here a simple string type is used to represent the error\n// possibility of a Result type.\ntype NumberValidResult = Result<(), String>;\n\n// Arbitrary check on a number input, which returns a Result type.\nfn is_number_valid(num: i32) -> NumberValidResult {\n  // Your code here\n\n  return Err(\"Number is invalid\".to_string())\n}\n\n// Function which inspects a Result type.\nfn check_result(result: NumberValidResult) {\n  println!(\"\\nChecking Result: {:?}\", result);\n\n  // Idiomatic Rust match statement.\n  match result {\n    Ok(()) => println!(\"Result is valid\"),\n    Err(err) => println!(\"Result is invalid, error: {:?}\", err),\n  }\n}\n\n// Get a valid result:\nlet valid = is_number_valid(50);\ncheck_result(valid);\n\n// Get an invalid result:\nlet invalid = is_number_valid(5);\ncheck_result(invalid);",
           "solutionCode": "// Here a simple string type is used to represent the error\n// possibility of a Result type.\ntype NumberValidResult = Result<(), String>;\n\n// Arbitrary check on a number input, which returns a Result type.\nfn is_number_valid(num: i32) -> NumberValidResult {\n  if num < 25 {\n    return Ok(())\n  }\n\n  return Err(\"Number is invalid\".to_string())\n}\n\n// Function which inspects a Result type.\nfn check_result(result: NumberValidResult) {\n  println!(\"\\nChecking Result: {:?}\", result);\n\n  // Idiomatic Rust match statement.\n  match result {\n    Ok(()) => println!(\"Result is valid\"),\n    Err(err) => println!(\"Result is invalid, error: {:?}\", err),\n  }\n}\n\n// Get a valid result:\nlet valid = is_number_valid(15);\ncheck_result(valid);\n\n// Get an invalid result:\nlet invalid = is_number_valid(50);\ncheck_result(invalid);",
           "content": ""
-        },
+        }
+      ]
+    },
+    {
+      "id": "vjN$jfZeb",
+      "title": "Data Types",
+      "challenges": [
         {
           "type": "section",
           "id": "6w$q0NkrZ",
@@ -119,7 +126,14 @@
           "starterCode": "fn add(a: f64, b: f64) -> f64 {\n  // Your code here\n}\n\nfn subtract(a: f64, b: f64) -> f64 {\n  // Your code here\n}\n\nfn multiply(a: f64, b: f64) -> f64 {\n  // Your code here\n}\n\nfn divide(a: f64, b: f64) -> f64 {\n  // Your code here\n}\n\nfn modulus(a: f64, b: f64) -> f64 {\n  // Your code here\n}\n\nprintln!(\"Rust Arithmetic Results:\");\nprintln!(\"Result add: {:?}\", add(23.532, 42.592));\nprintln!(\"Result subtract: {:?}\", subtract(23.532, 42.592));\nprintln!(\"Result multiply: {:?}\", multiply(23.532, 42.592));\nprintln!(\"Result divide: {:?}\", divide(23.532, 42.592));\nprintln!(\"Result modulus: {:?}\", modulus(23.532, 42.592));",
           "solutionCode": "fn add(a: f64, b: f64) -> f64 {\n  a + b\n}\n\nfn subtract(a: f64, b: f64) -> f64 {\n  a - b\n}\n\nfn multiply(a: f64, b: f64) -> f64 {\n  a * b\n}\n\nfn divide(a: f64, b: f64) -> f64 {\n  a / b\n}\n\nfn modulus(a: f64, b: f64) -> f64 {\n  a % b\n}\n\nprintln!(\"Rust Arithmetic Results:\");\nprintln!(\"Result add: {:?}\", add(23.532, 42.592));\nprintln!(\"Result subtract: {:?}\", subtract(23.532, 42.592));\nprintln!(\"Result multiply: {:?}\", multiply(23.532, 42.592));\nprintln!(\"Result divide: {:?}\", divide(23.532, 42.592));\nprintln!(\"Result modulus: {:?}\", modulus(23.532, 42.592));",
           "content": ""
-        },
+        }
+      ],
+      "free": false
+    },
+    {
+      "id": "krVVmQd$S",
+      "title": "Practice Challenges",
+      "challenges": [
         {
           "type": "section",
           "id": "32C7HdQle",
@@ -163,7 +177,14 @@
           "starterCode": "// Write your code here:",
           "solutionCode": "struct Person {\n  name: String,\n  age: u16,\n  height: u16,\n  siblings: bool,\n}\n\nfn create_person(name: String, age: u16, height: u16, siblings: bool) -> Person {\n  Person {\n    name,\n    age,\n    height,\n    siblings,\n  }\n}\n",
           "content": ""
-        },
+        }
+      ],
+      "free": false
+    },
+    {
+      "id": "uZZsKk7083",
+      "title": "Projects",
+      "challenges": [
         {
           "type": "section",
           "id": "tVYCXZbIl",
@@ -219,7 +240,8 @@
           "solutionCode": "",
           "content": "Build a web server using Rust which provides a real time chat functionality. For the basic implementation, consider a single chatroom which anyone can join and post messages to. The server forwards messages in real time to all connected clients.\n\nFor client implementations, you may disregard implementing a client \\(if you wish\\), or build a simple UI web client, or build a command line client in Rust which allows you to post a message to the chat server and can also subscribe to the server and print out any new messages as they arrive.\n\nFor more challenges, consider how you might change this to persist messages using a database and allow for more advanced chat features \\(e.g. direct messages between users, replies/threads, reactions, etc.\\). Finally, consider how you might test your project."
         }
-      ]
+      ],
+      "free": false
     }
   ]
 }
