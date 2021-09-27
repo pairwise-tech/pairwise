@@ -99,6 +99,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "6DWRvh7zW",
+          "title": "Floating Point Numbers",
+          "instructions": "Rust also provides basic data types to deal with floating point numbers. In Rust there are two floating point types: `f32` and `f64`, which use 32 and 64 bits, respectively.\n\nInitialize the two variables in the function body to floating point values so the code compiles correctly.\n\nIf you don't explicitly declare the type, Rust will assign `f64` as the default floating point data type, try doing this for the second variable in the function body.",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  let result = floating_point_types();\n  let _x: f32 = result.0;\n  let _y: f64 = result.1;\n\n  true\n}\n`;\n\ntest(\"The `floating_point_types` function should return a `(f32, f64)` type tuple, using the properly initialized values in the function body.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// This function returns a tuple type\nfn floating_point_types() -> (f32, f64) {\n  // Explicitly defined as an f32 value\n  let floating_point_thirty_two: f32;\n\n  // The type will default to f64\n  let floating_point_sixty_four;\n\n  // Disregard .into() usage, again ;)\n  return (floating_point_thirty_two, floating_point_sixty_four);\n}\n\nlet result = floating_point_types();\nprintln!(\"Result: {:?}\", result);",
+          "solutionCode": "// This function returns a tuple type\nfn floating_point_types() -> (f32, f64) {\n  // Explicitly defined as an f32 value\n  let floating_point_thirty_two: f32 = 213.12311;\n\n  // The type will default to f64\n  let floating_point_sixty_four = 32423.12313131;\n\n  // Disregard .into() usage, again ;)\n  return (floating_point_thirty_two, floating_point_sixty_four);\n}\n\nlet result = floating_point_types();\nprintln!(\"Result: {:?}\", result);",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "32C7HdQle",
           "title": "Practice Challenges",
