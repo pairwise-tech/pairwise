@@ -126,6 +126,17 @@
           "starterCode": "fn add(a: f64, b: f64) -> f64 {\n  // Your code here\n}\n\nfn subtract(a: f64, b: f64) -> f64 {\n  // Your code here\n}\n\nfn multiply(a: f64, b: f64) -> f64 {\n  // Your code here\n}\n\nfn divide(a: f64, b: f64) -> f64 {\n  // Your code here\n}\n\nfn modulus(a: f64, b: f64) -> f64 {\n  // Your code here\n}\n\nprintln!(\"Rust Arithmetic Results:\");\nprintln!(\"Result add: {:?}\", add(23.532, 42.592));\nprintln!(\"Result subtract: {:?}\", subtract(23.532, 42.592));\nprintln!(\"Result multiply: {:?}\", multiply(23.532, 42.592));\nprintln!(\"Result divide: {:?}\", divide(23.532, 42.592));\nprintln!(\"Result modulus: {:?}\", modulus(23.532, 42.592));",
           "solutionCode": "fn add(a: f64, b: f64) -> f64 {\n  a + b\n}\n\nfn subtract(a: f64, b: f64) -> f64 {\n  a - b\n}\n\nfn multiply(a: f64, b: f64) -> f64 {\n  a * b\n}\n\nfn divide(a: f64, b: f64) -> f64 {\n  a / b\n}\n\nfn modulus(a: f64, b: f64) -> f64 {\n  a % b\n}\n\nprintln!(\"Rust Arithmetic Results:\");\nprintln!(\"Result add: {:?}\", add(23.532, 42.592));\nprintln!(\"Result subtract: {:?}\", subtract(23.532, 42.592));\nprintln!(\"Result multiply: {:?}\", multiply(23.532, 42.592));\nprintln!(\"Result divide: {:?}\", divide(23.532, 42.592));\nprintln!(\"Result modulus: {:?}\", modulus(23.532, 42.592));",
           "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "U3$RxoovO",
+          "title": "Boolean Values",
+          "instructions": "In Rust boolean values can be `true` or `false` and as a type can be represented using the  `bool` keyword\\. Change the value of the variables in the `all_should_be_truthy` function in the editor according to the type annotations so the code compiles, and then return an appropriate value from the function.",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  let result: bool = all_should_be_truthy();\n\n  return result;\n}\n`;\n\ntest(\"The `all_should_be_truthy` function should compile and return `true`.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn all_should_be_truthy() -> bool {\n  let should_be_true: bool = 50 < 10;\n\n  // Change the variable value, not the if statement\n  if should_be_true == false {\n    return false;\n  }\n\n  let should_be_false: bool = 250 > 50;\n\n  // Change the variable value, not the if statement\n  if should_be_false == true {\n    return false;\n  }\n\n}\n\nprintln!(\"Result should be true, result: {:?}\", all_should_be_truthy());",
+          "solutionCode": "fn all_should_be_truthy() -> bool {\n  let should_be_true: bool = 5 < 10;\n\n  if should_be_true == false {\n    return false;\n  }\n\n  let should_be_false: bool = 25 > 50;\n\n  if should_be_false == true {\n    return false;\n  }\n\n  return true;\n}\n\nprintln!(\"Result should be true, result: {:?}\", all_should_be_truthy());",
+          "content": ""
         }
       ],
       "free": false
