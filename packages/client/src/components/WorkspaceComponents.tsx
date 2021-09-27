@@ -36,7 +36,7 @@ import {
   themeColor,
   themeText,
 } from "./ThemeContainer";
-import { AppTheme, CHALLENGE_TYPE } from "@pairwise/common";
+import { AppTheme, CHALLENGE_TYPE, ConsoleDarkTheme } from "@pairwise/common";
 
 const D = getDimensions();
 
@@ -386,12 +386,12 @@ export const TestResultRow = ({
 
 export const getConsoleRowStyles = (
   theme: AppTheme,
-  challengeType: CHALLENGE_TYPE,
+  useConsoleTerminalDarkTheme: boolean,
 ) => {
   let background =
     theme === "dark" ? C.BACKGROUND_CONSOLE_DARK : C.BACKGROUND_CONSOLE_LIGHT;
 
-  if (challengeType === "rust") {
+  if (useConsoleTerminalDarkTheme) {
     background = C.TERMINAL_DARK_BACKGROUND;
   }
 

@@ -18,7 +18,7 @@ import {
   ILastActiveIdsDto,
   canDisconnectAccountRequest,
   PAYMENT_PLAN,
-  ConsoleTheme,
+  ConsoleDarkTheme,
 } from "@pairwise/common";
 import validator from "validator";
 import { BadRequestException } from "@nestjs/common";
@@ -258,8 +258,8 @@ const checkAppThemeField = (theme: any): AppTheme => {
   return theme === "dark" || theme === "light" ? theme : null;
 };
 
-const checkConsoleThemeField = (theme: any): ConsoleTheme => {
-  return theme === "default" || theme === "terminal-dark" ? theme : null;
+const checkConsoleDarkThemeField = (theme: any): ConsoleDarkTheme => {
+  return theme === "standard" || theme === "terminal-dark" ? theme : null;
 };
 
 /**
@@ -272,7 +272,7 @@ const checkSettingsField = (settings?: Partial<UserSettings>) => {
       editorTheme: checkThemeField(settings.editorTheme),
       fullScreenEditor: checkBooleanField(settings.fullScreenEditor),
       workspaceFontSize: checkNumberField(settings.workspaceFontSize),
-      consoleTheme: checkConsoleThemeField(settings.consoleTheme),
+      consoleDarkTheme: checkConsoleDarkThemeField(settings.consoleDarkTheme),
     };
 
     return sanitizeObject(validSettings);

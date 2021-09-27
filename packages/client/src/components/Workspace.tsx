@@ -415,19 +415,25 @@ class Workspace extends React.Component<IProps, IState> {
         : WorkspaceMonacoEditor;
 
     const theme = userSettings.appTheme;
+    const consoleDarkTheme = userSettings.consoleDarkTheme;
     const IS_DARK = userSettings.appTheme === "dark";
     const setTheme = (dark: string, light: string) => {
       return IS_DARK ? dark : light;
     };
 
-    // See: https://github.com/samdenty/console-feed/blob/master/src/definitions/Styles.d.ts
-    const TERMINAL_LOG_STYLES = {
-      LOG_COLOR: C.TERMINAL_DARK_LOGS,
-      LOG_BACKGROUND: C.TERMINAL_DARK_BACKGROUND,
-    };
+    // Only valid on non standard language challenges (i.e. non JS/TS)
+    const useConsoleTerminalDarkTheme =
+      IS_ALTERNATE_LANGUAGE_CHALLENGE && consoleDarkTheme === "terminal-dark";
 
-    // TODO: Make this an option theme toggle
-    const IS_RUST = challenge.type === "rust";
+    let consoleDarkThemeStyles = {};
+    if (useConsoleTerminalDarkTheme) {
+      // Reference: https://github.com/samdenty/console-feed/blob/master/src/definitions/Styles.d.ts
+      const TERMINAL_LOG_STYLES = {
+        LOG_COLOR: C.TERMINAL_DARK_LOGS,
+        LOG_BACKGROUND: C.TERMINAL_DARK_BACKGROUND,
+      };
+      consoleDarkThemeStyles = TERMINAL_LOG_STYLES;
+    }
 
     // Define console-feed component
     const ConsoleComponent = () => (
@@ -437,8 +443,8 @@ class Workspace extends React.Component<IProps, IState> {
         styles={
           theme === "light"
             ? { LOG_COLOR: "black" }
-            : IS_RUST
-            ? TERMINAL_LOG_STYLES
+            : IS_ALTERNATE_LANGUAGE_CHALLENGE
+            ? consoleDarkThemeStyles
             : {}
         }
       />
@@ -530,8 +536,8 @@ class Workspace extends React.Component<IProps, IState> {
     // Codepress test editor full height
     const TestFullHeightEditor = (
       <Col
-        style={getConsoleRowStyles(theme, challenge.type)}
         initialHeight={D.WORKSPACE_HEIGHT}
+        style={getConsoleRowStyles(theme, useConsoleTerminalDarkTheme)}
       >
         {IS_ALTERNATIVE_EDIT_VIEW && WorkspaceTestContainer}
         <div>
@@ -695,6 +701,15 @@ class Workspace extends React.Component<IProps, IState> {
                             ? "Use Android Mobile Device"
                             : "Use iOS Mobile Device"
                         }
+                      />
+                    )}
+                    {IS_ALTERNATE_LANGUAGE_CHALLENGE && (
+                      <MenuItem
+                        id="editor-toggle-console-dark-theme"
+                        icon="compass"
+                        aria-label="toggle console theme"
+                        onClick={this.props.toggleConsoleDarkTheme}
+                        text="Toggle Console Theme"
                       />
                     )}
                     {isMobileView && (
@@ -870,7 +885,7 @@ class Workspace extends React.Component<IProps, IState> {
               </MobileDeviceUI>
             </Row>
             <Row
-              style={getConsoleRowStyles(theme, challenge.type)}
+              style={getConsoleRowStyles(theme, useConsoleTerminalDarkTheme)}
               initialHeight={D.PREVIEW_CONSOLE_REACT_NATIVE_HEIGHT}
             >
               {ScrollableWorkspaceConsole}
@@ -888,7 +903,7 @@ class Workspace extends React.Component<IProps, IState> {
               <div style={{ height: "100%" }}>{iFrameNormal}</div>
             </Row>
             <Row
-              style={getConsoleRowStyles(theme, challenge.type)}
+              style={getConsoleRowStyles(theme, useConsoleTerminalDarkTheme)}
               initialHeight={D.CONSOLE_HEIGHT}
             >
               {ScrollableWorkspaceConsole}
@@ -897,7 +912,7 @@ class Workspace extends React.Component<IProps, IState> {
         </Col>
       ) : IS_TYPESCRIPT_CHALLENGE ? (
         <Col
-          style={getConsoleRowStyles(theme, challenge.type)}
+          style={getConsoleRowStyles(theme, useConsoleTerminalDarkTheme)}
           initialHeight={D.WORKSPACE_HEIGHT}
         >
           <EmptyPreviewCoverPanel
@@ -909,7 +924,7 @@ class Workspace extends React.Component<IProps, IState> {
         </Col>
       ) : IS_ALTERNATE_LANGUAGE_CHALLENGE ? (
         <Col
-          style={getConsoleRowStyles(theme, challenge.type)}
+          style={getConsoleRowStyles(theme, useConsoleTerminalDarkTheme)}
           initialHeight={D.WORKSPACE_HEIGHT}
         >
           <EmptyPreviewCoverPanel
@@ -1816,6 +1831,13 @@ const mergeProps = (
         ? MonacoEditorThemes.HIGH_CONTRAST
         : MonacoEditorThemes.DEFAULT;
     methods.updateUserSettings({ editorTheme: nextTheme });
+  },
+  toggleConsoleDarkTheme: () => {
+    const nextTheme =
+      state.userSettings.consoleDarkTheme === "standard"
+        ? "terminal-dark"
+        : "standard";
+    methods.updateUserSettings({ consoleDarkTheme: nextTheme });
   },
   toggleEditorSize: () => {
     methods.updateUserSettings({
