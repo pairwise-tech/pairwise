@@ -75,7 +75,18 @@ class AdminStatsPage extends React.Component<IProps, IState> {
       progressRecords,
       usersListLoading,
       socketIOConnected,
+      connectedClientsCount,
     } = this.props;
+
+    // Reduce count by one, to account for the currently connected admin
+    // user... not perfect, there could be other admin users.
+    const clients = connectedClientsCount - 1;
+    const clientConnectedMessage =
+      clients > 0
+        ? ` - there ${
+            clients === 1 ? "is" : "are"
+          } currently ${clients} connected client${clients > 1 ? "s" : ""}.`
+        : "";
 
     // Wait for stats and users list to load
     const loading = usersListLoading || statsLoading;
@@ -182,7 +193,9 @@ class AdminStatsPage extends React.Component<IProps, IState> {
             })}
             <Title>Realtime Challenge Updates:</Title>
             <SocketIOText socketIOConnected={socketIOConnected}>
-              {socketIOConnected ? "Connected" : "Disconnected..."}
+              {socketIOConnected
+                ? `Connected${clientConnectedMessage}`
+                : "Disconnected..."}
             </SocketIOText>
             {this.renderRealTimeUpdates()}
             <Title>Past 24hr Progress Summary:</Title>
@@ -405,6 +418,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   usersListLoading: Modules.selectors.users.usersState(state).loading,
   courseSkeletons: Modules.selectors.challenges.courseSkeletons(state),
   progressRecords: Modules.selectors.stats.progressRecordsSelector(state),
+  connectedClientsCount: Modules.selectors.app.connectedClientsSelector(state),
   lastUpdated:
     Modules.selectors.stats.progressRecordsLastUpdatedSelector(state),
   paymentRecords: Modules.selectors.payments.paymentRecordsSelector(state),

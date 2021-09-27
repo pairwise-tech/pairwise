@@ -13,8 +13,9 @@ import {
   assertUnreachable,
   createInverseChallengeMapping,
   LeaderboardEntryDto,
-  SocketEvents,
-  SocketEventTypes,
+  SocketClientEventTypes,
+  SocketServerEvents,
+  SocketServerEventTypes,
 } from "@pairwise/common";
 import SEO from "./SEO";
 
@@ -112,7 +113,10 @@ class UserLeaderboard extends React.Component<IProps, IState> {
       // Connection opened
       socket.on("connect", () => {
         console.log("WebSocket connection established.");
-        this.setState({ socketIOConnected: true });
+        this.setState({ socketIOConnected: true }, () => {
+          // Broadcast client connection event
+          socket.emit(SocketClientEventTypes.WORKSPACE_CLIENT_CONNECTED);
+        });
       });
 
       socket.on("disconnect", (reason: string) => {
@@ -140,11 +144,11 @@ class UserLeaderboard extends React.Component<IProps, IState> {
       });
 
       // Listen for messages
-      socket.on("message", (event: SocketEvents) => {
+      socket.on("message", (event: SocketServerEvents) => {
         try {
           switch (event.type) {
-            case SocketEventTypes.REAL_TIME_CHALLENGE_UPDATE: {
-              const message = event.payload.data;
+            case SocketServerEventTypes.REAL_TIME_CHALLENGE_UPDATE: {
+              const message = event.payload;
               this.setState(
                 (ps) => ({
                   realtimeChallengeUpdates:
@@ -157,8 +161,13 @@ class UserLeaderboard extends React.Component<IProps, IState> {
               break;
             }
 
+            case SocketServerEventTypes.CONNECTED_USER_COUNT_UPDATE: {
+              // No op
+              break;
+            }
+
             default: {
-              assertUnreachable(event.type);
+              assertUnreachable(event);
             }
           }
         } catch (err) {

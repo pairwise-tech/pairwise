@@ -20,6 +20,7 @@ export interface State {
   screensaver: boolean;
   socketIOConnected: boolean;
   realtimeChallengeUpdates: RealTimeChallengeUpdate[];
+  connectedClientsCount: number;
 }
 
 const initialState = {
@@ -29,6 +30,7 @@ const initialState = {
   screensaver: false,
   socketIOConnected: false,
   realtimeChallengeUpdates: [],
+  connectedClientsCount: 0,
 };
 
 const app = createReducer<State, AppActionTypes>(initialState)
@@ -59,6 +61,10 @@ const app = createReducer<State, AppActionTypes>(initialState)
   .handleAction(actions.connectSocketIOFailure, (state, action) => ({
     ...state,
     socketIOConnected: false,
+  }))
+  .handleAction(actions.socketClientConnectionUpdate, (state, action) => ({
+    ...state,
+    connectedClientsCount: action.payload.connectedClients,
   }))
   .handleAction(actions.locationChange, (state, action) => ({
     ...state,

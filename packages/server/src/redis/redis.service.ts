@@ -248,11 +248,9 @@ export class RedisClientService {
       client.set(REDIS_CACHE_KEYS.RECENT_PROGRESS_HISTORY, json);
 
       const message: CacheUpdateMessage = {
-        data: {
-          complete,
-          challengeId,
-          id: shortid(),
-        },
+        complete,
+        challengeId,
+        id: shortid(),
       };
 
       // Publish update event

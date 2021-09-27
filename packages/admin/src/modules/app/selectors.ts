@@ -24,6 +24,11 @@ export const socketIOConnected = createSelector(
   (appState) => appState.socketIOConnected,
 );
 
+export const connectedClientsSelector = createSelector(
+  [appState],
+  (appState) => appState.connectedClientsCount,
+);
+
 export const locationSelector = createSelector(
   appSelector,
   (app) => app.location,

@@ -25,6 +25,8 @@ enum ActionTypesEnum {
 
   ADD_REAL_TIME_CHALLENGE_UPDATE = "ADD_REAL_TIME_CHALLENGE_UPDATE",
   REMOVE_REAL_TIME_CHALLENGE_UPDATE = "REMOVE_REAL_TIME_CHALLENGE_UPDATE",
+
+  CLIENT_CONNECTION_UPDATE = "CLIENT_CONNECTION_UPDATE",
 }
 
 /** ===========================================================================
@@ -93,3 +95,7 @@ export const addRealTimeChallengeUpdate = createAction(
 export const removeRealTimeChallengeUpdate = createAction(
   ActionTypesEnum.REMOVE_REAL_TIME_CHALLENGE_UPDATE,
 )<RealTimeChallengeUpdate>();
+
+export const socketClientConnectionUpdate = createAction(
+  ActionTypesEnum.CLIENT_CONNECTION_UPDATE,
+)<{ connectedClients: number }>();

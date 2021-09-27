@@ -20,12 +20,11 @@ import {
 } from "tools/admin-utils";
 import {
   assertUnreachable,
-  SocketEvents,
-  SocketEventTypes,
+  SocketServerEvents,
+  SocketServerEventTypes,
 } from "@pairwise/common";
 import io, { Socket } from "socket.io-client";
 import { HOST } from "../../tools/admin-env";
-import shortid from "shortid";
 
 /** ===========================================================================
  * Epics
@@ -214,11 +213,11 @@ const connectSocketIOEpic: EpicSignature = (action$, _, deps) => {
 
         // Listen for messages, this could be refactored into a separate
         // function if it gets much larger.
-        socket.on("message", (event: SocketEvents) => {
+        socket.on("message", (event: SocketServerEvents) => {
           try {
             switch (event.type) {
-              case SocketEventTypes.REAL_TIME_CHALLENGE_UPDATE: {
-                const message = event.payload.data;
+              case SocketServerEventTypes.REAL_TIME_CHALLENGE_UPDATE: {
+                const message = event.payload;
                 const action = Actions.addRealTimeChallengeUpdate(message);
 
                 // Use store dispatch function to dispatch actions in response
@@ -227,8 +226,16 @@ const connectSocketIOEpic: EpicSignature = (action$, _, deps) => {
                 break;
               }
 
+              case SocketServerEventTypes.CONNECTED_USER_COUNT_UPDATE: {
+                const action = Actions.socketClientConnectionUpdate(
+                  event.payload,
+                );
+                deps.dispatch(action);
+                break;
+              }
+
               default: {
-                assertUnreachable(event.type);
+                assertUnreachable(event);
               }
             }
           } catch (err) {

@@ -1,8 +1,10 @@
 import {
   CacheUpdateMessage,
+  ConnectedUsersUpdateEvent,
   RealTimeUpdateEvent,
-  SocketEvents,
-  SocketEventTypes,
+  SocketServerEventTypes,
+  SocketServerEvents,
+  SocketClientEventTypes,
 } from "@pairwise/common";
 import {
   MessageBody,
@@ -28,10 +30,36 @@ export class WebSocketsGatewayService {
   }
 
   /**
+   * Get all connected clients. This includes connected admins.
+   *
+   * NOTE: Workspace clients only connect on the /leaderboard route currently.
+   * This does not represent all current users.
+   */
+  public async getConnectedClientCount() {
+    const allSocketsSet = await this.server.allSockets();
+    return allSocketsSet.size;
+  }
+
+  /**
    * Handling broadcasting event.
    */
-  private broadcastMessage(event: SocketEvents) {
+  private broadcastMessage(event: SocketServerEvents) {
     this.server.send(event);
+  }
+
+  /**
+   * Broadcast connected clients update.
+   */
+  public async broadcastConnectedClientsUpdate() {
+    const clients = await this.getConnectedClientCount();
+    const event: ConnectedUsersUpdateEvent = {
+      type: SocketServerEventTypes.CONNECTED_USER_COUNT_UPDATE,
+      payload: {
+        connectedClients: clients,
+      },
+    };
+
+    this.broadcastMessage(event);
   }
 
   /**
@@ -39,10 +67,18 @@ export class WebSocketsGatewayService {
    */
   public broadcastRealTimeUpdate(update: CacheUpdateMessage) {
     const event: RealTimeUpdateEvent = {
-      type: SocketEventTypes.REAL_TIME_CHALLENGE_UPDATE,
+      type: SocketServerEventTypes.REAL_TIME_CHALLENGE_UPDATE,
       payload: update,
     };
     this.broadcastMessage(event);
+  }
+
+  /**
+   * Broadcast new client connection update to all clients.
+   */
+  @SubscribeMessage(SocketClientEventTypes.WORKSPACE_CLIENT_CONNECTED)
+  public async handleClientConnectionEvent(): Promise<void> {
+    await this.broadcastConnectedClientsUpdate();
   }
 
   /**

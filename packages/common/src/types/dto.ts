@@ -379,28 +379,44 @@ export interface RecentProgressAdminDto {
  * ============================================================================
  */
 
-export interface PublishedMessage<MessagePayload> {
-  data: MessagePayload;
-}
-
-export type CacheUpdateMessage = PublishedMessage<{
+export type CacheUpdateMessage = {
   id: string;
   complete: boolean;
   challengeId: string;
-}>;
+};
+
+export type ConnectedUsersUpdateMessage = {
+  connectedClients: number;
+};
 
 // Types for various support socket-io events
-export enum SocketEventTypes {
+export enum SocketServerEventTypes {
   REAL_TIME_CHALLENGE_UPDATE = "REAL_TIME_CHALLENGE_UPDATE",
+  CONNECTED_USER_COUNT_UPDATE = "CONNECTED_USER_COUNT_UPDATE",
 }
 
-// Like a Redux action object
-export interface SocketEvent<T> {
-  type: SocketEventTypes.REAL_TIME_CHALLENGE_UPDATE;
-  payload: T;
+export interface RealTimeUpdateEvent {
+  type: SocketServerEventTypes.REAL_TIME_CHALLENGE_UPDATE;
+  payload: CacheUpdateMessage;
 }
 
-export type RealTimeUpdateEvent = SocketEvent<CacheUpdateMessage>;
+export interface ConnectedUsersUpdateEvent {
+  type: SocketServerEventTypes.CONNECTED_USER_COUNT_UPDATE;
+  payload: ConnectedUsersUpdateMessage;
+}
 
-// All possible socket-io event objects
-export type SocketEvents = RealTimeUpdateEvent;
+// All socket-io server sent events
+export type SocketServerEvents =
+  | RealTimeUpdateEvent
+  | ConnectedUsersUpdateEvent;
+
+export enum SocketClientEventTypes {
+  WORKSPACE_CLIENT_CONNECTED = "WORKSPACE_CLIENT_CONNECTED",
+}
+
+export interface WorkspaceClientConnectedEvent {
+  type: SocketClientEventTypes.WORKSPACE_CLIENT_CONNECTED;
+}
+
+// All client sent socket-io events
+export type SocketClientEvents = WorkspaceClientConnectedEvent;
