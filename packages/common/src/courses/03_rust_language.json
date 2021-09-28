@@ -202,6 +202,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "ohaohA5x9",
+          "title": "Constants",
+          "instructions": "You can also declare constants in Rust. Constants are like variables but their value is fixed at compile time and not subject to change throughout the life of the program. Constants are declared with the `const` keyword, are always immutable, and must have an explicit type annotation. Constants can be declared in any scope, including the global scope. They are ideal for global values which do not change throughout the life of a program.\n\nAdd type annotations to the constants in the editor so the code compiles.\n\n> For the string type, try to use the string slice reference type `&str`. We will cover strings more in detail later.\n",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  let x = DEBUG;\n  let y = MAX_HEIGHT;\n  let z = NAME;\n\n  true\n}\n`;\n\ntest(\"The three constants should be initialized correctly and the code should compile.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "const DEBUG = false;\n\nconst MAX_HEIGHT = 52;\n\nconst NAME = \"Pairwise\";\n\nprintln!(\"DEBUG value: {:?}\", DEBUG);\nprintln!(\"MAX_HEIGHT value: {:?}\", MAX_HEIGHT);\nprintln!(\"NAME value: {:?}\", NAME);",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "5B5@asRy6",
           "title": "Data Structures",
