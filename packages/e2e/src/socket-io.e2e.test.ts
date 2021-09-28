@@ -1,8 +1,8 @@
 import io, { Socket } from "socket.io-client";
 import {
   assertUnreachable,
-  SocketEvents,
-  SocketEventTypes,
+  SocketServerEvents,
+  SocketServerEventTypes,
 } from "@pairwise/common";
 import ENV from "./utils/e2e-env";
 import { createUserAndUpdateProgress, wait } from "./utils/e2e-utils";
@@ -47,14 +47,19 @@ describe("Backend Web Sockets server is functional", () => {
 
     let message;
 
-    socket.on("message", (event: SocketEvents) => {
+    socket.on("message", (event: SocketServerEvents) => {
       switch (event.type) {
-        case SocketEventTypes.REAL_TIME_CHALLENGE_UPDATE: {
-          message = event.payload.data;
+        case SocketServerEventTypes.REAL_TIME_CHALLENGE_UPDATE: {
+          message = event.payload;
+          break;
+        }
+
+        case SocketServerEventTypes.CONNECTED_USER_COUNT_UPDATE: {
+          // No-op
           break;
         }
         default:
-          assertUnreachable(event.type);
+          assertUnreachable(event);
       }
     });
 
