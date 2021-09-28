@@ -59,18 +59,18 @@
     },
     {
       "id": "vjN$jfZeb",
-      "title": "Data Types",
+      "title": "Data Primitives",
       "challenges": [
         {
           "type": "section",
           "id": "6w$q0NkrZ",
-          "title": "Primitives and Types",
+          "title": "Data Primitives and Types",
           "instructions": "",
           "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Rust is a fully typed language so our discussion should begin by defining the basic data primitives and types you have to work with. That will be the topic of this section."
+          "content": "Rust is a fully typed language so our discussion should begin by defining the basic data primitives and types you have to work with. That will be the topic of this section, all the basic data types and primitives in Rust. Specifically, we will look at:\n\n* Signed and unsigned integers.\n* Floating point numbers.\n* Arithmetic\\.\n* Booleans\\.\n* Characters\\.\n\n\nAlong the way we will get a feeling for basic syntax in Rust, e.g. variable and function declarations, print statements, code comments, and other basics.\n\nIn the next module, we will cover basic Rust programming and data structures."
         },
         {
           "type": "rust",
@@ -162,6 +162,154 @@
         }
       ],
       "free": false
+    },
+    {
+      "id": "S3BmBYNCP",
+      "title": "Rust Basics",
+      "free": false,
+      "challenges": [
+        {
+          "type": "section",
+          "id": "upbaggZVb",
+          "title": "Variables and Functions",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In this section we will cover variables and functions in more detail. These challenges should be fairly quick since the previous module included many examples of variables and functions. Nevertheless, it should be helpful to explicitly mention a few points here."
+        },
+        {
+          "type": "section",
+          "id": "5B5@asRy6",
+          "title": "Data Structures",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Rust provides a variety of primitive and advanced data structures to work with. We will explore the most common and useful of these in this module, such as:\n\n* Tuples\n* Arrays\n* Enums\n* Vectors\n* Structs\n* Hash Maps\n\n"
+        },
+        {
+          "type": "section",
+          "id": "owXHK17s4",
+          "title": "Control Flow",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Rust contains many of the common control flow structures you will be familiar with from other programming languages. We will cover those in this section, along with a few other patterns which are unique and common to Rust, such as:\n\n* If/else statements\n* Iterators and loops\n* Match statements\n\n"
+        },
+        {
+          "type": "section",
+          "id": "R4TolzmG5",
+          "title": "Rust's Result and Option Types",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Rust contains two well known and powerful types the `Result` and `Option` types which are used to model values which optionally may be in an error/failure state \\(the `Result` type\\) or in an optional/not\\-present state \\(the `Option` type\\). These types are so prevalent and important that we have given them their own section of challenges here."
+        },
+        {
+          "type": "section",
+          "id": "ITJBLJQnl",
+          "title": "Generics, Traits and Lifetimes",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "type": "section",
+          "id": "PnCi8hB8E",
+          "title": "Error Handling",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "type": "section",
+          "id": "JAYJEcvrv",
+          "title": "Testing",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "type": "section",
+          "id": "usDs33hMCZ",
+          "title": "Modules, Packages and Crates",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "type": "section",
+          "id": "RZAimitGF",
+          "title": "Cargo",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        }
+      ]
+    },
+    {
+      "id": "AX04ZC5H8",
+      "title": "Ownership and Borrowing",
+      "free": false,
+      "challenges": []
+    },
+    {
+      "id": "zfbfBa6nP",
+      "title": "Macros",
+      "free": false,
+      "challenges": []
+    },
+    {
+      "id": "LeikXungd",
+      "title": "Smart Pointers",
+      "free": false,
+      "challenges": []
+    },
+    {
+      "id": "HiDVdMr4I",
+      "title": "Concurrency",
+      "free": false,
+      "challenges": []
+    },
+    {
+      "id": "XT73AIuM5",
+      "title": "Additional Features",
+      "free": false,
+      "challenges": [
+        {
+          "type": "section",
+          "id": "axPeNlByhG",
+          "title": "Additional Rust Features",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "This section will cover additional Rust features, such as:\n\n* Functional programming techniques in Rust\n* Object\\-oriented programming techniques in Rust\n* Unsafe code\n* Some advanced features\n\n"
+        }
+      ]
     },
     {
       "id": "krVVmQd$S",
