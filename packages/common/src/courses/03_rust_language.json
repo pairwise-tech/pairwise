@@ -180,6 +180,28 @@
           "content": "In this section we will cover variables and functions in more detail. These challenges should be fairly quick since the previous module included many examples of variables and functions. Nevertheless, it should be helpful to explicitly mention a few points here."
         },
         {
+          "type": "rust",
+          "id": "C55Lmpb@L",
+          "title": "Immutable by Default",
+          "instructions": "In Rust, variables are immutable by default. This means you cannot change the value after declaration. Of course, sometimes you might want to change the value later on, so you can opt\\-in to mutability using the `mut` keyword\\.\n\nUpdate the code in the editor by making variables mutable. The `immutable_by_default` function should be invoked twice.\n\n> Use the `mut` keyword intentionally. When you see a mutable variable, it means the original programmer _intended_ for that variable to change later on. This conveys useful information, and it is important it is an opt\\-in behavior. \n> \n> Use `mut` only when you need it.\n",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  let result: u128 = immutable_by_default(807);\n  true\n}\n`;\n\ntest(\"The code should compile with no errors.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\ntest(\"The `immutable_by_default` function should by invoked twice.\", async () => {\n  const CODE_STRING = __user_code_string__;\n\n  const matched = CODE_STRING.replaceAll(\" \", \"\").match(\n    /immutable_by_default\\(/g\n  ).length;\n\n  expect(matched).toBe(3);\n});\n\ntest(\"Two variables should be made mutable using the `mut` keyword.\", async () => {\n  const CODE_STRING = __user_code_string__;\n\n  const matched = CODE_STRING.replaceAll(\" \", \"\").match(/letmut/g).length;\n\n  expect(matched).toBe(2);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn immutable_by_default(input: u128) -> u128{\n  let value = 52;\n\n  value = input;\n\n  value\n}\n\nlet result = immutable_by_default(41);\nprintln!(\"Result 2 is: {:?}\", result);\n\nresult = immutable_by_default(502);\nprintln!(\"Result 1 is: {:?}\", result);",
+          "solutionCode": "fn immutable_by_default(input: u128) -> u128{\n  let mut value = 52;\n\n  value = input;\n\n  value\n}\n\nlet mut result = immutable_by_default(41);\nprintln!(\"Result 2 is: {:?}\", result);\n\nresult = immutable_by_default(502);\nprintln!(\"Result 1 is: {:?}\", result);",
+          "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "dMMvFPvNS",
+          "title": "Variable Shadowing",
+          "instructions": "While variables are immutable by default, it is in fact possible to change immutable variables values by redeclaring them with the same name. This is called variable shadowing. To shadow a variable, you simply declare it again using the `let` keyword\\.\n\nThe code in the editor tries to update the `name` variable\\. Allow this to work by using variable shadowing—do not use the `mut` keyword\\.\n\n> Shadowing, although perhaps a bit unusual, is useful when working with values which need to be updated or redeclared \\(even, changing to a different type\\) throughout a program. Specifically, shadowing helps the programmer avoid coming up with a new name for the variable.\n",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The code should compile with no errors.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\ntest(\"The `name` variable should be shadowing and printed out for a total of 5 times.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const count = CODE_STRING.replace(/ /g, \"\").match(/letname=/g).length;\n  expect(count).toBe(5);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn variable_shadowing() {\n  let name = \"Sam\";\n  println!(\"[1] The name is: {:?}\", name);\n\n  name = \"Joe\";\n  println!(\"[2] The name is: {:?}\", name);\n\n  name = \"Ryan\";\n  println!(\"[3] The name is: {:?}\", name);\n\n  name = \"Sara\";\n  println!(\"[4] The name is: {:?}\", name);\n\n  name = 52;\n  println!(\"[5] The name is: {:?}\", name);\n}\n\nvariable_shadowing();",
+          "solutionCode": "fn variable_shadowing() {\n  let name = \"Sam\";\n  println!(\"[1] The name is: {:?}\", name);\n\n  let name = \"Joe\";\n  println!(\"[2] The name is: {:?}\", name);\n\n  let name = \"Ryan\";\n  println!(\"[3] The name is: {:?}\", name);\n\n  let name = \"Sara\";\n  println!(\"[4] The name is: {:?}\", name);\n\n  let name = 52;\n  println!(\"[5] The name is: {:?}\", name);\n}\n\nvariable_shadowing();",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "5B5@asRy6",
           "title": "Data Structures",
@@ -423,6 +445,24 @@
         }
       ],
       "free": false
+    },
+    {
+      "id": "aUHE3cOCli",
+      "title": "Rust in Production",
+      "free": false,
+      "challenges": [
+        {
+          "type": "section",
+          "id": "663qF3qvRe",
+          "title": "Rust Applications",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "What is Rust actually used for in the real world, and what can you do with your Rust skills?"
+        }
+      ]
     }
   ]
 }
