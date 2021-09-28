@@ -213,6 +213,39 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "o0UpOqzg3",
+          "title": "Functions",
+          "instructions": "So far we've seen several functions, so you should have the basics down by now. But there is one important function we have not seen yet: the `main` function\\. Since we are working within the Pairwise workspace, some of the details of how to setup, compile, and run Rust code are hidden away \\(for now...\\).\n\nIn Rust, the entry point to a program is a `main` function\\. This is where everything starts, and it must be defined.\n\nIn the editor below, define a `main` function which returns the boolean `true`.\n\n> In the Pairwise workspace, we are taking your code from the editor below and wrapping it in the other code required to run a Rust program, e.g. the `main` function, and the test code for each challenge. This is all being compiled and run with the output captured to determine if you passed or failed the tests.\n> \n> The purpose of this is to get you off the ground quickly writing Rust code without having to deal with setup tasks like downloading the Rust compiler and learning how to use it \\(although, this is not that hard\\).\n> \n> But don't worry\\! We will cover these topics later in this course and by the end you will be compiling your own Rust code like a pro.\n\n\n",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  let result: bool = main();\n\n  return result;\n}\n`;\n\ntest(\"The `main` function should be defined and should return `true`.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Write your code here",
+          "solutionCode": "// Write your code here\nfn  main() -> bool {\n  true\n}",
+          "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "$Do6$e1dD",
+          "title": "Snake Case",
+          "instructions": "What is the convention for naming variables and functions in Rust? `snake_case`of course: all lowercase with words separated by underscores. As you learn more Rust, you will see that enforces strong conventions and rules in many cases which cannot be deviated from. Naming is no exception\\! Although it might feel frustrating at first, it means that any Rust code will have a basic level of familiarity to a seasoned Rust developer.\n\nUpdate the naming conventions in the editor to adhere to snake casing rules.\n\n> The code in the editor will compile. But if you were running `rustc` locally to see the full output you would see warnings on the variable names like this:\n> \n> ```\n> warning: function `myFunction` should have a snake case name\n> \n> ```\n> \n> Although you can name you functions and variables different, we would recommend sticking with the Rust convention of snake case.\n\n",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The code should compile with no errors.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\ntest(\"The `myFunction` function should renamed using snake case.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  expect(CODE_STRING.includes(\"my_function\")).toBe(true);\n});\n\ntest(\"The `mySpecialValue` variable should renamed using snake case.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  expect(CODE_STRING.includes(\"my_special_value\")).toBe(true);\n});\n\ntest(\"The `functionResultValue` function should renamed using snake case.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  expect(CODE_STRING.includes(\"function_result_value\")).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn myFunction() -> u64 {\n  let mySpecialValue = 5000;\n\n  return mySpecialValue;\n}\n\nlet functionResultValue = myFunction();\nprintln!(\"functionResultValue: {:?}\", functionResultValue);",
+          "solutionCode": "fn my_function() -> u64 {\n  let my_special_value = 5000;\n\n  return my_special_value;\n}\n\nlet function_result_value = my_function();\nprintln!(\"function_result_value: {:?}\", function_result_value);",
+          "content": ""
+        },
+        {
+          "type": "section",
+          "id": "@VZT4$txv",
+          "title": "Strings",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In Rust strings are a more complex topic than in many other languages where you simply have the notion of a \"string\" type. In Rust there are multiple ways to represent strings which we need to spend some time explain."
+        },
+        {
           "type": "section",
           "id": "5B5@asRy6",
           "title": "Data Structures",
