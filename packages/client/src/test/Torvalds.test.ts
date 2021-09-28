@@ -330,6 +330,9 @@ const executeTests = async (challenge: Challenge) => {
     case "python":
     case "golang":
     case "rust": {
+      // NOTE: These could be evaluated using the code-runner-api server,
+      // at the very least on an ad-hoc basis locally to ensure challenge
+      // test integrity.
       log.skip(challenge);
       return [];
     }
