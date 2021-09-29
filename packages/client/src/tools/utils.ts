@@ -164,16 +164,7 @@ const starterTestCodeTypeScript = `test("\`example\` function should...", () => 
 });
 `;
 
-/**
- * The identifier is hard-coded here because it is used in the default
- * test code and in the file export generation. It should match in both
- * cases and not be changed.
- */
-const RUST_TEST_STRING_IDENTIFIER = "const TEST_STRING = `";
-
-const starterTestCodePython = `// Do not change the following definition, it is used in Rust file export generation:
-${RUST_TEST_STRING_IDENTIFIER}
-def test():
+const starterTestCodePython = `def test():
   return True
 \`;
 
@@ -184,7 +175,16 @@ test("The \`example\` function should ...", async () => {
 });
 `;
 
-const starterTestCodeRust = `const TEST_STRING = \`
+/**
+ * The identifier is hard-coded here because it is used in the default
+ * test code and in the file export generation. It should match in both
+ * cases and not be changed.
+ */
+const RUST_TEST_STRING_IDENTIFIER = "const TEST_STRING = `";
+
+const starterTestCodeRust = `// Do not change the following line, it is used in Rust file export generation.
+${RUST_TEST_STRING_IDENTIFIER}
+// Returns a boolean representing challenge test status.
 fn test() -> bool {
   true
 }
