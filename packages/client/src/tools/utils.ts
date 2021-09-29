@@ -685,7 +685,7 @@ const assembleRustFile = (
  * Also, you may have to adjust the indentation/formatting of the code. A
  * helpful tool for this is CargoFmt: https://github.com/rust-lang/rustfmt
  */
-fn challenge() -> () {
+fn pairwise_challenge() -> () {
   // User challenge code (change this for the challenge):
   ${code}
 
@@ -694,8 +694,11 @@ fn challenge() -> () {
 
   // Invoke test function:
   let test_result: bool = test();
-  println!("\\n- Challenge passes the tests: {:?}", test_result);
 
+  // The result should be true:
+  assert_eq!(test_result, true);
+
+  println!("\\n- Challenge passes the tests: {}", test_result);
   return ();
 }
 
@@ -703,7 +706,7 @@ fn challenge() -> () {
 fn main() {
   println!("\\n- Running tests for challenge: ${challenge.title}");
   println!("- Code log output:\\n");
-  challenge();
+  pairwise_challenge();
   println!("- Test run complete, exiting.\\n");
 }`;
 
