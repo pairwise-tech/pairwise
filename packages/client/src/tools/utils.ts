@@ -678,6 +678,10 @@ const assembleRustFile = (
  * Pairwise browser workspace environment, and some tests will just simply
  * return true (the only requirement is that the code compiles).
  * 
+ * To run this file, create a new project with cargo (e.g. 'cargo new') and
+ * paste all the contents here into the main.rs file. Then use the
+ * 'cargo run' command to run this file.
+ * 
  * Also, you may have to adjust the indentation/formatting of the code. A
  * helpful tool for this is CargoFmt: https://github.com/rust-lang/rustfmt
  */
@@ -690,15 +694,17 @@ fn challenge() -> () {
 
   // Invoke test function:
   let test_result: bool = test();
-  println!("Result of Tests: {:?}", test_result);
+  println!("\\n- Challenge passes the tests: {:?}", test_result);
 
   return ();
 }
 
+// Run the challenge + test code with helpful logging:
 fn main() {
   println!("\\n- Running tests for challenge: ${challenge.title}");
+  println!("- Code log output:\\n");
   challenge();
-  println!("- Complete, exiting.\\n");
+  println!("- Test run complete, exiting.\\n");
 }`;
 
   return fileString;
