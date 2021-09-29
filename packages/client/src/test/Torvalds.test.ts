@@ -361,6 +361,7 @@ const executeTests = async (challenge: Challenge) => {
       // continue outerLoop;
       return [];
     }
+    // these may be additionally enabled later, as needed.
     case "python":
     case "golang": {
       log.skip(challenge);
