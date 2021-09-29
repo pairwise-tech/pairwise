@@ -69,7 +69,8 @@
     "cypress": "docker-compose -f packages/cypress/docker-compose.yml up --abort-on-container-exit",
     "test:cypress": "cd packages/cypress && yarn cypress:ci",
     "stats": "node scripts/user_stats.js",
-    "edit:email": "cd packages/server && yarn edit:email"
+    "edit:email": "cd packages/server && yarn edit:email",
+    "code:runner": "cd ../code-runner-api && yarn watch"
   },
   "resolutions": {
     "babel-loader": "8.1.0",

@@ -237,12 +237,23 @@
         {
           "type": "rust",
           "id": "eTZNP3td8",
-          "title": "Function Return Values",
-          "instructions": "There are two ways to return values from functions, using the explicit `return` keyword and also uniquely by just writing the final value as a statement with no semicolon.",
-          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "title": "Returning Values from Functions",
+          "instructions": "There are two ways to return values from functions, using the explicit `return` keyword and also by just writing the final value as an expression with no semicolon. \"Early\" returns are often written using the `return` keyword while it is somewhat standard for a return at the end of the function to be written as a standalone expression.\n\nThe `different_ways_to_return` contains three expressions for different conditions. Modify the function to return these three expressions. Try to return the final expression without using the `return` keyword\\.",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  assert_eq!(different_ways_to_return(-5), \"Value is less than zero\");\n  assert_eq!(different_ways_to_return(0), \"Value is zero\");\n  assert_eq!(different_ways_to_return(5), \"Value is greater than zero\");\n\n  true\n}\n`;\n\ntest(\"The `different_ways_to_return` function should compile and return different string slices based on the input value.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
           "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
+          "starterCode": "// Don't worry about this 'static on the return parameter yet.\n// This is a lifetime parameter, which instructs the Rust compiler\n// how long the return value can live.\nfn different_ways_to_return(val: i32) -> &'static str {\n  // We will see more on if/else statements soon\n  if val == 0 {\n    \"Value is zero\";\n  }\n\n  if val < 0 {\n    \"Value is less than zero\";\n  }\n\n  // Final expression is returned from the function,\n  // without the need for a return keyword\n  \"Value is greater than zero\";\n}\n\nprintln!(\"Checking -5: {:?}\", different_ways_to_return(-5));\nprintln!(\"Checking 0: {:?}\", different_ways_to_return(0));\nprintln!(\"Checking +5: {:?}\", different_ways_to_return(5));",
+          "solutionCode": "// Don't worry about this 'static on the return parameter yet.\n// This is a lifetime parameter, which instructs the Rust compiler\n// how long the return value can live.\nfn different_ways_to_return(val: i32) -> &'static str {\n  // We will see more on if/else statements soon\n  if val == 0 {\n    return \"Value is zero\";\n  }\n\n  if val < 0 {\n    return \"Value is less than zero\";\n  }\n\n  // Final expression is returned from the function,\n  // without the need for a return keyword\n  \"Value is greater than zero\"\n}\n\nprintln!(\"Checking -5: {:?}\", different_ways_to_return(-5));\nprintln!(\"Checking 0: {:?}\", different_ways_to_return(0));\nprintln!(\"Checking +5: {:?}\", different_ways_to_return(5));",
+          "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "jLTXZFPZt",
+          "title": "Multiply",
+          "instructions": "Write a function from scratch to take two `f64`numbers and multiply them together and return the result.",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  fn _mult(x: f64, y: f64) -> f64 {\n    x * y\n  }\n\n  let a = 5.231231;\n  let b = 7.912381;\n\n  let result = multiply(a, b);\n  let expected = _mult(a, b);\n  assert_eq!(result, expected);\n\n  true\n}\n`;\n\ntest(\"The `multiply` function should exist and return the result of multiplying its two arguments together.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here",
+          "solutionCode": "// Multiple function\nfn multiply(x: f64, y: f64) -> f64 {\n  x * y\n}",
           "content": ""
         },
         {
