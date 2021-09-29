@@ -633,6 +633,125 @@ export const getFileExtensionByChallengeType = (challenge: Challenge) => {
   }
 };
 
+/**
+ * In the event parsing the Rust challenge test code fails, prepare a fallback
+ * file for download.
+ */
+const assembleFallbackRustFile = (
+  code: string,
+  challenge: Challenge,
+): string => {
+  const fileString = `
+/**
+ * Pairwise Rust Challenge: ${challenge.title}
+ * https://app.pairwise.tech/workspace/${challenge.id}
+ *
+ * There was an issue generating the test code for this challenge. Here is
+ * the challenge code, in a runnable main function:
+ */
+fn main() -> () {
+  // Challenge Code:
+  ${code}
+
+  return ();
+}
+`;
+
+  return fileString;
+};
+
+/**
+ * Assemble Rust challenge and test code into a runnable file, for download
+ * and execution.
+ */
+const assembleRustFile = (
+  code: string,
+  testString: string,
+  challenge: Challenge,
+): string => {
+  const fileString = `
+/**
+ * Pairwise Rust Challenge: ${challenge.title}
+ * https://app.pairwise.tech/workspace/${challenge.id}
+ * 
+ * Note that some challenges will have additional tests which only run in the
+ * Pairwise browser workspace environment, and some tests will just simply
+ * return true (the only requirement is that the code compiles).
+ * 
+ * Also, you may have to adjust the indentation/formatting of the code. A
+ * helpful tool for this is CargoFmt: https://github.com/rust-lang/rustfmt
+ */
+fn challenge() -> () {
+  // User challenge code (change this for the challenge):
+  ${code}
+
+  // Test code (do not change this):
+  ${testString}
+
+  // Invoke test function:
+  let test_result: bool = test();
+  println!("Result of Tests: {:?}", test_result);
+
+  return ();
+}
+
+fn main() {
+  println!("\\n- Running tests for challenge: ${challenge.title}");
+  challenge();
+  println!("- Complete, exiting.\\n");
+}`;
+
+  return fileString;
+};
+
+// Get an appropriate name and file extension for a challenge
+export const getCodeForFileExport = (
+  code: string,
+  challenge: Challenge,
+): string => {
+  const { type, testCode } = challenge;
+
+  switch (type) {
+    case "markup":
+    case "react":
+    case "typescript":
+    case "python":
+    case "golang": {
+      return code;
+    }
+    case "rust": {
+      /**
+       * For Rust challenges try to assembly the test code into a full
+       * runnable file, in case folks want to evaluate these on their local
+       * machines and interact with the compiler more directly.
+       */
+      try {
+        const identifier = "const TEST_STRING = `";
+        const initialIndex = testCode.indexOf("const TEST_STRING = `");
+        const startIndex = initialIndex + identifier.length + 1;
+        const endIndex = testCode.indexOf("`;");
+        const rustTestString = testCode.slice(startIndex, endIndex);
+        const rustCode = assembleRustFile(code, rustTestString, challenge);
+        return rustCode;
+      } catch (err) {
+        console.warn(
+          "[WARNING]: Failed to parse test code for Rust challenge file download, challenge id: ",
+          challenge.id,
+        );
+        return assembleFallbackRustFile(code, challenge);
+      }
+    }
+    case "media":
+    case "section":
+    case "project":
+    case "guided-project":
+    case "special-topic":
+      return "No challenge tests.";
+    default:
+      return assertUnreachable(type);
+  }
+};
+
 // Copy some text to the clipboard
 export const copyToClipboard = (text: string) => {
   const el = document.createElement("textarea");

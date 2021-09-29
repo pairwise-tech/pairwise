@@ -225,6 +225,17 @@
         },
         {
           "type": "rust",
+          "id": "eTZNP3td8",
+          "title": "Function Return Values",
+          "instructions": "There are two ways to return values from functions, using the explicit `return` keyword and also uniquely by just writing the final value as a statement with no semicolon.",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "type": "rust",
           "id": "$Do6$e1dD",
           "title": "Snake Case",
           "instructions": "What is the convention for naming variables and functions in Rust? `snake_case`of course: all lowercase with words separated by underscores. As you learn more Rust, you will see that enforces strong conventions and rules in many cases which cannot be deviated from. Naming is no exception\\! Although it might feel frustrating at first, it means that any Rust code will have a basic level of familiarity to a seasoned Rust developer.\n\nUpdate the naming conventions in the editor to adhere to snake casing rules.\n\n> The code in the editor will compile. But if you were running `rustc` locally to see the full output you would see warnings on the variable names like this:\n> \n> ```\n> warning: function `myFunction` should have a snake case name\n> \n> ```\n> \n> Although you can name you functions and variables different, we would recommend sticking with the Rust convention of snake case.\n\n",

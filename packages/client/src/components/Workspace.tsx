@@ -66,6 +66,7 @@ import {
   wait,
   isAlternateLanguageChallenge,
   copyToClipboard,
+  getCodeForFileExport,
 } from "tools/utils";
 import {
   Tab,
@@ -1670,18 +1671,20 @@ class Workspace extends React.Component<IProps, IState> {
   // Export / Download the text from the editor as a file. File extension is determined by challenge type.
   private readonly handleExport = () => {
     const { code } = this.state;
-    const meta = getFileExtensionByChallengeType(this.props.challenge);
+    const { challenge } = this.props;
+    const meta = getFileExtensionByChallengeType(challenge);
 
     if (!meta) {
       console.warn(
-        `[WARN] Cannot get file meta data for inappropriate challenge type: ${this.props.challenge.type}`,
+        `[WARN] Cannot get file meta data for inappropriate challenge type: ${challenge.type}`,
       );
       return;
     }
 
+    const fileString = getCodeForFileExport(code, challenge);
     const filename = `${meta.name}.${meta.ext}`;
     const DOWNLOAD_LINK_ID = "pairwise-blob-download-link";
-    const data = new Blob([code], { type: "text/plain" });
+    const data = new Blob([fileString], { type: "text/plain" });
     const url = URL.createObjectURL(data); // NOTE: We never revoke any object URLs. Potential future improvement, but likely not a bottleneck
 
     try {
