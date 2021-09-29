@@ -164,7 +164,15 @@ const starterTestCodeTypeScript = `test("\`example\` function should...", () => 
 });
 `;
 
-const starterTestCodePython = `const TEST_STRING = \`
+/**
+ * The identifier is hard-coded here because it is used in the default
+ * test code and in the file export generation. It should match in both
+ * cases and not be changed.
+ */
+const RUST_TEST_STRING_IDENTIFIER = "const TEST_STRING = `";
+
+const starterTestCodePython = `// Do not change the following definition, it is used in Rust file export generation:
+${RUST_TEST_STRING_IDENTIFIER}
 def test():
   return True
 \`;
@@ -735,7 +743,7 @@ export const getCodeForFileExport = (
        * machines and interact with the compiler more directly.
        */
       try {
-        const identifier = "const TEST_STRING = `";
+        const identifier = RUST_TEST_STRING_IDENTIFIER;
         const initialIndex = testCode.indexOf("const TEST_STRING = `");
         const startIndex = initialIndex + identifier.length + 1;
         const endIndex = testCode.indexOf("`;");
