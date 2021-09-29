@@ -59,12 +59,12 @@
     },
     {
       "id": "vjN$jfZeb",
-      "title": "Data Primitives",
+      "title": "Primitives and Types",
       "challenges": [
         {
           "type": "section",
           "id": "6w$q0NkrZ",
-          "title": "Data Primitives and Types",
+          "title": "Data Primitives",
           "instructions": "",
           "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
           "videoUrl": "",
@@ -152,13 +152,24 @@
         {
           "type": "rust",
           "id": "R@eJbCV7@",
-          "title": "The Char Type",
+          "title": "The Char Primitive",
           "instructions": "Next is the `char` data type, which represents a single character. This is the primitive type which is used to build up `str` and `String` types which are more commonly used to represent string values \\(more on these later\\). A `char` value is limited to a single character and represents a Unicode Scalar Value. Note that `char`s are declared using single quotes.\n\nAdjust the `return_a_char_value` function so the code compiles.",
           "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  let _result: char = return_a_char_value();\n\n  true\n}\n`;\n\ntest(\"The `return_a_char_value` function should compile and return a `char` value.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
           "videoUrl": "",
           "starterCode": "fn return_a_char_value() -> char {\n  let character: char = 'xyz';\n\n  character\n}\n\nlet result = return_a_char_value();\nprintln!(\"Character: {:?}\", result);",
           "solutionCode": "fn return_a_char_value() -> char {\n  let character: char = 'x';\n\n  character\n}\n\nlet result = return_a_char_value();\nprintln!(\"Character: {:?}\", result);",
           "content": ""
+        },
+        {
+          "type": "section",
+          "id": "XBUpI@uVl",
+          "title": "Types",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Types are fundamental to Rust."
         }
       ],
       "free": false
