@@ -29,9 +29,11 @@
     "format": "yarn prettier:fix && yarn eslint:fix",
     "tsc": "tsc",
     "test:watch": "yarn jest",
+    "test:watch:rust": "TEST_RUST_CHALLENGES=true yarn jest",
     "test:unit": "yarn jest --watchAll=false",
     "test:update-snapshots": "yarn jest --updateSnapshot",
     "js:build": "tsc --lib esnext,dom --esModuleInterop --skipLibCheck --declaration src/js/browser-test-lib.ts src/js/test-expectation-lib.ts src/js/express-js-lib.ts",
+    "js:build:watch": "yarn js:build --watch",
     "pretest": "yarn run js:build",
     "test": "yarn lint && yarn test:unit",
     "analyze": "source-map-explorer 'build/static/js/*.js' --html source-map-analysis-result.html"

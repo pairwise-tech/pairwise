@@ -16,6 +16,12 @@
 // Environment should be dev if running on localhost...
 const guessIfEnvironmentIsDevelopment = () => {
   try {
+    // In the test environment for Torvalds (don't ask)
+    if (window.location.pathname === "/") {
+      return true;
+    }
+
+    // When running locally in development
     const location = window.location.ancestorOrigins[0];
     if (location === "http://localhost:3000") {
       return true;

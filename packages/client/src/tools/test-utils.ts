@@ -627,7 +627,6 @@ export const compileCodeString = async (
   challenge: Challenge,
 ) => {
   if (isAlternateLanguageChallenge(challenge)) {
-    console.warn("HELLO");
     const processedCodeString = await pipe(
       injectTestCode(challenge),
       hijackConsole,

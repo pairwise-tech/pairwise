@@ -1,5 +1,4 @@
 import fs from "fs";
-
 import { Course, assertUnreachable, Challenge } from "@pairwise/common";
 import {
   compileCodeString,
@@ -14,6 +13,12 @@ import stripComments from "strip-comments";
  * Config & Utils
  * ============================================================================
  */
+
+/**
+ * Test Rust challenges by running the yarn test:watch:rust command. You
+ * will need the code-runner-api running locally as well.
+ */
+const TEST_RUST = process.env.TEST_RUST_CHALLENGES === "true";
 
 /**
  * Huge timeout! This timeout applies to the entire running test time, and
@@ -56,8 +61,8 @@ const WORKSPACE_LIB = `
  */
 // eslint-disable-next-line
 const courses = require("@pairwise/common").default;
-const { FullstackTypeScript } = courses;
-const course: Course = FullstackTypeScript;
+const { FullstackTypeScript, Rust } = courses;
+let course: Course = TEST_RUST ? Rust : FullstackTypeScript;
 
 // NOTE: Enable debug mode. Inspect challenges directly by id. Should
 // only be used for debugging.
@@ -90,7 +95,8 @@ const DANGEROUSLY_SKIP_CHALLENGE = new Set([
   "EoK0U8Q$0", // Fetching Data Asynchronously
   "rShMOVugA", // Quote of the Day Challenge
   // *************************************************************************
-  // Database challenges, which rely on the external Database Challenge API:
+  // Database challenges, which rely on the external Database Challenge API.
+  // These could be run locally with that API running locally.
   "2W$NOg9P@",
   "a06u3l6bq",
   "LvJ5cydPJ",
@@ -114,6 +120,7 @@ const DANGEROUSLY_SKIP_CHALLENGE = new Set([
   "ogGvBc5sl",
   "Q6wrmX6TN",
   "LzZJLUJI0",
+  "wf9ggEKbq",
   // *************************************************************************
   // React Native challenges:
   "zKZu8XMJz", // Some issue checking CSS styles
@@ -196,6 +203,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
 
   test("Execute all challenge tests against their solution code", async () => {
     let failedTests: string[] = [];
+    let failedChallenges: Challenge[] = [];
 
     /* Get all the challenges */
     const challenges = course.modules.flatMap((m) => m.challenges);
@@ -236,6 +244,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
 
       if (currentFailedTests.length) {
         failed++;
+        failedChallenges.push(challenge);
         log.fail(challenge);
       } else {
         passed++;
@@ -250,37 +259,50 @@ describe("Linus should be able to pass all the challenges first try", () => {
     console.log(`-> Challenge Tests Skipped: ${skipped}`);
     console.log(`-> Challenge Tests Failed:  ${failed}`);
 
+    // Log out failed challenge results:
+    if (failed > 0) {
+      console.log(`-> Failed Challenges:`);
+    }
+
+    for (const x of failedChallenges) {
+      console.log(`- Failed Challenge: ${x.id} - ${x.title}`);
+    }
+
     expect(failedTests).toEqual([]);
   });
 
   test("Torvalds identifies failing tests", async () => {
-    // An example challenge with a failing solution
-    const failedChallengeTests: Challenge = {
-      id: "6f7$Xc4ap",
-      type: "typescript",
-      title: "Add Two Numbers",
-      instructions:
-        "Complete the function body below. The function should receive two numbers as input arguments and return the result of adding these numbers together.",
-      starterCode:
-        "const addTwoNumbers = (a: number, b: number) => {\n  // Your code here\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n",
-      solutionCode:
-        "const addTwoNumbers = (a: number, b: number) => {\n  return a * b;\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n",
-      testCode:
-        "const cases = [\n  { input: [1, 2], expected: 3 },\n  { input: [10, 50], expected: -600 },\n  { input: [-10, -50], expected: -6000 },\n  { input: [100, 500], expected: 1000 },\n  { input: [1123, 532142], expected: 533265 },\n  { input: [-10, 50], expected: 40 },\n  { input: [1, 500], expected: 501 },\n  { input: [842, 124], expected: 966 },\n  { input: [1000, 500], expected: 1500 },\n  { input: [-100, 100], expected: 0 },\n  { input: [2, 50234432], expected: 50234434 },\n];\n\ncases.forEach(x => {\n    const { input: [a, b], expected } = x;\n    test(`adding the inputs`, () => {\n        expect(addTwoNumbers(a,b)).toBe(expected)\n    })\n})",
-      content: "",
-      videoUrl: "",
-    };
+    if (TEST_RUST) {
+      expect(true).toBe(true);
+    } else {
+      // An example challenge with a failing solution
+      const failedChallengeTests: Challenge = {
+        id: "6f7$Xc4ap",
+        type: "typescript",
+        title: "Add Two Numbers",
+        instructions:
+          "Complete the function body below. The function should receive two numbers as input arguments and return the result of adding these numbers together.",
+        starterCode:
+          "const addTwoNumbers = (a: number, b: number) => {\n  // Your code here\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n",
+        solutionCode:
+          "const addTwoNumbers = (a: number, b: number) => {\n  return a * b;\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n",
+        testCode:
+          "const cases = [\n  { input: [1, 2], expected: 3 },\n  { input: [10, 50], expected: -600 },\n  { input: [-10, -50], expected: -6000 },\n  { input: [100, 500], expected: 1000 },\n  { input: [1123, 532142], expected: 533265 },\n  { input: [-10, 50], expected: 40 },\n  { input: [1, 500], expected: 501 },\n  { input: [842, 124], expected: 966 },\n  { input: [1000, 500], expected: 1500 },\n  { input: [-100, 100], expected: 0 },\n  { input: [2, 50234432], expected: 50234434 },\n];\n\ncases.forEach(x => {\n    const { input: [a, b], expected } = x;\n    test(`adding the inputs`, () => {\n        expect(addTwoNumbers(a,b)).toBe(expected)\n    })\n})",
+        content: "",
+        videoUrl: "",
+      };
 
-    // Run the tests on the challenge and get the results
-    const results = await executeTests(failedChallengeTests);
+      // Run the tests on the challenge and get the results
+      const results = await executeTests(failedChallengeTests);
 
-    // Results should not be empty
-    expect(results.length).toBe(11);
+      // Results should not be empty
+      expect(results.length).toBe(11);
 
-    // All test results should fail
-    for (const result of results) {
-      expect(result.testResult).toBe(false);
-      expect(typeof result.error).toBe("string");
+      // All test results should fail
+      for (const result of results) {
+        expect(result.testResult).toBe(false);
+        expect(typeof result.error).toBe("string");
+      }
     }
   });
 });
@@ -298,17 +320,29 @@ const executeTests = async (challenge: Challenge) => {
   /* Process the different challenge types and get the test code */
   switch (challenge.type) {
     case "react": {
+      if (TEST_RUST) {
+        return [];
+      }
+
       const code = await compileSolutionCode(challenge);
       doc = `<html><body><div id="root"></div></body></html>`;
       script = `${WORKSPACE_LIB}\n${code}`;
       break;
     }
     case "typescript": {
+      if (TEST_RUST) {
+        return [];
+      }
+
       const code = await compileSolutionCode(challenge);
       script = `${WORKSPACE_LIB}\n${code}`;
       break;
     }
     case "markup": {
+      if (TEST_RUST) {
+        return [];
+      }
+
       doc = challenge.solutionCode;
       script = `${WORKSPACE_LIB}\n${getTestHarness(
         "",
@@ -328,13 +362,20 @@ const executeTests = async (challenge: Challenge) => {
       return [];
     }
     case "python":
-    case "golang":
-    case "rust": {
-      // NOTE: These could be evaluated using the code-runner-api server,
-      // at the very least on an ad-hoc basis locally to ensure challenge
-      // test integrity.
+    case "golang": {
       log.skip(challenge);
       return [];
+    }
+    // Enable to check Rust challenges
+    case "rust": {
+      if (TEST_RUST) {
+        const code = await compileSolutionCode(challenge);
+        script = `${WORKSPACE_LIB}\n${code}`;
+        break;
+      } else {
+        log.skip(challenge);
+        return [];
+      }
     }
     default: {
       assertUnreachable(challenge.type);
