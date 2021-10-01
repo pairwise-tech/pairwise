@@ -76,6 +76,17 @@
           "starterCode": "/**\n * For most values you can use the println macro with {}\n * followed by the values you want to print out.\n *\n * For some values, you may need to use {:?}.\n *\n * The std::fmt library handles printing values and relies\n * on various traits, such as fmt::Debug and fmt::Display.\n * These traits must be derived or implemented for the values\n * you want to print out.\n *\n * If fmt::Display is implemented you can print a value using\n * using {}, if only Debug is implemented (which can usually\n * be derived) you will have to use {:?}.\n *\n * Don't worry about all these details much. For now, just\n * get a sense of how to use println to log values.\n */\nfn logging_demonstration() -> bool {\n  println!(\"\\n- Examples of using the println macro:\\n\");\n\n  let value = 52;\n  println!(\"Log a number: {}\", value);\n\n  let boolean = true;\n  println!(\"Log a boolean: {}\", boolean);\n\n  let name = \"Oren\";\n  println!(\"Log a string slice: {}\", name);\n\n  let a = 2;\n  let b = false;\n  let c = \"Hi!\";\n  // You can provide multiple arguments to println:\n  println!(\"Log out multiple values, a: {}, b: {}, c: {}\", a, b, c);\n\n  // We derive the fmt::Debug trait on our Person struct, to\n  // allow it to be printed using {:?} - otherwise, we would\n  // have to implement the fmt::Display trait.\n  #[derive(Debug)]\n  struct Person {\n    name: String,\n  }\n\n  let person = Person {\n    name: \"Sam\".to_string(),\n  };\n\n  // You must use {:?} to format values for which the Display\n  // trait has not been implemented, like the above Person.\n  println!(\"A Person: {:?}\", person);\n\n  let complete: bool = false;\n  println!(\"\\n- When you are ready, change the value of the complete variable from false to true to complete the challenge.\");\n\n  complete\n}\n\nlogging_demonstration();",
           "solutionCode": "/**\n * For most values you can use the println macro with {}\n * followed by the values you want to print out.\n *\n * For some values, you may need to use {:?}.\n *\n * The std::fmt library handles printing values and relies\n * on various traits, such as fmt::Debug and fmt::Display.\n * These traits must be derived or implemented for the values\n * you want to print out.\n *\n * If fmt::Display is implemented you can print a value using\n * using {}, if only Debug is implemented (which can usually\n * be derived) you will have to use {:?}.\n *\n * Don't worry about all these details much. For now, just\n * get a sense of how to use println to log values.\n */\nfn logging_demonstration() -> bool {\n  println!(\"\\n- Examples of using the println macro:\\n\");\n\n  let value = 52;\n  println!(\"Log a number: {}\", value);\n\n  let boolean = true;\n  println!(\"Log a boolean: {}\", boolean);\n\n  let name = \"Oren\";\n  println!(\"Log a string slice: {}\", name);\n\n  let a = 2;\n  let b = false;\n  let c = \"Hi!\";\n  // You can provide multiple arguments to println:\n  println!(\"Log out multiple values, a: {}, b: {}, c: {}\", a, b, c);\n\n  // We derive the fmt::Debug trait on our Person struct, to\n  // allow it to be printed using {:?} - otherwise, we would\n  // have to implement the fmt::Display trait.\n  #[derive(Debug)]\n  struct Person {\n    name: String,\n  }\n\n  let person = Person {\n    name: \"Sam\".to_string(),\n  };\n\n  // You must use {:?} to format values for which the Display\n  // trait has not been implemented, like the above Person.\n  println!(\"A Person: {:?}\", person);\n\n  let complete: bool = true;\n  println!(\"\\n- When you are ready, change the value of the complete variable from false to true to complete the challenge.\");\n\n  complete\n}\n\nlogging_demonstration();",
           "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "$Do6$e1dD",
+          "title": "Snake Case",
+          "instructions": "What is the convention for naming variables and functions in Rust? `snake_case`of course: all lowercase with words separated by underscores. As you learn more Rust, you will see that enforces strong conventions and rules in many cases which cannot be deviated from. Naming is no exception\\! Although it might feel frustrating at first, it means that any Rust code will have a basic level of familiarity to a seasoned Rust developer.\n\nUpdate the naming conventions in the editor to adhere to snake casing rules.\n\n> The code in the editor will compile. But if you were running `rustc` locally to see the full output you would see warnings on the variable names like this:\n> \n> ```\n> warning: function `myFunction` should have a snake case name\n> \n> ```\n> \n> Although you can name you functions and variables different, we would recommend sticking with the Rust convention of snake case.\n\n",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The code should compile with no errors.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\ntest(\"The `myFunction` function should renamed using snake case.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  expect(CODE_STRING.includes(\"my_function\")).toBe(true);\n});\n\ntest(\"The `mySpecialValue` variable should renamed using snake case.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  expect(CODE_STRING.includes(\"my_special_value\")).toBe(true);\n});\n\ntest(\"The `functionResultValue` function should renamed using snake case.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  expect(CODE_STRING.includes(\"function_result_value\")).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn myFunction() -> u64 {\n  let mySpecialValue = 5000;\n\n  return mySpecialValue;\n}\n\nlet functionResultValue = myFunction();\nprintln!(\"functionResultValue: {:?}\", functionResultValue);",
+          "solutionCode": "fn my_function() -> u64 {\n  let my_special_value = 5000;\n\n  return my_special_value;\n}\n\nlet function_result_value = my_function();\nprintln!(\"function_result_value: {:?}\", function_result_value);",
+          "content": ""
         }
       ]
     },
@@ -231,7 +242,7 @@
     },
     {
       "id": "S3BmBYNCP",
-      "title": "Rust Basics",
+      "title": "Rust Fundamentals",
       "free": false,
       "challenges": [
         {
@@ -312,17 +323,6 @@
           "content": ""
         },
         {
-          "type": "rust",
-          "id": "$Do6$e1dD",
-          "title": "Snake Case",
-          "instructions": "What is the convention for naming variables and functions in Rust? `snake_case`of course: all lowercase with words separated by underscores. As you learn more Rust, you will see that enforces strong conventions and rules in many cases which cannot be deviated from. Naming is no exception\\! Although it might feel frustrating at first, it means that any Rust code will have a basic level of familiarity to a seasoned Rust developer.\n\nUpdate the naming conventions in the editor to adhere to snake casing rules.\n\n> The code in the editor will compile. But if you were running `rustc` locally to see the full output you would see warnings on the variable names like this:\n> \n> ```\n> warning: function `myFunction` should have a snake case name\n> \n> ```\n> \n> Although you can name you functions and variables different, we would recommend sticking with the Rust convention of snake case.\n\n",
-          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The code should compile with no errors.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\ntest(\"The `myFunction` function should renamed using snake case.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  expect(CODE_STRING.includes(\"my_function\")).toBe(true);\n});\n\ntest(\"The `mySpecialValue` variable should renamed using snake case.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  expect(CODE_STRING.includes(\"my_special_value\")).toBe(true);\n});\n\ntest(\"The `functionResultValue` function should renamed using snake case.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  expect(CODE_STRING.includes(\"function_result_value\")).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "fn myFunction() -> u64 {\n  let mySpecialValue = 5000;\n\n  return mySpecialValue;\n}\n\nlet functionResultValue = myFunction();\nprintln!(\"functionResultValue: {:?}\", functionResultValue);",
-          "solutionCode": "fn my_function() -> u64 {\n  let my_special_value = 5000;\n\n  return my_special_value;\n}\n\nlet function_result_value = my_function();\nprintln!(\"function_result_value: {:?}\", function_result_value);",
-          "content": ""
-        },
-        {
           "type": "section",
           "id": "@orxFOEdD",
           "title": "Structs and Enums",
@@ -331,7 +331,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": ""
+          "content": "Rust structures \"structs\" are a way to group several related values into a single meaningful group."
         },
         {
           "type": "section",
