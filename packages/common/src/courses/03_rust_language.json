@@ -214,6 +214,17 @@
           "starterCode": "/**\n * When this code is run, it will compile but produce a runtime panic.\n */\nfn runtime_array_access() {\n  let array: [i8; 10] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\n\n  let mut index = 0;\n\n  while index < 11 {\n    let value = array[index];\n    println!(\"The value at index {} is: {}\", index, value);\n    index = index + 1;\n  }\n}\n\nruntime_array_access();",
           "solutionCode": "/**\n * When this code is run, it will compile but produce a runtime panic.\n */\nfn runtime_array_access() {\n  let array: [i8; 10] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\n\n  let mut index = 0;\n\n  while index < array.len() {\n    let value = array[index];\n    println!(\"The value at index {} is: {}\", index, value);\n    index = index + 1;\n  }\n}\n\nruntime_array_access();",
           "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "niJPS3cRO",
+          "title": "Tuples",
+          "instructions": "Tuples are the second primitive compound type available in Rust. They are similar to arrays in that they have a fixed length but different in that the items they contain may be of different types.\n\nIn the code below we define a new tuple type which contains several values, including an array. Update the function `tuple_demonstration` to return just this array from the provided tuple. Note that tuples are indexed just like arrays, but to access a tuple item by index you use a dot syntax, e.g. `my_tuple.2` would return the item at the 2nd index in `my_tuple`.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let array = [7,3,5];\n  let example_tuple: CustomTuple = (\"Tuples contain primitive types\", true, false, 50, array);\n  let result = tuple_demonstration(example_tuple);\n  assert_eq!(array, result);\n  true\n}\n`;\n\ntest(\"The `tuple_demonstration` function should return the array in the `CustomTuple` argument it is provided.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Tuple types can be declared like this:\ntype CustomTuple = (&'static str, bool, bool, u32, [i8; 3]);\n\nfn tuple_demonstration(custom_tuple: CustomTuple) -> [i8; 3] {  \n  println!(\"Tuple: {:?}\", custom_tuple);\n}\n\nlet array: [i8; 3] = [1, 2, 3];\n// A new tuple can be initialized directly like this:\nlet example_tuple: CustomTuple = (\"Tuples contain primitive types\", true, false, 50, array);\ntuple_demonstration(example_tuple);",
+          "solutionCode": "// Tuple types can be declared like this:\ntype CustomTuple = (&'static str, bool, bool, u32, [i8; 3]);\n\nfn tuple_demonstration(custom_tuple: CustomTuple) -> [i8; 3] {  \n  println!(\"Tuple: {:?}\", custom_tuple);\n\n  custom_tuple.4\n}\n\nlet array: [i8; 3] = [1, 2, 3];\n// A new tuple can be initialized directly like this:\nlet example_tuple: CustomTuple = (\"Tuples contain primitive types\", true, false, 50, array);\ntuple_demonstration(example_tuple);",
+          "content": ""
         }
       ],
       "free": false
