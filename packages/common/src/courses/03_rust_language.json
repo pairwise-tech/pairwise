@@ -81,18 +81,18 @@
     },
     {
       "id": "vjN$jfZeb",
-      "title": "Primitives and Types",
+      "title": "Data and Types",
       "challenges": [
         {
           "type": "section",
           "id": "6w$q0NkrZ",
-          "title": "Data Primitives",
+          "title": "Primitive Data and Types",
           "instructions": "",
           "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Rust is a fully typed language so our discussion should begin by defining the basic data primitives and types you have to work with. That will be the topic of this section, all the basic data types and primitives in Rust. Specifically, we will look at:\n\n* Signed and unsigned integers.\n* Floating point numbers.\n* Arithmetic\\.\n* Booleans\\.\n* Characters\\.\n\n\nAlong the way we will get a feeling for basic syntax in Rust, e.g. variable and function declarations, print statements, code comments, and other basics.\n\nIn the next module, we will cover basic Rust programming and data structures."
+          "content": "Rust is a statically typed language which means the Rust compiler determines the type of all data in a program when it is compiled. The compiler enforces that only valid operations are allowed \\- for instance, you cannot arithmetically add a string to an integer type. This section will introduce the basic types and data primitives you have available to work with in the Rust language. In particular, there are two main categories of primitive types: scalar and compound.\n\n**Scalar** types represent a single value, and include the following:\n\n* Signed and unsigned integers.\n* Floating point numbers.\n* Arithmetic\\.\n* Booleans\\.\n* Characters\\.\n* The unit type.\n\n\n**Compound** types group several individual values into one type. In Rust compound type primitives include arrays and tuples.\n\nThroughout this module, you will also get a feeling for basic syntax in Rust, e.g. variable and function declarations, print statements, code comments, and other basics.\n\nIn the next module, we will cover basic Rust programming and higher level data structures."
         },
         {
           "type": "rust",
@@ -108,7 +108,7 @@
         {
           "type": "rust",
           "id": "d8WItf9JW",
-          "title": "Integer Types",
+          "title": "Integers",
           "instructions": "Initialize the `my_int` value in `get_integer` function in the editor to return a valid `i8` integer, an 8\\-bit signed integer. Rust supports multiple different integer data types, from 8 to 128 bit, each signed or unsigned. A \"signed\" integer is one that may be positive of negative, e.g. `-4` is a signed integer. Unsigned integers are assumed to be positive.",
           "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  let n = get_integer();\n  let result = 5 + n;\n  let original = result - 5;\n\n  if n != original {\n    return false\n  }\n\n  return true\n}\n`;\n\ntest(\"The `my_int` variable in the `get_integer` should be correctly initialized.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
           "videoUrl": "",
@@ -183,17 +183,6 @@
           "content": ""
         },
         {
-          "type": "section",
-          "id": "XBUpI@uVl",
-          "title": "Types",
-          "instructions": "",
-          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "Types are fundamental to Rust."
-        },
-        {
           "type": "rust",
           "id": "FsJ$iEG44E",
           "title": "The Unit Type",
@@ -202,6 +191,28 @@
           "videoUrl": "",
           "starterCode": "// Functions, by deafult, return ()\nfn unit_one() {\n  println!(\"Functions return () by default.\");\n}\n\nfn unit_two() -> () {\n  println!(\"Adding a type signature doesn't change it.\");\n}\n\nfn unit_three() -> () {\n  println!(\"We can also return () directly at the end of the function.\");\n\n  ()\n}\n\nlet one = unit_one();\nlet two = unit_two();\nlet three = unit_three();\nlet four: ();\n\n// Assert the same return value\nif one == two && two == three && three == four {\n  println!(\"\\n- In Rust, all unit types are equivalent: () == ()\");\n}",
           "solutionCode": "// Functions, by deafult, return ()\nfn unit_one() {\n  println!(\"Functions return () by default.\");\n}\n\nfn unit_two() -> () {\n  println!(\"Adding a type signature doesn't change it.\");\n}\n\nfn unit_three() -> () {\n  println!(\"We can also return () directly at the end of the function.\");\n\n  ()\n}\n\nlet one = unit_one();\nlet two = unit_two();\nlet three = unit_three();\nlet four: () = ();\n\n// Assert the same return value\nif one == two && two == three && three == four {\n  println!(\"\\n- In Rust, all unit types are equivalent: () == ()\");\n}",
+          "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "sLEaTrYvk",
+          "title": "Array Primitives",
+          "instructions": "Arrays in Rust have a fixed length and contain values of only a single type. Like arrays in other languages, they are zero indexed.\n\nTake a look at the code in the editor. It currently doesn't compile. Can you find the problem and fix it?",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let result = array_access();\n  assert_eq!(result.len(), 5);\n\n  true\n}\n`;\n\ntest(\"The code should compile and print out all 5 values in the `my_array` array.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn array_access() -> [i8; 5] {\n  // Arrays can be initialized as follows:\n  let my_array: [i8; 5] = [1,2,3,4,5];\n\n  // Array items can be accessed using the index:\n  let one = my_array[1];\n  println!(\"The 1st value in my_array is {}\", one);\n\n  let two = my_array[2];\n  println!(\"The 2nd value in my_array is {}\", two);\n\n  let three = my_array[3];\n  println!(\"The 3rd value in my_array is {}\", three);\n\n  let four = my_array[4];\n  println!(\"The 4th value in my_array is {}\", four);\n\n  let five = my_array[5];\n  println!(\"The 5th value in my_array is {}\", five);\n\n  my_array\n}\n\narray_access();",
+          "solutionCode": "fn array_access() -> [i8; 5] {\n  // Arrays can be initialized as follows:\n  let my_array: [i8; 5] = [1,2,3,4,5];\n\n  // Array items can be accessed using the index:\n  let one = my_array[0];\n  println!(\"The 1st value in my_array is {}\", one);\n\n  let two = my_array[1];\n  println!(\"The 2nd value in my_array is {}\", two);\n\n  let three = my_array[2];\n  println!(\"The 3rd value in my_array is {}\", three);\n\n  let four = my_array[3];\n  println!(\"The 4th value in my_array is {}\", four);\n\n  let five = my_array[4];\n  println!(\"The 5th value in my_array is {}\", five);\n\n  my_array\n}\n\narray_access();",
+          "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "sCOekMaC@",
+          "title": "Array Indexing",
+          "instructions": "The last challenge demonstrated something important: The Rust compiler checks for invalid array index access at compile time. If you have an array of length 3 and you try to access the item at index 10 this will fail at the compile step \\- assuming the compiler knows the value of the index you are trying to access at that step.\n\nIf it does not, i.e. if that value is only known at runtime, the program will _panic\\._ Take a look at the editor to see what we mean.\n\nThe code compiles, but fails at runtime. To fix this issue, update the while loop condition to stop at the length of the array. You can find the length of an array with the `.len` method\\.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The code should compile and run without any runtime errors\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "/**\n * When this code is run, it will compile but produce a runtime panic.\n */\nfn runtime_array_access() {\n  let array: [i8; 10] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\n\n  let mut index = 0;\n\n  while index < 11 {\n    let value = array[index];\n    println!(\"The value at index {} is: {}\", index, value);\n    index = index + 1;\n  }\n}\n\nruntime_array_access();",
+          "solutionCode": "/**\n * When this code is run, it will compile but produce a runtime panic.\n */\nfn runtime_array_access() {\n  let array: [i8; 10] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\n\n  let mut index = 0;\n\n  while index < array.len() {\n    let value = array[index];\n    println!(\"The value at index {} is: {}\", index, value);\n    index = index + 1;\n  }\n}\n\nruntime_array_access();",
           "content": ""
         }
       ],
