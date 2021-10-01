@@ -97,7 +97,7 @@
         {
           "type": "rust",
           "id": "hH8NF2FXav",
-          "title": "Syntax Primer",
+          "title": "Rust Syntax Primer",
           "instructions": "Before we dive in, let's start with a quick practice lesson to gain a foundation in basic Rust syntax, specifically how to define variables and functions in Rust.\n\nRead the code and comments in the editor, and then make a small change to solve the challenge.",
           "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  let result: bool = is_complete();\n\n  result\n}\n`;\n\ntest(\"The `is_complete` function should return the boolean `true`. Update this function to return `true` once you are satisifed you understand all the points here.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
           "videoUrl": "",
@@ -108,7 +108,7 @@
         {
           "type": "rust",
           "id": "d8WItf9JW",
-          "title": "Rust Integer Types",
+          "title": "Integer Types",
           "instructions": "Initialize the `my_int` value in `get_integer` function in the editor to return a valid `i8` integer, an 8\\-bit signed integer. Rust supports multiple different integer data types, from 8 to 128 bit, each signed or unsigned. A \"signed\" integer is one that may be positive of negative, e.g. `-4` is a signed integer. Unsigned integers are assumed to be positive.",
           "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  let n = get_integer();\n  let result = 5 + n;\n  let original = result - 5;\n\n  if n != original {\n    return false\n  }\n\n  return true\n}\n`;\n\ntest(\"The `my_int` variable in the `get_integer` should be correctly initialized.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
           "videoUrl": "",
@@ -192,6 +192,17 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Types are fundamental to Rust."
+        },
+        {
+          "type": "rust",
+          "id": "FsJ$iEG44E",
+          "title": "The Unit Type",
+          "instructions": "In Rust, the [Unit](https://doc.rust-lang.org/std/primitive.unit.html) type exists to represent an empty/non\\-meaningful state. All expressions return the unit type unless they otherwise return another value explicitly.The unit type is useful when you need a placeholder to represent a specific state or value, but that particular state or value really has no other significant representation for it \\(such as the generic success or failure of some operation\\).\n\nInitialize the variable `four` in the editor below to the value of the unit type to complete the challenge.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The variable `four` should be initialized as the unit type `()` so the code compiles correctly. \", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Functions, by deafult, return ()\nfn unit_one() {\n  println!(\"Functions return () by default.\");\n}\n\nfn unit_two() -> () {\n  println!(\"Adding a type signature doesn't change it.\");\n}\n\nfn unit_three() -> () {\n  println!(\"We can also return () directly at the end of the function.\");\n\n  ()\n}\n\nlet one = unit_one();\nlet two = unit_two();\nlet three = unit_three();\nlet four: ();\n\n// Assert the same return value\nif one == two && two == three && three == four {\n  println!(\"\\n- In Rust, all unit types are equivalent: () == ()\");\n}",
+          "solutionCode": "// Functions, by deafult, return ()\nfn unit_one() {\n  println!(\"Functions return () by default.\");\n}\n\nfn unit_two() -> () {\n  println!(\"Adding a type signature doesn't change it.\");\n}\n\nfn unit_three() -> () {\n  println!(\"We can also return () directly at the end of the function.\");\n\n  ()\n}\n\nlet one = unit_one();\nlet two = unit_two();\nlet three = unit_three();\nlet four: () = ();\n\n// Assert the same return value\nif one == two && two == three && three == four {\n  println!(\"\\n- In Rust, all unit types are equivalent: () == ()\");\n}",
+          "content": ""
         }
       ],
       "free": false
