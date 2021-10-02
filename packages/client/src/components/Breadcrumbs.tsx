@@ -3,7 +3,13 @@ import isMobile from "is-mobile";
 import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
 import { connect } from "react-redux";
-import { Breadcrumb, Breadcrumbs, BreadcrumbProps } from "@blueprintjs/core";
+import {
+  Icon,
+  Button,
+  Breadcrumb,
+  Breadcrumbs,
+  BreadcrumbProps,
+} from "@blueprintjs/core";
 import { Tooltip2 } from "@blueprintjs/popover2";
 import {
   AppTheme,
@@ -56,6 +62,7 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
       breadcrumbsPath,
       displaySkillIcon,
       isInstructionsViewCollapsed,
+      setChallengeInstructionsModalState,
     } = this.props;
 
     if (!breadcrumbsPath || !challenge) {
@@ -65,17 +72,14 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
     const CAN_COLLAPSE = typeof toggleCollapsed === "function";
     const IS_ALTERNATE_LANGUAGE = isAlternateLanguageChallenge(challenge);
 
+    const handleClickTitle = () => {
+      if (typeof toggleCollapsed === "function") {
+        toggleCollapsed();
+      }
+    };
+
     return (
-      <BreadcrumbsBar
-        type={type}
-        canCollapse={CAN_COLLAPSE}
-        id={panelId}
-        onClick={() => {
-          if (typeof toggleCollapsed === "function") {
-            toggleCollapsed();
-          }
-        }}
-      >
+      <BreadcrumbsBar type={type} id={panelId} canCollapse={CAN_COLLAPSE}>
         {IS_ALTERNATE_LANGUAGE && !isInstructionsViewCollapsed && (
           <Tooltip2
             usePortal={false}
@@ -90,21 +94,38 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
               </TooltipText>
             }
           >
-            <ContentLabel>Experimental Content</ContentLabel>
+            <ContentLabel>New Content</ContentLabel>
           </Tooltip2>
         )}
         <Horizontal>
-          <Breadcrumbs
-            items={this.getBreadcrumbs(breadcrumbsPath)}
-            currentBreadcrumbRenderer={this.renderCurrentBreadcrumb}
-          />
-          {!isMobileView && displaySkillIcon && (
-            <ChallengeSkillIcons
-              isEditMode={false}
-              appTheme={appTheme}
-              challenge={challenge}
+          <div onClick={handleClickTitle}>
+            <Breadcrumbs
+              items={this.getBreadcrumbs(breadcrumbsPath)}
+              currentBreadcrumbRenderer={this.renderCurrentBreadcrumb}
             />
-          )}
+          </div>
+          <Row>
+            {!isMobileView && displaySkillIcon && (
+              <ChallengeSkillIcons
+                isEditMode={false}
+                appTheme={appTheme}
+                challenge={challenge}
+              />
+            )}
+            {!isMobileView && (
+              <Tooltip2
+                position="bottom"
+                content="View challenge instructions in a modal."
+              >
+                <Button
+                  style={{ marginLeft: 4 }}
+                  onClick={() => setChallengeInstructionsModalState(true)}
+                >
+                  <Icon iconSize={16} icon="search" />
+                </Button>
+              </Tooltip2>
+            )}
+          </Row>
         </Horizontal>
       </BreadcrumbsBar>
     );
@@ -232,7 +253,7 @@ export const ChallengeSkillIcons = (props: {
 }) => {
   const { isEditMode, appTheme, challenge } = props;
   return (
-    <Row>
+    <>
       {challenge.skillTags &&
         challenge.skillTags.map((skill) => (
           <SkillIcon
@@ -242,7 +263,7 @@ export const ChallengeSkillIcons = (props: {
             isEditMode={isEditMode}
           />
         ))}
-    </Row>
+    </>
   );
 };
 
@@ -266,16 +287,19 @@ const SkillIcon = (props: {
           : `Solving this challenge earns ${skill} skills.`
       }
     >
-      <div style={{ paddingBottom: 1 }}>
+      <Centered>
         <i
           style={{
             fontSize: 20,
-            marginLeft: 3,
-            marginRight: 3,
+            marginRight: 1,
+            marginBottom: 5,
+            // marginTop: 3,
+            // marginLeft: 3,
+            // marginRight: 3,
           }}
           className={className}
         />
-      </div>
+      </Centered>
     </Tooltip2>
   );
 };
@@ -305,6 +329,12 @@ const TooltipText = styled.p`
   font-size: 14px;
 `;
 
+const Centered = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 /** ===========================================================================
  * Props
  * ============================================================================
@@ -323,6 +353,8 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 
 const dispatchProps = {
   handlePaymentCourseIntent: Modules.actions.payments.handlePaymentCourseIntent,
+  setChallengeInstructionsModalState:
+    Modules.actions.challenges.setChallengeInstructionsModalState,
 };
 
 interface ComponentProps {

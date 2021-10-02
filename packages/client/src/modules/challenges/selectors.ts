@@ -32,6 +32,11 @@ export const menuSelectColumn = createSelector(
   (x) => x.menuSelectColumn,
 );
 
+export const showChallengeInstructionsModal = createSelector(
+  [challengesState],
+  (x) => x.showChallengeInstructionsModal,
+);
+
 export const isInstructionsViewCollapsed = createSelector(
   [challengesState],
   (x) => x.isInstructionsViewCollapsed,

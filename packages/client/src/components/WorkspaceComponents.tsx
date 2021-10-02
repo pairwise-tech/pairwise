@@ -13,7 +13,12 @@ import {
 } from "../tools/constants";
 import { getDimensions, HEADER_HEIGHT } from "../tools/dimensions";
 import KeyboardShortcuts from "./KeyboardShortcuts";
-import { Loading, RotatingIcon } from "./SharedComponents";
+import {
+  Loading,
+  ModalContainer,
+  ModalTitleText,
+  RotatingIcon,
+} from "./SharedComponents";
 import {
   Icon,
   Collapse,
@@ -23,6 +28,8 @@ import {
   Button,
   Spinner,
   IconSize,
+  Classes,
+  Dialog,
 } from "@blueprintjs/core";
 import { Tooltip2 } from "@blueprintjs/popover2";
 import { TestCase } from "tools/test-utils";
@@ -36,7 +43,7 @@ import {
   themeColor,
   themeText,
 } from "./ThemeContainer";
-import { AppTheme, CHALLENGE_TYPE, ConsoleDarkTheme } from "@pairwise/common";
+import { AppTheme, Challenge } from "@pairwise/common";
 
 const D = getDimensions();
 
@@ -155,11 +162,7 @@ export const EmptyPreviewCoverPanel = (props: {
   return (
     <PreviewCover>
       <p>Run the code to get started.</p>
-      <RunButton
-        style={{ zIndex: 100, marginTop: 6 }}
-        icon="play"
-        onClick={runCodeHandler}
-      >
+      <RunButton icon="play" onClick={runCodeHandler} style={{ marginTop: 6 }}>
         Run Code
       </RunButton>
     </PreviewCover>
@@ -678,6 +681,8 @@ const instructionsMapState = (state: ReduxStoreState) => ({
 const instructionsMapDispatch = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
   toggleInstructionsView: Modules.actions.challenges.toggleInstructionsView,
+  setChallengeInstructionsModalState:
+    Modules.actions.challenges.setChallengeInstructionsModalState,
 };
 
 type InstructionsViewEditProps = ReturnType<typeof instructionsMapState> &
@@ -698,6 +703,7 @@ export const InstructionsViewEdit = connect(
     isEditMode,
     toggleInstructionsView,
     isInstructionsViewCollapsed,
+    setChallengeInstructionsModalState,
   } = props;
 
   if (!challenge) {
@@ -978,6 +984,44 @@ export const WorkspaceMobileView = styled.div`
     flex-grow: 0;
   }
 `;
+
+interface WorkspaceChallengeInstructionsModalProps {
+  challenge: Challenge;
+  isDarkTheme: boolean;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export class WorkspaceChallengeInstructionsModal extends React.Component<WorkspaceChallengeInstructionsModalProps> {
+  render(): JSX.Element {
+    const { isDarkTheme, isOpen, challenge, onClose } = this.props;
+    return (
+      <Dialog
+        usePortal
+        canEscapeKeyClose
+        isOpen={isOpen}
+        onClose={onClose}
+        style={{ zIndex: 105 }}
+        className={isDarkTheme ? Classes.DARK : ""}
+      >
+        <ModalContainer style={{ width: PROSE_MAX_WIDTH }}>
+          <ModalTitleText style={{ textAlign: "left" }}>
+            {challenge.title}
+          </ModalTitleText>
+          <ContentEditor
+            toc={false}
+            autoFocus={false}
+            readOnly
+            spellCheck={false}
+            onChange={() => null}
+            defaultValue={challenge.instructions}
+            placeholder="No content..."
+          />
+        </ModalContainer>
+      </Dialog>
+    );
+  }
+}
 
 /**
  * Types and components for displaying SQL Results as table

@@ -18,13 +18,16 @@ export class FeedbackService {
   ) {}
 
   public async getAllFeedback() {
-    // Find all feedback and join with user
+    // Find all feedback and join with user, sort by created at time
     return this.feedbackRepository.find({
       join: {
         alias: "feedback",
         leftJoinAndSelect: {
           user: "feedback.user",
         },
+      },
+      order: {
+        createdAt: "ASC",
       },
     });
   }

@@ -91,6 +91,7 @@ import {
   WorkspaceMobileView,
   SQLResultsTable,
   INSTRUCTIONS_VIEW_PANEL_ID,
+  WorkspaceChallengeInstructionsModal,
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 import { WORKSPACE_LIB, EXPRESS_JS_LIB } from "tools/browser-libraries";
@@ -372,8 +373,8 @@ class Workspace extends React.Component<IProps, IState> {
       hideSuccessModal,
       testResultsLoading,
       shouldRefreshLayout,
-      mobileDevicePreviewType,
       isPreviewTestResults,
+      mobileDevicePreviewType,
     } = this.state;
     const {
       challenge,
@@ -386,6 +387,8 @@ class Workspace extends React.Component<IProps, IState> {
       isReactNativeChallenge,
       isInstructionsViewCollapsed,
       editModeAlternativeViewEnabled,
+      showChallengeInstructionsModal,
+      setChallengeInstructionsModalState,
     } = this.props;
     const { fullScreenEditor } = userSettings;
     const { failingTests, correct: allTestsPassing } =
@@ -1026,6 +1029,12 @@ class Workspace extends React.Component<IProps, IState> {
     return (
       <Container>
         <PageSection>
+          <WorkspaceChallengeInstructionsModal
+            isDarkTheme={IS_DARK}
+            challenge={challenge}
+            isOpen={showChallengeInstructionsModal}
+            onClose={() => setChallengeInstructionsModalState(false)}
+          />
           <WorkspaceContainer>
             {isMobileView ? (
               mobileView
@@ -1419,7 +1428,7 @@ class Workspace extends React.Component<IProps, IState> {
       }
 
       this.iFrameRef.srcdoc = sourceDocument;
-    } catch (err) {
+    } catch (err: any) {
       this.handleCompilationError(err);
     }
   };
@@ -1797,9 +1806,11 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   useCodemirrorEditor: ChallengeSelectors.useCodemirrorEditor(state),
   isLoadingBlob: ChallengeSelectors.isLoadingCurrentChallengeBlob(state),
   isReactNativeChallenge: ChallengeSelectors.isReactNativeChallenge(state),
-  isSqlChallenge: ChallengeSelectors.isSqlChallenge(state),
   isInstructionsViewCollapsed:
-    Modules.selectors.challenges.isInstructionsViewCollapsed(state),
+    ChallengeSelectors.isInstructionsViewCollapsed(state),
+  isSqlChallenge: ChallengeSelectors.isSqlChallenge(state),
+  showChallengeInstructionsModal:
+    Modules.selectors.challenges.showChallengeInstructionsModal(state),
   isBackendModuleChallenge: ChallengeSelectors.isBackendModuleChallenge(state),
   isTestingAndAutomationChallenge:
     ChallengeSelectors.isTestingAndAutomationChallenge(state),
@@ -1816,6 +1827,8 @@ const dispatchProps = {
   handleAttemptChallenge: ChallengeActions.handleAttemptChallenge,
   toggleRevealSolutionCode: ChallengeActions.toggleRevealSolutionCode,
   updateCurrentChallengeBlob: ChallengeActions.updateCurrentChallengeBlob,
+  setChallengeInstructionsModalState:
+    ChallengeActions.setChallengeInstructionsModalState,
   toggleAlternativeEditView:
     Modules.actions.challenges.toggleEditModeAlternativeView,
 };

@@ -123,6 +123,8 @@ enum ActionTypesEnum {
   LOAD_PULL_REQUEST_COURSE_LIST_FAILURE = "LOAD_PULL_REQUEST_COURSE_LIST_FAILURE",
 
   RESET_PULL_REQUEST_STATE = "RESET_PULL_REQUEST_STATE",
+
+  SET_CHALLENGE_INSTRUCTIONS_MODAL_STATE = "SET_CHALLENGE_INSTRUCTIONS_MODAL_STATE",
 }
 
 /** ===========================================================================
@@ -363,3 +365,7 @@ export const fetchPullRequestCourseListFailure = createAction(
 export const resetPullRequestState = createAction(
   ActionTypesEnum.RESET_PULL_REQUEST_STATE,
 )();
+
+export const setChallengeInstructionsModalState = createAction(
+  ActionTypesEnum.SET_CHALLENGE_INSTRUCTIONS_MODAL_STATE,
+)<boolean>();

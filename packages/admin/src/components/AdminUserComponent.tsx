@@ -72,6 +72,7 @@ class AdminUserComponent extends React.Component<
     const isDark = adminUserSettings.appTheme === "dark";
     const showDetails = this.state.uuid === user.uuid;
     const payment = user.payments[0];
+    const HAS_PAYMENT = !!payment;
     const IS_PREMIUM = payment && payment.plan === "PREMIUM";
     const challengeTotal = progressHistoryToChallengeCount(
       user.challengeProgressHistory,
@@ -135,6 +136,13 @@ class AdminUserComponent extends React.Component<
         )}
         <KeyValue label="Email" value={user.email} allowCopy />
         <KeyValue label="uuid" value={user.uuid} code />
+        {HAS_PAYMENT && (
+          <SummaryText
+            style={{ color: COLORS.PRIMARY_GREEN, fontWeight: "bold" }}
+          >
+            User has paid for course {payment.courseId}.
+          </SummaryText>
+        )}
         <SummaryText>
           User has completed {challengeTotal}{" "}
           {challengeTotal === 1 ? "challenge" : "challenges"}.

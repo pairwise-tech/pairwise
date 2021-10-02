@@ -93,6 +93,7 @@ export interface State {
   deepLinkSandboxChallengeType: Nullable<CHALLENGE_TYPE>;
   pullRequestChallengeIds: Set<string>;
   fetchingPullRequestCourses: boolean;
+  showChallengeInstructionsModal: boolean;
 }
 
 const initialState: State = {
@@ -126,6 +127,7 @@ const initialState: State = {
   deepLinkSandboxChallengeType: null,
   pullRequestChallengeIds: new Set(),
   fetchingPullRequestCourses: false,
+  showChallengeInstructionsModal: false,
 };
 
 /** ===========================================================================
@@ -736,6 +738,13 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     deepLinkCodeString: action.payload.codeString,
     deepLinkSandboxChallengeType: action.payload.sandboxChallengeType,
   }))
+  .handleAction(
+    actions.setChallengeInstructionsModalState,
+    (state, action) => ({
+      ...state,
+      showChallengeInstructionsModal: action.payload,
+    }),
+  )
   .handleAction(actions.fetchCoursesSuccess, (state, { payload }) => ({
     ...state,
     ...payload,
