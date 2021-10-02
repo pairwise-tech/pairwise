@@ -53,7 +53,14 @@ class AdminChartComponent extends React.Component<IProps> {
                 additionalAreaElements.map((element) => {
                   const { id, color } = element;
                   return (
-                    <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
+                    <linearGradient
+                      key={id}
+                      id={id}
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
                       <stop offset="5%" stopColor={color} stopOpacity={1} />
                       <stop offset="95%" stopColor={color} stopOpacity={0.2} />
                     </linearGradient>
@@ -87,6 +94,7 @@ class AdminChartComponent extends React.Component<IProps> {
                 const { id, color, dataKey } = element;
                 return (
                   <Area
+                    key={id}
                     fillOpacity={1}
                     type="monotone"
                     dataKey={dataKey}

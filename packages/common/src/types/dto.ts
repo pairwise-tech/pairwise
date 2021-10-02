@@ -122,7 +122,14 @@ export interface AdminProgressChartItem {
   progressCount: number;
 }
 
-export type AdminProgressChartDto = AdminProgressChartItem[];
+export interface AdminProgressSeries {
+  [key: string]: number;
+}
+
+export type AdminProgressChartDto = {
+  userProgressDistribution: AdminProgressChartItem[];
+  globalChallengeProgressSeries: AdminProgressSeries;
+};
 
 /**
  * Only these fields can be updated on the user object by the

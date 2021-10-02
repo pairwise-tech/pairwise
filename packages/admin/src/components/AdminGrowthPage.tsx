@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
-import { Area } from "recharts";
 import { PageContainer } from "./AdminComponents";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { COLORS } from "../tools/constants";
@@ -10,6 +9,7 @@ import { composeWithProps } from "../tools/admin-utils";
 import { themeText } from "./AdminThemeContainer";
 import AdminChartComponent from "./AdminChartComponent";
 import {
+  getGlobalProgressHistory,
   getUsersChartData,
   getUsersProgressChartData,
 } from "../tools/admin-chart-utils";
@@ -48,6 +48,8 @@ class AdminGrowthPage extends React.Component<IProps, IState> {
       <PageContainer>
         <Title>Pairwise User Growth</Title>
         {this.renderUsersGrowthChart()}
+        <Title>Pairwise Challenge Growth</Title>
+        {this.renderGlobalChallengeProgressChart()}
         <Title>User Course Progress Distribution</Title>
         {this.renderUsersProgressChart()}
       </PageContainer>
@@ -93,13 +95,29 @@ class AdminGrowthPage extends React.Component<IProps, IState> {
     );
   };
 
+  renderGlobalChallengeProgressChart = () => {
+    const { globalChallengeProgressSeries } = this.props;
+    console.log(globalChallengeProgressSeries);
+    const data = getGlobalProgressHistory(globalChallengeProgressSeries);
+    console.log(data);
+    return (
+      <AdminChartComponent
+        data={data}
+        chartHeight={500}
+        chartWidth={1000}
+        yName="Total Challenges"
+        xName="Date"
+      />
+    );
+  };
+
   renderUsersProgressChart = () => {
-    const { allUsersProgressState } = this.props;
-    if (allUsersProgressState.length === 0) {
+    const { userProgressDistribution } = this.props;
+    if (userProgressDistribution.length === 0) {
       return <p>No data yet...</p>;
     }
 
-    const data = getUsersProgressChartData(allUsersProgressState);
+    const data = getUsersProgressChartData(userProgressDistribution);
     return (
       <AdminChartComponent
         data={data}
@@ -129,7 +147,10 @@ const Title = styled.h2`
 const mapStateToProps = (state: ReduxStoreState) => ({
   users: Modules.selectors.users.usersState(state).users,
   adminUserSettings: Modules.selectors.admin.adminUserSettings(state),
-  allUsersProgressState: Modules.selectors.users.allUsersProgressState(state),
+  userProgressDistribution:
+    Modules.selectors.users.userProgressDistribution(state),
+  globalChallengeProgressSeries:
+    Modules.selectors.users.globalChallengeProgressSeries(state),
 });
 
 const dispatchProps = {

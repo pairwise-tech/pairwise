@@ -50,9 +50,20 @@ export class ProgressService {
       .getMany();
 
     let max = -1;
+    const progressDateSeries = {};
+
     const progressMap = result.reduce((map, entry) => {
       const { progress } = entry;
-      const completedCount = Object.keys(JSON.parse(progress)).length;
+
+      // Summarize challenge progress history for all users
+      const progressData: UserCourseStatus = JSON.parse(progress);
+      for (const x of Object.values(progressData)) {
+        const key = new Date(x.timeCompleted).toDateString();
+        const value = (progressDateSeries[key] || 0) + 1;
+        progressDateSeries[key] = value;
+      }
+
+      const completedCount = Object.keys(progressData).length;
       max = Math.max(completedCount, max);
       const key = String(completedCount);
       const existing = key in map ? map[key] : 0;
@@ -96,7 +107,10 @@ export class ProgressService {
       return a.userCount - b.userCount;
     });
 
-    return sortedProgress;
+    return {
+      userProgressDistribution: sortedProgress,
+      globalChallengeProgressSeries: progressDateSeries,
+    };
   }
 
   public async fetchUserProgress(uuid: string) {

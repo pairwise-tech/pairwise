@@ -65,9 +65,10 @@ const loading = createReducer<boolean, UsersActionTypes | AuthActionTypes>(
   () => false,
 );
 
-const allUserProgress = createReducer<AdminProgressChartDto, UsersActionTypes>(
-  [],
-).handleAction(
+const allUserProgress = createReducer<AdminProgressChartDto, UsersActionTypes>({
+  userProgressDistribution: [],
+  globalChallengeProgressSeries: {},
+}).handleAction(
   actions.fetchAllUsersProgressSuccess,
   (state, action) => action.payload,
 );

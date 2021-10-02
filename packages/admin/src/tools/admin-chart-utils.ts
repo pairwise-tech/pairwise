@@ -1,5 +1,6 @@
 import {
-  AdminProgressChartDto,
+  AdminProgressSeries,
+  AdminProgressChartItem,
   RecentProgressAdminDto,
 } from "@pairwise/common";
 import {
@@ -157,10 +158,52 @@ export const getUsersChartData = (
 };
 
 /**
+ * Map global challenge history to progress chart data.
+ */
+export const getGlobalProgressHistory = (
+  adminProgressSeries: AdminProgressSeries,
+): ChartDataSeries => {
+  const list = [];
+
+  for (const [k, v] of Object.entries(adminProgressSeries)) {
+    list.push({ date: k, progressCount: v });
+  }
+
+  const sorted = list.sort((a, b) => {
+    return new Date(a.date).getTime() - new Date(b.date).getTime();
+  });
+
+  const today = new Date();
+  const current = new Date(sorted[0].date);
+
+  let runningTotal = 0;
+  const normalizedChartData: ChartDataSeries = [];
+
+  while (current <= today) {
+    const key = new Date(current).toDateString();
+
+    if (key in adminProgressSeries) {
+      runningTotal += adminProgressSeries[key];
+    }
+
+    normalizedChartData.push({
+      xValue: key,
+      yValue: runningTotal,
+      name: "User Challenge Growth",
+    });
+
+    // Advance day by 1
+    current.setDate(current.getDate() + 1);
+  }
+
+  return normalizedChartData;
+};
+
+/**
  * Map all users progress list to chart data.
  */
 export const getUsersProgressChartData = (
-  progress: AdminProgressChartDto,
+  progress: AdminProgressChartItem[],
 ): ChartDataSeries => {
   const chartData = progress.map((x) => {
     return {
