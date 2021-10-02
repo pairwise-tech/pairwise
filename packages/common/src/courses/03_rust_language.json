@@ -389,6 +389,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "l0YwrWngu",
+          "title": "Tuple Structs",
+          "instructions": "Structs can also be defined as tuples. Tuple structs are regular tuples, but have a distinct type and name and also lack the additional field names of a regular struct. They are appropriate for certain use cases. Take a look at the code in the editor and complete the `are_players_on_same_space` to solve the challenge.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let mut a = Coordinate(5, 2);\n  let mut b = Coordinate(5, 2);\n  let mut same_space = are_players_on_same_space(a, b);\n  assert_eq!(same_space, true);\n\n  a = Coordinate(5, 2);\n  b = Coordinate(5, 1);\n  same_space = are_players_on_same_space(a, b);\n  assert_eq!(same_space, false);\n\n  true\n}\n`;\n\ntest(\"The `are_players_on_same_space` function should return `true` if the two given coordiantes represent the same space.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// (x, y) coordinate representing position on a board\nstruct Coordinate(i32, i32);\n\nfn are_players_on_same_space(a_coordinate: Coordinate, b_coordinate: Coordinate) -> bool {\n  // Your code here\n}\n\nlet mut a = Coordinate(5, 2);\nlet mut b = Coordinate(5, 2);\n\nlet mut same_space = are_players_on_same_space(a, b);\nprintln!(\"[1] Same Space: {}\", same_space);\n\na = Coordinate(5, 2);\nb = Coordinate(5, 1);\n\nsame_space = are_players_on_same_space(a, b);\nprintln!(\"[2] Same Space: {}\", same_space);",
+          "solutionCode": "// (x, y) coordinate representing position on a board\nstruct Coordinate(i32, i32);\n\nfn are_players_on_same_space(a_coordinate: Coordinate, b_coordinate: Coordinate) -> bool {\n  let same_x = a_coordinate.0 == b_coordinate.0;\n  let same_y = a_coordinate.1 == b_coordinate.1;\n\n  same_x && same_y\n}\n\nlet mut a = Coordinate(5, 2);\nlet mut b = Coordinate(5, 2);\n\nlet mut same_space = are_players_on_same_space(a, b);\nprintln!(\"[1] Same Space: {}\", same_space);\n\na = Coordinate(5, 2);\nb = Coordinate(5, 1);\n\nsame_space = are_players_on_same_space(a, b);\nprintln!(\"[2] Same Space: {}\", same_space);",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "@VZT4$txv",
           "title": "Strings",
@@ -402,7 +413,7 @@
         {
           "type": "section",
           "id": "5B5@asRy6",
-          "title": "Data Structures",
+          "title": "Data Collections",
           "instructions": "",
           "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
           "videoUrl": "",
