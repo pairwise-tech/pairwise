@@ -357,6 +357,17 @@
         },
         {
           "type": "rust",
+          "id": "PvQraNq37",
+          "title": "Reading Struct Fields",
+          "instructions": "Accessing a field on a struct can be done using the dot syntax, e.g.` user.first_name`. Complete the `get_rectangle_area` function to return the area of the given rectangle.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let rect = Rect {\n    x: 5,\n    y: 5,\n    width: 102,\n    height: 908,\n  };\n  let result = get_rectangle_area(rect);\n  assert_eq!(result, 102 * 908);\n\n  true\n}\n`;\n\ntest(\"The `get_rectangle_area` function should return the `u32` area of the rectangle given to it.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "#[derive(Debug)]\nstruct Rect {\n  x: u32,\n  y: u32,\n  width: u32,\n  height: u32,\n}\n\nfn get_rectangle_area(rect: Rect) -> u32 { \n  // Write your code here:\n}\n\nlet rect = Rect {\n  x: 5,\n  y: 5,\n  width: 100,\n  height: 50,\n};\n\nlet area = get_rectangle_area(rect);\nprintln!(\"Rectangle Area: {:?}\", area);\n",
+          "solutionCode": "#[derive(Debug)]\nstruct Rect {\n  x: u32,\n  y: u32,\n  width: u32,\n  height: u32,\n}\n\nfn get_rectangle_area(rect: Rect) -> u32 { \n  rect.width * rect.height\n}\n\nlet rect = Rect {\n  x: 5,\n  y: 5,\n  width: 100,\n  height: 50,\n};\n\nlet area = get_rectangle_area(rect);\nprintln!(\"Rectangle Area: {:?}\", area);\n",
+          "content": ""
+        },
+        {
+          "type": "rust",
           "id": "jQdiNPjQJK",
           "title": "Updating Struct Fields",
           "instructions": "How can we update the fields of a struct? Well, you can set them similar to how you would set a variable. Try to complete the function in the editor below.",
