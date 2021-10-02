@@ -615,6 +615,8 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   .handleAction(App.actions.locationChange, (state, action) => ({
     ...state,
     displayNavigationMap: false,
+    // Hide the overall, if it was visible, on navigation
+    showChallengeInstructionsModal: false,
   }))
   .handleAction(actions.setNavigationMapState, (state, action) => ({
     ...state,
