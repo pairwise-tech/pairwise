@@ -345,6 +345,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "rONYaskiU",
+          "title": "Create a New Struct",
+          "instructions": "Let's get some more practice defining structs. This challenge is similar to the last but here we will start with an empty editor\\! Review the test cases to solve the challenge.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let radius: u32 = 51231;\n  let mass: u32 = 97612301731;\n  let inhabitants: u32 = 713231;\n  let planet = create_plant(radius, mass, inhabitants);\n  assert_eq!(planet.radius, radius);\n  assert_eq!(planet.mass, mass);\n  assert_eq!(planet.inhabitants, inhabitants);\n\n  true\n}\n`;\n\ntest(\"A `create_planet` function should exist and return a new `Planet` struct, which has the following `u32` fields: `radius`, `mass`, `inhabitants`. The function signature should accept these three fields, in that order, as parameters to initalize the `Planet` struct.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Write your code here",
+          "solutionCode": "#[derive(Debug)]\nstruct Planet {\n  radius: u32,\n  mass: u32,\n  inhabitants: u32,\n}\n\nfn create_planet(radius: u32, mass: u32, inhabitants: u32) -> Planet {\n  let planet = Planet {\n    radius,\n    mass,\n    inhabitants,\n  };\n\n  planet\n}\n\nlet planet = create_planet(791231, 13211231, 1231311);\nprintln!(\"Planet Struct: {:?}\", planet);",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "@VZT4$txv",
           "title": "Strings",
