@@ -400,6 +400,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "Unlagm$ty",
+          "title": "Implementing Struct Methods",
+          "instructions": "We have seen how to define struct fields which contain data. Now we will look at how we can implement methods on structs to associate specific behavior or functionality with a struct. Struct methods are defined in implementation blocks signified by the `impl` keyword and in their series of arguments always receive the current instance of the struct as a `self` argument\\.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "@VZT4$txv",
           "title": "Strings",
@@ -413,7 +424,7 @@
         {
           "type": "section",
           "id": "5B5@asRy6",
-          "title": "Data Collections",
+          "title": "Collections",
           "instructions": "",
           "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
           "videoUrl": "",
@@ -435,7 +446,7 @@
         {
           "type": "section",
           "id": "R4TolzmG5",
-          "title": "Rust's Result and Option Types",
+          "title": "Result and Option Types",
           "instructions": "",
           "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
           "videoUrl": "",
