@@ -455,7 +455,7 @@ const executeTests = async (challenge: Challenge) => {
 
       // Run the wait loop
       await waitForResultsUntilTimeout();
-    } catch (err) {
+    } catch (err: any) {
       // Catch any errors from above and populate a failure message
       results = [
         {
