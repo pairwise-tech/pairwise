@@ -97,9 +97,11 @@ class AdminGrowthPage extends React.Component<IProps, IState> {
 
   renderGlobalChallengeProgressChart = () => {
     const { globalChallengeProgressSeries } = this.props;
-    console.log(globalChallengeProgressSeries);
+    if (Object.keys(globalChallengeProgressSeries).length === 0) {
+      return <p>No data yet...</p>;
+    }
+
     const data = getGlobalProgressHistory(globalChallengeProgressSeries);
-    console.log(data);
     return (
       <AdminChartComponent
         data={data}
