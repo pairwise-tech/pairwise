@@ -80,7 +80,7 @@
         {
           "type": "rust",
           "id": "$Do6$e1dD",
-          "title": "Snake Case",
+          "title": "Naming: Snake Case",
           "instructions": "What is the convention for naming variables and functions in Rust? `snake_case`of course: all lowercase with words separated by underscores. As you learn more Rust, you will see that enforces strong conventions and rules in many cases which cannot be deviated from. Naming is no exception\\! Although it might feel frustrating at first, it means that any Rust code will have a basic level of familiarity to a seasoned Rust developer.\n\nUpdate the naming conventions in the editor to adhere to snake casing rules.\n\n> The code in the editor will compile. But if you were running `rustc` locally to see the full output you would see warnings on the variable names like this:\n> \n> ```\n> warning: function `myFunction` should have a snake case name\n> \n> ```\n> \n> Although you can name you functions and variables different, we would recommend sticking with the Rust convention of snake case.\n\n",
           "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The code should compile with no errors.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\ntest(\"The `myFunction` function should renamed using snake case.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  expect(CODE_STRING.includes(\"my_function\")).toBe(true);\n});\n\ntest(\"The `mySpecialValue` variable should renamed using snake case.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  expect(CODE_STRING.includes(\"my_special_value\")).toBe(true);\n});\n\ntest(\"The `functionResultValue` function should renamed using snake case.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  expect(CODE_STRING.includes(\"function_result_value\")).toBe(true);\n});\n",
           "videoUrl": "",
@@ -332,6 +332,17 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Rust structures \"structs\" are a way to group several related values into a single meaningful group."
+        },
+        {
+          "type": "rust",
+          "id": "rONYoxCYV",
+          "title": "Struct Definition",
+          "instructions": "Struct are defined using the `struct` keyword\\. Like tuples, they can contain data of different types. Unlike tuples they have a much more defined structure which conveys more meaning and makes data access easier.\n\nWe've defined a struct in the editor below representing a rectangle. In the `create_rectangle` function, return a new instance of this struct whose fields match the parameters given to the function. You can create a new instance of a struct by writing its name followed by `{...}` brackets within which you defined the struct fields.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let x: u32 = 5;\n  let y: u32 = 10;\n  let width: u32 = 25;\n  let height: u32 = 50;\n  let rect = create_rectangle(x, y, width, height);\n  assert_eq!(rect.x, x);\n  assert_eq!(rect.y, y);\n  assert_eq!(rect.width, width);\n  assert_eq!(rect.height, height);\n\n  true\n}\n`;\n\ntest(\"The `create_rectangle` function should return a new `Rect` struct matching the parameters given to it.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "#[derive(Debug)]\nstruct Rect {\n  x: u32,\n  y: u32,\n  width: u32,\n  height: u32,\n}\n\nfn create_rectangle(x: u32, y: u32, width: u32, height: u32) -> Rect {\n  // Write your code here\n}\n\nlet rect = create_rectangle(5, 10, 25, 50);\nprintln!(\"Rectangle Struct: {:?}\", rect);",
+          "solutionCode": "#[derive(Debug)]\nstruct Rect {\n  x: u32,\n  y: u32,\n  width: u32,\n  height: u32,\n}\n\nfn create_rectangle(x: u32, y: u32, width: u32, height: u32) -> Rect {\n  // Write your code here\n  Rect {\n    x,\n    y,\n    width,\n    height\n  }\n}\n\nlet rect = create_rectangle(5, 10, 25, 50);\nprintln!(\"Rectangle Struct: {:?}\", rect);",
+          "content": ""
         },
         {
           "type": "section",
