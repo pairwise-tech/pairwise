@@ -19,12 +19,9 @@ import { Link } from "react-router-dom";
 
 class AdminFeedbackPage extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
-    const {
-      adminUserSettings: userSettings,
-      feedbackRecords,
-      deleteFeedbackByUuid,
-    } = this.props;
-    const theme = userSettings.appTheme;
+    const { feedbackRecords, adminUserSettings, deleteFeedbackByUuid } =
+      this.props;
+    const theme = adminUserSettings.appTheme;
     const isDark = theme === "dark";
     return (
       <PageContainer>
@@ -33,7 +30,7 @@ class AdminFeedbackPage extends React.Component<IProps, {}> {
           There are a total of {feedbackRecords.length} feedback records
           submitted.
         </SummaryText>
-        {feedbackRecords.reverse().map((feedback) => {
+        {feedbackRecords.map((feedback) => {
           const { user } = feedback;
           const email = user?.email;
           return (

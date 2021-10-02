@@ -27,7 +27,7 @@ export class FeedbackService {
         },
       },
       order: {
-        createdAt: "ASC",
+        createdAt: "DESC",
       },
     });
   }
