@@ -400,6 +400,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "ONCKyRCRf7",
+          "title": "Iteration With For Loops",
+          "instructions": "Although the `loop` and `while` expressions are available to use, it is generally preferable to use other iteration patterns which reduce the need for manually tracking the looping logic. It's always pleasant to avoid potential infinite loops.\n\nWith arrays and other collections we will see later, we can easily iterate through their members using a `for .. in` syntax\\. Finish the `iterate_names_array` function to use the `for .. in` syntax to iterate through the given `names_array`. You can turn an array into an iterator to use in the `for .. in` expression using the `iter()` method\\.\n\nUse a for loop to iterate through the given `names_array` and create a new array containing the reversed order of the names. You can use some indexing math to create this new array as your iterate through the for loop. Try to avoid using any built\\-in reverse methods.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let mut names: [&str; 5] = [\n    \"Sara\",\n    \"Ryan\",\n    \"Ben\",\n    \"Sam\",\n    \"Eddie\",\n  ];\n\n  // Get code result\n  let result = iterate_and_reverse_names_array(names);\n\n  // Reverse original list\n  names.reverse();\n  let names_reversed = names;\n\n  // Assert result\n  assert_eq!(result, names_reversed);\n\n  true\n}\n`;\n\ntest(\"The `iterate_and_reverse_names_array` function should return an array of names in the reverse order of the given `names_array`.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "let names: [&str; 5] = [\n  \"Sam\",\n  \"Ryan\",\n  \"Joe\",\n  \"Sara\",\n  \"Ben\",\n];\n\nfn iterate_and_reverse_names_array(names_array: [&str; 5]) -> [&str; 5] {\n  // Implement your solution here\n  //\n  // NOTE: Try to use a for..in loop, do not use any built-in\n  // reverse methods ;)\n}\n\nlet result = iterate_and_reverse_names_array(names);\nprintln!(\"Original list of names: {:?}\", names);\nprintln!(\"Reversed list of names: {:?}\", result);\n",
+          "solutionCode": "let names: [&str; 5] = [\n  \"Sam\",\n  \"Ryan\",\n  \"Joe\",\n  \"Sara\",\n  \"Ben\",\n];\n\nfn iterate_and_reverse_names_array(names_array: [&str; 5]) -> [&str; 5] {\n  let mut reversed_list: [&str; 5] = [\"\", \"\", \"\", \"\", \"\"];\n  let mut index: usize = 5;\n\n  for name in names_array.iter() {\n      println!(\"The current name is: {}\", name);\n      index = index - 1;\n      reversed_list[index] = name;\n  }\n\n  return reversed_list;\n}\n\nlet result = iterate_and_reverse_names_array(names);\nprintln!(\"Original list of names: {:?}\", names);\nprintln!(\"Reversed list of names: {:?}\", result);\n",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "@orxFOEdD",
           "title": "Structs and Enums",
