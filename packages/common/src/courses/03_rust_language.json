@@ -324,6 +324,28 @@
         },
         {
           "type": "section",
+          "id": "owXHK17s4",
+          "title": "Control Flow",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Rust contains many of the common control flow structures you will be familiar with from other programming languages. We will cover those in this section, along with a few other patterns which are unique and common to Rust, such as:\n\n* If/else statements\n* Iterators and loops\n* Match statements\n\n"
+        },
+        {
+          "type": "rust",
+          "id": "@i3sE3J3Q",
+          "title": "Creating Conditional If Statements",
+          "instructions": "Rust supports if/else statements which work in the expected way. Complete the `conditionals` function so all of the assertions are valid.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let result = conditionals(-5);\n  assert_eq!(result, String::from(\"The value is negative.\"));\n\n  let result = conditionals(0);\n  assert_eq!(result, String::from(\"The value is zero.\"));\n\n  let result = conditionals(52);\n  assert_eq!(result, String::from(\"The value is positive.\"));\n\n  true\n}\n`;\n\ntest(\"The `conditionals` function should return the `String` values specified in the `assert_eq!` assertions depending on whether the input is positive, negative, or zero.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Implement the body of this function using if/else expressions\nfn conditionals(value: i64) -> String {\n  // Write your code here\n}\n\nlet result = conditionals(-5);\nassert_eq!(result, String::from(\"The value is negative.\"));\n\nlet result = conditionals(0);\nassert_eq!(result, String::from(\"The value is zero.\"));\n\nlet result = conditionals(52);\nassert_eq!(result, String::from(\"The value is positive.\"));",
+          "solutionCode": "// Implement the body of this function using if/else expressions\nfn conditionals(value: i64) -> String {\n  if value < 0 {\n    String::from(\"The value is negative.\")\n  } else if value == 0 {\n    String::from(\"The value is zero.\")\n  } else {\n    String::from(\"The value is positive.\")\n  }\n}\n\nlet result = conditionals(-5);\nassert_eq!(result, String::from(\"The value is negative.\"));\n\nlet result = conditionals(0);\nassert_eq!(result, String::from(\"The value is zero.\"));\n\nlet result = conditionals(52);\nassert_eq!(result, String::from(\"The value is positive.\"));",
+          "content": ""
+        },
+        {
+          "type": "section",
           "id": "@orxFOEdD",
           "title": "Structs and Enums",
           "instructions": "",
@@ -522,17 +544,6 @@
         },
         {
           "type": "section",
-          "id": "owXHK17s4",
-          "title": "Control Flow",
-          "instructions": "",
-          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "Rust contains many of the common control flow structures you will be familiar with from other programming languages. We will cover those in this section, along with a few other patterns which are unique and common to Rust, such as:\n\n* If/else statements\n* Iterators and loops\n* Match statements\n\n"
-        },
-        {
-          "type": "section",
           "id": "PnCi8hB8E",
           "title": "Error Handling",
           "instructions": "",
@@ -576,6 +587,12 @@
           "content": ""
         }
       ]
+    },
+    {
+      "id": "GDSzv2jA7",
+      "title": "Basic Challenges",
+      "free": false,
+      "challenges": []
     },
     {
       "id": "ACiP6Y2O5e",
@@ -678,7 +695,7 @@
     },
     {
       "id": "krVVmQd$S",
-      "title": "Practice Challenges",
+      "title": "Intermediate Challenges",
       "challenges": [
         {
           "type": "section",
@@ -729,7 +746,7 @@
     },
     {
       "id": "uZZsKk7083",
-      "title": "Projects",
+      "title": "Final Projects",
       "challenges": [
         {
           "type": "section",

@@ -236,7 +236,7 @@ const Horizontal = styled.div`
   justify-content: space-between;
 
   @media ${DESKTOP} {
-    width: ${PROSE_MAX_WIDTH}px;
+    max-width: ${PROSE_MAX_WIDTH}px;
   }
 `;
 
@@ -293,9 +293,6 @@ const SkillIcon = (props: {
             fontSize: 20,
             marginRight: 1,
             marginBottom: 5,
-            // marginTop: 3,
-            // marginLeft: 3,
-            // marginRight: 3,
           }}
           className={className}
         />
@@ -310,7 +307,7 @@ const ContentLabel = styled.div`
   justify-content: center;
   font-size: 10px;
   height: 14px;
-  width: 150px;
+  width: 95px;
   font-weight: bold;
   letter-spacing: 1.2px;
   color: ${COLORS.TEXT_DARK};
