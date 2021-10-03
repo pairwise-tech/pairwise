@@ -512,6 +512,35 @@
       ]
     },
     {
+      "id": "ACiP6Y2O5e",
+      "title": "Mini Projects",
+      "free": false,
+      "challenges": [
+        {
+          "type": "section",
+          "id": "@n6b3RDWPm",
+          "title": "Rust Mini Projects",
+          "instructions": "",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "We have now covered a lot of Rust fundamentals\\!\n\nCongratulations you are well on the way to becoming a proficient Rust programmer\\!\n\nIt's time to get our hands dirty writing some Rust code. We've learned enough to write a few more complex programs. This section introduces a few mini projects which will give you a chance to test out your newly acquired Rust chops."
+        },
+        {
+          "type": "rust",
+          "id": "j$ugekdN1",
+          "title": "Simulate Tic Tac Toe",
+          "instructions": "We've provided some code in the editor below. We want to simulate a Tic Tac Toe game and have created a function `simulate_tic_tac_toe` which takes a parameter of the number of games to simulate.\n\nYour job is to create additional code to handle this game simulation. The game simulation can just involve two players, the \"player\" and \"computer\", randomly playing against each other.\n\nOnce all the games are complete, return a `Result` containing a `GameResult` from the `simulate_tic_tac_toe` function\\.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let result = simulate_tic_tac_toe(10);\n  match result {\n    Ok(x) => {\n      let total = x.player_wins + x.computer_wins + x.stalemates;\n      assert_eq!(total, 10);\n      assert_eq!(x.games_played, 10);\n    }\n    Err(_e) => {\n      panic!(\"Function should return an Ok result not return an Err!\");\n    }\n  }\n\n  true\n}\n`;\n\ntest(\"The `simulate_tic_tac_toe` function should return a `GameResult` representing the number of games simulated and the results.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "#[derive(Debug)]\nstruct GameResult {\n  games_played: u32,\n  player_wins: u32,\n  computer_wins: u32,\n  stalemates: u32,\n}\n\n// Change anything except this function signaure ;)\nfn simulate_tic_tac_toe(number_of_games_to_play: u32) -> Result<GameResult, String> {\n  println!(\"Ready to start playing {} games!\", number_of_games_to_play);\n  \n  // Write your code here, or anywhere else\n\n  Err(String::from(\"The game is not implemented yet!\"))\n}\n\nlet result = simulate_tic_tac_toe(3);\nprintln!(\"Game result: {:?}\", result);",
+          "solutionCode": "#[derive(Debug)]\nstruct GameResult {\n  games_played: u32,\n  player_wins: u32,\n  computer_wins: u32,\n  stalemates: u32,\n}\n\n// Change anything except this function signaure ;)\nfn simulate_tic_tac_toe(number_of_games_to_play: u32) -> Result<GameResult, String> {\n  println!(\"Ready to start playing {} games!\", number_of_games_to_play);\n  \n  // TODO: Implement solution\n  let result = GameResult {\n    games_played: number_of_games_to_play,\n    player_wins: number_of_games_to_play,\n    computer_wins: 0,\n    stalemates: 0,\n  };\n\n  Ok(result)\n}\n\nlet result = simulate_tic_tac_toe(3);\nprintln!(\"Game result: {:?}\", result);",
+          "content": ""
+        }
+      ]
+    },
+    {
       "id": "AX04ZC5H8",
       "title": "Ownership and Borrowing",
       "free": false,
