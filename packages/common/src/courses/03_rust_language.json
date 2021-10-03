@@ -402,12 +402,34 @@
         {
           "type": "rust",
           "id": "Unlagm$ty",
-          "title": "Implementing Struct Methods",
-          "instructions": "We have seen how to define struct fields which contain data. Now we will look at how we can implement methods on structs to associate specific behavior or functionality with a struct. Struct methods are defined in implementation blocks signified by the `impl` keyword and in their series of arguments always receive the current instance of the struct as a `self` argument\\.",
-          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "title": "Implementing Struct Methods I",
+          "instructions": "We have seen how to define struct fields which contain data. Now we will look at how we can implement methods on structs to associate specific behavior or functionality with a struct. Struct methods are defined in implementation blocks signified by the `impl` keyword and in their series of arguments always receive the current instance of the struct as a `self` argument\\.\n\nThe `Person` struct in the editor below has an empty `say_hello` implementation started. Complete this to return a `String` of the given person saying hello.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let name = String::from(\"Frank\");\n  let age = 25;\n\n  let sam = Person {\n    name,\n    age,\n  };\n\n  let result = sam.say_hello();\n  let expected = String::from(\"Hello, my name is Frank!\");\n  assert_eq!(result, expected);\n\n  let name = String::from(\"Vivian\");\n  let age = 25;\n\n  let vivian = Person {\n    name,\n    age,\n  };\n\n  let result = vivian.say_hello();\n  let expected = String::from(\"Hello, my name is Vivian!\");\n  assert_eq!(result, expected);\n\n  true\n}\n`;\n\ntest(\"The `Person` struct `say_hello` implementation should return a `String` saying hello for the given person, like this: `Hello, my name is Eddie!`\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
           "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
+          "starterCode": "#[derive(Debug)]\nstruct Person {\n  name: String,\n  age: u32,\n}\n\nimpl Person {\n  // Return a string hello message of the pattern: Hello, my name is <name>!\n  // This method implementation takes as an argument a reference to\n  // the current instance of the struct, denoted by &self.\n  // We will see more on references in future challenges.\n  fn say_hello(&self) -> String {\n    // Implement this method, note you can use the format!\n    // macro just like println! to interpolate a variable into\n    // a string. The format! macro returns a String, just what\n    // we need to return here.\n  }\n}\n\n// We convert a string slice to an owned String type:\nlet name = String::from(\"Sam\");\nlet age = 25;\n\nlet sam = Person {\n  name,\n  age,\n};\n\nsam.say_hello();\n",
+          "solutionCode": "#[derive(Debug)]\nstruct Person {\n  name: String,\n  age: u32,\n}\n\nimpl Person {\n  fn say_hello(&self) -> String {\n    format!(\"Hello, my name is {}!\", self.name)\n  }\n}\n\n// We convert a string slice to an owned String type:\nlet name = String::from(\"Sam\");\nlet age = 25;\n\nlet sam = Person {\n  name,\n  age,\n};\n\nlet x = sam.say_hello();\nprintln!(\"{}\", x);\n",
+          "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "Unlaaiu1P",
+          "title": "Implementing Struct Methods II",
+          "instructions": "We have our same `Person` from the last challenge in the editor below. This time, create a new `impl` block which implements a function `can_vote` which returns whether the given person is 18 or older.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let name = String::from(\"Frank\");\n  let age = 25;\n\n  let sam = Person {\n    name,\n    age,\n  };\n\n  let result = sam.can_vote();\n  assert_eq!(result, true);\n\n  let name = String::from(\"Vivian\");\n  let age = 12;\n\n  let vivian = Person {\n    name,\n    age,\n  };\n\n  let result = vivian.can_vote();\n  assert_eq!(result, false);\n\n  true\n}\n`;\n\ntest(\"The `Person` struct `say_hello` implementation should return a `String` saying hello for the given person, like this: `Hello, my name is Eddie!`\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "#[derive(Debug)]\nstruct Person {\n  name: String,\n  age: u32,\n}\n\n// Your code here\n\n// We convert a string slice to an owned String type:\nlet name = String::from(\"Sam\");\nlet age = 25;\n\nlet sam = Person {\n  name,\n  age,\n};\n\nlet can_vote = sam.can_vote();\nprintln!(\"Can Sam vote? Result = {}\", can_vote);\n",
+          "solutionCode": "#[derive(Debug)]\nstruct Person {\n  name: String,\n  age: u32,\n}\n\nimpl Person {\n  fn can_vote(&self) -> bool {\n    self.age >= 18\n  }\n}\n\n// We convert a string slice to an owned String type:\nlet name = String::from(\"Sam\");\nlet age = 25;\n\nlet sam = Person {\n  name,\n  age,\n};\n\nlet can_vote = sam.can_vote();\nprintln!(\"Can Sam vote? Result = {}\", can_vote);\n",
+          "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "fisyTm$ty",
+          "title": "Struct Associated Functions",
+          "instructions": "Struct `impl` blocks may also implement standalone functions which can be invoked with the `::` syntax\\. These are called associated functions are return an instance of the struct they are implement on. They _do not_ receive a reference to `self` as a parameter. A common example of this is the `String::from(\"...\")` method\\.\n\nA typical use of associated functions is to implement a `new` method for a struct. Take a look at the editor below. We've modified our code from the last two challenges to now set a field `can_vote` on our `Person` struct\\. We can now assign this field in a `new` associated function.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let name = String::from(\"Frank\");\n  let age = 25;\n  let sam = Person::new(name, age);\n  let can_vote = sam.can_vote();\n  assert_eq!(can_vote, true);\n\n  let name = String::from(\"Vivian\");\n  let age = 12;\n  let vivian = Person::new(name, age);\n  let can_vote = vivian.can_vote();\n  assert_eq!(can_vote, false);\n\n  true\n}\n`;\n\ntest(\"The `Person` struct `new` associated function should be implemented and return new `Person` instances with the `can_vote` property assigned correctly.`\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "#[derive(Debug)]\nstruct Person {\n  name: String,\n  age: u32,\n  can_vote: bool,\n}\n\nimpl Person {\n  fn new(name: String, age: u32) -> Person {\n    // Define and return a new Person here, assigning\n    // the can_vote field based on if the given age\n    // is over 18 or not.\n  }\n\n  fn can_vote(&self) -> bool {\n    self.can_vote\n  }\n}\n\n// We convert a string slice to an owned String type:\nlet name = String::from(\"Sam\");\nlet age = 25;\n\nlet sam = Person::new(name, age);\nlet can_vote = sam.can_vote();\nprintln!(\"Can Sam vote? Result = {}\", can_vote);\n",
+          "solutionCode": "#[derive(Debug)]\nstruct Person {\n  name: String,\n  age: u32,\n  can_vote: bool,\n}\n\nimpl Person {\n  fn new(name: String, age: u32) -> Person {\n    let can_vote = age >= 18;\n    Person {\n      name,\n      age,\n      can_vote,\n    }\n  }\n\n  fn can_vote(&self) -> bool {\n    self.can_vote\n  }\n}\n\n// We convert a string slice to an owned String type:\nlet name = String::from(\"Sam\");\nlet age = 25;\n\nlet sam = Person::new(name, age);\nlet can_vote = sam.can_vote();\nprintln!(\"Can Sam vote? Result = {}\", can_vote);\n",
           "content": ""
         },
         {
@@ -453,17 +475,6 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Rust contains two well known and powerful types the `Result` and `Option` types which are used to model values which optionally may be in an error/failure state \\(the `Result` type\\) or in an optional/not\\-present state \\(the `Option` type\\). These types are so prevalent and important that we have given them their own section of challenges here."
-        },
-        {
-          "type": "section",
-          "id": "ITJBLJQnl",
-          "title": "Generics, Traits and Lifetimes",
-          "instructions": "",
-          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": ""
         },
         {
           "type": "section",
@@ -543,6 +554,12 @@
     {
       "id": "AX04ZC5H8",
       "title": "Ownership and Borrowing",
+      "free": false,
+      "challenges": []
+    },
+    {
+      "id": "5wbe@14QT",
+      "title": "Generics, Traits and Lifetimes",
       "free": false,
       "challenges": []
     },
