@@ -609,6 +609,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "A69i0d3FY",
+          "title": "Working with Options",
+          "instructions": "Let's get some more practice with the `Option` type\\. This type is pervasive in Rust code. Once you have a good feel for working with it, you will be quite happy to find that those insidious null pointer exceptions plague your code no more\\!\n\nIn the editor below is a `sum` function\\. Finish it to return the sum of all of the optional values provided to it.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let result = sum((\n    Some(321),\n    Some(192),\n    None,\n  ));\n  assert_eq!(result, 513);\n\n  let result = sum((\n    None,\n    None,\n    None,\n  ));\n  assert_eq!(result, 0);\n\n  let result = sum((\n    Some(2),\n    Some(2),\n    Some(2),\n  ));\n  assert_eq!(result, 6);\n\n  true\n}\n`;\n\ntest(\"The `sum` function should add up all of the values present in the `SomeValues` tuple. If any value is `None`, add zero.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// A tuple of three options\ntype SomeValues = (\n  Option<u32>,\n  Option<u32>,\n  Option<u32>,\n);\n\nfn sum(values: SomeValues) -> u32 {\n  // Add up the values in the tuple\n  // If an option is None, add 0\n}\n\nlet values: SomeValues = (\n  Some(5),\n  Some(72),\n  None,\n);\n\nlet result = sum(values);\nprintln!(\"Result: {}\", result);",
+          "solutionCode": "// A tuple of three options\ntype SomeValues = (\n  Option<u32>,\n  Option<u32>,\n  Option<u32>,\n);\n\nfn sum(values: SomeValues) -> u32 {\n  let mut result = 0;\n\n  if let Some(x) = values.0 {\n    result = result + x;\n  }\n\n  if let Some(x) = values.1 {\n    result = result + x;\n  }\n\n  if let Some(x) = values.2 {\n    result = result + x;\n  }\n\n  result\n}\n\nlet values: SomeValues = (\n  Some(5),\n  Some(72),\n  None,\n);\n\nlet result = sum(values);\nprintln!(\"Result: {}\", result);",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "@VZT4$txv",
           "title": "Strings",
