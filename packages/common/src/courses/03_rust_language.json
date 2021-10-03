@@ -367,6 +367,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "vB5grXNR8",
+          "title": "Loop Expressions",
+          "instructions": "The `loop` keyword always you to repeat an action indefinitely. Fix the code below to `break` out of the loop after `x` is reassigned to the `target_value`.\n\n> NOTE: The code execution will be aborted after about 10 seconds if it does not finishing running.\n",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let value = 283;\n  let result = loops_are_dangerous(value);\n  assert_eq!(result, value);\n\n  true\n}\n`;\n\ntest(\"The `loops_are_dangerous` function should `break` out of the loop after assigning `target_value` to `x`.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn loops_are_dangerous(target_value: u32) -> u32 {\n  let mut x: u32 = 5;\n\n  // There is really no point to this code, except to demonstrate\n  // the loop construct.\n  loop {\n    x = target_value;\n  }\n\n  x\n}\n\nlet value = 500;\nlet result = loops_are_dangerous(value);\nassert_eq!(result, value);\nprintln!(\"Result = {}\", result);",
+          "solutionCode": "fn loops_are_dangerous(target_value: u32) -> u32 {\n  let mut x: u32 = 5;\n\n  // There is really no point to this code, except to demonstrate\n  // the loop construct.\n  loop {\n    x = target_value;\n    break;\n  }\n\n  x\n}\n\nlet value = 500;\nlet result = loops_are_dangerous(value);\nassert_eq!(result, value);\nprintln!(\"Result = {}\", result);",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "@orxFOEdD",
           "title": "Structs and Enums",
