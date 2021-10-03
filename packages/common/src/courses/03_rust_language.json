@@ -433,6 +433,28 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "efEpmQap5",
+          "title": "Enums",
+          "instructions": "Enums, or \"enumerations\",  are a way to represent a single type which may be one of many variants. Such a type can be useful in a variety of programming scenarios. Enums can be created using the `enum` keyword and specific variants can be referenced use the enum name followed by the `::` syntax\\. Take a look at the code below to see enums in action.\n\nIn the following section, we will see more on enums and Rust's powerful pattern matching techniques which can be used to perform operations on enums and other variants.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let result = get_default_user_registration_stage();\n  if let UserRegistrationStage::NotStarted = result {\n    return true;\n  } else {\n    panic!(\"Expected UserRegistrationStage to be NotStarted\");\n  }\n}\n`;\n\ntest(\"The `get_default_user_registration_stage` function should the `NotStarted` variant of the `UserRegistrationStage` enum.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// An enum to represent the current stage a user is in within\n// some registration process\n#[derive(Debug)]\nenum UserRegistrationStage {\n  NotStarted,\n  EnterNameAndEmail,\n  EnterPassword,\n  PendingConfirmation,\n  RegistrationSuccessful,\n}\n\nstruct User {\n  // Imagine various user struct fields here...\n  registration_stage: UserRegistrationStage,\n}\n\nfn get_default_user_registration_stage() -> UserRegistrationStage {\n  // Write your code here\n}\n\nlet result = get_default_user_registration_stage();\nprintln!(\"Current registration stage: {:?}\", result);",
+          "solutionCode": "// An enum to represent the current stage a user is in within\n// some registration process\n#[derive(Debug)]\nenum UserRegistrationStage {\n  NotStarted,\n  EnterNameAndEmail,\n  EnterPassword,\n  PendingConfirmation,\n  RegistrationSuccessful,\n}\n\nstruct User {\n  // Imagine various user struct fields here...\n  registration_stage: UserRegistrationStage,\n}\n\nfn get_default_user_registration_stage() -> UserRegistrationStage {\n  UserRegistrationStage::NotStarted\n}\n\nlet result = get_default_user_registration_stage();\nprintln!(\"Current registration stage: {:?}\", result);",
+          "content": ""
+        },
+        {
+          "type": "section",
+          "id": "R4TolzmG5",
+          "title": "Pattern Matching",
+          "instructions": "",
+          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Rust contains two well known and powerful types the `Result` and `Option` types which are used to model values which optionally may be in an error/failure state \\(the `Result` type\\) or in an optional/not\\-present state \\(the `Option` type\\). These types are so prevalent and important that we have given them their own section of challenges here."
+        },
+        {
           "type": "section",
           "id": "@VZT4$txv",
           "title": "Strings",
@@ -464,17 +486,6 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Rust contains many of the common control flow structures you will be familiar with from other programming languages. We will cover those in this section, along with a few other patterns which are unique and common to Rust, such as:\n\n* If/else statements\n* Iterators and loops\n* Match statements\n\n"
-        },
-        {
-          "type": "section",
-          "id": "R4TolzmG5",
-          "title": "Result and Option Types",
-          "instructions": "",
-          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "Rust contains two well known and powerful types the `Result` and `Option` types which are used to model values which optionally may be in an error/failure state \\(the `Result` type\\) or in an optional/not\\-present state \\(the `Option` type\\). These types are so prevalent and important that we have given them their own section of challenges here."
         },
         {
           "type": "section",
