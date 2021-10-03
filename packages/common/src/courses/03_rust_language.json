@@ -466,6 +466,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "pn@ANcAKj",
+          "title": "Matching Using the if let Syntax",
+          "instructions": "There is another syntax which is useful for matching a single variant in isolation, the `if let` syntax\\. This is useful for performing equality checks against an enum value, for instance. Consider the following code:\n\n```\nenum Letters {\n    X,\n    Y,\n    Z,\n}\n\nlet value = Letters::X;\n\nif Letters::X = value {\n    // This code block will run\n}\n\n```\n",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let result = is_unauthorized_error(FailureState::Unauthorized);\n  assert_eq!(result, true);\n\n  let result = is_unauthorized_error(FailureState::ResourceNotFound);\n  assert_eq!(result, false);\n\n  let result = is_unauthorized_error(FailureState::ResourceDeleted);\n  assert_eq!(result, false);\n\n  let result = is_unauthorized_error(FailureState::InternalError);\n  assert_eq!(result, false);\n\n  true\n}\n`;\n\ntest(\"The `is_unauthorized_error` function should return `true` when given the `Unauthorized` variant of the `FailureState` enum, and `false` otherwise.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "#[derive(Debug)]\nenum FailureState {\n  Unauthorized,\n  ResourceNotFound,\n  ResourceDeleted,\n  InternalError,\n}\n\n// In this function, we only care about one of the enum\n// variants. For this use case, it makes sense to use an\n// 'if let' expression.\nfn is_unauthorized_error(failure_state: FailureState) -> bool {\n  // Write your code here\n}\n\nlet is_unauthorized = is_unauthorized_error(FailureState::Unauthorized);\nprintln!(\"Is unauthorized: {}\", is_unauthorized);\n\nlet is_unauthorized = is_unauthorized_error(FailureState::ResourceNotFound);\nprintln!(\"Is unauthorized: {}\", is_unauthorized);\n",
+          "solutionCode": "#[derive(Debug)]\nenum FailureState {\n  Unauthorized,\n  ResourceNotFound,\n  ResourceDeleted,\n  InternalError,\n}\n\n// In this function, we only care about one of the enum\n// variants. For this use case, it makes sense to use an\n// 'if let' expression.\nfn is_unauthorized_error(failure_state: FailureState) -> bool {\n  if let FailureState::Unauthorized = failure_state {\n    return true;\n  }\n\n  return false;\n}\n\nlet is_unauthorized = is_unauthorized_error(FailureState::Unauthorized);\nprintln!(\"Is unauthorized: {}\", is_unauthorized);\n\nlet is_unauthorized = is_unauthorized_error(FailureState::ResourceNotFound);\nprintln!(\"Is unauthorized: {}\", is_unauthorized);\n",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "@VZT4$txv",
           "title": "Strings",
