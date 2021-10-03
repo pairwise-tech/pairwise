@@ -58,9 +58,13 @@ export class ProgressService {
       // Summarize challenge progress history for all users
       const progressData: UserCourseStatus = JSON.parse(progress);
       for (const x of Object.values(progressData)) {
-        const key = new Date(x.timeCompleted).toDateString();
-        const value = (progressDateSeries[key] || 0) + 1;
-        progressDateSeries[key] = value;
+        // In some legacy past timeCompleted was not recorded with
+        // progress entries...
+        if (x.timeCompleted) {
+          const key = new Date(x.timeCompleted).toDateString();
+          const value = (progressDateSeries[key] || 0) + 1;
+          progressDateSeries[key] = value;
+        }
       }
 
       const completedCount = Object.keys(progressData).length;
