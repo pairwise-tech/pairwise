@@ -620,6 +620,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "W6slZ2r0Y",
+          "title": "Matching Options",
+          "instructions": "In addition to use an \"if let\" expression we can also match against option enums using a `match` expression\\.  This can be appealing because it ensures both variants of the option are handled. Take a look at the code in the editor. Looks good right? Try to run it and see what the compiler has to say about it. Fix the errors to continue.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let result = add_one_if_value_exists(Some(10));\n  if let Some(x) = result {\n    assert_eq!(x, 11);\n  } else {\n    panic!(\"Given Some, add_one_if_value_exists should not return None\");\n  }\n\n  let result = add_one_if_value_exists(None);\n  if let Some(_x) = result {\n    panic!(\"Given None, add_one_if_value_exists should return None\");\n  }\n\n  true\n}\n`;\n\ntest(\"The `add_one_if_value_exists` function should return an `Option` with an incremented value, if the given Option is not `None`. Given `None`, it should return `None`.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn add_one_if_value_exists(opt: Option<u32>) -> Option<u32> {\n  match opt {\n    Some(x) => Some(x + 1)\n  }\n}\n\nlet result = add_one_if_value_exists(Some(10));\nprintln!(\"The result is: {:?}\", result);",
+          "solutionCode": "fn add_one_if_value_exists(opt: Option<u32>) -> Option<u32> {\n  match opt {\n    Some(x) => Some(x + 1),\n    None => None\n  }\n}\n\nlet result = add_one_if_value_exists(Some(10));\nprintln!(\"The result is: {:?}\", result);",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "@VZT4$txv",
           "title": "Strings",
