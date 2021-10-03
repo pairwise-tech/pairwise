@@ -356,6 +356,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "QHQPQktNv",
+          "title": "Assigning Values with a Conditional Expression",
+          "instructions": "Rust also supports using an `if` expression to define a variable directly. This is similar to a ternary expression in other languages \\(something that Rust does not support\\). The code in the editor is a little mixed up though. See if you can correct it.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let result = is_a_greater_than_b(5, 10);\n  assert_eq!(result, false);\n\n  let result = is_a_greater_than_b(50, 10);\n  assert_eq!(result, true);\n  true\n}\n`;\n\ntest(\"The `is_a_greater_than_b` function should return `true` if the provided argument `a` is greater than `b`.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn is_a_greater_than_b(a: i128, b: i128) -> bool {\n  let greater_than = if a > b { false } else { true };\n\n  greater_than\n}\n\nlet result = is_a_greater_than_b(5, 10);\nassert_eq!(result, false);\n\nlet result = is_a_greater_than_b(50, 10);\nassert_eq!(result, true);",
+          "solutionCode": "fn is_a_greater_than_b(a: i128, b: i128) -> bool {\n  let greater_than = if a > b { true } else { false };\n\n  greater_than\n}\n\nlet result = is_a_greater_than_b(5, 10);\nassert_eq!(result, false);\n\nlet result = is_a_greater_than_b(50, 10);\nassert_eq!(result, true);",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "@orxFOEdD",
           "title": "Structs and Enums",
