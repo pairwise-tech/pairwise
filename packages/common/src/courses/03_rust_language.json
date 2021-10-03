@@ -345,6 +345,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "lqTN5PoAV",
+          "title": "Conditional Expressions Require Booleans",
+          "instructions": "Unlike in some other languages, conditional expressions in Rust _must_ evaluate to a boolean value. There is no implicit coercion. Consider this point and then correct the code in the editor.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `conditions_require_booleans` function should compile.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn conditions_require_booleans() {\n  let value: u32 = 500;\n\n  if value {\n    println!(\"Value exists: {}\", value);\n  }\n\n  let name: &str = \"Joseph\";\n\n  if name {\n    println!(\"Name exists: {}\", name);\n  }\n}\n\nconditions_require_booleans();",
+          "solutionCode": "fn conditions_require_booleans() {\n  let value: u32 = 500;\n\n  if value == 500 {\n    println!(\"Value exists: {}\", value);\n  }\n\n  let name: &str = \"Joseph\";\n\n  if name == \"Joseph\" {\n    println!(\"Name exists: {}\", name);\n  }\n}\n\nconditions_require_booleans();",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "@orxFOEdD",
           "title": "Structs and Enums",
