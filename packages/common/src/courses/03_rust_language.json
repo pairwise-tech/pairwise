@@ -537,19 +537,30 @@
     },
     {
       "id": "XT73AIuM5",
-      "title": "Additional Features",
+      "title": "Advanced Topics",
       "free": false,
       "challenges": [
         {
           "type": "section",
           "id": "axPeNlByhG",
-          "title": "Additional Rust Features",
+          "title": "Advanced Topics",
           "instructions": "",
           "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
           "content": "This section will cover additional Rust features, such as:\n\n* Functional programming techniques in Rust\n* Object\\-oriented programming techniques in Rust\n* Unsafe code\n* Some advanced features\n\n"
+        },
+        {
+          "type": "rust",
+          "id": "PMz$hmkFP",
+          "title": "Unsafe Code",
+          "instructions": "The Rust compiler, as we have seen in the previous challenges, is very strict when enforcing code correctness and preventing runtime errors. It is possible to opt out of the compiler's strict behavior, but it is of course _unsafe_ to do so.\n\nLet's take a look at the editor below. If you compile the code you will see an error: `use of mutable static is unsafe and requires unsafe function or block`.\n\nGlobal, mutable state can be dangerous in a variety of programming scenarios, but in Rust this is explicit. The compiler does not allow you to have global mutable state with explicitly declaring it is _unsafe_. Nice\\!\n\nTo write unsafe code you have wrap the code in question in an `unsafe {...}` code block. Do this to complete the challenge.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The code should compile and use an `unsafe` block to allow the mutation of global state (a dangerous thing to do!).\", async () => {\n  const CODE_STRING = __user_code_string__;\n  expect(CODE_STRING.includes(\"unsafe\")).toBe(true);\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "static mut DANGEROUS_GLOBAL_MUTABLE_CONSTANT: u8 = 10;\n\nfn mutating_global_state_is_dangerous() {\n  println!(\"[1] DANGEROUS_GLOBAL_MUTABLE_CONSTANT is: {}\", DANGEROUS_GLOBAL_MUTABLE_CONSTANT);\n  DANGEROUS_GLOBAL_MUTABLE_CONSTANT = 5;\n  println!(\"[2] DANGEROUS_GLOBAL_MUTABLE_CONSTANT is: {}\", DANGEROUS_GLOBAL_MUTABLE_CONSTANT);\n}\n\nmutating_global_state_is_dangerous();",
+          "solutionCode": "static mut DANGEROUS_GLOBAL_MUTABLE_CONSTANT: u8 = 10;\n\nfn mutating_global_state_is_dangerous() {\n  unsafe {\n    println!(\"[1] DANGEROUS_GLOBAL_MUTABLE_CONSTANT is: {}\", DANGEROUS_GLOBAL_MUTABLE_CONSTANT);\n    DANGEROUS_GLOBAL_MUTABLE_CONSTANT = 5;\n    println!(\"[2] DANGEROUS_GLOBAL_MUTABLE_CONSTANT is: {}\", DANGEROUS_GLOBAL_MUTABLE_CONSTANT);\n  }\n}\n\nmutating_global_state_is_dangerous();",
+          "content": ""
         }
       ]
     },
