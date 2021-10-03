@@ -389,6 +389,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "UwDUOEzL5",
+          "title": "While Loops",
+          "instructions": "Rust also provides standard `while` loops to execute some operations while a condition is true. Complete the body of the `add_all_up_to_limit` function to use a `while` loop to calculate the total sum of all numbers from zero up to and including the given `limit`. For instance, the total sum for `3` would be `0 + 1 + 2 + 3 = 6`.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let result = add_all_up_to_limit(4);\n  assert_eq!(result, 10);\n\n  let result = add_all_up_to_limit(17);\n  assert_eq!(result, 153);\n\n  let result = add_all_up_to_limit(48);\n  assert_eq!(result, 1176);\n\n  true\n}\n`;\n\ntest(\"The `add_all_up_to_limit` function should return the sum of all numbers from zero up to the provided `limit`.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn add_all_up_to_limit(limit: u128) -> u128 {\n  // Write your code here\n}\n\nlet result = add_all_up_to_limit(3);\nassert_eq!(result, 6);\nprintln!(\"add_all_up_to_limit(3)  = {}\", result);\n\nlet result = add_all_up_to_limit(15);\nassert_eq!(result, 120);\nprintln!(\"add_all_up_to_limit(15) = {}\", result);\n\nlet result = add_all_up_to_limit(53);\nassert_eq!(result, 1431);\nprintln!(\"add_all_up_to_limit(53) = {}\", result);",
+          "solutionCode": "fn add_all_up_to_limit(limit: u128) -> u128 {\n  let mut total: u128 = 0;\n  let mut current: u128 = 0;\n\n  while current <= limit {\n    total = total + current;\n    current = current + 1;\n  }\n\n  total\n}\n\nlet result = add_all_up_to_limit(3);\nassert_eq!(result, 6);\nprintln!(\"add_all_up_to_limit(3)  = {}\", result);\n\nlet result = add_all_up_to_limit(15);\nassert_eq!(result, 120);\nprintln!(\"add_all_up_to_limit(15) = {}\", result);\n\nlet result = add_all_up_to_limit(53);\nassert_eq!(result, 1431);\nprintln!(\"add_all_up_to_limit(53) = {}\", result);",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "@orxFOEdD",
           "title": "Structs and Enums",
