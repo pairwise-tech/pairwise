@@ -378,6 +378,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "UIQ8YPdV7",
+          "title": "Using Loop Expressions to Assign Values",
+          "instructions": "Loops can also be used to assign values, similar to `if/else` blocks\\. This may be useful if you need to an attempt an operation which may fail and needs to be retried. Take a look at the code in the editor, and then return a `String` from the `get_result` function to complete the challenge.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let result: String = get_result();\n\n  true\n}\n`;\n\ntest(\"The `get_result` function should return a `String` which should be assigned to the `result` variable in the loop expression.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn get_result() -> String {\n  // Write your code here\n}\n\nfn retry_logic() {\n  // A counter to limit retries\n  let mut attempts_remaining = 5;\n\n  let result: String = loop {\n    // Decrement remaining retry amounts\n    attempts_remaining = attempts_remaining - 1;\n\n    // This contrived code artificially just returns the result\n    // when the retry reaches zero, you can imagine in reality\n    // the operation would either succeed or fail after the retry\n    // limit is reached.\n    if attempts_remaining == 0 {\n      break get_result();\n    }\n  };\n\n  println!(\"The result is: {}\", result);\n}\n\nretry_logic();",
+          "solutionCode": "fn get_result() -> String {\n  String::from(\"Imagine this is the data from some request which may fail at first.\")\n}\n\nfn retry_logic() {\n  // A counter to limit retries\n  let mut attempts_remaining = 5;\n\n  let result: String = loop {\n    // Decrement remaining retry amounts\n    attempts_remaining = attempts_remaining - 1;\n\n    // This contrived code artificially just returns the result\n    // when the retry reaches zero, you can imagine in reality\n    // the operation would either succeed or fail after the retry\n    // limit is reached.\n    if attempts_remaining == 0 {\n      break get_result();\n    }\n  };\n\n  println!(\"The result is: {}\", result);\n}\n\nretry_logic();",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "@orxFOEdD",
           "title": "Structs and Enums",
