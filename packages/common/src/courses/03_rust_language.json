@@ -455,6 +455,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "514h0g6Hp",
+          "title": "Enums Can Contain Any Data",
+          "instructions": "Enum variants can contain any data, even other enums, or no data at all. Complete the code in the editor for an illustration. After this, we will start to see how we can match against different variants of enums and other types in Rust.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let result = create_enum();\n  let mut matched = false;\n  match result {\n    ManyDifferentVariants::BasicVariant => {\n      matched = true;\n    }\n    ManyDifferentVariants::AdvancedVariant => {\n      matched = true;\n    }\n    ManyDifferentVariants::Numbers(x, y, z) => {\n      matched = true;\n    }\n    ManyDifferentVariants::FlagEnabled(x) => {\n      matched = true;\n    }\n    ManyDifferentVariants::ID(x) => {\n      matched = true;\n    }\n    ManyDifferentVariants::Data(x) => {\n      matched = true;\n    }\n  }\n\n  return matched;\n}\n`;\n\ntest(\"The `create_enum` function should a properly defined `ManyDifferentVariants` enum.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// This enum should include a variety of different\n// variants. Read the commented instructions and then\n// add the variants to proceed.\n#[derive(Debug)]\nenum ManyDifferentVariants {\n  // A 'BasicVariant' should exist like this:\n  BasicVariant,\n\n  // A 'AdvancedVariant' should exist:\n\n  // A 'Numbers' tuple should exist: (u32, u32, u32)\n\n  // A 'FlagEnabled' variant should exist and contain a boolean value:\n\n  // An 'ID' field should exist of a u128 type:\n\n  // A 'Data' field should exist and contain a Data struct\n  // (define the Data struct above however you like):\n}\n\nfn create_enum() -> ManyDifferentVariants {\n  // Instantiate a new ManyDifferentVariants enum here and return it\n}\n\nlet result = create_enum();\nprintln!(\"Result: {:?}\", result);\n",
+          "solutionCode": "#[derive(Debug)]\nstruct Data {\n  members: [u8; 5],\n}\n\n// This enum should include a variety of different\n// variants. Read the commented instructions and then\n// add the variants to proceed.\n#[derive(Debug)]\nenum ManyDifferentVariants {\n  // A 'BasicVariant' should exist like this:\n  BasicVariant,\n\n  // A 'AdvancedVariant' should exist:\n  AdvancedVariant,\n\n  // A 'Numbers' tuple should exist: (u32, u32, u32)\n  Numbers(u32, u32, u32),\n\n  // A 'FlagEnabled' variant should exist and contain a boolean value:\n  FlagEnabled(bool),\n\n  // An 'ID' field should exist of a u128 type:\n  ID(u128),\n\n  // A 'Data' field should exist and contain a Data struct\n  // (define the Data struct above however you like):\n  Data(Data)\n}\n\nfn create_enum() -> ManyDifferentVariants {\n  // Instantiate a new ManyDifferentVariants enum here and return it\n  let data = Data {\n    members: [1, 5, 8, 2, 7],\n  };\n\n  ManyDifferentVariants::Data(data)\n}\n\nlet result = create_enum();\nprintln!(\"Result: {:?}\", result);\n",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "R4TolzmG5",
           "title": "Pattern Matching",
