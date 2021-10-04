@@ -87,6 +87,17 @@
           "starterCode": "fn myFunction() -> u64 {\n  let mySpecialValue = 5000;\n\n  return mySpecialValue;\n}\n\nlet functionResultValue = myFunction();\nprintln!(\"functionResultValue: {:?}\", functionResultValue);",
           "solutionCode": "fn my_function() -> u64 {\n  let my_special_value = 5000;\n\n  return my_special_value;\n}\n\nlet function_result_value = my_function();\nprintln!(\"function_result_value: {:?}\", function_result_value);",
           "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "r2nYe0r8uk",
+          "title": "Don't Panic",
+          "instructions": "Rust is a type\\-safe language which tries meticulously to prevent runtime program errors. However, inevitably things still tend to go wrong from time to time. In Rust, a language facility exists for program states which are un\\-recoverable, or should not be possible. The \"panic\" macro can be invoked in such states:\n\n```\npanic!(\"This should not happen!\");\n\n```\n\nThis will halt and exit the program. We mention it here in the introduction, because you might encounter panicked code in the following challenges before we fully introduce topics such as macros, panicking, handling errors, the `Result` type, and so on. The purpose of this introduction is to inform you in advance in case you see a stacktrace like... well, try running the code in the editor to see what we mean.\n",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The code should compile and run without issues.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// What could go wrong here?\nlet x = vec![10, 9, 8, 7, 6, 5, 4, 3, 2, 1];\nlet y = x[80];\nprintln!(\"The value in x at index 80 is: {}\", y);",
+          "solutionCode": "// What could go wrong here?\nlet x = vec![10, 9, 8, 7, 6, 5, 4, 3, 2, 1];\nlet y = x[8];\nprintln!(\"The value in x at index 80 is: {}\", y);",
+          "content": ""
         }
       ]
     },
