@@ -735,6 +735,17 @@
           "starterCode": "type InputArray = [f64; 2];\ntype OutputSum = f64;\n\n// Write your code here:",
           "solutionCode": "type InputArray = [f64; 10];\ntype OutputSum = f64;\n\n// Write your code here:\nfn array_sum(input_array: InputArray) -> OutputSum {\n  let mut sum: f64 = 0 as f64;\n  for x in input_array.iter() {\n    sum = sum + x;\n  }\n  sum\n}\n\nlet input_array: InputArray = [\n  234.982,\n  432.772,\n  91.32,\n  4.2321231,\n  893.223,\n  576.243,\n  24.3,\n  2342.2,\n  422.1,\n  342.0,\n];\n\nlet result = array_sum(input_array);\nprintln!(\"Result: {}\", result);",
           "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "aQ6M6ZmiF",
+          "title": "Find in a Vector",
+          "instructions": "You are given a vector of integers and a target value. Return an option indicating if the target exists in the vector, and if so, how many times it is present.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let mut vec = Vec::new();\n  for x in 0..1000 {\n    if x % 2 == 0 {\n      vec.push(50);\n    } else {\n      vec.push(x);\n    }\n  }\n\n  let result = find_in_vector(vec, 50);\n  assert_eq!(result.unwrap(), 500);\n\n  let result = find_in_vector(Vec::new(), 500);\n  if let Some(_x) = result {\n    panic!(\"Value should not be present in vector, expected None!\");\n  }\n\n  true\n}\n`;\n\ntest(\"The `find_in_vector` function should exist and return an `Option` representing the number of times the `target` value is found in the given vector, or `None` otherwise.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Write Your code here",
+          "solutionCode": "fn find_in_vector(v: Vec<i64>, target: i64) -> Option<u32> {\n  let mut found_count: u32 = 0;\n\n  for x in v.iter() {\n    if *x == target {\n      found_count = found_count + 1;\n    }\n  }\n\n  if found_count == 0 {\n    None\n  } else {\n    Some(found_count)\n  }\n}\n\n// Create and populate a new vector\nlet mut vec = Vec::new();\nfor x in 0..1000 {\n  if x % 2 == 0 {\n    vec.push(50);\n  } else {\n    vec.push(x);\n  }\n}\n\nlet result = find_in_vector(vec, 50);\nprintln!(\"Result = {:?}\", result);",
+          "content": ""
         }
       ]
     },
