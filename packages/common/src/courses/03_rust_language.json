@@ -666,7 +666,7 @@
         {
           "type": "section",
           "id": "PnCi8hB8E",
-          "title": "Error Handling",
+          "title": "Errors and Results",
           "instructions": "",
           "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
           "videoUrl": "",
@@ -713,7 +713,30 @@
       "id": "GDSzv2jA7",
       "title": "Basic Challenges",
       "free": false,
-      "challenges": []
+      "challenges": [
+        {
+          "type": "section",
+          "id": "1@q9EgYpm",
+          "title": "Basic Challenges",
+          "instructions": "",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "We have now covered many of the basics of the Rust language.\n\nNow, we will have a brief interlude of programming challenges and projects to practice what we've learned before diving into some more advanced topics.\n\nIt's important to get a lot of hands on practice when learning a new language—that's what this section is about.\n\nDon't worry if the challenges feel too easy or hard, just do you best and try to get as much practice writing and thinking in Rust as you can. See you on the other side\\!"
+        },
+        {
+          "type": "rust",
+          "id": "SfTt1nKS$",
+          "title": "Array Sum",
+          "instructions": "You are given an array of `f64` values\\. Write a function `array_sum` to return the sum of all the values in the array.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let input_array: InputArray = [\n    234.982,\n    432.772,\n    91.32,\n    42321231.2,\n    893.223,\n    576.243,\n    24.3,\n    2342.2,\n    422.1,\n    100.02,\n  ];\n\n  let result = array_sum(input_array);\n  assert_eq!(result, 42326348.36000001);\n\n  true\n}\n`;\n\ntest(\"The `array_sum` function should exist and return an `OutputSum` type given an `InputArray`.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "type InputArray = [f64; 2];\ntype OutputSum = f64;\n\n// Write your code here:",
+          "solutionCode": "type InputArray = [f64; 10];\ntype OutputSum = f64;\n\n// Write your code here:\nfn array_sum(input_array: InputArray) -> OutputSum {\n  let mut sum: f64 = 0 as f64;\n  for x in input_array.iter() {\n    sum = sum + x;\n  }\n  sum\n}\n\nlet input_array: InputArray = [\n  234.982,\n  432.772,\n  91.32,\n  4.2321231,\n  893.223,\n  576.243,\n  24.3,\n  2342.2,\n  422.1,\n  342.0,\n];\n\nlet result = array_sum(input_array);\nprintln!(\"Result: {}\", result);",
+          "content": ""
+        }
+      ]
     },
     {
       "id": "ACiP6Y2O5e",
