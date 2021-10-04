@@ -664,6 +664,17 @@
           "content": "Rust provides a variety of primitive and advanced data structures to work with. We will explore the most common and useful of these in this module, such as:\n\n* Tuples\n* Arrays\n* Enums\n* Vectors\n* Structs\n* Hash Maps\n\n"
         },
         {
+          "type": "rust",
+          "id": "yh$liP$ml",
+          "title": "Vectors",
+          "instructions": "A vector is a collection of elements of dynamic size. It is stored on the heap and unlike arrays can grow or shrink during the life of a program. Vectors are ideal for storing lists of elements, especially ones whose size needs to change or whose size is not known at compile time.\n\nBecause vectors have an unknown length at compile time, you need to be a little more careful when working with them.\n\nConsider the code in the editor below which panics when run because of an \"index out of bounds\" error. Modify the code to check if the index `i` is in bounds of the vector and change the return type of the function to return an `Option<i32>`. Return `None` if the given index is out of bounds.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let result = maybe_get_item_at_index(vec![1,2,3,4,5], 2);\n  assert_eq!(result.unwrap(), 3);\n\n  let result = maybe_get_item_at_index(vec![1,2,3,4,5], 4);\n  assert_eq!(result.unwrap(), 5);\n\n  let result = maybe_get_item_at_index(vec![1,2,3,4,5], 20);\n  if let Some(_) = result {\n    panic!(\"maybe_get_item_at_index should return None when the index is out of bounds\");\n  }\n\n  true\n}\n`;\n\ntest(\"The `maybe_get_item_at_index` function should return an `Option<i32>`, returning the element at index `i` or `None` if the index is out of bounds.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Change the return type and body of this function\n// to solve the challenge\nfn maybe_get_item_at_index(v: Vec<i32>, i: usize) -> i32 {\n  v[i]\n}\n\nlet result = maybe_get_item_at_index(vec![1,2,3,4,5], 2);\nprintln!(\"Result: {:?}\", result);\n\nlet result = maybe_get_item_at_index(vec![1,2,3,4,5], 20);\nprintln!(\"Result: {:?}\", result);",
+          "solutionCode": "// Change the return type and body of this function\n// to solve the challenge\nfn maybe_get_item_at_index(v: Vec<i32>, i: usize) -> Option<i32> {\n  if i < v.len() {\n    return Some(v[i]);\n  }\n\n  None\n}\n\nlet result = maybe_get_item_at_index(vec![1,2,3,4,5], 2);\nprintln!(\"Result: {:?}\", result);\n\nlet result = maybe_get_item_at_index(vec![1,2,3,4,5], 20);\nprintln!(\"Result: {:?}\", result);",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "PnCi8hB8E",
           "title": "Errors and Results",
