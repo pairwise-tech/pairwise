@@ -1001,27 +1001,38 @@ export class WorkspaceChallengeInstructionsModal extends React.Component<Workspa
         canEscapeKeyClose
         isOpen={isOpen}
         onClose={onClose}
-        style={{ zIndex: 105 }}
         className={isDarkTheme ? Classes.DARK : ""}
       >
-        <ModalContainer style={{ width: PROSE_MAX_WIDTH }}>
-          <ModalTitleText style={{ textAlign: "left" }}>
-            {challenge.title}
-          </ModalTitleText>
-          <ContentEditor
-            toc={false}
-            autoFocus={false}
-            readOnly
-            spellCheck={false}
-            onChange={() => null}
-            defaultValue={challenge.instructions}
-            placeholder="No content..."
-          />
-        </ModalContainer>
+        <ChallengeInstructionsModal>
+          <ModalSubContainer>
+            <ModalTitleText style={{ textAlign: "left" }}>
+              {challenge.title}
+            </ModalTitleText>
+            <ContentEditor
+              readOnly
+              toc={false}
+              autoFocus={false}
+              spellCheck={false}
+              onChange={() => null}
+              defaultValue={challenge.instructions}
+              placeholder="No content..."
+            />
+          </ModalSubContainer>
+        </ChallengeInstructionsModal>
       </Dialog>
     );
   }
 }
+
+const ChallengeInstructionsModal = styled(ModalContainer)`
+  overflow-y: scroll;
+  width: ${PROSE_MAX_WIDTH + 64}px;
+`;
+
+const ModalSubContainer = styled.div`
+  height: 450px;
+  padding: 32px;
+`;
 
 /**
  * Types and components for displaying SQL Results as table

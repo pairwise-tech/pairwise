@@ -98,6 +98,17 @@
           "starterCode": "// What could go wrong here?\nlet x = vec![10, 9, 8, 7, 6, 5, 4, 3, 2, 1];\nlet y = x[80];\nprintln!(\"The value in x at index 80 is: {}\", y);",
           "solutionCode": "// What could go wrong here?\nlet x = vec![10, 9, 8, 7, 6, 5, 4, 3, 2, 1];\nlet y = x[8];\nprintln!(\"The value in x at index 80 is: {}\", y);",
           "content": ""
+        },
+        {
+          "type": "media",
+          "id": "3q8AK1mvF",
+          "title": "How to Approach the Following Challenges",
+          "instructions": "",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "We've now seen some of the basics of the Rust language."
         }
       ]
     },

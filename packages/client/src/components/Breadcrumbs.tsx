@@ -62,6 +62,7 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
       breadcrumbsPath,
       displaySkillIcon,
       isInstructionsViewCollapsed,
+      hideInstructionsModalButton,
       setChallengeInstructionsModalState,
     } = this.props;
 
@@ -112,7 +113,7 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
                 challenge={challenge}
               />
             )}
-            {!isMobileView && (
+            {!isMobileView && !hideInstructionsModalButton && (
               <Tooltip2
                 position="bottom"
                 content="View challenge instructions in a modal."
@@ -359,6 +360,7 @@ interface ComponentProps {
   panelId?: string;
   isMobileView: boolean;
   displaySkillIcon?: boolean;
+  hideInstructionsModalButton?: boolean;
   toggleCollapsed?: () => void;
 }
 

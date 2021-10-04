@@ -143,6 +143,7 @@ ID (video ID)
       <div style={{ height: 8 }} /> {/* Add some space */}
       <Breadcrumbs
         type="media"
+        hideInstructionsModalButton
         isMobileView={isMobileView}
         displaySkillIcon={IS_MEDIA || IS_PROJECT}
       />

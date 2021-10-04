@@ -300,8 +300,8 @@ export const ModalContainer = styled.div`
   padding-top: 22px;
   left: 50%;
   top: 50%;
-  outline: none;
   position: absolute;
+  outline: none;
   background: black;
   display: flex;
   align-items: center;
@@ -355,7 +355,7 @@ export const HalfCircle = styled.div<HalfCircleProps>`
   }
 
   width: 60px;
-  z-index: 50;
+  /* z-index: 50; */
   cursor: pointer;
   align-items: center;
   height: 30px;
