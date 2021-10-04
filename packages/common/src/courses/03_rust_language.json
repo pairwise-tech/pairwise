@@ -746,6 +746,17 @@
           "starterCode": "// Write Your code here",
           "solutionCode": "fn find_in_vector(v: Vec<i64>, target: i64) -> Option<u32> {\n  let mut found_count: u32 = 0;\n\n  for x in v.iter() {\n    if *x == target {\n      found_count = found_count + 1;\n    }\n  }\n\n  if found_count == 0 {\n    None\n  } else {\n    Some(found_count)\n  }\n}\n\n// Create and populate a new vector\nlet mut vec = Vec::new();\nfor x in 0..1000 {\n  if x % 2 == 0 {\n    vec.push(50);\n  } else {\n    vec.push(x);\n  }\n}\n\nlet result = find_in_vector(vec, 50);\nprintln!(\"Result = {:?}\", result);",
           "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "lb1erIfLNp",
+          "title": "Rectangle Area",
+          "instructions": "Create a struct `Rectangle` and implement `new` and `area` methods such that the following code is valid:\n\n```\nlet rect = Rectangle::new(5, 10);\nlet area = rect.area();\nassert_eq!(area, 50);\n\n```\n",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let rect = Rectangle::new(5, 10);\n  let area = rect.area();\n  assert_eq!(area, 50);\n\n  true\n}\n`;\n\ntest(\"The `Rectangle` struct should exist and implement `new` and `area` methods correctly.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Write your code here",
+          "solutionCode": "struct Rectangle {\n  width: u32,\n  height: u32,\n}\n\nimpl Rectangle {\n  fn new(width: u32, height: u32) -> Self {\n    Rectangle {\n      width,\n      height,\n    }\n  }\n\n  fn area(&self) -> u32 {\n    self.width * self.height\n  }\n}\n\nlet rect = Rectangle::new(42, 58);\nlet area = rect.area();\nassert_eq!(area, 2436);\nprintln!(\"The rectangle's area is: {}\", area);",
+          "content": ""
         }
       ]
     },
