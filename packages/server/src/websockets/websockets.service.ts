@@ -26,7 +26,7 @@ export class WebSocketsGatewayService implements OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
-  private disconnectServer() {
+  public disconnectServer() {
     this.server.close();
   }
 
@@ -71,7 +71,7 @@ export class WebSocketsGatewayService implements OnGatewayDisconnect {
   /**
    * Broadcast realtime update.
    */
-  private broadcastRealTimeUpdate(update: CacheUpdateMessage) {
+  public broadcastRealTimeUpdate(update: CacheUpdateMessage) {
     const event: RealTimeUpdateEvent = {
       type: SocketServerEventTypes.REAL_TIME_CHALLENGE_UPDATE,
       payload: update,
