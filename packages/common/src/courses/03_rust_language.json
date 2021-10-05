@@ -741,6 +741,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "rVF0OUfW3",
+          "title": "Pop And Reverse",
+          "instructions": "As we saw in the last challenge, popping an item from a vector returns an `Option` of whatever that vector may contain. This makes perfect sense: a vector may _optionally_ be empty and in that case popping the last item returns nothing\\! Rust enforces this fact of reality in the type system, to protect us from popping an item and then performing some action on it, when in fact no item exists.\n\nLet's build on this and use the pop method to pop all the items from a given vector. Just for fun, let's add them to a new vector, and return that from a function `pop_and_reverse`. Note that if you were to use the vector to model a stack, this would be equivalent to popping all the items on the stack.\n\nFor now, continue to type your vector as `Vec<i32>`. You may be thinking... but we could write this function for a vector containing any type—how can we do that? We can do that using _generics_, which we will see in future challenges\\!",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let v = vec![1, 2, 3, 4, 5];\n  let rev = vec![5, 4, 3, 2, 1];\n  let result = pop_and_reverse(v);\n  assert_eq!(result, rev);\n\n  true\n}\n`;\n\ntest(\"The `pop_and_reverse` function should pop all the items from the given vector and return a new vector with the items in reverse order.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Write you code here\n\nlet v = vec![1, 2, 3, 4, 5];\nlet rev = vec![5, 4, 3, 2, 1];\nlet result = pop_and_reverse(v);\nassert_eq!(result, rev);",
+          "solutionCode": "fn pop_and_reverse(mut v: Vec<i32>) -> Vec<i32> {\n  let mut result = Vec::new();\n  while let Some(x) = v.pop() {\n    result.push(x);\n  }\n\n  result\n}\n\nlet v = vec![1, 2, 3, 4, 5];\nlet rev = vec![5, 4, 3, 2, 1];\nlet result = pop_and_reverse(v);\nassert_eq!(result, rev);",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "PnCi8hB8E",
           "title": "Errors and Results",
