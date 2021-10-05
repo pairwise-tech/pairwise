@@ -8,6 +8,7 @@ import {
 } from "@pairwise/common";
 import {
   MessageBody,
+  OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
@@ -21,12 +22,17 @@ import { Server } from "socket.io";
  * https://docs.nestjs.com/websockets/gateways
  */
 @WebSocketGateway()
-export class WebSocketsGatewayService {
+export class WebSocketsGatewayService implements OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
-  public disconnectServer() {
+  private disconnectServer() {
     this.server.close();
+  }
+
+  // Handler for when clients disconnect
+  public handleDisconnect() {
+    this.broadcastConnectedClientsUpdate();
   }
 
   /**
@@ -35,9 +41,9 @@ export class WebSocketsGatewayService {
    * NOTE: Workspace clients only connect on the /leaderboard route currently.
    * This does not represent all current users.
    */
-  public async getConnectedClientCount() {
-    const allSocketsSet = await this.server.allSockets();
-    return allSocketsSet.size;
+  private async getConnectedClientCount() {
+    const sockets = await this.server.fetchSockets();
+    return sockets.length;
   }
 
   /**
@@ -50,7 +56,7 @@ export class WebSocketsGatewayService {
   /**
    * Broadcast connected clients update.
    */
-  public async broadcastConnectedClientsUpdate() {
+  private async broadcastConnectedClientsUpdate() {
     const clients = await this.getConnectedClientCount();
     const event: ConnectedUsersUpdateEvent = {
       type: SocketServerEventTypes.CONNECTED_USER_COUNT_UPDATE,
@@ -65,7 +71,7 @@ export class WebSocketsGatewayService {
   /**
    * Broadcast realtime update.
    */
-  public broadcastRealTimeUpdate(update: CacheUpdateMessage) {
+  private broadcastRealTimeUpdate(update: CacheUpdateMessage) {
     const event: RealTimeUpdateEvent = {
       type: SocketServerEventTypes.REAL_TIME_CHALLENGE_UPDATE,
       payload: update,
@@ -77,7 +83,7 @@ export class WebSocketsGatewayService {
    * Broadcast new client connection update to all clients.
    */
   @SubscribeMessage(SocketClientEventTypes.WORKSPACE_CLIENT_CONNECTED)
-  public async handleClientConnectionEvent(): Promise<void> {
+  private async handleClientConnectionEvent(): Promise<void> {
     await this.broadcastConnectedClientsUpdate();
   }
 
@@ -85,7 +91,9 @@ export class WebSocketsGatewayService {
    * Example handler for Socket messages defined as "event".
    */
   @SubscribeMessage("event")
-  public async handleEvent(@MessageBody() data: any): Promise<WsResponse<any>> {
+  private async handleEvent(
+    @MessageBody() data: any,
+  ): Promise<WsResponse<any>> {
     return data;
   }
 }
