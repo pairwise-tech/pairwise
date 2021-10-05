@@ -752,6 +752,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "1VtNcZHIE",
+          "title": "A Vector of String Slices",
+          "instructions": "Vectors can contain any type. Here we have a vector of string slices \\(we will see more on strings, a topic we have been skirting around so far, in the next section\\). Write a function called `find_str_in_vector` which takes a `&Vec<&str>` \\(a reference to a vector containing references to string slices\\) and a `&str` and returns an `Option` containing the index of that string in the vector, if it exists.\n\n> Note: We are edging around topics such as **references**... as we get closer and closer to the topic of ownership and borrowing: a core subject in Rust. Don't worry we will get there soon\\! For now, it's OK to not fully understand everything.\n",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let strings: Vec<&str> = vec![\n    \"sword\",\n    \"even\",\n    \"good\",\n    \"carbon\",\n    \"battery\",\n    \"bear\",\n    \"concentration\",\n    \"shout\",\n    \"apple\",\n    \"yellow\",\n  ];\n\n  let result = find_str_in_vector(&strings, \"sword\");\n  if let Some(x) = result {\n    assert_eq!(x, 0);\n  } else {\n    panic!(\"Expected 'sword' to be found\");\n  }\n\n  let result = find_str_in_vector(&strings, \"shout\");\n  if let Some(x) = result {\n    assert_eq!(x, 7);\n  } else {\n    panic!(\"Expected 'shout' to be found\");\n  }\n\n  let result = find_str_in_vector(&strings, \"shouting\");\n  if let Some(x) = result {\n    panic!(\"Expected 'shouting' to not be found\");\n  }\n\n  true\n}\n`;\n\ntest(\"The `find_str_in_vector` function should accept a `&Vec<&str>` and a `&str` target and return an `Option` of the index of the target, if it exists.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Write your code here\n\nlet strings: Vec<&str> = vec![\n  \"sword\",\n  \"even\",\n  \"good\",\n  \"carbon\",\n  \"battery\",\n  \"shout\",\n  \"bear\",\n  \"concentration\",\n  \"apple\",\n  \"yellow\",\n];\n\nprintln!(\"Strings: {:?}\", strings);\nlet result = find_str_in_vector(strings, \"good\");\nprintln!(\"Result: {:?}\", result);\n\nlet result = find_str_in_vector(strings, \"blegga\");\nprintln!(\"Result: {:?}\", result);",
+          "solutionCode": "fn find_str_in_vector(v: &Vec<&str>, string: &str) -> Option<usize> {\n  let mut index: usize = 0;\n\n  for x in v.iter() {\n    if x == &string {\n      return Some(index);\n    }\n\n    index = index + 1;\n  }\n\n  None\n}\n\nlet strings: Vec<&str> = vec![\n  \"sword\",\n  \"even\",\n  \"good\",\n  \"carbon\",\n  \"battery\",\n  \"shout\",\n  \"bear\",\n  \"concentration\",\n  \"apple\",\n  \"yellow\",\n];\n\nprintln!(\"Strings: {:?}\", strings);\nlet result = find_str_in_vector(&strings, \"good\");\nprintln!(\"Result: {:?}\", result);\n\nlet result = find_str_in_vector(&strings, \"blegga\");\nprintln!(\"Result: {:?}\", result);\n",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "PnCi8hB8E",
           "title": "Errors and Results",
