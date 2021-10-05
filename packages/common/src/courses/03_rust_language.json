@@ -708,6 +708,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "SyJsNcFRxE",
+          "title": "Swap Items in a Vector",
+          "instructions": "Similar to \"list\" data structures in other programming languages, vectors support many operations you would expect. You can pop the last item, get the length of the vector, iterate through it, index into it, push new items on it, and so on.\n\nTo get more practice with vectors, implement a function `swap_at_indexes` which takes a `Vec<i32>` and two `usize`indexes\\. Then, return the vector with the values at those indexes swapped, or, if one of the indexes is out of bounds return the original vector without swapping anything.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let list = vec![9, 8, 7, 6, 5, 4, 3, 2, 1];\n  let list = swap_at_indexes(list, 0, 32);\n  assert_eq!(list, vec![9, 8, 7, 6, 5, 4, 3, 2, 1]);\n\n  let list = vec![9, 8, 7, 6, 5, 4, 3, 2, 1];\n  let list = swap_at_indexes(list, 19, 2);\n  assert_eq!(list, vec![9, 8, 7, 6, 5, 4, 3, 2, 1]);\n\n  let list = vec![9, 8, 7, 6, 5, 4, 3, 2, 1];\n  let list = swap_at_indexes(list, 1, 2);\n  assert_eq!(list, vec![9, 7, 8, 6, 5, 4, 3, 2, 1]);\n\n  let list = vec![9, 8, 7, 6, 5, 4, 3, 2, 1];\n  let list = swap_at_indexes(list, 1, 1);\n  assert_eq!(list, vec![9, 8, 7, 6, 5, 4, 3, 2, 1]);\n\n  let list = vec![9, 8, 7, 6, 5, 4, 3, 2, 1];\n  let list = swap_at_indexes(list, 6, 8);\n  assert_eq!(list, vec![9, 8, 7, 6, 5, 4, 1, 2, 3]);\n\n  true\n}\n`;\n\ntest(\"The `swap_at_indexes` function should take a `Vec<i32>` and swap the values at the two indexes given to it, if the indexes are not out of bounds.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Write your code here\n\nlet list = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\nprintln!(\"Original: {:?}\", list);\n\nlet list = swap_at_indexes(list, 0, 50);\nassert_eq!(list, vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);\nprintln!(\"Result [1]: {:?}\", list);\n\nlet list = swap_at_indexes(list, 0, 5);\nassert_eq!(list, vec![6, 2, 3, 4, 5, 1, 7, 8, 9, 10]);\nprintln!(\"Result [2]: {:?}\", list);\n",
+          "solutionCode": "fn swap_at_indexes(mut v: Vec<i32>, a: usize, b: usize) -> Vec<i32> {\n  if a > v.len() || b > v.len() {\n    return v;\n  }\n\n  let a_value = v[a];\n  let b_value = v[b];\n\n  v[a] = b_value;\n  v[b] = a_value;\n\n  v\n}\n\nlet list = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\nprintln!(\"Original: {:?}\", list);\n\nlet list = swap_at_indexes(list, 0, 50);\nassert_eq!(list, vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);\nprintln!(\"Result [1]: {:?}\", list);\n\nlet list = swap_at_indexes(list, 0, 5);\nassert_eq!(list, vec![6, 2, 3, 4, 5, 1, 7, 8, 9, 10]);\nprintln!(\"Result [2]: {:?}\", list);\n",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "PnCi8hB8E",
           "title": "Errors and Results",
