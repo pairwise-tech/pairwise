@@ -697,6 +697,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "AKUw7arOt",
+          "title": "Initializing Vectors",
+          "instructions": "Vectors can be initialized in a few different ways. Write a new function in the editor below called `create_new_vector`. This function should accept a `usize` parameter and an `i32` default value parameter. Return a new vector of that size with every position in the vector filled with the `default_value`.  Take a look a look at the [Vec documentation](https://doc.rust-lang.org/std/vec/struct.Vec.html) if you need to.\n\n> Remember back to the challenges covering arrays, and recall that arrays have a fixed length. The vector is very useful because it has a dynamic size at runtime, as we see in this challenge.\n",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let size: usize = 1000;\n  let vec = create_new_vector(size, 5);\n  assert_eq!(vec.len(), size);\n\n  let size: usize = 52;\n  let vec = create_new_vector(size, 51);\n  assert_eq!(vec.len(), size);\n\n  let size: usize = 999;\n  let vec = create_new_vector(size, 28);\n  assert_eq!(vec.len(), size);\n\n  true\n}\n`;\n\ntest(\"The `create_new_vector` function should exist and return a new vector of that size.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Write your code here\n\nlet vec = create_new_vector(500, 5);\nprintln!(\"Result: {:?}\", vec);\nassert_eq!(vec.len(), 500);\n",
+          "solutionCode": "// Using the vec! macro\nfn create_new_vector(size: usize, default_value: i32) -> Vec<i32> {\n  vec![default_value; size]\n}\n\nlet vec = create_new_vector(250, 5);\nprintln!(\"[1] Result: {:?}\", vec);\nassert_eq!(vec.len(), 250);\n\n// Using logic to fill in the vector during runtime\nfn create_new_vector_alternate(size: usize, default_value: i32) -> Vec<i32> {\n  let mut v = Vec::new();\n  let mut current = 0;\n  while current < size {\n    v.push(default_value);\n    current = current + 1;\n  }\n  v\n}\n\nlet vec = create_new_vector_alternate(250, 7);\nprintln!(\"[2] Result: {:?}\", vec);\nassert_eq!(vec.len(), 250);\n",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "PnCi8hB8E",
           "title": "Errors and Results",
