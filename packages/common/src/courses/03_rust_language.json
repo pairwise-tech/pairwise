@@ -719,6 +719,28 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "XNHkdURTA0",
+          "title": "Iterating Vectors",
+          "instructions": "Write a function `get_vector_sum` which takes a `Vec<i32>`, iterates through it and calculates the sum of all of items.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let result = get_vector_sum(vec![5, 5, 5, 5, 7]);\n  assert_eq!(result, 27);\n\n  let result = get_vector_sum(vec![5, 5, 5, 5, 7, 100]);\n  assert_eq!(result, 127);\n\n  let result = get_vector_sum(vec![5, 5, 5, 5, 7, 599]);\n  assert_eq!(result, 626);\n\n  true\n}\n`;\n\ntest(\"The `get_vector_sum` function should return the sum of all the items in the provided vector.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Write your code here",
+          "solutionCode": "fn get_vector_sum(v: Vec<i32>) -> i32 {\n  let mut sum = 0;\n\n  // The .iter() method is a common and handy way to iterate a collection\n  // like this.\n  for x in v.iter() {\n    sum = sum + x;\n  } \n\n  sum\n}\n\nlet result = get_vector_sum(vec![5, 5, 5, 5, 7]);\nassert_eq!(result, 27);",
+          "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "4XpH9$RzGO",
+          "title": "Get the Last Item in a Vector",
+          "instructions": "Popping the final item from a vector is a common thing to do for list data structures. The Rust `Vec` implements a `pop` method just for this purpose. However, things may not be quite as straightforward as \"popping\" in other languages. Check out the code below and let the compiler guide you.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let result = get_last_item_in_vector(vec![5, 19, 20, 22]);\n  if let Some(x) = result {\n    assert_eq!(x, 22);\n  } else {\n    panic!(\"Expected to receive a value!\");\n  }\n\n  let result = get_last_item_in_vector(vec![5, 19, 20, 22, 99, 201, 822]);\n  if let Some(x) = result {\n    assert_eq!(x, 822);\n  } else {\n    panic!(\"Expected to receive a value!\");\n  }\n\n  true\n}\n`;\n\ntest(\"The `get_last_item_in_vector` function should return an appropriate value representing the final item in in a list.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// What's wrong here? Let the compiler help you.\nfn get_last_item_in_vector(v: Vec<i32>) -> i32 {\n  v.pop()\n}\n\nlet result = get_last_item_in_vector(vec![5, 19, 20, 22]);\nprintln!(\"Result: {:?}\", result);",
+          "solutionCode": "// What's wrong here? Let the compiler help you.\nfn get_last_item_in_vector(mut v: Vec<i32>) -> Option<i32> {\n  v.pop()\n}\n\nlet result = get_last_item_in_vector(vec![5, 19, 20, 22]);\nprintln!(\"Result: {:?}\", result);",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "PnCi8hB8E",
           "title": "Errors and Results",
