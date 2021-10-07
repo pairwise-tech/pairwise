@@ -840,6 +840,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "tI7KcRQjA",
+          "title": "Zipping Iterators into a Hash Map",
+          "instructions": "Another way to create a `HashMap` is by zipping two lists into a `collect` method\\. A \"zip\" operation processes two lists of elements, applying some common operation for each \"pair\" of items at the same position in each list. We can take two lists, for instance, and zip them into key/value pairs which are then collected into a `HashMap`.\n\nTake a look at the code to see how this is done, and then create `frutis` and `quantities` vectors matching the defined types. Once the code compiles, you're good\\!",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `fruits` and `quantities` vectors should be defined, with 5 fruits which get collected into the `fruits_map`.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "use std::collections::HashMap;\n\ntype FruitVector = Vec<String>;\ntype FruitQuantitiesVector = Vec<i32>;\n\n// Write your code here\n\nlet mut fruits_map: HashMap<String, i32> = fruits\n  .into_iter()\n  .zip(quantities.into_iter())\n  .collect();\n\nprintln!(\"Fruits Map: {:?}\", fruits_map);\nassert_eq!(fruits_map.keys().len(), 5);",
+          "solutionCode": "use std::collections::HashMap;\n\ntype FruitVector = Vec<String>;\ntype FruitQuantitiesVector = Vec<i32>;\n\nlet fruits = vec![\n  String::from(\"Apple\"),\n  String::from(\"Banana\"),\n  String::from(\"Grapes\"),\n  String::from(\"Blueberries\"),\n  String::from(\"Watermelon\"),\n];\nlet quantities = vec![10, 50, 5, 100, 3];\n\nlet mut fruits_map: HashMap<String, i32> = fruits\n  .into_iter()\n  .zip(quantities.into_iter())\n  .collect();\n\nprintln!(\"Fruits Map: {:?}\", fruits_map);\nassert_eq!(fruits_map.keys().len(), 5);",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "PnCi8hB8E",
           "title": "Errors and Results",
