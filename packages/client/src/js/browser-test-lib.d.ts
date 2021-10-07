@@ -120,7 +120,7 @@ declare const handleAlternateLanguageTestResult: (result: AlternateLanguageTestR
 /**
  * Execute Rust code.
  */
-declare const executeRustChallengeTests: (codeString: string, testString: string) => Promise<AlternateLanguageTestResult>;
+declare const executeRustChallengeTests: (codeString: string, testString: string, isUnitTestChallenge?: boolean) => Promise<AlternateLanguageTestResult>;
 /**
  * Execute Python code.
  */

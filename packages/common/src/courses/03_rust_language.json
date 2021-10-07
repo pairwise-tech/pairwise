@@ -791,8 +791,8 @@
           "instructions": "The Rust `HashMap` is a collection which stores key value pairs, the equivalent of a map/hash table in other programming languages. Unlike the `Vec` collection, which is included by default when writing Rust, we have to import the `HashMap` collection directly with a `use` statement\\. This is one of the first times we are seeing this. This makes the `HashMap` collection from the standard library available for use within that scope. We will see more on modules and the standard library in future challenges.\n\nIn the `create_new_hash_map` below, create and return a new `HashMap`. You can do this just like with a vector, by invoking the `new` associated function.",
           "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let result: HashMap<String, i32> = create_new_hash_map();\n\n  true\n}\n`;\n\ntest(\"The `create_new_hash_map` function should return a new `HashMap<String, i32>`.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
           "videoUrl": "",
-          "starterCode": "use std::collections::HashMap;\n\nfn create_new_hash_map() -> HashMap<String, i32> {\n  HashMap::new()\n}\n\nlet result = create_new_hash_map();\nprintln!(\"Result: {:?}\", result);",
-          "solutionCode": "",
+          "starterCode": "use std::collections::HashMap;\n\nfn create_new_hash_map() -> HashMap<String, i32> {\n  // Write your code here\n}\n\nlet result = create_new_hash_map();\nprintln!(\"Result: {:?}\", result);",
+          "solutionCode": "use std::collections::HashMap;\n\nfn create_new_hash_map() -> HashMap<String, i32> {\n  HashMap::new()\n}\n\nlet result = create_new_hash_map();\nprintln!(\"Result: {:?}\", result);",
           "content": ""
         },
         {
@@ -870,6 +870,17 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
+          "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "R9KzjlYp7",
+          "title": "Writing Tests in Rust",
+          "instructions": "Support for testing is built into the Rust language. This makes writing, running, and automating tests easy and consistent across disparate Rust projects.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The tests should pass.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(\n    CODE_STRING,\n    TEST_STRING,\n    true\n  );\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn test_this_function() -> bool {\n  // Should return true...\n}\n\n// Rust test:\n#[cfg(test)]\nmod tests {\n    #[test]\n    fn it_works() {\n        let result = test_this_function();\n        assert_eq!(result, true);\n    }\n}",
+          "solutionCode": "fn test_this_function() -> bool {\n  true\n}\n\n// Rust tests:\n#[cfg(test)]\nmod tests {\n  use super::*;\n\n  #[test]\n  fn it_works() {\n    let result = test_this_function();\n    assert_eq!(result, true);\n  }\n}",
           "content": ""
         },
         {

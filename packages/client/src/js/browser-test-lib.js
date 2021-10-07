@@ -350,42 +350,49 @@ var handleAlternateLanguageTestResult = function (result, consoleMethod) {
 /**
  * Execute Rust code.
  */
-var executeRustChallengeTests = function (codeString, testString) { return __awaiter(_this, void 0, void 0, function () {
-    var url, body, headers, response, text, result, err_3;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 5, , 6]);
-                url = PAIRWISE_CODE_RUNNER_API + "/api/rust";
-                body = JSON.stringify({ codeString: codeString, testString: testString });
-                headers = {
-                    Accept: "application/json",
-                    "Content-Type": "application/json"
-                };
-                return [4 /*yield*/, fetch(url, {
-                        body: body,
-                        headers: headers,
-                        method: "post"
-                    })];
-            case 1:
-                response = _a.sent();
-                if (!!response.ok) return [3 /*break*/, 3];
-                return [4 /*yield*/, response.text()];
-            case 2:
-                text = _a.sent();
-                throw new Error(text);
-            case 3: return [4 /*yield*/, response.json()];
-            case 4:
-                result = _a.sent();
-                return [2 /*return*/, result];
-            case 5:
-                err_3 = _a.sent();
-                // Throw err to fail test
-                throw err_3;
-            case 6: return [2 /*return*/];
-        }
+var executeRustChallengeTests = function (codeString, testString, isUnitTestChallenge) {
+    if (isUnitTestChallenge === void 0) { isUnitTestChallenge = false; }
+    return __awaiter(_this, void 0, void 0, function () {
+        var url, body, headers, response, text, result, err_3;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 5, , 6]);
+                    url = PAIRWISE_CODE_RUNNER_API + "/api/rust";
+                    body = JSON.stringify({
+                        codeString: codeString,
+                        testString: testString,
+                        isUnitTestChallenge: isUnitTestChallenge
+                    });
+                    headers = {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                    };
+                    return [4 /*yield*/, fetch(url, {
+                            body: body,
+                            headers: headers,
+                            method: "post"
+                        })];
+                case 1:
+                    response = _a.sent();
+                    if (!!response.ok) return [3 /*break*/, 3];
+                    return [4 /*yield*/, response.text()];
+                case 2:
+                    text = _a.sent();
+                    throw new Error(text);
+                case 3: return [4 /*yield*/, response.json()];
+                case 4:
+                    result = _a.sent();
+                    return [2 /*return*/, result];
+                case 5:
+                    err_3 = _a.sent();
+                    // Throw err to fail test
+                    throw err_3;
+                case 6: return [2 /*return*/];
+            }
+        });
     });
-}); };
+};
 /**
  * Execute Python code.
  */

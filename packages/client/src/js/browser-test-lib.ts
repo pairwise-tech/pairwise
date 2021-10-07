@@ -361,14 +361,21 @@ const handleAlternateLanguageTestResult = (
 const executeRustChallengeTests = async (
   codeString: string,
   testString: string,
+  isUnitTestChallenge: boolean = false,
 ): Promise<AlternateLanguageTestResult> => {
   try {
     const url = `${PAIRWISE_CODE_RUNNER_API}/api/rust`;
-    const body = JSON.stringify({ codeString, testString });
+    const body = JSON.stringify({
+      codeString,
+      testString,
+      isUnitTestChallenge,
+    });
+
     const headers = {
       Accept: "application/json",
       "Content-Type": "application/json",
     };
+
     const response = await fetch(url, {
       body,
       headers,
