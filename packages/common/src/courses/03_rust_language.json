@@ -876,11 +876,22 @@
           "type": "rust",
           "id": "R9KzjlYp7",
           "title": "Writing Tests in Rust",
-          "instructions": "Support for testing is built into the Rust language. This makes writing, running, and automating tests easy and consistent across disparate Rust projects.",
+          "instructions": "Support for testing is built into the Rust language. This makes writing, running, and automating tests easy and consistent across between different Rust projects. Take a look at the code in the editor and complete the function so the tests pass.",
           "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The tests should pass.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(\n    CODE_STRING,\n    TEST_STRING,\n    true\n  );\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
           "videoUrl": "",
-          "starterCode": "fn test_this_function() -> bool {\n  // Should return true...\n}\n\n// Rust test:\n#[cfg(test)]\nmod tests {\n    #[test]\n    fn it_works() {\n        let result = test_this_function();\n        assert_eq!(result, true);\n    }\n}",
-          "solutionCode": "fn test_this_function() -> bool {\n  true\n}\n\n// Rust tests:\n#[cfg(test)]\nmod tests {\n  use super::*;\n\n  #[test]\n  fn it_works() {\n    let result = test_this_function();\n    assert_eq!(result, true);\n  }\n}",
+          "starterCode": "fn test_this_function() -> bool {\n  // Should return true...\n}\n\n#[cfg(test)]\nmod tests {\n  use super::*;\n\n  #[test]\n  fn it_works() {\n    let result = test_this_function();\n    assert_eq!(result, true);\n  }\n}",
+          "solutionCode": "fn test_this_function() -> bool {\n  true\n}\n\n#[cfg(test)]\nmod tests {\n  use super::*;\n\n  #[test]\n  fn it_works() {\n    let result = test_this_function();\n    assert_eq!(result, true);\n  }\n}",
+          "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "NLBxzpu8D",
+          "title": "Mark Tests with the Test Attribute",
+          "instructions": "You can mark test functions using the `#[test]` attribute\\. We've seen attributes before, such as the `[#derive]` attribute used for deriving traits like `Debug`. To run tests on a Rust project, you use the command `cargo test` which will build a binary of your code which specifically executes any functions marked with the `#[test]` attribute\\.\n\nThe tests are grouped under a `mod tests` block annotated with the `#[cfg(test)]` attribute\\. This [cfg attribute](https://doc.rust-lang.org/reference/conditional-compilation.html#the-cfg-attribute) takes a configuration predicate which instructs the compiler to only include the associated code based on a particular configuration predicate. In this case, it means to only compile the test code when the test configuration is active. This means the test code is excluded when you build and run your program, or when you compile a release binary.\n\nUse these attributes to define a new test module for the function in the editor below.\n\n> Hint: Use `super::*` in the test module like in the last challenge to make the code in the outer scope available within that test module.\n",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `add_vector_ints` function is tested using `#[cfg(test)]` and `#[test]` attributes.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  expect(CODE_STRING.includes(\"#[cfg(test)]\")).toBe(true);\n  expect(CODE_STRING.includes(\"#[test]\")).toBe(true);\n\n  const result = await executeRustChallengeTests(\n    CODE_STRING,\n    TEST_STRING,\n    true\n  );\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn add_vector_ints(v: Vec<i32>) -> i32 {\n  v.iter().sum()\n}\n\n// Write your code here",
+          "solutionCode": "fn add_vector_ints(v: Vec<i32>) -> i32 {\n  v.iter().sum()\n}\n\n#[cfg(test)]\nmod test {\n  use super::*;\n\n  #[test]\n  fn test_add_vector_ints() {\n    let vector = vec![2, 4, 6];\n    assert_eq!(add_vector_ints(vector), 12);\n\n    let vector = vec![20, 20, 20, 20, 20, 100, 800, 1];\n    assert_eq!(add_vector_ints(vector), 1001);\n\n    let vector = vec![9, 8, 7, 6, 5, 4, 3, 2, 1];\n    assert_eq!(add_vector_ints(vector), 45);\n  }\n}",
           "content": ""
         },
         {
