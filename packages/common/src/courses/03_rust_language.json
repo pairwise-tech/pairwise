@@ -895,6 +895,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "@Y37G7Zen",
+          "title": "Using Assertion Macros with Tests",
+          "instructions": "Rust provides a few assertion macros which can be used to perform equality checks. We have seen these in the previous challenges in several challenges, but now we will outline them all:\n\n* `assert!` takes a single argument and expects it to evaluate to `true`.\n* `assert_eq!` compares two arguments and expects them to be equivalent.\n* `assert_ne!` compares two arguments and expects them to be non\\-equivalent.\n\n\nWe can also provide additional arguments after the values we want to check, namely a custom message which we will be surfaced if the assertion fails. These messages allow you to interpolate actual values using the `{}` or `{:?}` syntax\\. Complete the test below using the appropriate assertion macro, and try adding some custom messages.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n\n  true\n}\n`;\n\ntest(\"The tests should pass and use all three assertion macros.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(\n    CODE_STRING,\n    TEST_STRING,\n    true\n  );\n  handleAlternateLanguageTestResult(result, console.log);\n  if (result.passed) {\n    expect(CODE_STRING.includes(\"assert!(\")).toBe(true);\n    expect(CODE_STRING.includes(\"assert_eq!(\")).toBe(true);\n    expect(CODE_STRING.includes(\"assert_ne!(\")).toBe(true);\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn is_great_than_some_critical_threshold(value: f64) -> bool {\n  // Some arbitrary threshold... imagine more complicated calculations here...\n  const THRESHOLD: f64 = 72.89;\n  return value > THRESHOLD;\n}\n\n#[cfg(test)]\nmod tests {\n  use super::*;\n\n  #[test]\n  fn asset_result_should_be_true() {\n    let test_value = 200.3;\n    let result = is_great_than_some_critical_threshold(test_value);\n    assert!(result, \"Expected {} to be greater than some critical threshold.\", test_value);\n  }\n  \n  // Implement two other tests using assert_eq! and assert_ne! here:\n}\n",
+          "solutionCode": "fn is_great_than_some_critical_threshold(value: f64) -> bool {\n  // Some arbitrary threshold... imagine more complicated calculations here...\n  const THRESHOLD: f64 = 72.89;\n  return value > THRESHOLD;\n}\n\n#[cfg(test)]\nmod tests {\n  use super::*;\n\n  #[test]\n  fn asset_result_should_be_true() {\n    let test_value = 200.3;\n    let result = is_great_than_some_critical_threshold(test_value);\n    assert!(result, \"Expected {} to be greater than some critical threshold.\", test_value);\n  }\n\n  #[test]\n  fn assert_eq_result_should_be_true() {\n    let test_value = 200.5;\n    let result = is_great_than_some_critical_threshold(test_value);\n    assert_eq!(result, true, \"Expected {} to be greater than some critical threshold.\", test_value);\n  }\n\n  #[test]\n  fn assert_ne_result_should_be_false() {\n    let test_value = 2.7;\n    let result = is_great_than_some_critical_threshold(test_value);\n    assert_ne!(result, true, \"Expected {} to not be greater than some critical threshold.\", test_value);\n  }\n}",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "usDs33hMCZ",
           "title": "Modules, Packages and Crates",
