@@ -104,6 +104,11 @@ class WorkspaceMonacoEditor
       getPath("monaco-type-patches"),
     );
 
+    // Enable strict mode compiler options for all TypeScript challenges
+    monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+      strict: true,
+    });
+
     if (this.props.isEditMode) {
       monaco.languages.typescript.typescriptDefaults.addExtraLib(
         WORKSPACE_LIB_TYPES,
