@@ -100,6 +100,28 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "TRAA2QQYn",
+          "title": "Ownership Primer",
+          "instructions": "Borrowing and ownership are fundamental concepts in Rust, but they are more advanced, can be hard to understand in practice, and tend to trip up many beginning Rust programmers.\n\nWe want to introduce the concept of ownership and borrowing here but we will deep dive on this topic later. You will inevitably encounter some compiler errors related to ownership so it is helpful to have a brief primer in advance.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "ki3WuKjhV",
+          "title": "Rust's & * and 'a Syntax Primer",
+          "instructions": "If you are coming from other higher level programming languages like JavaScript or Python, you may be surprised to see strange symbols like `&` and `*` in Rust code. You may even see `&&` from time to time. Not to mentioned the especially alien `<'a>`. What are these?\n\nWe will deep dive on all of these concepts later, but for now we want to briefly introduce them so you will not be totally lost if you encounter some of these in the upcoming challenges.\n",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
           "type": "media",
           "id": "3q8AK1mvF",
           "title": "How to Approach the Following Challenges",
@@ -694,6 +716,17 @@
           "videoUrl": "",
           "starterCode": "fn vector_to_string(v: Vec<&str>) -> String {\n  // Write your code here\n}\n\nlet v = vec![\"What\", \" \", \"is\", \" \", \"your\", \" \", \"name?\"];\nlet result = vector_to_string(v);\nprintln!(\"Result: {}\", result);",
           "solutionCode": "fn vector_to_string(v: Vec<&str>) -> String {\n  let mut result = String::new();\n\n  for x in v.iter() {\n    result.push_str(x)\n  }\n\n  result\n}\n\nlet v = vec![\"What\", \" \", \"is\", \" \", \"your\", \" \", \"name?\"];\nlet result = vector_to_string(v);\nprintln!(\"Result = {}\", result);",
+          "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "qhjdZvp4cH",
+          "title": "Cloning Strings",
+          "instructions": "We can create a copy of a `String` using the `clone` method \\(which is an implementation of the `Clone` trait\\. This allows us to create a new copy of a `String`.\n\nIn the editor below we are passing `s1` to the `do_something_with_a_string` function and as an initial value to create `s2`. Then, we are trying to print out the value of `s1`. However, `s1` has already first been \"moved\" into `do_something_with_a_string`. What does this mean? This means the current scope no longer has \"ownership\" over `s1`. This is the notorious Rust concept of ownership and borrowing which we are fast approaching in a future module.\n\nBut let this be a simple demonstration of it: once `s1` is moved into the `do_something_with_a_string` call, we can no longer safely read from the variable in the current scope. To avoid this, simple clone `s1` in the two usages of it.\n\n> Note: some values in Rust, when passed to a function, are automatically copied. This avoids the ownership issue we see in this challenge. But this does not occur for all types, in the case of a `String` such as in this challenge we have to manually clone the `String` when passing it to a function. For more on this see the [Clone](https://doc.rust-lang.org/std/clone/trait.Clone.html) and [Copy](https://doc.rust-lang.org/std/marker/trait.Copy.html) trait docs.\n",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let result = clone_a_string();\n  let a: String = result.0;\n  let b: String = result.1;\n\n  true\n}\n`;\n\ntest(\"The `clone_a_string` function should return a tuple of the two strings `(s1, s2)`.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn do_something_with_a_string(s: String) {\n  let x = s.as_bytes();\n  println!(\"String Bytes: {:?}\", x);\n}\n\nfn clone_a_string() -> (String, String) {\n  let s1 = String::from(\"This is just an ordinary string.\");\n  do_something_with_a_string(s1);\n  let s2 = String::from(s1);\n  println!(\"s1: {}\", s1);\n  println!(\"s2: {}\", s2);\n\n  (s1, s2)\n}\n\nclone_a_string();",
+          "solutionCode": "fn do_something_with_a_string(s: String) {\n  let x = s.as_bytes();\n  println!(\"String Bytes: {:?}\", x);\n}\n\nfn clone_a_string() -> (String, String) {\n  let s1 = String::from(\"This is just an ordinary string.\");\n  do_something_with_a_string(s1.clone());\n  let s2 = String::from(s1.clone());\n  println!(\"s1: {}\", s1);\n  println!(\"s2: {}\", s2);\n\n  (s1, s2)\n}\n\nclone_a_string();",
           "content": ""
         },
         {
