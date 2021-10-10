@@ -687,6 +687,17 @@
         },
         {
           "type": "rust",
+          "id": "WMb@d9Nd@",
+          "title": "Pushing Data on to a String",
+          "instructions": "`String` data is fully owned and allocated on the heap, which means it can grow or shrink in size as needed. Remember, `String`s are implemented as vectors of bytes. This is helpful to remember when you are working with a `String` and struggling to perform some operation. Consider: could I do this with a vector of bytes?\n\nSpeaking of vectors, let's say we have a vector of references to string literals \\(string slices\\) `Vec<&str>`. Complete the function in the editor below to iterate through this vector and add the string slices to a new `String`, which then gets returned from the function.\n\n> Hint: You can use the `push_str` method on a `String` to concatenate additional string slices onto an existing `String`.\n",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let v = vec![\"What\", \" \", \"is\", \" \", \"your\", \" \", \"name?\"];\n  let result = vector_to_string(v);\n  let expected = String::from(\"What is your name?\");\n  assert_eq!(expected, result);\n  true\n}\n`;\n\ntest(\"The `vector_to_string` function should return a single `String` representing the concatenated result of all the string slices in the vector.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn vector_to_string(v: Vec<&str>) -> String {\n  // Write your code here\n}\n\nlet v = vec![\"What\", \" \", \"is\", \" \", \"your\", \" \", \"name?\"];\nlet result = vector_to_string(v);\nprintln!(\"Result: {}\", result);",
+          "solutionCode": "fn vector_to_string(v: Vec<&str>) -> String {\n  let mut result = String::new();\n\n  for x in v.iter() {\n    result.push_str(x)\n  }\n\n  result\n}\n\nlet v = vec![\"What\", \" \", \"is\", \" \", \"your\", \" \", \"name?\"];\nlet result = vector_to_string(v);\nprintln!(\"Result = {}\", result);",
+          "content": ""
+        },
+        {
+          "type": "rust",
           "id": "qqG6eBY82",
           "title": "String vs. &str",
           "instructions": "",
