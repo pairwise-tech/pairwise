@@ -752,6 +752,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "KUliVUh0I",
+          "title": "Concatenating Strings and String Slices",
+          "instructions": "Concatenating strings is a common thing to do. One common and slightly idiosyncratic way to do this is to add a string slice to a `String`. A `String` provides an `add` function whose signature generally is `fn add(self, s: &str) -> String {...}`. This allows us to add additional string slices to a `String`, but only if we adhere to that function signature.\n\nFix and complete the `concat_strings` function in the editor below to return the text `\"Order: first second third\"` by correctly concatenating the string values defined ",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let result = concat_strings();\n  let expected = String::from(\"Order: first second third\");\n  assert_eq!(result, expected);\n\n  true\n}\n`;\n\ntest('The `concat_strings` function should add the strings together and return a `String` result of the text value: `\"Order: first second third\".` ', async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn concat_strings() -> String {\n  let s1 = \"first\";\n  let s2 = \"second\";\n  let s3 = \"third\";\n\n  let string = String::from(\"Order:\");\n\n  // This won't compile, remove it\n  let result = s1 + s2 + s3;\n\n  // This won't compile, remove it\n  let result = s1 + s2 + s3 + string;\n\n  // Add the above strings without changing their type so the\n  // 'result' String is \"Order: first second third\"\n\n  println!(\"Result = {}\", result);\n  return result;\n}\n\nconcat_strings();",
+          "solutionCode": "fn concat_strings() -> String {\n  let s1 = \"first\";\n  let s2 = \"second\";\n  let s3 = \"third\";\n\n  let string = String::from(\"Order:\");\n\n  // Add the above strings without changing their type so the\n  // 'result' String is \"Order: first second third\"\n  let result = string + \" \" + s1 + \" \" + s2 + \" \" + s3;\n\n  println!(\"Result = {}\", result);\n  return result;\n}\n\nconcat_strings();",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "5B5@asRy6",
           "title": "Collections",
