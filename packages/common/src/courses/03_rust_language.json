@@ -743,11 +743,11 @@
         {
           "type": "rust",
           "id": "qqG6eBY82",
-          "title": "String vs. &str",
-          "instructions": "",
-          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "title": "The String Slice",
+          "instructions": "Now that we have seen the `String` data type, let's move on to the more primitive string slice which is built into the core Rust language. The `str` type is the most primitive string type in Rust and can be declared as a string literal:\n\n```\nconst my_string_slice = \"This is a string slice\";\n\n```\n\nString slices are always valid UTF\\-8. A string slice is comprised of a pointer to some bytes in memory, and a length. The `str` type is immutable by default and unlike `String`s which are always heap\\-allocated, a `str` may be stored in heap memory, stack memory, and compiled into the static binary itself, depending on the usage in the program. A `String` for instance dereferences into `&str`s, which are stored on the heap.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let expected = String::from(\"Static string slices are compiled directly into the program binary.\");\n  let actual = String::from(working_with_string_slices());\n  assert_eq!(actual, expected);\n\n  true\n}\n`;\n\ntest('The `static_string` should have the value `\"Static string slices are compiled directly into the program binary.\"`', async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
           "videoUrl": "",
-          "starterCode": "",
+          "starterCode": "fn working_with_string_slices() -> &'static str {\n  let static_string: &'static str = \"My static string\";\n\n  println!(\"Static String = {}\", static_string);\n  println!(\"Static String Length = {}\", static_string.len());\n  println!(\"Is the string empty? Empty = {}\", static_string.is_empty());\n\n  for c in static_string.chars() {\n    println!(\"Current Character: {}\", c);\n  }\n\n  static_string\n}\n",
           "solutionCode": "",
           "content": ""
         },
