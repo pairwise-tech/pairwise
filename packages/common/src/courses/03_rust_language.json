@@ -731,6 +731,17 @@
         },
         {
           "type": "rust",
+          "id": "Pd$BL98l2",
+          "title": "Strings and Bytes",
+          "instructions": "Just to drive the point home that a `String` is just a vector of bytes, let's convert a `String` to bytes and then back to the same `String` again\\. Complete the two functions `string_to_bytes` and `bytes_to_string`. Feel free to jump into the Rust documentation for help, this will require looking up a few new methods and debugging with the aid of the Rust compiler. Good luck\\!",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let s1 = String::from(\"s9ad7fa9s7f9sd7f8a0s7fd0a7f09as76df9as\");\n  let bytes = string_to_bytes(s1.clone());\n  let s2 = bytes_to_string(bytes);\n  assert_eq!(s1, s2);\n\n  true\n}\n`;\n\ntest(\"The `string_to_bytes` and `bytes_to_string` functions should be implemented and correctly convert from a `String` to bytes and back to a `String`.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn string_to_bytes(string: String) -> Vec<u8> {\n  // TODO: Implement this function\n}\n\nfn bytes_to_string(bytes: Vec<u8>) -> String {\n  // TODO: Implement this function\n}\n\nfn convert_string(original_string: String) {\n  println!(\"\\n[1] Original string: {}\", original_string);\n\n  let bytes = string_to_bytes(original_string);\n  println!(\"\\n[2] String bytes: {:?}\", bytes);\n\n  let string = bytes_to_string(bytes.to_vec());\n  println!(\"\\n[3] Result string: {}\", string);\n}\n\nconvert_string(\"Fair is foul, foul is fair.\".to_string());",
+          "solutionCode": "fn string_to_bytes(string: String) -> Vec<u8> {\n  string.into_bytes().to_vec()\n}\n\nfn bytes_to_string(bytes: Vec<u8>) -> String {\n  String::from_utf8(bytes).unwrap()\n}\n\nfn convert_string(original_string: String) {\n  println!(\"\\n[1] Original string: {}\", original_string);\n\n  let bytes = string_to_bytes(original_string);\n  println!(\"\\n[2] String bytes: {:?}\", bytes);\n\n  let string = bytes_to_string(bytes.to_vec());\n  println!(\"\\n[3] Result string: {}\", string);\n}\n\nconvert_string(\"Fair is foul, foul is fair.\".to_string());",
+          "content": ""
+        },
+        {
+          "type": "rust",
           "id": "qqG6eBY82",
           "title": "String vs. &str",
           "instructions": "",
