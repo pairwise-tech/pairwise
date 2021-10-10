@@ -672,7 +672,18 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "In Rust strings are a more complex topic than in many other languages where you simply have the notion of a \"string\" type. In Rust there are multiple ways to represent strings which we need to spend some time explain."
+          "content": "Strings are a more complicated data structure in Rust than in most other programming languages. In Rust there are primarily two types of strings: owned, heap\\-allocated `Strings` which are vector collections of UTF\\-8 encoded bytes and the string slice `str`.\n\nRather than explaining these in more depth here, let's dive into the challenges to see these two string variations in action."
+        },
+        {
+          "type": "rust",
+          "id": "f72ZE5IDZ",
+          "title": "Creating Strings",
+          "instructions": "Let's start with the owned `String` type, since it is more similar to the strings most programmers might expect when coming from other languages. A `String` in Rust is a collection from the standard library and not built in to the core language. Strings are implemented as vectors of UTF\\-8 encoded bytes and are heap\\-allocated, meaning they can grow and shrink in size during runtime. A `String` is an owned piece of data, and can be manipulated or mutated. Finally, `String`s provide several helpful methods for creating, copying, and interacting with strings.\n\n> UTF\\-8 is a character encoding character specification for representing text, specifically human language and human readable characters, in a byte format. Each character comprises one to four bytes of data and overall UTF\\-8 can encode 1,112,064 different characters. Both Strings and string slices in Rust both rely on UTF\\-8 encoding to store string data.\n\nThe `String` type provides associated methods `new` to create a new `String` and `from` to create a `String` directly from a string slice. You can also call `.to_string` on a string slice to convert it into a `String`. Complete the function in the editor below to create three new `String`s using these different methods.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let strings = create_new_strings();\n  let a: String = strings.0;\n  let b: String = strings.1;\n  let c: String = strings.2;\n\n  true\n}\n`;\n\ntest(\"The `create_new_strings` function should return three new `String`s.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn create_new_strings() -> (String, String, String) {\n  // Use the new associated method to create a new string:\n  let new_empty_string: String;\n\n  // Create a new String from a string slice:\n  let string_from_str_a: String;\n\n  // Create a String by calling the `to_string` method no a string slice:\n  let string_from_str_b: String;\n\n  (new_empty_string, string_from_str_a, string_from_str_b)\n}\n\nlet result = create_new_strings();\nprintln!(\"Result = {:?}\", result);\n",
+          "solutionCode": "fn create_new_strings() -> (String, String, String) {\n  // Use the new associated method to create a new string:\n  let new_empty_string: String = String::new();\n\n  // Create a new String from a string slice:\n  let string_from_str_a: String = String::from(\"Hello,\");\n\n  // Create a String by calling the `to_string` method no a string slice:\n  let string_from_str_b: String = \"World!\".to_string();\n\n  (new_empty_string, string_from_str_a, string_from_str_b)\n}\n\nlet result = create_new_strings();\nprintln!(\"Result = {:?}\", result);\n",
+          "content": ""
         },
         {
           "type": "rust",
@@ -881,7 +892,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "The Rust language has built "
+          "content": "The Rust language has built\\-in support for writing and running tests. We will see all about it in this section."
         },
         {
           "type": "rust",
