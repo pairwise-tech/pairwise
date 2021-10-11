@@ -1016,6 +1016,17 @@
           "content": ""
         },
         {
+          "type": "media",
+          "id": "fopvkoxMc",
+          "title": "Handling Errors with the ? Operator",
+          "instructions": "",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In Rust we can also handle potentially erroneous states using the `?` operator\\."
+        },
+        {
           "type": "section",
           "id": "JAYJEcvrv",
           "title": "Testing",
