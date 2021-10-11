@@ -983,6 +983,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "1IMOWj3ED",
+          "title": "Results Must Be Used",
+          "instructions": "The `Result` enum is annotated with the `#[must_use]` annotation, which instructs the compiler that `Result` values must be dealt with explicitly. The following code compiles, and you don't see any compiler warnings here but if you ran this in a terminal you would see the following message:\n\n```\nwarning: unused `Result` that must be used\n --> src/main.rs:7:1\n  |\n7 | returns_a_result(true);\n  | ^^^^^^^^^^^^^^^^^^^^^^^\n  |\n  = note: `#[warn(unused_must_use)]` on by default\n  = note: this `Result` may be an `Err` variant, which should be handled\n\n```\n\nRust recommends you handle the `Result`, because it might be an `Err` variant\\. This behavior is very important, because it is too easily to otherwise just ignore error variants.\n\nAlthough you can't see the warning message, try to change the code below to handle the return value from `returns_a_result`.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `returns_a_result` return value should be handled.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn returns_a_result(should_be_ok: bool) -> Result<(), ()> {\n  return if should_be_ok { Ok(()) } else { Err(()) };\n}\n\n// Handle the Result returned below:\nreturns_a_result(true);",
+          "solutionCode": "fn returns_a_result(should_be_ok: bool) -> Result<(), ()> {\n  return if should_be_ok { Ok(()) } else { Err(()) };\n}\n\n// Handle the Result returned below:\nlet result = returns_a_result(true);\n\nif let Err(_) = result {\n  println!(\"Got an error!\");\n}",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "JAYJEcvrv",
           "title": "Testing",
