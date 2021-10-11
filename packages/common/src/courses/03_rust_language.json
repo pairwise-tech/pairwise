@@ -994,6 +994,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "Wa2ybokzPf",
+          "title": "Additional Result Methods",
+          "instructions": "`Result` types also provide a few helpful methods. See the code below for details.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The code should compile with no errors.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "let result: Result<&str, &str> = Ok(\"This Result is OK\");\n\nif result.is_ok() {\n  // 'Unwrapping' a Result or Option enum in Rust returns the\n  // enclosed value, or panics. This is a direct, concise way\n  // to extract a value from one of these types, but more dangerous\n  // because it will halt your program if the type is not what\n  // you expected. Here, we can be sure the Result is OK since\n  // we performed the check on the above line.\n  let value = result.unwrap();\n  println!(\"This result has value: {}\", value);\n}\n\nlet result: Result<&str, &str> = Err(\"This Result is an Err variant!\");\n\nif result.is_ok() {\n  let value = result.unwrap();\n  println!(\"This result has value: {}\", value);\n} else {\n  // We cannot unwrap an Err from a Result. Unwrapping returns\n  // the enclosed Ok variant of a Result or Some value of an Option.\n  // Change this code to extract the enclosed Err and print it out.\n  let value = result.unwrap();\n  println!(\"This error has value: {}\", value);\n}",
+          "solutionCode": "let result: Result<&str, &str> = Ok(\"This Result is OK\");\n\nif result.is_ok() {\n  // 'Unwrapping' a Result or Option enum in Rust returns the\n  // enclosed value, or panics. This is a direct, concise way\n  // to extract a value from one of these types, but more dangerous\n  // because it will halt your program if the type is not what\n  // you expected. Here, we can be sure the Result is OK since\n  // we performed the check on the above line.\n  let value = result.unwrap();\n  println!(\"This result has value: {}\", value);\n}\n\nlet result: Result<&str, &str> = Err(\"This Result is an Err variant!\");\n\nif result.is_ok() {\n  let value = result.unwrap();\n  println!(\"This result has value: {}\", value);\n} else {\n  // We cannot unwrap an Err from a Result. Unwrapping returns\n  // the enclosed Ok variant of a Result or Some value of an Option.\n  // Change this code to extract the enclosed Err and print it out.\n  if let Err(err_value) = result {\n    println!(\"This error has value: {}\", err_value);\n  }\n}",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "JAYJEcvrv",
           "title": "Testing",
