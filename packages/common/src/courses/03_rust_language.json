@@ -1084,24 +1084,13 @@
         {
           "type": "section",
           "id": "usDs33hMCZ",
-          "title": "Modules, Packages and Crates",
+          "title": "Modules, Crates and Cargo",
           "instructions": "",
           "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": ""
-        },
-        {
-          "type": "section",
-          "id": "RZAimitGF",
-          "title": "Cargo",
-          "instructions": "",
-          "testCode": "const TEST_STRING = `\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": ""
+          "content": "How do modules, libraries, and package management work in Rust?"
         }
       ]
     },
