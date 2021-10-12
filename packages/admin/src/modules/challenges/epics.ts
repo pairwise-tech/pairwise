@@ -3,7 +3,7 @@ import { filter, map, mergeMap, pluck } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
-import { createInverseChallengeMapping } from "@pairwise/common";
+import { createInverseChallengeMapping, matchResult } from "@pairwise/common";
 import { parseSearchQuery } from "../../tools/admin-utils";
 
 /** ===========================================================================
@@ -18,12 +18,11 @@ const contentSkeletonInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.initializeApp)),
     mergeMap(deps.api.fetchCourseSkeletons),
-    map(({ value: courses, error }) => {
-      if (courses) {
-        return Actions.fetchNavigationSkeletonSuccess(courses);
-      } else {
-        return Actions.fetchNavigationSkeletonFailure(error);
-      }
+    map((result) => {
+      return matchResult(result, {
+        ok: Actions.fetchNavigationSkeletonSuccess,
+        err: Actions.fetchNavigationSkeletonFailure,
+      });
     }),
   );
 };
@@ -35,12 +34,11 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.storeAccessTokenSuccess)),
     mergeMap(deps.api.fetchCourses),
-    map(({ value: courses }) => {
-      if (courses) {
-        return Actions.fetchCoursesSuccess({ courses });
-      } else {
-        return Actions.fetchCoursesFailure();
-      }
+    map((result) => {
+      return matchResult(result, {
+        ok: (courses) => Actions.fetchCoursesSuccess({ courses }),
+        err: Actions.fetchCoursesFailure,
+      });
     }),
   );
 };
@@ -117,12 +115,11 @@ const fetchChallengeMetaEpic: EpicSignature = (action$, state$, deps) => {
     // @ts-ignore
     filter((x) => x !== null),
     mergeMap(deps.api.fetchChallengeMetaByChallengeId),
-    map(({ value: meta, error }) => {
-      if (meta) {
-        return Actions.fetchChallengeMetaSuccess(meta);
-      } else {
-        return Actions.fetchChallengeMetaFailure(error);
-      }
+    map((result) => {
+      return matchResult(result, {
+        ok: Actions.fetchChallengeMetaSuccess,
+        err: Actions.fetchChallengeMetaFailure,
+      });
     }),
   );
 };
@@ -134,12 +131,11 @@ const fetchAllChallengeMetaEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf([Actions.fetchAllChallengeMeta, Actions.initializeApp])),
     mergeMap(deps.api.fetchAllChallengeMeta),
-    map(({ value: meta, error }) => {
-      if (meta) {
-        return Actions.fetchAllChallengeMetaSuccess(meta);
-      } else {
-        return Actions.fetchAllChallengeMetaFailure(error);
-      }
+    map((result) => {
+      return matchResult(result, {
+        ok: Actions.fetchAllChallengeMetaSuccess,
+        err: Actions.fetchAllChallengeMetaFailure,
+      });
     }),
   );
 };
@@ -152,13 +148,14 @@ const resetChallengeMetaEpic: EpicSignature = (action$, state$, deps) => {
     filter(isActionOf(Actions.resetChallengeMeta)),
     pluck("payload"),
     mergeMap(deps.api.resetChallengeMeta),
-    map(({ value: meta, error }) => {
-      if (meta) {
-        deps.toaster.success(`Challenge id ${meta.challengeId} Meta Reset`);
-        return Actions.resetChallengeMetaSuccess(meta);
-      } else {
-        return Actions.resetChallengeMetaFailure(error);
-      }
+    map((result) => {
+      return matchResult(result, {
+        ok: (x) => {
+          deps.toaster.success(`Challenge id ${x.challengeId} Meta Reset`);
+          return Actions.resetChallengeMetaSuccess(x);
+        },
+        err: Actions.resetChallengeMetaFailure,
+      });
     }),
   );
 };
@@ -192,18 +189,21 @@ const handleFetchChallengeCodeBlob: EpicSignature = (action$, state$, deps) => {
       return { uuid, challengeId, result };
     }),
     map(({ uuid, challengeId, result }) => {
-      if (result.value) {
-        return Actions.fetchChallengeBlobSuccess({
-          uuid,
-          challengeId,
-          blob: result.value,
-        });
-      } else {
-        deps.toaster.warn(
-          `Failed to fetch challenge blob for challenge id: ${challengeId}`,
-        );
-        return Actions.fetchChallengeBlobFailure(result.error);
-      }
+      return matchResult(result, {
+        ok: (x) => {
+          return Actions.fetchChallengeBlobSuccess({
+            uuid,
+            challengeId,
+            blob: x,
+          });
+        },
+        err: (e) => {
+          deps.toaster.warn(
+            `Failed to fetch challenge blob for challenge id: ${challengeId}`,
+          );
+          return Actions.fetchChallengeBlobFailure(e);
+        },
+      });
     }),
   );
 };
@@ -242,19 +242,22 @@ const fetchPullRequestContextEpic: EpicSignature = (action$, state$, deps) => {
     filter(isActionOf(Actions.fetchPullRequestContext)),
     pluck("payload"),
     mergeMap(deps.api.fetchPullRequestContext),
-    map(({ value, error }) => {
-      if (value) {
-        // Empty results are returned as a string message
-        if (typeof value === "string") {
-          deps.toaster.warn("No diff available for this pull request.");
-          return Actions.fetchPullRequestContextFailure(error);
-        } else {
-          return Actions.fetchPullRequestContextSuccess(value);
-        }
-      } else {
-        deps.toaster.warn("Failed to fetch pull request context...");
-        return Actions.fetchPullRequestContextFailure(error);
-      }
+    map((result) => {
+      return matchResult(result, {
+        ok: (x) => {
+          // Empty results are returned as a string message
+          if (typeof x === "string") {
+            deps.toaster.warn("No diff available for this pull request.");
+            return Actions.fetchPullRequestContextFailure(undefined);
+          } else {
+            return Actions.fetchPullRequestContextSuccess(x);
+          }
+        },
+        err: (e) => {
+          deps.toaster.warn("Failed to fetch pull request context...");
+          return Actions.fetchPullRequestContextFailure(e);
+        },
+      });
     }),
   );
 };

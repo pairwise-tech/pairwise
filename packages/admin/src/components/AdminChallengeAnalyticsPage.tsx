@@ -35,8 +35,8 @@ class AdminChallengeAnalyticsPage extends React.Component<IProps, IState> {
 
     this.state = {
       alert: false,
-      resetChallengeId: new None(),
       sortBy: "default",
+      resetChallengeId: None(),
     };
   }
 
@@ -234,14 +234,14 @@ class AdminChallengeAnalyticsPage extends React.Component<IProps, IState> {
   handleOpenResetChallengeMetaAlert = (id: string) => {
     this.setState({
       alert: true,
-      resetChallengeId: new Some(id),
+      resetChallengeId: Some(id),
     });
   };
 
   handleCancelResetChallengeMetaAlert = () => {
     this.setState({
       alert: false,
-      resetChallengeId: new None(),
+      resetChallengeId: None(),
     });
   };
 

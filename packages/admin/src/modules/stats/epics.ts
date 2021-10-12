@@ -25,7 +25,7 @@ const fetchProgressRecordsEpic: EpicSignature = (action$, _, deps) => {
     delay(750),
     switchMap(deps.api.fetchProgressRecords),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         return Actions.fetchProgressRecordsSuccess(result.value);
       } else {
         return Actions.fetchProgressRecordsFailure(result.error);

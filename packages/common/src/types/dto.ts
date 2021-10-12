@@ -5,7 +5,8 @@ import {
   CourseSkeletonList,
   PortfolioSkillSummaryMap,
 } from "./courses";
-import { Nullable } from "./result";
+
+type Nullable<T> = T | null;
 
 /** ===========================================================================
  * DTO interfaces

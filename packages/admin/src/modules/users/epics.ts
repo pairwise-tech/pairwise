@@ -22,7 +22,7 @@ const fetchUsersEpic: EpicSignature = (action$, _, deps) => {
     ),
     mergeMap(API.fetchUsersList),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         return Actions.fetchUsersSuccess(result.value);
       } else {
         return Actions.fetchUsersFailure(result.error);
@@ -37,7 +37,7 @@ const revokeCoachingSessionEpic: EpicSignature = (action$, _, deps) => {
     map((x) => x.payload.userUuid),
     mergeMap(async (uuid) => {
       const result = await API.revokeCoachingSessionForUser(uuid);
-      if (result.value) {
+      if (result.ok) {
         deps.toaster.success("Coaching session revoked.");
         return Actions.markCoachingSessionCompleteSuccess({ userUuid: uuid });
       } else {
@@ -55,7 +55,7 @@ const deleteUserAccountEpic: EpicSignature = (action$, _, deps) => {
     map((x) => x.payload.uuid),
     mergeMap(API.deleteUserAccount),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         deps.toaster.success("User account deleted successfully.");
         return Actions.deleteUserAccountSuccess();
       } else {
@@ -74,7 +74,7 @@ const fetchAllUsersProgressEpic: EpicSignature = (action$, _, deps) => {
     map((x) => x.payload.courseId),
     mergeMap(API.fetchProgressForAllUsers),
     mergeMap(async (result) => {
-      if (result.value) {
+      if (result.ok) {
         return Actions.fetchAllUsersProgressSuccess(result.value);
       } else {
         return Actions.fetchAllUsersProgressFailure(result.error);

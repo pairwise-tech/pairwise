@@ -11,11 +11,10 @@ import ContentUtility, {
 /**
  * Types
  */
+export * from "./types/dto";
 export * from "./types/git";
 export * from "./types/courses";
-export * from "./types/result";
-export * from "./types/option";
-export * from "./types/dto";
+export * from "./types/rust-types";
 
 /**
  * Utils

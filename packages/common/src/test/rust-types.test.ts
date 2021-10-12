@@ -5,8 +5,8 @@ import {
   None,
   unwrapOption,
   unwrapResult,
-  IOption,
-  IResult,
+  Option,
+  Result,
   matchResult,
   matchOption,
 } from "../types/rust-types";
@@ -23,7 +23,7 @@ const SOME_DATA: SomeData = {
   description: "This is the data...",
 };
 
-const getResult = (value?: SomeData): IResult<SomeData, void> => {
+const getResult = (value?: SomeData): Result<SomeData, void> => {
   if (value !== undefined) {
     return Ok(value);
   } else {
@@ -31,7 +31,7 @@ const getResult = (value?: SomeData): IResult<SomeData, void> => {
   }
 };
 
-const getOption = (value?: SomeData): IOption<SomeData> => {
+const getOption = (value?: SomeData): Option<SomeData> => {
   if (value !== undefined) {
     return Some(value);
   } else {

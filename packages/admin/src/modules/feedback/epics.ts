@@ -23,7 +23,7 @@ const fetchAllFeedbackEpic: EpicSignature = (action$, _, deps) => {
     ),
     mergeMap(deps.api.fetchAllFeedbackRecords),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         return Actions.fetchAllFeedbackSuccess(result.value);
       } else {
         return Actions.fetchAllFeedbackFailure(result.error);
@@ -41,7 +41,7 @@ const deleteFeedbackByUuidEpic: EpicSignature = (action$, _, deps) => {
     pluck("payload"),
     mergeMap(deps.api.deleteFeedbackByUuid),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         deps.toaster.success("Feedback record deleted.");
         return Actions.deleteFeedbackByUuidSuccess(result.value);
       } else {

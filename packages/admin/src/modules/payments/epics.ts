@@ -18,7 +18,7 @@ const fetchAllPaymentsEpic: EpicSignature = (action$, _, deps) => {
     filter(isActionOf([Actions.fetchAllPayments, Actions.fetchAdminUser])),
     mergeMap(deps.api.fetchAllPaymentRecords),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         return Actions.fetchAllPaymentsSuccess(result.value);
       } else {
         return Actions.fetchAllPaymentsFailure(result.error);
@@ -36,7 +36,7 @@ const giftCourseForUserEpic: EpicSignature = (action$, _, deps) => {
     pluck("payload"),
     mergeMap(deps.api.giftCourseForUser),
     mergeMap((result) => {
-      if (result.value) {
+      if (result.ok) {
         deps.toaster.success("Course purchase successful!");
         return of(
           Actions.fetchUsers(),
@@ -59,7 +59,7 @@ const refundCourseForUserEpic: EpicSignature = (action$, _, deps) => {
     pluck("payload"),
     mergeMap(deps.api.refundCourseForUser),
     mergeMap((result) => {
-      if (result.value) {
+      if (result.ok) {
         deps.toaster.success("Course refund successful!");
         return of(
           Actions.fetchUsers(),

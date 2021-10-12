@@ -76,7 +76,7 @@ export const fetchCoursesSuccess = createAction(
 
 export const fetchCoursesFailure = createAction(
   ActionTypesEnum.FETCH_COURSES_FAILURE,
-)();
+)<HttpResponseError>();
 
 export const storeInverseChallengeMapping = createAction(
   ActionTypesEnum.STORE_INVERSE_CHALLENGE_MAP,
@@ -108,7 +108,7 @@ export const fetchPullRequestContextSuccess = createAction(
 
 export const fetchPullRequestContextFailure = createAction(
   ActionTypesEnum.FETCH_PULL_REQUEST_CONTEXT_FAILURE,
-)<HttpResponseError>();
+)<HttpResponseError | undefined>();
 
 export const fetchChallengeMeta = createAction(
   ActionTypesEnum.FETCH_CHALLENGE_META,

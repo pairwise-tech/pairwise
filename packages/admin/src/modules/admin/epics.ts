@@ -4,6 +4,7 @@ import { isActionOf } from "typesafe-actions";
 import API from "modules/api";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
+import { matchResult } from "@pairwise/common";
 
 /** ===========================================================================
  * Epics
@@ -15,11 +16,10 @@ const fetchUserEpic: EpicSignature = (action$, _, deps) => {
     filter(isActionOf(Actions.fetchAdminUser)),
     mergeMap(API.fetchUserProfile),
     map((result) => {
-      if (result.value) {
-        return Actions.fetchAdminUserSuccess(result.value);
-      } else {
-        return Actions.fetchAdminUserFailure(result.error);
-      }
+      return matchResult(result, {
+        ok: (x) => Actions.fetchAdminUserSuccess(x),
+        err: (e) => Actions.fetchAdminUserFailure(e),
+      });
     }),
   );
 };
@@ -30,11 +30,10 @@ const updateUserSettingsEpic: EpicSignature = (action$, _, deps) => {
     pluck("payload"),
     mergeMap(API.updateUserSettings),
     map((result) => {
-      if (result.value) {
-        return Actions.updateUserSettingsSuccess(result.value);
-      } else {
-        return Actions.updateUserSettingsFailure(result.error);
-      }
+      return matchResult(result, {
+        ok: (x) => Actions.updateUserSettingsSuccess(x),
+        err: (e) => Actions.updateUserSettingsFailure(e),
+      });
     }),
   );
 };

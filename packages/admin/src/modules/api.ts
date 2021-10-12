@@ -50,8 +50,8 @@ const HOST = ENV.HOST; /* NestJS Server URL */
  */
 const createNonHttpResponseError = (
   message: string,
-): Err<HttpResponseError> => {
-  return new Err({ status: 418, message }); /* ha */
+): Result<never, HttpResponseError> => {
+  return Err({ status: 418, message }); /* ha */
 };
 
 /** ===========================================================================
@@ -69,7 +69,7 @@ class BaseApiClass {
   ) => {
     try {
       const result = await httpFn();
-      return new Ok(result.data);
+      return Ok(result.data);
     } catch (err) {
       return this.handleHttpError(err);
     }
@@ -115,7 +115,7 @@ class BaseApiClass {
       this.handleForcedLogout();
     }
 
-    return new Err(formattedError);
+    return Err(formattedError);
   };
 
   /**
@@ -168,7 +168,7 @@ class Api extends BaseApiClass {
         courses = result.data;
       }
 
-      return new Ok(courses);
+      return Ok(courses);
     } catch (err) {
       return this.handleHttpError(err);
     }
@@ -180,7 +180,7 @@ class Api extends BaseApiClass {
       const courseMap = require("@pairwise/common").default;
       const courses: CourseSkeletonList = Object.values(courseMap);
       const courseSkeletonList = courses.map(mapCourseSkeletonInDev);
-      return new Ok(courseSkeletonList);
+      return Ok(courseSkeletonList);
     }
 
     return this.httpHandler(async () => {
@@ -310,7 +310,7 @@ class Api extends BaseApiClass {
 
   updateUserSettings = async (
     settings: Partial<UserSettings>,
-  ): Promise<Err<HttpResponseError> | Ok<UserStoreState>> => {
+  ): Promise<Result<UserStoreState, HttpResponseError>> => {
     const { authenticated } = this.getRequestHeaders();
     if (authenticated) {
       return this.updateUser({ settings });

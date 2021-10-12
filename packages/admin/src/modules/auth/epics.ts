@@ -18,6 +18,7 @@ import {
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import { APP_INITIALIZATION_TYPE } from "tools/admin-utils";
+import { matchResult } from "@pairwise/common";
 
 /** ===========================================================================
  * Epics
@@ -100,9 +101,12 @@ const logoutUserEpic: EpicSignature = (action$, _, deps) => {
     mergeMap(async () => {
       const result = await deps.api.logoutUser();
 
-      if (result.error) {
-        console.error("Error occurring processing logout.", result.error);
-      }
+      matchResult(result, {
+        ok: (x) => x,
+        err: (e) => {
+          console.error("Error occurring processing logout.", e);
+        },
+      });
 
       return Actions.logoutUserSuccess();
     }),

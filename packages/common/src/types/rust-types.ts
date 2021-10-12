@@ -5,14 +5,14 @@ import { assertUnreachable } from "../tools/utils";
  * ============================================================================
  */
 
-export type IOption<T> = { some: true; value: T } | { some: false };
+export type Option<T> = { some: true; value: T } | { some: false };
 
-export const Some = <T>(value: T): IOption<T> => ({
+export const Some = <T>(value: T): Option<T> => ({
   some: true,
   value,
 });
 
-export const None = (): IOption<never> => ({
+export const None = (): Option<never> => ({
   some: false,
 });
 
@@ -22,7 +22,7 @@ export interface OptionMatcher<T, R1, R2> {
 }
 
 export const matchOption = <T, R1, R2>(
-  x: IOption<T>,
+  x: Option<T>,
   matcher: OptionMatcher<T, R1, R2>,
 ) => {
   if (x.some === true) {
@@ -34,7 +34,7 @@ export const matchOption = <T, R1, R2>(
   }
 };
 
-export const unwrapOption = <T>(option: IOption<T>): T => {
+export const unwrapOption = <T>(option: Option<T>): T => {
   if (option.some === false) {
     throw new Error("Unwrapped option was actually empty!");
   }
@@ -47,14 +47,16 @@ export const unwrapOption = <T>(option: IOption<T>): T => {
  * ============================================================================
  */
 
-export type IResult<T, E> = { ok: true; value: T } | { ok: false; error: E };
+export type IOk<T> = { ok: true; value: T };
+export type IErr<E> = { ok: false; error: E };
+export type Result<T, E> = IOk<T> | IErr<E>;
 
-export const Ok = <T>(value: T): IResult<T, never> => ({
+export const Ok = <T>(value: T): Result<T, never> => ({
   ok: true,
   value,
 });
 
-export const Err = <E>(error: E): IResult<never, E> => ({
+export const Err = <E>(error: E): Result<never, E> => ({
   ok: false,
   error,
 });
@@ -65,7 +67,7 @@ export interface ResultMatcher<T, E, R1, R2> {
 }
 
 export const matchResult = <T, E, R1, R2>(
-  x: IResult<T, E>,
+  x: Result<T, E>,
   matcher: ResultMatcher<T, E, R1, R2>,
 ) => {
   if (x.ok === true) {
@@ -77,7 +79,7 @@ export const matchResult = <T, E, R1, R2>(
   }
 };
 
-export const unwrapResult = <T, E>(result: IResult<T, E>): T => {
+export const unwrapResult = <T, E>(result: Result<T, E>): T => {
   if (result.ok === false) {
     throw new Error("Unwrapped result was actually an error variant!");
   }
