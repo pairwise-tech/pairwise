@@ -36,15 +36,18 @@ const guessIfEnvironmentIsDevelopment = () => {
 let DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
 
 let PAIRWISE_CODE_RUNNER_API =
-  "https://pairwise-code-runner-api.uc.r.appspot.com";
+  "https://code-runner-api-cloud-run-ldb4orzria-uc.a.run.app";
+
+// let PAIRWISE_CODE_RUNNER_API =
+//   "https://pairwise-code-runner-api.uc.r.appspot.com";
 
 const DEV = guessIfEnvironmentIsDevelopment();
 
 // Reset to localhost in local development environment
-if (DEV) {
-  DATABASE_CHALLENGE_API = "http://localhost:5000";
-  PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
-}
+// if (DEV) {
+//   DATABASE_CHALLENGE_API = "http://localhost:5000";
+//   PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
+// }
 
 /** ===========================================================================
  * Type definitions for additional test utils which are provided in the
