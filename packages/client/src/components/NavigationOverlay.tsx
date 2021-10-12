@@ -164,47 +164,48 @@ class NavigationOverlay extends React.Component<
           className={cx("module-select", { open: this.state.showModuleList })}
         >
           {/* Display course select for Codepress */}
-          {CODEPRESS ? (
-            <ColTitle className="course-select">
-              <CourseSelect
-                filterable={false}
-                items={courseListMetadata}
-                itemDisabled={(c) => c.id === course.id}
-                onItemSelect={({ id }) => {
-                  this.props.setNavigationOverlayCurrentCourse(id);
-                }}
-                popoverProps={{
-                  onClosed: () => {
-                    // Blur the damn element to avoid keyboard interactions
-                    // opening the select menu again later.
-                    if (document.activeElement) {
-                      // @ts-ignore
-                      document.activeElement.blur();
-                    }
-                  },
-                }}
-                itemRenderer={({ title, id }, { handleClick }) => (
-                  <ClickableColTitle
-                    key={id}
-                    disabled={id === course.id}
-                    onClick={(e: any) => handleClick(e)}
-                  >
-                    {title}
-                  </ClickableColTitle>
-                )}
-              >
-                <Button
-                  fill
-                  rightIcon="chevron-down"
-                  className="mobile-shrink"
-                  style={{ whiteSpace: "nowrap" }}
-                  text={isMobile ? "" : course.title}
-                />
-              </CourseSelect>
-            </ColTitle>
+          {/* {CODEPRESS ? (
+            null
           ) : (
             <ColTitle>{isMobile ? null : <p>{course.title}</p>}</ColTitle>
-          )}
+          )} */}
+          <ColTitle className="course-select">
+            <CourseSelect
+              filterable={false}
+              items={courseListMetadata}
+              itemDisabled={(c) => c.id === course.id}
+              onItemSelect={({ id }) => {
+                this.props.setNavigationOverlayCurrentCourse(id);
+              }}
+              popoverProps={{
+                onClosed: () => {
+                  // Blur the damn element to avoid keyboard interactions
+                  // opening the select menu again later.
+                  if (document.activeElement) {
+                    // @ts-ignore
+                    document.activeElement.blur();
+                  }
+                },
+              }}
+              itemRenderer={({ title, id }, { handleClick }) => (
+                <ClickableColTitle
+                  key={id}
+                  disabled={id === course.id}
+                  onClick={(e: any) => handleClick(e)}
+                >
+                  {title}
+                </ClickableColTitle>
+              )}
+            >
+              <Button
+                fill
+                rightIcon="chevron-down"
+                className="mobile-shrink"
+                style={{ whiteSpace: "nowrap" }}
+                text={isMobile ? "" : course.title}
+              />
+            </CourseSelect>
+          </ColTitle>
           <ColScroll>
             {/* In case of no challenges yet, or to add one at the start, here's a button */}
             <div style={{ position: "relative" }}>

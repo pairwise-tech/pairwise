@@ -340,7 +340,7 @@ class ContentUtilityClass {
 // const courseList = [FullstackTypeScript, Python, Rust, Golang];
 
 // Only TS course for now:
-const courseList = [FullstackTypeScript];
+const courseList = [FullstackTypeScript, Rust];
 
 const ContentUtility = new ContentUtilityClass(courseList as CourseList);
 
