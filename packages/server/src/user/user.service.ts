@@ -423,7 +423,7 @@ export class UserService {
   public async updateUser(user: RequestUser, userDetails: UserUpdateOptions) {
     const validationResult = validateUserUpdateDetails(user, userDetails);
 
-    if (validationResult.error) {
+    if (validationResult.ok === false) {
       throw new BadRequestException(validationResult.error);
     } else {
       /**

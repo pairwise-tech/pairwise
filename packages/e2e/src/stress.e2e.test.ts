@@ -47,10 +47,10 @@ describe.skip("Stress Test the Server", () => {
             const response = await axios.post(`${ENV.HOST}/blob`, body, {
               headers,
             });
-            return new Ok(response.data);
+            return Ok(response.data);
           } catch (err) {
             console.log(err);
-            return new Err(err);
+            return Err(err);
           }
         }),
       );
@@ -61,7 +61,7 @@ describe.skip("Stress Test the Server", () => {
     );
 
     const flattenedResults = results.reduce((flat, x) => flat.concat(x));
-    const valid = flattenedResults.filter((x) => !!x.value);
+    const valid = flattenedResults.filter((x) => x.ok);
 
     const end = Date.now();
     const time = (end - start) / 1000;

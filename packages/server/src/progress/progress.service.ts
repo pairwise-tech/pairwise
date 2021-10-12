@@ -325,7 +325,7 @@ export class ProgressService {
 
     const cachedData = await this.redisClientService.getProgressCacheData();
 
-    if (cachedData.value) {
+    if (cachedData.ok) {
       const data = cachedData.value;
 
       let id;
@@ -378,7 +378,7 @@ export class ProgressService {
   public async fetchRecentProgressRecords() {
     const cachedData = await this.redisClientService.getProgressCacheData();
 
-    if (cachedData.value) {
+    if (cachedData.ok) {
       const data = cachedData.value;
       const records = data.progress;
 

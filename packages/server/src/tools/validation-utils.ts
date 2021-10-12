@@ -191,12 +191,12 @@ export const validateUserUpdateDetails = (
     };
 
     const sanitizedUpdate = sanitizeObject(updateDetails);
-    return new Ok(sanitizedUpdate);
+    return Ok(sanitizedUpdate);
   } catch (err) {
     captureSentryException(err);
 
     // Propagate the message in the thrown error
-    return new Err(err.message);
+    return Err(err.message);
   }
 };
 

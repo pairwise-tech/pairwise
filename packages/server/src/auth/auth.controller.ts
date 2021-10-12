@@ -55,7 +55,7 @@ export class AuthController {
     const result = await this.authService.handleEmailLoginVerification(
       magicEmailToken,
     );
-    if (result.value) {
+    if (result.ok) {
       const { token, accountCreated } = result.value;
       const params = this.getQueryParams(token, accountCreated);
       return res.redirect(`${ENV.CLIENT_URL}/authenticated?${params}`);
@@ -78,7 +78,7 @@ export class AuthController {
   ) {
     const result = await this.authService.handleFacebookSignin(req.user);
 
-    if (result.value) {
+    if (result.ok) {
       const { token, accountCreated } = result.value;
       const params = this.getQueryParams(token, accountCreated);
       const baseUrl = this.getRedirectUrl(req);
@@ -102,7 +102,7 @@ export class AuthController {
   ) {
     const result = await this.authService.handleGitHubSignin(req.user);
 
-    if (result.value) {
+    if (result.ok) {
       const { token, accountCreated } = result.value;
       const params = this.getQueryParams(token, accountCreated);
       const baseUrl = this.getRedirectUrl(req);
@@ -126,7 +126,7 @@ export class AuthController {
   ) {
     const result = await this.authService.handleGoogleSignin(req.user);
 
-    if (result.value) {
+    if (result.ok) {
       const { token, accountCreated } = result.value;
       const params = this.getQueryParams(token, accountCreated);
       const baseUrl = this.getRedirectUrl(req);
@@ -153,7 +153,7 @@ export class AuthController {
     // Client URL here is the admin client
     const clientUrl = ENV.ADMIN_CLIENT_URL;
 
-    if (result.value) {
+    if (result.ok) {
       const { token, accountCreated } = result.value;
       const params = this.getQueryParams(token, accountCreated);
       return res.redirect(`${clientUrl}?${params}`);

@@ -160,12 +160,12 @@ export class RedisClientService {
     try {
       const result: MessageType = JSON.parse(message);
       if (result) {
-        return new Ok(result);
+        return Ok(result);
       } else {
         throw new Error("No message data found");
       }
     } catch (err) {
-      return new Err("Failed to parse message.");
+      return Err("Failed to parse message.");
     }
   }
 
@@ -200,7 +200,7 @@ export class RedisClientService {
         const result =
           this.handleDeserializeMessage<CacheUpdateMessage>(message);
 
-        if (result.value) {
+        if (result.ok) {
           this.websocketsService.broadcastRealTimeUpdate(result.value);
         }
         break;
@@ -228,10 +228,10 @@ export class RedisClientService {
       const parsed: RawProgressCacheData = JSON.parse(json);
       const result = this.deserializeProgressCache(parsed);
 
-      return new Ok(result);
+      return Ok(result);
     } catch (err) {
       console.log("Failed to get progress cache data from Redis, err: ", err);
-      return new Err(err);
+      return Err(err);
     }
   }
 

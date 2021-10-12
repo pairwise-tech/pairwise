@@ -67,7 +67,7 @@ export class AuthService {
 
   public async handleUserUpdateEmailRequest(payload: any) {
     const result = this.decodeUserUpdateEmailPayload(payload);
-    if (result.value) {
+    if (result.ok) {
       const { email, uuid } = result.value;
       this.userService.updateUserEmail(email, uuid);
     } else {
@@ -80,9 +80,9 @@ export class AuthService {
   ): Result<{ email: string; uuid: string }, string> {
     const result: any = this.jwtService.decode(payload);
     if ("uuid" in result && "email" in result) {
-      return new Ok(result);
+      return Ok(result);
     } else {
-      return new Err("Invalid Payload");
+      return Err("Invalid Payload");
     }
   }
 
@@ -104,7 +104,7 @@ export class AuthService {
           await this.userService.markEmailAsVerified(existingUser.profile.uuid);
           // Generate an access token
           const token = this.generateJwtAccessToken(existingUser.profile);
-          return new Ok({ token, accountCreated: false });
+          return Ok({ token, accountCreated: false });
         } else {
           const userProfile: GenericUserProfile = {
             email,
@@ -123,13 +123,13 @@ export class AuthService {
             "Email",
           );
           const token = this.generateJwtAccessToken(user.profile);
-          return new Ok({ token, accountCreated: true });
+          return Ok({ token, accountCreated: true });
         }
       } else {
         throw new Error("Request payload was invalid");
       }
     } catch (err) {
-      return new Err(ERROR_CODES.EMAIL_LOGIN_ERROR);
+      return Err(ERROR_CODES.EMAIL_LOGIN_ERROR);
     }
   }
 
@@ -150,7 +150,7 @@ export class AuthService {
       if (existingUser) {
         user = existingUser;
         token = this.generateJwtAccessToken(user.profile);
-        return new Ok({ token, accountCreated: false });
+        return Ok({ token, accountCreated: false });
       } else {
         const email = profile.email;
         if (email) {
@@ -164,7 +164,7 @@ export class AuthService {
               facebookAccountId,
             );
             token = this.generateJwtAccessToken(user.profile);
-            return new Ok({ token, accountCreated: false });
+            return Ok({ token, accountCreated: false });
           }
         }
 
@@ -187,11 +187,11 @@ export class AuthService {
 
         user = await this.userService.createNewUser(userProfile, "Facebook");
         token = this.generateJwtAccessToken(user.profile);
-        return new Ok({ token, accountCreated: true });
+        return Ok({ token, accountCreated: true });
       }
     } catch (err) {
       captureSentryException(err);
-      return new Err(ERROR_CODES.UNKNOWN_LOGIN_ERROR);
+      return Err(ERROR_CODES.UNKNOWN_LOGIN_ERROR);
     }
   }
 
@@ -212,7 +212,7 @@ export class AuthService {
       if (existingUser) {
         user = existingUser;
         token = this.generateJwtAccessToken(user.profile);
-        return new Ok({ token, accountCreated: false });
+        return Ok({ token, accountCreated: false });
       } else {
         const email = profile.email;
         if (email) {
@@ -226,7 +226,7 @@ export class AuthService {
               githubAccountId,
             );
             token = this.generateJwtAccessToken(user.profile);
-            return new Ok({ token, accountCreated: false });
+            return Ok({ token, accountCreated: false });
           }
         }
 
@@ -255,11 +255,11 @@ export class AuthService {
 
         user = await this.userService.createNewUser(userProfile, "GitHub");
         token = this.generateJwtAccessToken(user.profile);
-        return new Ok({ token, accountCreated: true });
+        return Ok({ token, accountCreated: true });
       }
     } catch (err) {
       captureSentryException(err);
-      return new Err(ERROR_CODES.UNKNOWN_LOGIN_ERROR);
+      return Err(ERROR_CODES.UNKNOWN_LOGIN_ERROR);
     }
   }
 
@@ -280,7 +280,7 @@ export class AuthService {
       if (existingUser) {
         user = existingUser;
         token = this.generateJwtAccessToken(existingUser.profile);
-        return new Ok({ token, accountCreated: false });
+        return Ok({ token, accountCreated: false });
       } else {
         const email = profile.email;
         if (email) {
@@ -294,7 +294,7 @@ export class AuthService {
               googleAccountId,
             );
             token = this.generateJwtAccessToken(user.profile);
-            return new Ok({ token, accountCreated: false });
+            return Ok({ token, accountCreated: false });
           }
         }
 
@@ -313,11 +313,11 @@ export class AuthService {
 
         user = await this.userService.createNewUser(userProfile, "Google");
         token = this.generateJwtAccessToken(user.profile);
-        return new Ok({ token, accountCreated: true });
+        return Ok({ token, accountCreated: true });
       }
     } catch (err) {
       captureSentryException(err);
-      return new Err(ERROR_CODES.UNKNOWN_LOGIN_ERROR);
+      return Err(ERROR_CODES.UNKNOWN_LOGIN_ERROR);
     }
   }
 
@@ -336,7 +336,7 @@ export class AuthService {
 
         if (isAdminEmail(email)) {
           const token = this.generateJwtAccessToken(existingUser.profile);
-          return new Ok({ token, accountCreated: false });
+          return Ok({ token, accountCreated: false });
         } else {
           throw new Error("Unauthorized.");
         }
@@ -346,7 +346,7 @@ export class AuthService {
         );
       }
     } catch (err) {
-      return new Err(ERROR_CODES.UNKNOWN_LOGIN_ERROR);
+      return Err(ERROR_CODES.UNKNOWN_LOGIN_ERROR);
     }
   }
 
