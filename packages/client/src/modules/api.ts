@@ -71,8 +71,8 @@ const HOST = ENV.HOST; /* NestJS Server URL */
  */
 const createNonHttpResponseError = (
   message: string,
-): Err<HttpResponseError> => {
-  return new Err({ status: 418, message }); /* ha */
+): Result<never, HttpResponseError> => {
+  return Err({ status: 418, message }); /* ha */
 };
 
 /** ===========================================================================
@@ -127,7 +127,7 @@ class BaseApiClass {
   ) => {
     try {
       const result = await httpFn();
-      return new Ok(result.data);
+      return Ok(result.data);
     } catch (err) {
       return this.handleHttpError(err);
     }
@@ -173,7 +173,7 @@ class BaseApiClass {
       this.handleForcedLogout();
     }
 
-    return new Err(formattedError);
+    return Err(formattedError);
   };
 
   handleForcedLogout = async () => {
@@ -234,7 +234,7 @@ class Api extends BaseApiClass {
         courses = result.data;
       }
 
-      return new Ok(courses);
+      return Ok(courses);
     } catch (err) {
       return this.handleHttpError(err);
     }
@@ -246,9 +246,9 @@ class Api extends BaseApiClass {
       const courseMap = require("@pairwise/common").default;
       const courses: CourseSkeletonList = Object.values(courseMap);
       const courseSkeletonList = courses.map(mapCourseSkeletonInDev);
-      return new Ok(courseSkeletonList);
+      return Ok(courseSkeletonList);
     } else if (ENV.CODEPRESS) {
-      return lastValueFrom(this.codepressApi.getSkeletons().pipe(map(Ok.of)));
+      return lastValueFrom(this.codepressApi.getSkeletons().pipe(map(Ok)));
     }
 
     return this.httpHandler(async () => {
@@ -287,7 +287,7 @@ class Api extends BaseApiClass {
         lastActiveChallengeIds,
       };
 
-      return new Ok(preAccountUser);
+      return Ok(preAccountUser);
     }
   };
 
@@ -311,7 +311,7 @@ class Api extends BaseApiClass {
    */
   updateUserSettings = async (
     settings: Partial<UserSettings>,
-  ): Promise<Err<HttpResponseError> | Ok<UserStoreState>> => {
+  ): Promise<Result<UserStoreState, HttpResponseError>> => {
     const { authenticated } = this.getRequestHeaders();
     if (authenticated) {
       return this.updateUser({ settings });
@@ -387,7 +387,7 @@ class Api extends BaseApiClass {
       });
     } else {
       const result = localStorageHTTP.fetchUserProgress();
-      return new Ok(result);
+      return Ok(result);
     }
   };
 
@@ -422,7 +422,7 @@ class Api extends BaseApiClass {
         captureSentryException(err);
       }
 
-      return new Ok(result);
+      return Ok(result);
     }
   };
 
@@ -440,7 +440,7 @@ class Api extends BaseApiClass {
         challengeId: SANDBOX_ID,
       };
 
-      return new Ok(result);
+      return Ok(result);
     }
 
     const { config, authenticated } = this.getRequestHeaders();
@@ -453,7 +453,7 @@ class Api extends BaseApiClass {
         );
       });
 
-      if (result.value) {
+      if (result.ok) {
         // Is a null blob, i.e. 404, no blob was found
         if (
           result.value.dataBlob === null &&
@@ -466,7 +466,7 @@ class Api extends BaseApiClass {
           // A valid blob is returned, the if statement above ensures
           // this is the case
           const blob = result.value as ICodeBlobDto;
-          return new Ok(blob);
+          return Ok(blob);
         }
       } else {
         return result;
@@ -485,7 +485,7 @@ class Api extends BaseApiClass {
      */
     if (dataBlob.dataBlob.type === SANDBOX_ID) {
       saveSandboxToLocalStorage(dataBlob.dataBlob);
-      return new Ok(dataBlob);
+      return Ok(dataBlob);
     }
 
     const { config, authenticated } = this.getRequestHeaders();
@@ -495,7 +495,7 @@ class Api extends BaseApiClass {
       });
     } else {
       const result = localStorageHTTP.updateChallengeHistory(dataBlob);
-      return new Ok(result);
+      return Ok(result);
     }
   };
 
@@ -518,7 +518,7 @@ class Api extends BaseApiClass {
         courseId,
         challengeId,
       );
-      return new Ok(result);
+      return Ok(result);
     }
   };
 
@@ -577,12 +577,12 @@ class Api extends BaseApiClass {
 
       // Response should be 'true' is user is an admin
       if (result === true) {
-        return new Ok(true);
+        return Ok(true);
       } else {
-        return new Err(false);
+        return Err(false);
       }
     } catch (err) {
-      return new Err(false);
+      return Err(false);
     }
   };
 
@@ -746,9 +746,9 @@ class LocalStorageHttpClass {
     );
 
     if (challengeId in blobs) {
-      return new Ok(blobs[challengeId]);
+      return Ok(blobs[challengeId]);
     } else {
-      return new Err({
+      return Err({
         status: 404,
         message: "Blob not found!",
       });
@@ -897,7 +897,7 @@ class LocalStorageHttpClass {
   }
 
   private logErrorIfOperationFailed(result: MaybeFailedResponse) {
-    if (result.error) {
+    if (result.ok === false) {
       console.warn(
         "[WARNING]: A new account data persistence request failed!",
         result.error,

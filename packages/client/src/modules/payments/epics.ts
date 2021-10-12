@@ -110,7 +110,7 @@ const startCheckoutEpic: EpicSignature = (action$, state$, deps) => {
     pluck("payload"),
     mergeMap(deps.api.createCheckoutSession),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         return Actions.startCheckoutSuccess(result.value);
       } else {
         deps.toaster.warn("Failed to start checkout, please try again!");

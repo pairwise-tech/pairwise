@@ -19,7 +19,7 @@ const submitUserFeedbackEpic: EpicSignature = (action$, _, deps) => {
     pluck("payload"),
     mergeMap(deps.api.submitUserFeedback),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         deps.toaster.success("Feedback Submitted Successfully!");
         return Actions.submitUserFeedbackSuccess();
       } else {
@@ -40,7 +40,7 @@ const submitGenericFeedbackEpic: EpicSignature = (action$, _, deps) => {
     pluck("payload"),
     mergeMap(deps.api.submitGenericFeedback),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         deps.toaster.success("Feedback Submitted Successfully!");
         return Actions.submitGeneralFeedbackSuccess();
       } else {

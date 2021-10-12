@@ -184,24 +184,24 @@ const userLeaderboard = createReducer<UserLeaderboardState, UserActionTypes>(
 const publicUserProfile = createReducer<
   PublicUserProfileState,
   UserActionTypes
->({ loading: false, data: new None() })
+>({ loading: false, data: None() })
   .handleAction(actions.fetchPublicUserProfile, (state) => {
     return {
       ...state,
       loading: true,
-      data: new None(),
+      data: None(),
     };
   })
   .handleAction(actions.fetchPublicUserProfileSuccess, (state, action) => {
     return {
       loading: false,
-      data: new Some(action.payload),
+      data: Some(action.payload),
     };
   })
   .handleAction(actions.fetchPublicUserProfileFailure, (state, action) => {
     return {
       loading: false,
-      data: new None(),
+      data: None(),
     };
   });
 

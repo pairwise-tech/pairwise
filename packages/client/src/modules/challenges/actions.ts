@@ -360,7 +360,7 @@ export const fetchPullRequestCourseListSuccess = createAction(
 
 export const fetchPullRequestCourseListFailure = createAction(
   ActionTypesEnum.LOAD_PULL_REQUEST_COURSE_LIST_FAILURE,
-)<HttpResponseError>();
+)<HttpResponseError | undefined>();
 
 export const resetPullRequestState = createAction(
   ActionTypesEnum.RESET_PULL_REQUEST_STATE,

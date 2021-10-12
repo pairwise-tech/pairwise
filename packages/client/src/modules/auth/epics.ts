@@ -112,7 +112,7 @@ const isUserAdminEpic: EpicSignature = (action$, _, deps) => {
     filter((x) => x.payload.accessToken !== ""),
     mergeMap(deps.api.isUserAdmin),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         return Actions.userIsAdmin();
       } else {
         return Actions.empty("isUserAdminEpic no-op - user is not an admin.");
@@ -164,7 +164,7 @@ const loginByEmailEpic: EpicSignature = (action$, _, deps) => {
 
       // Send the request
       const result = await deps.api.loginByEmail(email);
-      if (result.value) {
+      if (result.ok) {
         deps.toaster.success(
           "Email sent! If you don't see it, you may need to check your spam or junk folder.",
         );
@@ -187,7 +187,7 @@ const logoutUserEpic: EpicSignature = (action$, _, deps) => {
     mergeMap(async (payload) => {
       const result = await deps.api.logoutUser();
 
-      if (result.error) {
+      if (result.ok === false) {
         console.error("Error occurring processing logout.", result.error);
       }
 

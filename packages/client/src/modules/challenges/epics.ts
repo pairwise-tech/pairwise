@@ -17,6 +17,7 @@ import {
   Some,
   None,
   Option,
+  matchResult,
 } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
 import { merge, of, combineLatest, Observable, partition } from "rxjs";
@@ -230,12 +231,11 @@ const courseSkeletonsInitializationEpic: EpicSignature = (action$, _, deps) => {
       ]),
     ),
     mergeMap(deps.api.fetchCourseSkeletons),
-    map(({ value: courses, error }) => {
-      if (courses) {
-        return Actions.fetchNavigationSkeletonSuccess(courses);
-      } else {
-        return Actions.fetchNavigationSkeletonFailure(error);
-      }
+    map((result) => {
+      return matchResult(result, {
+        ok: Actions.fetchNavigationSkeletonSuccess,
+        err: Actions.fetchNavigationSkeletonFailure,
+      });
     }),
   );
 };
@@ -254,7 +254,7 @@ const coursesInitializationEpic: EpicSignature = (action$, _, deps) => {
     ),
     mergeMap(deps.api.fetchCourses),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         return Actions.fetchCoursesSuccess({ courses: result.value });
       } else {
         return Actions.fetchCoursesFailure(result.error);
@@ -272,15 +272,13 @@ const fetchAdminCourseListEpic: EpicSignature = (action$, _, deps) => {
     pluck("payload"),
     mergeMap(deps.api.fetchAdminPullRequestCourseList),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         const courses = result.value;
         const { challengeIds } = courses;
         if (challengeIds.length === 0) {
           const msg = "No modified challenge ids found for this pull request.";
           deps.toaster.warn(msg);
-          return Actions.fetchPullRequestCourseListFailure(
-            deps.api.createNonHttpResponseError(msg).error,
-          );
+          return Actions.fetchPullRequestCourseListFailure(undefined);
         } else {
           deps.toaster.success(
             "Successfully loaded pull request course content.",
@@ -646,7 +644,7 @@ const fetchCodeBlobForChallengeEpic: EpicSignature = (
         });
       } else {
         const result = await deps.api.fetchChallengeBlob(id);
-        if (result.value) {
+        if (result.ok) {
           return Actions.fetchBlobForChallengeSuccess(result.value);
         } else {
           return Actions.fetchBlobForChallengeFailure({
@@ -677,7 +675,7 @@ const updateLastActiveChallengeIdsEpic: EpicSignature = (action$, _, deps) => {
       );
     }),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         return Actions.updateLastActiveChallengeIdsSuccess(result.value);
       } else {
         return Actions.updateLastActiveChallengeIdsFailure();
@@ -746,9 +744,9 @@ const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
           challengeId: id,
           dataBlob: cachedItem.dataBlob,
         };
-        return new Some(codeBlob);
+        return Some(codeBlob);
       } else {
-        return new None();
+        return None();
       }
     }),
     map((result: Option<ICodeBlobDto>) => {
@@ -781,7 +779,7 @@ const saveCodeBlobEpic: EpicSignature = (action$, _, deps) => {
     pluck("payload"),
     mergeMap(deps.api.updateChallengeBlob),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         return Actions.saveChallengeBlobSuccess();
       } else {
         return Actions.saveChallengeBlobFailure(result.error);
@@ -825,7 +823,7 @@ const completeContentOnlyChallengeEpic: EpicSignature = (
     filter((x) => x.type !== "project"), // Exclude projects
     map(({ id }) => constructProgressDto(state$.value, id, true)),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         return Actions.updateUserProgress(result.value);
       } else {
         return Actions.empty("Did not save user progress");
@@ -844,7 +842,7 @@ const completeProjectSubmissionEpic: EpicSignature = (action$, state$) => {
     filter((x) => x.type === "project"),
     map(({ id }) => constructProgressDto(state$.value, id, true)),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         return Actions.updateUserProgress(result.value);
       } else {
         return Actions.empty("Did not save user progress");
@@ -869,7 +867,7 @@ const handleAttemptChallengeEpic: EpicSignature = (action$, state$) => {
       constructProgressDto(state$.value, challengeId, complete),
     ),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         return Actions.updateUserProgress(result.value);
       } else {
         return Actions.empty("Did not save user progress");
@@ -895,7 +893,7 @@ const updateUserProgressEpic: EpicSignature = (action$, state$, deps) => {
     throttleTime(500),
     mergeMap(deps.api.updateUserProgress),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         return Actions.updateUserProgressSuccess(result.value);
       } else {
         return Actions.updateUserProgressFailure(result.error);
@@ -1033,12 +1031,12 @@ const constructProgressDto = (
       timeCompleted: new Date(),
     };
 
-    return new Ok(payload);
+    return Ok(payload);
   } else {
     const msg =
       "[WARNING!]: No active course id found in challenge completion epic, this shouldn't happen...";
     console.warn(msg);
-    return new Err(msg);
+    return Err(msg);
   }
 };
 

@@ -24,7 +24,7 @@ const fetchUserEpic: EpicSignature = (action$, _, deps) => {
     filter(isActionOf([Actions.storeAccessTokenSuccess, Actions.fetchUser])),
     mergeMap(API.fetchUserProfile),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         return Actions.fetchUserSuccess(result.value);
       } else {
         deps.toaster.warn(
@@ -42,7 +42,7 @@ const updateUserEpic: EpicSignature = (action$, _, deps) => {
     pluck("payload"),
     mergeMap(API.updateUser),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         deps.toaster.success("Profile Updated 👍");
         return Actions.updateUserSuccess(result.value);
       } else {
@@ -75,7 +75,7 @@ const updateUserEmailEpic: EpicSignature = (action$, _, deps) => {
 
       deps.toaster.warn("Sending email verification link...");
       const result = await API.updateUserEmail(email);
-      if (result.value) {
+      if (result.ok) {
         deps.toaster.success(
           "Please check your email for verification instructions.",
         );
@@ -102,7 +102,7 @@ const updateUserSettingsEpic: EpicSignature = (action$, _, deps) => {
     pluck("payload"),
     mergeMap(API.updateUserSettings),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         return Actions.updateUserSettingsSuccess(result.value);
       } else {
         return Actions.updateUserSettingsFailure(result.error);
@@ -116,7 +116,7 @@ const fetchUserLeaderboardEpic: EpicSignature = (action$, _, deps) => {
     filter(isActionOf(Actions.fetchUserLeaderboard)),
     mergeMap(API.fetchUserLeaderboard),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         return Actions.fetchUserLeaderboardSuccess(result.value);
       } else {
         return Actions.fetchUserLeaderboardFailure(result.error);
@@ -131,7 +131,7 @@ const disconnectAccountEpic: EpicSignature = (action$, _, deps) => {
     pluck("payload"),
     mergeMap(API.disconnectAccount),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         deps.toaster.success("Account disconnected.");
         return Actions.disconnectAccountSuccess(result.value);
       } else {
@@ -147,7 +147,7 @@ const deleteUserAccountEpic: EpicSignature = (action$, _, deps) => {
     tap(() => deps.toaster.warn("Deleting user account...")),
     mergeMap(API.deleteUserAccount),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         deps.toaster.warn(
           "Your account has been permanently deleted. You will be logged out now.",
         );
@@ -177,7 +177,7 @@ const fetchPublicUserProfileEpic: EpicSignature = (action$, _, deps) => {
     pluck("username"),
     mergeMap(API.fetchUserPublicProfileByUsername),
     map((result) => {
-      if (result.value) {
+      if (result.ok) {
         return Actions.fetchPublicUserProfileSuccess(result.value);
       } else {
         return Actions.fetchPublicUserProfileFailure(result.error);
