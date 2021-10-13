@@ -1090,7 +1090,29 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "How do modules, libraries, and package management work in Rust?"
+          "content": "First, in case you have not already, you can install the Rust toolchain using `rustup`. [Start here](https://rustup.rs) to get Rust installed on your machine.\n\nOnce you have Rust installed you are ready to start writing and compiling your own programs. In Rust, the official package management tool is called Cargo. You can use Cargo to download crates \\(libraries\\) from [crates\\.io](https://crates.io/), compile and run your project, build your own library binary, run tests and benchmarks, and finally build a release binary for production. In Rust, external dependency libraries are called \"crates\". You can install and manage them in your project using the `Cargo.toml` file\\.\n\nHere are some helpful `rustup` commands:\n\n```bash\n# Show the Rustup toolchain version\nrustup --version\n\n# Set the Rustup language default to stable Rust\nrustup default stable\n\n# Set the Rustup language default to Nightly Rust\nrustup default stable\n\n```\n\nAnd here are some common Cargo commands:\n\n```bash\n# Create a new binary project\ncargo new my-rust-program --bin\n\n# Create a new library (crate project\ncargo new my-rust-program --lib\n\n# Run project tests\ncargo test\n\n# Compile and run your code\ncargo run\n\n# Build a binary for your program\ncargo build\n\n```\n\nIt's convenient to have your code re\\-compile and run automatically when you are frequently working on a project. You can do this with the [cargo\\-watch crate](https://crates.io/crates/cargo-watch/3.1.1).\n\nFinally, Rust provides a standardized code formatting tool which you can use to format you Rust code in a consistent way. This tool can be run using `cargo fmt` and you can see details about [how to install it here](https://github.com/rust-lang/rustfmt).\n\n---\n\nThese are the basics to get started building Rust projects on your local computer. In the next challenge, we will walk through all of the above steps in a video and also explain Rust's module system: how to organize your code into different files and folders and then import and share code throughout your program. With that out of the way, you will be ready to start writing your own Rust programs\\!"
+        },
+        {
+          "type": "media",
+          "id": "AyZ9ryzt3",
+          "title": "Running Rust Locally",
+          "instructions": "",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In this video we walk through all of the setup steps to run Rust locally."
+        },
+        {
+          "type": "media",
+          "id": "dAOhBdHzh",
+          "title": "Rust's Module System",
+          "instructions": "",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Rust provides a module system which allows you to organize code into different files and folders and share code between them. In this video, we will "
         }
       ]
     },
