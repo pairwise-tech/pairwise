@@ -196,13 +196,24 @@ class Account extends React.Component<IProps, IState> {
             </TextItem>
           </div>
         ) : usingGravatar ? (
-          <TextItem style={{ marginBottom: 24 }}>
-            Profile is currently using Gravatar for the avatar icon.{" "}
-            <ExternalLink link="https://en.gravatar.com/support/what-is-gravatar/">
-              Learn more here
-            </ExternalLink>
-            .
-          </TextItem>
+          <>
+            <TextItem style={{ marginBottom: 24 }}>
+              Profile is currently using Gravatar for the avatar icon.{" "}
+              <ExternalLink link="https://en.gravatar.com/support/what-is-gravatar/">
+                Learn more here
+              </ExternalLink>
+              .
+            </TextItem>
+            <Checkbox
+              checked={this.state.editAvatarUseGravatar}
+              label="Use Gravatar for my avatar icon."
+              onChange={() =>
+                this.setState({
+                  editAvatarUseGravatar: !this.state.editAvatarUseGravatar,
+                })
+              }
+            />
+          </>
         ) : null}
         <TextItem id="profile-given-name">
           <Bold>Given Name:</Bold> {!edit && profile.givenName}
