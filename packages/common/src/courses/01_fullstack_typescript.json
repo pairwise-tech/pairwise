@@ -105,6 +105,17 @@
           "content": ""
         },
         {
+          "type": "typescript",
+          "id": "6INEtFAT7",
+          "title": "Calculate the Volume of a Box",
+          "instructions": "Programming language provide constructs which allow you to group together data and behavior/actions. These data structures may be commonly called objects or classes in many programming languages. Take a look at the code below to see how an object may work.\n\nTo pass the challenge, complete the `getBoxVolume` function to calculate and return the volume of the given box.",
+          "testCode": "test(\"The `getBoxVolume` function should return the volume of the given box.\", () => {\n  let box: Box = {\n    width: 5,\n    height: 10,\n    depth: 8,\n  };\n  expect(getBoxVolume(box)).toBe(5 * 10 * 8);\n\n  box = {\n    width: 50,\n    height: 110,\n    depth: 82,\n  };\n  expect(getBoxVolume(box)).toBe(50 * 110 * 82);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// The type definition of a box:\ninterface Box {\n  width: number;\n  height: number;\n  depth: number;\n}\n\n// A new box object\nconst box: Box = {\n  width: 5,\n  height: 10,\n  depth: 8,\n}\n\n// A function to calculate the volume of a box object\nfunction getBoxVolume(box: Box): number {\n  // We can read a property from an object like this:\n  const width = box.width;\n  console.log(`The width of the box is: ${width}`);\n\n  // Your job: complete this function to return the volume of the box\n}\n\nconst volume = getBoxVolume(box);\nconsole.log(`The volume of the box is: ${volume}`);",
+          "solutionCode": "// The type definition of a box:\ninterface Box {\n  width: number;\n  height: number;\n  depth: number;\n}\n\n// A new box object\nconst box: Box = {\n  width: 5,\n  height: 10,\n  depth: 8,\n}\n\n// A function to calculate the volume of a box object\nfunction getBoxVolume(box: Box): number {\n  // We can destructure all three properties like this:\n  const { width, height, depth } = box;\n  const volume = width * height * depth;\n  return volume;\n\n  // You could also do this:\n  // return box.width * box.height * box.depth;\n}\n\nconst volume = getBoxVolume(box);\nconsole.log(`The volume of the box is: ${volume}`);",
+          "content": ""
+        },
+        {
           "id": "yxZjmD0o",
           "type": "media",
           "title": "Welcome to Pairwise! 🎉",
