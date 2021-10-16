@@ -135,7 +135,6 @@ ID (video ID)
     });
   };
 
-  const IS_MEDIA = challenge.type === "media";
   const IS_PROJECT = challenge.type === "project";
 
   return (
@@ -143,9 +142,9 @@ ID (video ID)
       <div style={{ height: 8 }} /> {/* Add some space */}
       <Breadcrumbs
         type="media"
+        displaySkillIcon={false}
         hideInstructionsModalButton
         isMobileView={isMobileView}
-        displaySkillIcon={IS_MEDIA || IS_PROJECT}
       />
       <TitleHeader>
         <EditableText
