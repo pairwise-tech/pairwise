@@ -116,6 +116,17 @@
           "content": ""
         },
         {
+          "id": "30f72918U",
+          "type": "react",
+          "title": "A View Into ReactJS",
+          "instructions": "Later in the course we will cover ReactJS, a popular UI library used for building frontend applications and even mobile apps. Let's take a look here. React combines HTML/CSS with a programming language, like TypeScript, to let you build flexible and expressive applications.\n\nIn the editor below is a standard React component. It renders some markup to the page \\(look to the preview on the right to see\\). Add an `<h1>` tag which includes the text `Hello, React!` to complete the challenge.",
+          "testCode": "test(\"The `App` component should be defined.\", () => {\n  expect(App).toBeDefined();\n});\n\ntest(\"The `App` component should render a `div` tag.\", () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n  const tag = container.querySelector(\"div\");\n  expect(tag.tagName).toBe(\"DIV\");\n});\n\ntest(\"The `App` component should render an `h1` tag with the text `Hello, React!`.\", () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n  const tag = container.querySelector(\"h1\");\n  expect(tag.tagName).toBe(\"H1\");\n  expect(tag.innerHTML).toBe(\"Hello, React!\");\n});\n",
+          "videoUrl": "https://www.youtube.com/embed/NcdRYj4lu4k",
+          "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\n// This is a React class component\nclass App extends React.Component {\n  // React components must include a render method which\n  // returns JSX: special HTML markup elements, but you\n  // can for now basically just treat it like HTML.\n  render(): JSX.Element {\n    return (\n      <div>\n        <p>This React component renders HTML elements to a page.</p>\n        <p>But this is a TypeScript file, not an HTML file!</p>\n      </div>\n    )\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\n// This is a React class component\nclass App extends React.Component {\n  // React components must include a render method which\n  // returns JSX: special HTML markup elements, but you\n  // can for now basically just treat it like HTML.\n  render(): JSX.Element {\n    return (\n      <div>\n        <p>This React component renders HTML elements to a page.</p>\n        <p>But this is a TypeScript file, not an HTML file!</p>\n        <h1>Hello, React!</h1>\n      </div>\n    )\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
+          "content": ""
+        },
+        {
           "id": "yxZjmD0o",
           "type": "media",
           "title": "Welcome to Pairwise! 🎉",
@@ -129,7 +140,7 @@
       ]
     },
     {
-      "free": true,
+      "free": false,
       "id": "fpvPtNWkC",
       "title": "HTML & CSS",
       "challenges": [
@@ -879,7 +890,7 @@
       ]
     },
     {
-      "free": true,
+      "free": false,
       "id": "lzTzpPcS",
       "title": "TypeScript",
       "skillTags": [
