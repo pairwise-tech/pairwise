@@ -37,6 +37,21 @@
           ]
         },
         {
+          "type": "markup",
+          "id": "@lFys5akJ",
+          "title": "HTML Tags",
+          "instructions": "The previous intro challenge rendered an `<h1>` tag to an HTML document. HTML has several different tags available to use, with different semantic meanings. The all follow a similar syntax, there is an 'opening' and 'closing' tag with the content contained on the inside.\n\nTake a look at the tags defined below. The \"h\" in `<h1>` stands for \"heading\", and it turns out there are other heading tags. Somewhere in the editor below, render an `h3` and `h4` heading tag, with some text content inside.",
+          "testCode": "test(\"The HTML document should render an `h3` and `h4` tag with text contents inside them.\", () => {\n  expect(get(\"h1\")).toBeDefined();\n  expect(get(\"h3\") !== null).toBe(true);\n  expect(get(\"h4\") !== null).toBe(true);\n  expect(get(\"h3\").innerHTML.length > 0).toBe(true);\n  expect(get(\"h4\").innerHTML.length > 0).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "<h1>This is an h1 heading tag</h1>\n<h2>This is an h2 heading tag</h1>\n<p>This is a paragraph tag. How many other 'heading' tags are there?</p>",
+          "solutionCode": "<h1>This is an h1 heading tag</h1>\n<h2>This is an h2 heading tag</h1>\n<h3>This is an h3 heading tag</h3>\n<h4>This is an h4 heading tag</h4>\n<p>This is a paragraph tag. How many other 'heading' tags are there?</p>",
+          "content": "",
+          "skillTags": [
+            "HTML",
+            "CSS"
+          ]
+        },
+        {
           "id": "Oqha$qtc",
           "type": "markup",
           "title": "Style HTML with CSS",
