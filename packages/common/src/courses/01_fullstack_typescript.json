@@ -51,9 +51,23 @@
           ]
         },
         {
+          "type": "typescript",
+          "id": "PWZ5Psyes",
+          "title": "Start Programming",
+          "instructions": "Now let's switch from HTML and CSS to a real programming language: TypeScript. In the editor below we define some variables and log out their variables \\(take a look at the console on the right when you click the \"Run\" button. Take a look at the test cases, and update the variable definitions to pass the challenge.",
+          "testCode": "test(\"The `smaller` and `larger` variables should be declared so that the `smaller` value is less than the `larger` value.\", () => {\n  expect(smaller < larger).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "let smaller: number = 500;\nlet larger: number = 100;\n\nconsole.log(`Smaller: ${smaller}`);\nconsole.log(`Larger: ${larger}`);\n\n// Don't worry if you don't understand all the syntax yet!\nconsole.log(`Is smaller less than larger? ${smaller < larger ? \"Yes\" : \"No\"}`);\n",
+          "solutionCode": "let smaller: number = 500;\nlet larger: number = 1000;\n\nconsole.log(`Smaller: ${smaller}`);\nconsole.log(`Larger: ${larger}`);\n\n// Don't worry if you don't understand all the syntax yet!\nconsole.log(`Is smaller less than larger? ${smaller < larger ? \"Yes\" : \"No\"}`);\n",
+          "content": "",
+          "skillTags": [
+            "TypeScript"
+          ]
+        },
+        {
           "id": "Sbb4Nf76s",
           "type": "typescript",
-          "title": "Start Programming",
+          "title": "Write a Function",
           "instructions": "Let's start with something very simple. Take a look at the code editor below. There you will find two functions, the `addTwoNumbers` function \\(which is complete\\) and the `subtractTwoNumbers` function \\(which is incomplete\\). This challenge is a little harder than the previous two \\- if you feel lost, check out the [video](#{\"component\":\"VideoPlayButton\"}) for some help\\!\n\nTake a look at the code and the comments \\(green colored text\\). Try to complete the `subtractTwoNumbers` function\\! When you are finished, press the \"Run\" button to run your code against the tests\\!",
           "testCode": "const tests: [number, number][] = [\n  [3234, 435],\n  [32134, 46645],\n  [31234, 2342231],\n  [321341, 4234],\n  [3234, 2342],\n  [92342, 437],\n  [2343, 432324],\n  [233, 235],\n  [36579, 444],\n  [3, 12],\n];\n\ntest(\"The `addTwoNumbers` function should add the arguments together and return the result.\", () => {\n  for (const testCase of tests) {\n    const a = testCase[0];\n    const b = testCase[1];\n    const result = addTwoNumbers(a, b);\n    expect(result).toBe(testCase[0] + testCase[1]);\n  }\n});\n\ntest(\"The `subtractTwoNumbers` function should accept two arguments and return the result of subtracting the second from the first.\", () => {\n  for (const testCase of tests) {\n    const a = testCase[0];\n    const b = testCase[1];\n    const result = subtractTwoNumbers(a, b);\n    expect(result).toBe(testCase[0] - testCase[1]);\n  }\n});\n",
           "videoUrl": "https://www.youtube.com/embed/uLwyU-vfY0c",
@@ -63,6 +77,17 @@
           "skillTags": [
             "TypeScript"
           ]
+        },
+        {
+          "type": "typescript",
+          "id": "pJt6X5tBc",
+          "title": "Sum Up a List",
+          "instructions": "We can define a list of values using an array: `[1, 2, 10, 13, 18, 5]`. Then, we can iterate or loop through the array of values using a `for..of` loop\\. Take a look at the editor to see how to do this.\n\nThere is a loop which iterates through the `list` of numbers, and also a `sum` variable\\. Update the loop body to increment this `sum` so that in the end it has the value of all the items in the list.",
+          "testCode": "test(\"The `sum` variable should be equal to the sum of all the values in the list.\", () => {\n  expect(sum).toBe(list.reduce((s, x) => s + x, 0));\n});\n",
+          "videoUrl": "",
+          "starterCode": "// An array of numbers\nconst list: number[] = [6, 8, 91, 17, 18, 22, 5, 3, 7];\n\nlet sum: number = 0;\n\n// A for..of loop which iterates through the array\nfor (const n of list) {\n  console.log(n);\n\n  // TODO: Add code here to update the 'sum' variable\n  // for each loop iteration, so that in the end the\n  // 'sum' value is equivalent to the sum of all values\n  // in the list.\n}\n\nconsole.log(`The sum of all the numbers in the list is: ${sum}`);",
+          "solutionCode": "// An array of numbers\nconst list: number[] = [6, 8, 91, 17, 18, 22, 5, 3, 7];\n\nlet sum: number = 0;\n\n// A for..of loop which iterates through the array\nfor (const n of list) {\n  console.log(n);\n\n  // A n to the sum value on each loop iteration\n  sum = sum + n;\n}\n\nconsole.log(`The sum of all the numbers in the list is: ${sum}`);",
+          "content": ""
         },
         {
           "id": "yxZjmD0o",

@@ -367,9 +367,13 @@ const executeRustChallengeTests = async (
   codeString: string,
   testString: string,
   isUnitTestChallenge: boolean = false,
+  customCodeRunnerUrl?: string,
 ): Promise<AlternateLanguageTestResult> => {
   try {
-    const url = `${PAIRWISE_CODE_RUNNER_API}/api/rust`;
+    const baseURL = customCodeRunnerUrl
+      ? customCodeRunnerUrl
+      : PAIRWISE_CODE_RUNNER_API;
+    const url = `${baseURL}/api/rust`;
     const body = JSON.stringify({
       codeString,
       testString,
