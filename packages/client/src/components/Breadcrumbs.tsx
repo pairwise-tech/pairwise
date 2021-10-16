@@ -119,7 +119,7 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
                 content="View challenge instructions in a modal."
               >
                 <Button
-                  style={{ marginLeft: 4 }}
+                  style={{ marginLeft: 5 }}
                   onClick={() => setChallengeInstructionsModalState(true)}
                 >
                   <Icon iconSize={16} icon="search" />

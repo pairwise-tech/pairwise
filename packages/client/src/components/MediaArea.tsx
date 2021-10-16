@@ -135,7 +135,6 @@ ID (video ID)
     });
   };
 
-  const IS_MEDIA = challenge.type === "media";
   const IS_PROJECT = challenge.type === "project";
 
   return (
@@ -143,9 +142,9 @@ ID (video ID)
       <div style={{ height: 8 }} /> {/* Add some space */}
       <Breadcrumbs
         type="media"
+        displaySkillIcon={false}
         hideInstructionsModalButton
         isMobileView={isMobileView}
-        displaySkillIcon={IS_MEDIA || IS_PROJECT}
       />
       <TitleHeader>
         <EditableText
@@ -439,7 +438,7 @@ export const scrollToVideoAndPlay = () => {
   el.scrollIntoView({ behavior: "smooth" });
 
   // Reverse engineered the postMessage call to play the vid without external
-  // SDK. This is... unecessary. We could just use youtube's YT.js, however I
+  // SDK. This is... unnecessary. We could just use youtube's YT.js, however I
   // really didn't want to include an external lib just to make this play. Yes,
   // I'm being silly but my silliness lead me to the post message call they use
   // internally to play. Anyway, here we are.

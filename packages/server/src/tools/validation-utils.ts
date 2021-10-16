@@ -176,21 +176,22 @@ export const validateUserUpdateDetails = (
     const settingsUpdate = checkSettingsField(details.settings);
     const mergedSettings = { ...user.settings, ...settingsUpdate };
     const settingsJSON = JSON.stringify(mergedSettings);
+    const { profile } = user;
 
     // Does NOT include email:
     const updateDetails = {
       settings: settingsJSON,
-      username: checkStringField(details.username),
-      avatarUrl: checkStringField(details.avatarUrl, 100),
-      givenName: checkStringField(details.givenName),
-      familyName: checkStringField(details.familyName),
+      username: checkStringField(details.username, profile.username),
+      avatarUrl: checkStringField(details.avatarUrl, profile.avatarUrl, 100),
+      givenName: checkStringField(details.givenName, profile.givenName),
+      familyName: checkStringField(details.familyName, profile.familyName),
       optInPublicProfile: checkBooleanField(details.optInPublicProfile),
       optInShareAnonymousGeolocationActivity: checkBooleanField(
         details.optInShareAnonymousGeolocationActivity,
       ),
     };
 
-    const sanitizedUpdate = sanitizeObject(updateDetails);
+    const sanitizedUpdate = removeNullFields(updateDetails);
     return Ok(sanitizedUpdate);
   } catch (err) {
     captureSentryException(err);
@@ -224,10 +225,15 @@ export const validateEmailUpdateRequest = (value: string) => {
 
 const checkStringField = (
   value: any,
+  existing: string,
   maxLength: number = 30,
   rejectEmptyValues = false,
 ) => {
   if (typeof value === "string") {
+    if (value === existing) {
+      return null;
+    }
+
     if (rejectEmptyValues && value === "") {
       throw new Error("Field cannot be empty!");
     }
@@ -275,7 +281,7 @@ const checkSettingsField = (settings?: Partial<UserSettings>) => {
       consoleDarkTheme: checkConsoleDarkThemeField(settings.consoleDarkTheme),
     };
 
-    return sanitizeObject(validSettings);
+    return removeNullFields(validSettings);
   }
 
   return {};
@@ -284,7 +290,7 @@ const checkSettingsField = (settings?: Partial<UserSettings>) => {
 /**
  * Remove [key]: null key:value pairs from an object.
  */
-const sanitizeObject = (obj: any) => {
+const removeNullFields = (obj: any) => {
   const sanitizedObject = {};
 
   /* Only add fields which pass the check: */
