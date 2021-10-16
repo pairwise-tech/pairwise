@@ -439,7 +439,7 @@ export const scrollToVideoAndPlay = () => {
   el.scrollIntoView({ behavior: "smooth" });
 
   // Reverse engineered the postMessage call to play the vid without external
-  // SDK. This is... unecessary. We could just use youtube's YT.js, however I
+  // SDK. This is... unnecessary. We could just use youtube's YT.js, however I
   // really didn't want to include an external lib just to make this play. Yes,
   // I'm being silly but my silliness lead me to the post message call they use
   // internally to play. Anyway, here we are.
