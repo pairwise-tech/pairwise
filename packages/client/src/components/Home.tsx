@@ -78,8 +78,7 @@ class Home extends React.Component<IProps, {}> {
                 </ContentText>
               </>
             )}
-            {/* Currently only available in Codepress */}
-            {CODEPRESS && this.props.skeletons?.map(this.renderCourseItem)}
+            {this.props.skeletons?.map(this.renderCourseItem)}
           </ContentContainer>
           <CourseProgressContainer>
             {userCourseProgressSummary && currentNavigationOverlayCourse && (
