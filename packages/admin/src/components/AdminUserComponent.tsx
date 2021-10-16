@@ -187,14 +187,15 @@ class AdminUserComponent extends React.Component<
               >
                 Gift Course (REGULAR)
               </CardButton>
-              <CardButton
+              {/* Not available at the moment: */}
+              {/* <CardButton
                 icon="dollar"
                 onClick={() =>
                   this.setState({ alert: "gift", plan: "PREMIUM" })
                 }
               >
                 Gift Course (PREMIUM)
-              </CardButton>
+              </CardButton> */}
             </>
           ) : payment.status === "CONFIRMED" ? (
             <CardButton
