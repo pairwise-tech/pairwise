@@ -22,7 +22,7 @@ import {
 describe("Account Creation Flow", () => {
   it("Creating an account persists last active challenge ids correctly", () => {
     // Visit a challenge in one course
-    cy.visit(`${CLIENT_APP_URL}/workspace/EztzbqIDQ`);
+    cy.visit(`${CLIENT_APP_URL}/workspace/6INEtFAT7`);
     cy.wait(TIMEOUT);
 
     // Helper to check both of the above challenges are saved correctly
@@ -30,7 +30,7 @@ describe("Account Creation Flow", () => {
       // Return to the home route
       click("header-home-link");
       click("course-link-0-start");
-      cy.url().should("include", "workspace/EztzbqIDQ");
+      cy.url().should("include", "workspace/6INEtFAT7");
     };
 
     cy.reload();
@@ -48,10 +48,10 @@ describe("Account Creation Flow", () => {
     checkTheHomeChallengeLinks();
 
     // Visit a different challenge
-    cy.visit(`${CLIENT_APP_URL}/workspace/Hvnu4UcaE`);
+    cy.visit(`${CLIENT_APP_URL}/workspace/30f72918U`);
     cy.wait(TIMEOUT);
 
-    cy.visit(`${CLIENT_APP_URL}/workspace/66sfsGVp8`);
+    cy.visit(`${CLIENT_APP_URL}/workspace/@lFys5akJ`);
     cy.wait(TIMEOUT);
 
     // Return home and reload
@@ -61,7 +61,7 @@ describe("Account Creation Flow", () => {
 
     // Check the id updated
     click("course-link-0-start");
-    cy.url().should("include", "workspace/66sfsGVp8");
+    cy.url().should("include", "workspace/@lFys5akJ");
   });
 
   it("Creating an account persists pre-login updates correctly", () => {
@@ -71,11 +71,11 @@ describe("Account Creation Flow", () => {
 
     /* Open the navigation menu and navigate to the first programming challenge: */
     click("navigation-menu-button");
-    click("module-navigation-1");
-    click("challenge-navigation-2");
+    click("module-navigation-0");
+    click("challenge-navigation-4");
 
     checkTestResultStatus("Incomplete...");
-    typeTextInCodeEditor("<h1>Hello!</h1>");
+    typeTextInCodeEditor(SOLUTIONS["4"]);
     checkTestResultStatus("Success!");
 
     goToNextChallenge();
@@ -83,19 +83,15 @@ describe("Account Creation Flow", () => {
     click("pw-run-code");
     checkTestStatus("Success!", 0);
     checkTestStatus("Incomplete...", 1);
-    checkTestStatus("Incomplete...", 2);
-    checkTestStatus("Incomplete...", 3);
-    checkTestStatus("Incomplete...", 4);
-    checkTestStatus("Incomplete...", 5);
-    typeTextInCodeEditor(
-      "<h1>1</h1><h2>2</h2><h3>3</h3><h4>4</h4><h5>5</h5><h6>6</h6>",
-    );
-    checkTestResultStatus("Success!", 6);
+    typeTextInCodeEditor(SOLUTIONS["5"]);
+    click("pw-run-code");
+    checkTestResultStatus("Success!", 2);
 
     goToNextChallenge();
-    checkTestResultStatus("Incomplete...", 3);
-    typeTextInCodeEditor("<p>This text is: <b>bold!</b></p>");
-    checkTestResultStatus("Success!", 3);
+    checkTestResultStatus("Incomplete...", 1);
+    typeTextInCodeEditor(SOLUTIONS["6"]);
+    click("pw-run-code");
+    checkTestResultStatus("Success!", 1);
     goToNextChallenge();
 
     checkNavigationOverlay();
@@ -169,9 +165,9 @@ describe("Account Creation Flow", () => {
  */
 const checkNavigationOverlay = () => {
   click("navigation-menu-button");
-  cy.get("#challenge-2-icon-COMPLETE").should("exist");
-  cy.get("#challenge-3-icon-COMPLETE").should("exist");
   cy.get("#challenge-4-icon-COMPLETE").should("exist");
+  cy.get("#challenge-5-icon-COMPLETE").should("exist");
+  cy.get("#challenge-6-icon-COMPLETE").should("exist");
 };
 
 /**
@@ -181,16 +177,21 @@ const checkCourseState = () => {
   const WELCOME_REGEX = /Welcome, |Welcome!/g;
   cy.contains(WELCOME_REGEX);
   click("navigation-menu-button");
-  click("module-navigation-1");
-  click("challenge-navigation-1");
+  click("module-navigation-0");
+  click("challenge-navigation-3");
 
   goToNextChallenge();
   click("pw-run-code");
-  elementContains("test-result-status-0", "Success!");
+  cy.get("body").type("esc");
+  checkTestResultStatus("Success!", 1);
   goToNextChallenge();
-  checkTestResultStatus("Success!", 6);
+  click("pw-run-code");
+  cy.get("body").type("esc");
+  checkTestResultStatus("Success!", 2);
+  click("pw-run-code");
+  cy.get("body").type("esc");
   goToNextChallenge();
-  checkTestResultStatus("Success!", 3);
+  checkTestResultStatus("Success!", 1);
 };
 
 /**
@@ -228,4 +229,28 @@ const checkUrlDuringUserRegistrationProcess = (
     cy.get("#account-menu-dropdown").trigger("mouseover");
     click("logout-link");
   });
+};
+
+const SOLUTIONS = {
+  4: `
+    let smaller: number = 500;
+    let larger: number = 1000;
+  `,
+  5: `
+    function addTwoNumbers(a: number, b: number) {
+      return a + b;
+    }
+
+    function subtractTwoNumbers(a: number, b: number) {
+      // Your code here
+      return a - b;
+    }
+  `,
+  6: `
+    const list: number[] = [6, 8, 91, 17, 18, 22, 5, 3, 7];    
+    let sum: number = 0;
+    for (const n of list) {
+      sum = sum + n;
+    }
+  `,
 };

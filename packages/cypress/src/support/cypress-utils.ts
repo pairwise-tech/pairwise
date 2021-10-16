@@ -56,18 +56,14 @@ export const typeTextInCodeEditor = (text: string) => {
   const clearEditorCommand =
     Cypress.platform === "darwin" ? "{cmd}a{backspace}" : "{ctrl}a{backspace}";
 
-  cy.get(".monaco-editor textarea:first").click().clear().type(text);
+  const monaco = ".monaco-editor textarea:first";
 
-  // Clear the editor
-  // cy.get(".monaco-editor textarea:first").type(clearEditorCommand);
-
-  // // Add a brief delay
-  // cy.wait(500);
-
-  // // Enter the new text into the editor
-  // cy.get(".monaco-editor textarea:first")
-  //   .invoke("val", text)
-  //   .trigger("input");
+  // Clear
+  cy.get(monaco).type(clearEditorCommand);
+  // Wait
+  cy.wait(500);
+  // Enter text input, all at once
+  cy.get(monaco).focus().invoke("val", text).trigger("input");
 };
 
 // Asset some element with an id contains some text.

@@ -28,8 +28,7 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
 
     // Check that the post-login payment modal is visible
     cy.contains("Purchase Course");
-    cy.contains("Choose Member");
-    cy.contains("Choose Premium");
+    cy.contains("Proceed to Checkout");
     cy.get("body").type("{esc}");
 
     // Purchase the course
@@ -54,7 +53,7 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
     cy.contains("The SQL INSERT INTO Statement");
   });
 
-  it("Purchase the Fullstack TypeScript Course (PREMIUM)", () => {
+  it.skip("Purchase the Fullstack TypeScript Course (PREMIUM)", () => {
     // Open the app
     cy.visit(`${CLIENT_APP_URL}/home`);
     cy.wait(TIMEOUT);
@@ -68,8 +67,7 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
 
     // Check that the post-login payment modal is visible
     cy.contains("Purchase Course");
-    cy.contains("Choose Member");
-    cy.contains("Choose Premium");
+    cy.contains("Proceed to Checkout");
     cy.get("body").type("{esc}");
 
     // Purchase the course

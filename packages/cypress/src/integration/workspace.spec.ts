@@ -62,7 +62,7 @@ describe("Workspace and Challenge Navigation Works", () => {
 
     /* Open the navigation menu and navigate to the first programming challenge: */
     click("navigation-menu-button");
-    click("module-navigation-1");
+    click("module-navigation-0");
     click("challenge-navigation-0");
 
     let challengeId = "";
@@ -122,7 +122,7 @@ describe("Sandbox", () => {
   });
 
   it("Sandbox should load when coming from non-workspace challenge", () => {
-    cy.visit(`${CLIENT_APP_URL}/workspace/yxZjmD0o`);
+    cy.visit(`${CLIENT_APP_URL}/workspace/9nSyakhMO`);
     cy.get("#pairwise-code-editor").should("not.exist");
     click("sandboxButton");
     click("selectChallengeType");
