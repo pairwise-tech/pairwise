@@ -310,27 +310,16 @@ const ApplicationContainer = (props: IProps) => {
             onClick={toggleNavigationMap}
             style={{ color: "white", marginRight: isMobile ? 15 : 20 }}
           />
-          <Tooltip2
-            usePortal={false}
-            position="right"
-            content={
-              <p style={{ margin: 0 }}>
-                During <b>beta</b> the Pairwise course content remains in
-                development and may change.
-              </p>
-            }
-          >
-            <ProductTitle id="product-title">
-              <Link
-                to="/home"
-                id="header-home-link"
-                style={{ display: "flex", alignItems: "center" }}
-              >
-                Pairwise
-              </Link>
-              <BetaLabel />
-            </ProductTitle>
-          </Tooltip2>
+          <ProductTitle id="product-title">
+            <Link
+              to="/home"
+              id="header-home-link"
+              style={{ display: "flex", alignItems: "center" }}
+            >
+              Pairwise
+            </Link>
+            <BetaLabel />
+          </ProductTitle>
         </ControlsContainer>
         {CODEPRESS && (
           <ControlsContainer style={{ flexShrink: 0 }}>

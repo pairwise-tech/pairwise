@@ -8,7 +8,7 @@ import { ModalContainer, ModalTitleText, Loading } from "./SharedComponents";
 import { COLORS, MOBILE } from "tools/constants";
 import { EMAIL_VERIFICATION_STATUS } from "modules/user/store";
 import { defaultTextColor, themeColor } from "./ThemeContainer";
-import { PAYMENT_PLAN } from "../../../common/dist/main";
+import { CourseSkeleton, PAYMENT_PLAN } from "@pairwise/common";
 
 /** ===========================================================================
  * Types & Config
@@ -64,122 +64,26 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
           </ModalContainer>
         ) : hasEmail ? (
           <PaymentModal>
-            <ModalTitleText style={{ fontSize: 22 }}>
-              Choose a Payment Option
-            </ModalTitleText>
-            <PaymentPlanContainer>
-              <PaymentPlanOne>
-                <PlanTitleContainerOne>
-                  <PlanTitleText>Basic</PlanTitleText>
-                </PlanTitleContainerOne>
-                <PlanContentBox>
-                  <PriceText>
-                    Price: <HighlightText>FREE</HighlightText>
-                  </PriceText>
-                  <Text>• First 3 course modules: HTML, CSS, TypeScript</Text>
-                  <Text>• Video explanations for all 3 modules</Text>
-                </PlanContentBox>
-              </PaymentPlanOne>
-              <PaymentPlanTwo>
-                <PlanTitleContainerTwo>
-                  <PlanTitleText>Member</PlanTitleText>
-                </PlanTitleContainerTwo>
-                <PlanContentBox>
-                  <PriceText>
-                    Price: <HighlightText>$50</HighlightText>
-                  </PriceText>
-                  <Text>• First 3 course modules: HTML, CSS, TypeScript</Text>
-                  <Text>
-                    • Entire paid course content (600 challenges covering
-                    fullstack web+mobile development)
-                  </Text>
-                  <Text>• Video explanations for all challenges</Text>
-                  <Text>
-                    • As an early Pairwise adopter, you will also get a{" "}
-                    <HighlightText>
-                      free 30 minute career coaching session
-                    </HighlightText>{" "}
-                    with a professional developer
-                  </Text>
-                </PlanContentBox>
-                <ButtonContainer>
-                  <Button
-                    large
-                    icon="tick-circle"
-                    intent="success"
-                    id="start-checkout-button-regular"
-                    style={{ marginTop: 18, marginBottom: 18 }}
-                    onClick={() =>
-                      this.handleSelectPaymentPlan(
-                        courseToPurchase.id,
-                        "REGULAR",
-                      )
-                    }
-                  >
-                    Choose Member
-                  </Button>
-                </ButtonContainer>
-              </PaymentPlanTwo>
-              <PaymentPlanThree>
-                <PlanTitleContainerThree
-                  style={{
-                    border: `1px solid ${
-                      isDark ? COLORS.PRIMARY_GREEN : COLORS.PINK
-                    }`,
-                  }}
+            <PaymentPlanThree>
+              <PlanTitleContainerThree>
+                <PlanTitleText>{courseToPurchase.title}</PlanTitleText>
+              </PlanTitleContainerThree>
+              {this.renderCourseToPurchaseDetails(courseToPurchase)}
+              <ButtonContainer>
+                <Button
+                  large
+                  icon="tick-circle"
+                  intent="success"
+                  id="start-checkout-button-regular"
+                  style={{ marginTop: 18, marginBottom: 18 }}
+                  onClick={() =>
+                    this.handleSelectPaymentPlan(courseToPurchase.id, "REGULAR")
+                  }
                 >
-                  <PlanTitleText
-                    style={{
-                      color: isDark ? COLORS.PRIMARY_GREEN : COLORS.PINK,
-                    }}
-                  >
-                    Premium
-                  </PlanTitleText>
-                </PlanTitleContainerThree>
-                <PlanContentBox>
-                  <PriceText>
-                    Price: <HighlightText>$500</HighlightText>
-                  </PriceText>
-                  <Text>• First 3 course modules: HTML, CSS, TypeScript</Text>
-                  <Text>
-                    • Entire paid course content (600 challenges covering
-                    fullstack web+mobile development)
-                  </Text>
-                  <Text>• Video explanations for all challenges</Text>
-                  <Text>
-                    • Three one hour coaching sessions with a professional
-                    developer
-                  </Text>
-                  <Text>• Access to Pairwise Slack/Discord community</Text>
-                  <Text>• 1:1 support throughout your learning experience</Text>
-                  <Text>• Personalized code/project review</Text>
-                </PlanContentBox>
-                <ButtonContainer>
-                  <Button
-                    large
-                    icon="star"
-                    intent="primary"
-                    style={{ marginTop: 18, marginBottom: 18 }}
-                    id="start-checkout-button-premium"
-                    onClick={() =>
-                      this.handleSelectPaymentPlan(
-                        courseToPurchase.id,
-                        "PREMIUM",
-                      )
-                    }
-                  >
-                    Choose Premium
-                  </Button>
-                </ButtonContainer>
-              </PaymentPlanThree>
-            </PaymentPlanContainer>
-            <SmallPointText>
-              You will be redirected to Stripe to complete the checkout process.
-            </SmallPointText>
-            <SmallPointText>
-              While Pairwise is in <b>beta</b> you can refund your purchase at
-              anytime.
-            </SmallPointText>
+                  Proceed to Checkout
+                </Button>
+              </ButtonContainer>
+            </PaymentPlanThree>
           </PaymentModal>
         ) : emailVerificationStatus === EMAIL_VERIFICATION_STATUS.LOADING ? (
           <ModalContainer>
@@ -242,6 +146,176 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
 
   updateUserEmail = () => {
     this.props.updateUserEmail(this.state.email);
+  };
+
+  renderCourseToPurchaseDetails = (course: CourseSkeleton) => {
+    if (course.id === "fpvPtfu7s") {
+      // TypeScript
+      return (
+        <PlanContentBox>
+          <PriceText>
+            <span style={{ textDecoration: "underline" }}>Price:</span>{" "}
+            <HighlightText>$50</HighlightText>
+          </PriceText>
+          <Text>
+            • 12 course modules covering fullstack web+mobile development
+          </Text>
+          <Text>• 500+ coding challenges</Text>
+          <Text>• 20+ projects</Text>
+          <Text>• Video explanations for all challenges</Text>
+          <Text>
+            • As an early Pairwise adopter, you will also get a{" "}
+            <HighlightText>
+              free 30 minute career coaching session
+            </HighlightText>{" "}
+            with a professional developer
+          </Text>
+        </PlanContentBox>
+      );
+    } else if (course.id === "alosiqu45") {
+      // Rust
+      return (
+        <PlanContentBox>
+          <PriceText>
+            <span style={{ textDecoration: "underline" }}>Price:</span>{" "}
+            <HighlightText>$50</HighlightText>
+          </PriceText>
+          <Text>
+            • 12 course modules covering the Rust Programming Language
+          </Text>
+          <Text>• 150+ coding challenges</Text>
+          <Text>• 5+ projects</Text>
+          <Text>• Video explanations for all challenges</Text>
+        </PlanContentBox>
+      );
+    } else {
+      console.log("New course to handle: ", course.title);
+    }
+  };
+
+  // Currently not used
+  renderFullPaymentModal = () => {
+    const { user, courseToPurchase } = this.props;
+    const { profile } = user;
+    if (!courseToPurchase || !profile) {
+      return null;
+    }
+
+    const isDark = user.settings.appTheme === "dark";
+
+    return (
+      <PaymentModal>
+        <ModalTitleText style={{ fontSize: 22 }}>
+          Choose a Payment Option
+        </ModalTitleText>
+        <PaymentPlanContainer>
+          <PaymentPlanOne>
+            <PlanTitleContainerOne>
+              <PlanTitleText>Basic</PlanTitleText>
+            </PlanTitleContainerOne>
+            <PlanContentBox>
+              <PriceText>
+                Price: <HighlightText>FREE</HighlightText>
+              </PriceText>
+              <Text>• First 3 course modules: HTML, CSS, TypeScript</Text>
+              <Text>• Video explanations for all 3 modules</Text>
+            </PlanContentBox>
+          </PaymentPlanOne>
+          <PaymentPlanTwo>
+            <PlanTitleContainerTwo>
+              <PlanTitleText>Member</PlanTitleText>
+            </PlanTitleContainerTwo>
+            <PlanContentBox>
+              <PriceText>
+                Price: <HighlightText>$50</HighlightText>
+              </PriceText>
+              <Text>• First 3 course modules: HTML, CSS, TypeScript</Text>
+              <Text>
+                • Entire paid course content (600 challenges covering fullstack
+                web+mobile development)
+              </Text>
+              <Text>• Video explanations for all challenges</Text>
+              <Text>
+                • As an early Pairwise adopter, you will also get a{" "}
+                <HighlightText>
+                  free 30 minute career coaching session
+                </HighlightText>{" "}
+                with a professional developer
+              </Text>
+            </PlanContentBox>
+            <ButtonContainer>
+              <Button
+                large
+                icon="tick-circle"
+                intent="success"
+                id="start-checkout-button-regular"
+                style={{ marginTop: 18, marginBottom: 18 }}
+                onClick={() =>
+                  this.handleSelectPaymentPlan(courseToPurchase.id, "REGULAR")
+                }
+              >
+                Choose Member
+              </Button>
+            </ButtonContainer>
+          </PaymentPlanTwo>
+          <PaymentPlanThree>
+            <PlanTitleContainerThree
+              style={{
+                border: `1px solid ${
+                  isDark ? COLORS.PRIMARY_GREEN : COLORS.PINK
+                }`,
+              }}
+            >
+              <PlanTitleText
+                style={{
+                  color: isDark ? COLORS.PRIMARY_GREEN : COLORS.PINK,
+                }}
+              >
+                Premium
+              </PlanTitleText>
+            </PlanTitleContainerThree>
+            <PlanContentBox>
+              <PriceText>
+                Price: <HighlightText>$500</HighlightText>
+              </PriceText>
+              <Text>• First 3 course modules: HTML, CSS, TypeScript</Text>
+              <Text>
+                • Entire paid course content (600 challenges covering fullstack
+                web+mobile development)
+              </Text>
+              <Text>• Video explanations for all challenges</Text>
+              <Text>
+                • Three one hour coaching sessions with a professional developer
+              </Text>
+              <Text>• Access to Pairwise Slack/Discord community</Text>
+              <Text>• 1:1 support throughout your learning experience</Text>
+              <Text>• Personalized code/project review</Text>
+            </PlanContentBox>
+            <ButtonContainer>
+              <Button
+                large
+                icon="star"
+                intent="primary"
+                style={{ marginTop: 18, marginBottom: 18 }}
+                id="start-checkout-button-premium"
+                onClick={() =>
+                  this.handleSelectPaymentPlan(courseToPurchase.id, "PREMIUM")
+                }
+              >
+                Choose Premium
+              </Button>
+            </ButtonContainer>
+          </PaymentPlanThree>
+        </PaymentPlanContainer>
+        <SmallPointText>
+          You will be redirected to Stripe to complete the checkout process.
+        </SmallPointText>
+        <SmallPointText>
+          While Pairwise is in <b>beta</b> you can refund your purchase at
+          anytime.
+        </SmallPointText>
+      </PaymentModal>
+    );
   };
 }
 
@@ -310,7 +384,7 @@ const Text = styled.p`
   margin-bottom: 0px;
   text-align: left;
   font-weight: 300;
-  font-size: 12px;
+  font-size: 18px;
   ${defaultTextColor};
 `;
 
@@ -356,7 +430,7 @@ const PaymentPlanContainer = styled.div`
 
 const PaymentPlan = styled.div`
   padding: 8px 12px;
-  width: 300px;
+  width: 450px;
   height: 450px;
   display: block;
   margin: 6px;

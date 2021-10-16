@@ -33,6 +33,10 @@ describe("Payments APIs", () => {
     adminAuthorizationHeader = `Bearer ${adminAccessToken}`;
   });
 
+  test.todo(
+    "Purchase 1+ courses and verify course purchase logic works correctly",
+  );
+
   test("/payments/checkout (POST) should require authentication", async (done) => {
     request(`${ENV.HOST}/payments/checkout`)
       .post("/")

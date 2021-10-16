@@ -32,9 +32,19 @@
           "starterCode": "<h1>\n  Welcome to Pairwise Workspace.\n</h1>\n",
           "solutionCode": "<h1>Hello Pairwise!</h1>\n",
           "content": "## A Quick Note About the Videos\n\nMany \\(but not all\\) challenges will have these videos lessons to walk through solving the challenge. The videos are intended as supplementary material to go in addition to the challenge. We recommend trying to solve the challenge on your own first and if you get totally stuck or lost, then using the video to see a full explanation.\n\nThe videos are intended to help you avoid ever getting lost and not knowing how to proceed.\n\nHaving said that, feel free to move on to the next challenge\\!",
-          "skillTags": [
-            "HTML"
-          ]
+          "skillTags": ["HTML"]
+        },
+        {
+          "type": "markup",
+          "id": "@lFys5akJ",
+          "title": "HTML Tags",
+          "instructions": "The previous intro challenge rendered an `<h1>` tag to an HTML document. HTML has several different tags available to use, with different semantic meanings. The all follow a similar syntax, there is an 'opening' and 'closing' tag with the content contained on the inside.\n\nTake a look at the tags defined below. The \"h\" in `<h1>` stands for \"heading\", and it turns out there are other heading tags. Somewhere in the editor below, render an `h3` and `h4` heading tag, with some text content inside.",
+          "testCode": "test(\"The HTML document should render an `h3` and `h4` tag with text contents inside them.\", () => {\n  expect(get(\"h1\")).toBeDefined();\n  expect(get(\"h3\") !== null).toBe(true);\n  expect(get(\"h4\") !== null).toBe(true);\n  expect(get(\"h3\").innerHTML.length > 0).toBe(true);\n  expect(get(\"h4\").innerHTML.length > 0).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "<h1>This is an h1 heading tag</h1>\n<h2>This is an h2 heading tag</h1>\n<p>This is a paragraph tag. How many other 'heading' tags are there?</p>",
+          "solutionCode": "<h1>This is an h1 heading tag</h1>\n<h2>This is an h2 heading tag</h1>\n<h3>This is an h3 heading tag</h3>\n<h4>This is an h4 heading tag</h4>\n<p>This is a paragraph tag. How many other 'heading' tags are there?</p>",
+          "content": "",
+          "skillTags": ["HTML", "CSS"]
         },
         {
           "id": "Oqha$qtc",
@@ -46,23 +56,64 @@
           "starterCode": "<html>\n  <header>\n    <style>\n      body {\n        background: #204678;\n        padding-left: 12px;\n        padding-right: 12px;\n      }\n      h1 {\n        /* Here! Look Here! */\n        color: white;\n      }\n      p {\n        color: tomato;\n      }\n    </style>\n  </header>\n  <body>\n    <div>\n      <h1>Welcome to Pairwise!</h1>\n      <p>\n        CSS let's you change the color and shape of HTML!\n      </p>\n    </div>\n  </body>\n</html>\n",
           "solutionCode": "<html>\n  <header>\n    <style>\n      body {\n        background: #1a4a2e;\n        padding-left: 12px;\n        padding-right: 12px;\n      }\n      h1 {\n        /* Here! Look Here! */\n        color: gold;\n      }\n      p {\n        color: tomato;\n      }\n    </style>\n  </header>\n  <body>\n    <div>\n      <h1>Welcome to Pairwise!</h1>\n      <p>\n        CSS let's you change the color and shape of HTML!\n      </p>\n    </div>\n  </body>\n</html>\n",
           "content": "",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
+        },
+        {
+          "type": "typescript",
+          "id": "PWZ5Psyes",
+          "title": "Start Programming",
+          "instructions": "Now let's switch from HTML and CSS to a real programming language: TypeScript. In the editor below we define some variables and log out their variables \\(take a look at the console on the right when you click the \"Run\" button. Take a look at the test cases, and update the variable definitions to pass the challenge.",
+          "testCode": "test(\"The `smaller` and `larger` variables should be declared so that the `smaller` value is less than the `larger` value.\", () => {\n  expect(smaller < larger).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "let smaller: number = 500;\nlet larger: number = 100;\n\nconsole.log(`Smaller: ${smaller}`);\nconsole.log(`Larger: ${larger}`);\n\n// Don't worry if you don't understand all the syntax yet!\nconsole.log(`Is smaller less than larger? ${smaller < larger ? \"Yes\" : \"No\"}`);\n",
+          "solutionCode": "let smaller: number = 500;\nlet larger: number = 1000;\n\nconsole.log(`Smaller: ${smaller}`);\nconsole.log(`Larger: ${larger}`);\n\n// Don't worry if you don't understand all the syntax yet!\nconsole.log(`Is smaller less than larger? ${smaller < larger ? \"Yes\" : \"No\"}`);\n",
+          "content": "",
+          "skillTags": ["TypeScript"]
         },
         {
           "id": "Sbb4Nf76s",
           "type": "typescript",
-          "title": "Start Programming",
+          "title": "Write a Function",
           "instructions": "Let's start with something very simple. Take a look at the code editor below. There you will find two functions, the `addTwoNumbers` function \\(which is complete\\) and the `subtractTwoNumbers` function \\(which is incomplete\\). This challenge is a little harder than the previous two \\- if you feel lost, check out the [video](#{\"component\":\"VideoPlayButton\"}) for some help\\!\n\nTake a look at the code and the comments \\(green colored text\\). Try to complete the `subtractTwoNumbers` function\\! When you are finished, press the \"Run\" button to run your code against the tests\\!",
           "testCode": "const tests: [number, number][] = [\n  [3234, 435],\n  [32134, 46645],\n  [31234, 2342231],\n  [321341, 4234],\n  [3234, 2342],\n  [92342, 437],\n  [2343, 432324],\n  [233, 235],\n  [36579, 444],\n  [3, 12],\n];\n\ntest(\"The `addTwoNumbers` function should add the arguments together and return the result.\", () => {\n  for (const testCase of tests) {\n    const a = testCase[0];\n    const b = testCase[1];\n    const result = addTwoNumbers(a, b);\n    expect(result).toBe(testCase[0] + testCase[1]);\n  }\n});\n\ntest(\"The `subtractTwoNumbers` function should accept two arguments and return the result of subtracting the second from the first.\", () => {\n  for (const testCase of tests) {\n    const a = testCase[0];\n    const b = testCase[1];\n    const result = subtractTwoNumbers(a, b);\n    expect(result).toBe(testCase[0] - testCase[1]);\n  }\n});\n",
           "videoUrl": "https://www.youtube.com/embed/uLwyU-vfY0c",
           "starterCode": "/**\n * A function which takes two numbers and adds them\n * together.\n */\nfunction addTwoNumbers(a: number, b: number) {\n    return a + b;\n}\n\n/**\n * A function which takes two numbers and subtracts\n * the second from the first.\n */\nfunction subtractTwoNumbers(a: number, b: number) {\n  // Hello!!! Write your solution on the next line here:\n}\n",
           "solutionCode": "/**\n * A function which takes two numbers and adds them\n * together.\n */\nfunction addTwoNumbers(a: number, b: number) {\n  return a + b;\n}\n\n/**\n * A function which takes two numbers and subtracts\n * the second from the first.\n */\nfunction subtractTwoNumbers(a: number, b: number) {\n  // Your code here\n  return a - b;\n}\n",
           "content": "",
-          "skillTags": [
-            "TypeScript"
-          ]
+          "skillTags": ["TypeScript"]
+        },
+        {
+          "type": "typescript",
+          "id": "pJt6X5tBc",
+          "title": "Sum Up a List",
+          "instructions": "We can define a list of values using an array: `[1, 2, 10, 13, 18, 5]`. Then, we can iterate or loop through the array of values using a `for..of` loop\\. Take a look at the editor to see how to do this.\n\nThere is a loop which iterates through the `list` of numbers, and also a `sum` variable\\. Update the loop body to increment this `sum` so that in the end it has the value of all the items in the list.",
+          "testCode": "test(\"The `sum` variable should be equal to the sum of all the values in the list.\", () => {\n  expect(sum).toBe(list.reduce((s, x) => s + x, 0));\n});\n",
+          "videoUrl": "",
+          "starterCode": "// An array of numbers\nconst list: number[] = [6, 8, 91, 17, 18, 22, 5, 3, 7];\n\nlet sum: number = 0;\n\n// A for..of loop which iterates through the array\nfor (const n of list) {\n  console.log(n);\n\n  // TODO: Add code here to update the 'sum' variable\n  // for each loop iteration, so that in the end the\n  // 'sum' value is equivalent to the sum of all values\n  // in the list.\n}\n\nconsole.log(`The sum of all the numbers in the list is: ${sum}`);",
+          "solutionCode": "// An array of numbers\nconst list: number[] = [6, 8, 91, 17, 18, 22, 5, 3, 7];\n\nlet sum: number = 0;\n\n// A for..of loop which iterates through the array\nfor (const n of list) {\n  console.log(n);\n\n  // A n to the sum value on each loop iteration\n  sum = sum + n;\n}\n\nconsole.log(`The sum of all the numbers in the list is: ${sum}`);",
+          "content": ""
+        },
+        {
+          "type": "typescript",
+          "id": "6INEtFAT7",
+          "title": "Calculate the Volume of a Box",
+          "instructions": "Programming language provide constructs which allow you to group together data and behavior/actions. These data structures may be commonly called objects or classes in many programming languages. Take a look at the code below to see how an object may work.\n\nTo pass the challenge, complete the `getBoxVolume` function to calculate and return the volume of the given box.",
+          "testCode": "test(\"The `getBoxVolume` function should return the volume of the given box.\", () => {\n  let box: Box = {\n    width: 5,\n    height: 10,\n    depth: 8,\n  };\n  expect(getBoxVolume(box)).toBe(5 * 10 * 8);\n\n  box = {\n    width: 50,\n    height: 110,\n    depth: 82,\n  };\n  expect(getBoxVolume(box)).toBe(50 * 110 * 82);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// The type definition of a box:\ninterface Box {\n  width: number;\n  height: number;\n  depth: number;\n}\n\n// A new box object\nconst box: Box = {\n  width: 5,\n  height: 10,\n  depth: 8,\n}\n\n// A function to calculate the volume of a box object\nfunction getBoxVolume(box: Box): number {\n  // We can read a property from an object like this:\n  const width = box.width;\n  console.log(`The width of the box is: ${width}`);\n\n  // Your job: complete this function to return the volume of the box\n}\n\nconst volume = getBoxVolume(box);\nconsole.log(`The volume of the box is: ${volume}`);",
+          "solutionCode": "// The type definition of a box:\ninterface Box {\n  width: number;\n  height: number;\n  depth: number;\n}\n\n// A new box object\nconst box: Box = {\n  width: 5,\n  height: 10,\n  depth: 8,\n}\n\n// A function to calculate the volume of a box object\nfunction getBoxVolume(box: Box): number {\n  // We can destructure all three properties like this:\n  const { width, height, depth } = box;\n  const volume = width * height * depth;\n  return volume;\n\n  // You could also do this:\n  // return box.width * box.height * box.depth;\n}\n\nconst volume = getBoxVolume(box);\nconsole.log(`The volume of the box is: ${volume}`);",
+          "content": ""
+        },
+        {
+          "id": "30f72918U",
+          "type": "react",
+          "title": "A View Into ReactJS",
+          "instructions": "Later in the course we will cover ReactJS, a popular UI library used for building frontend applications and even mobile apps. Let's take a look here. React combines HTML/CSS with a programming language, like TypeScript, to let you build flexible and expressive applications.\n\nIn the editor below is a standard React component. It renders some markup to the page \\(look to the preview on the right to see\\). Add an `<h1>` tag which includes the text `Hello, React!` to complete the challenge.",
+          "testCode": "test(\"The `App` component should be defined.\", () => {\n  expect(App).toBeDefined();\n});\n\ntest(\"The `App` component should render a `div` tag.\", () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n  const tag = container.querySelector(\"div\");\n  expect(tag.tagName).toBe(\"DIV\");\n});\n\ntest(\"The `App` component should render an `h1` tag with the text `Hello, React!`.\", () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n  const tag = container.querySelector(\"h1\");\n  expect(tag.tagName).toBe(\"H1\");\n  expect(tag.innerHTML).toBe(\"Hello, React!\");\n});\n",
+          "videoUrl": "https://www.youtube.com/embed/NcdRYj4lu4k",
+          "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\n// This is a React class component\nclass App extends React.Component {\n  // React components must include a render method which\n  // returns JSX: special HTML markup elements, but you\n  // can for now basically just treat it like HTML.\n  render(): JSX.Element {\n    return (\n      <div>\n        <p>This React component renders HTML elements to a page.</p>\n        <p>But this is a TypeScript file, not an HTML file!</p>\n      </div>\n    )\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\n// This is a React class component\nclass App extends React.Component {\n  // React components must include a render method which\n  // returns JSX: special HTML markup elements, but you\n  // can for now basically just treat it like HTML.\n  render(): JSX.Element {\n    return (\n      <div>\n        <p>This React component renders HTML elements to a page.</p>\n        <p>But this is a TypeScript file, not an HTML file!</p>\n        <h1>Hello, React!</h1>\n      </div>\n    )\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
+          "content": ""
         },
         {
           "id": "yxZjmD0o",
@@ -78,7 +129,7 @@
       ]
     },
     {
-      "free": true,
+      "free": false,
       "id": "fpvPtNWkC",
       "title": "HTML & CSS",
       "challenges": [
@@ -92,9 +143,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Welcome to the first Module\\! We'll be using HTML and CSS to lay a foundation for programming and get some practice writing real code.\n# What you will do in this module\n\n* Write a bunch of real code\n* Build your own web page\n* Put a website online\n\n\nThe challenges in this module will move fast and include a lot of video content. These are your first steps into the world of programming, and if you continue along this path you'll look back some day and remember where it all started: Right here\\!\n# Why are we learning this?\n\nWe _love_ the question \"why\" and we'll answer that in the [introductory lesson on HTML](/workspace/5ziJI35f#h-why-are-we-learning-html).\n\nOnward\\!",
-          "skillTags": [
-            "HTML"
-          ]
+          "skillTags": ["HTML"]
         },
         {
           "id": "5ziJI35f",
@@ -106,9 +155,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "HTML is the reason there is anything online to look at. It's ubiquitous online because without it there would be nothing. When you visit Facebook or Google or Reddit you're reading HTML. You're reading HTML right now.\n# What is HTML?\n\nHTML is a language for putting content into web browsers and telling browsers what content means what. Consider the following items:\n\n* Some plain text\n* Some _bold italic_ text\n* Some `code` text\n\n\nIt's easy to tell the difference and that's the point. Different parts of a webpage mean different things, and as programmers we need a way of telling a web browser what's what.\n\nLet's take another example. Consider the list above. Howe does the browser know that its' a list? How does it know to include a small dot in front of the text? The answer is HTML. \n\nConsider what that three\\-item list looks like to you, the reader, and also consider what it looks like in code:\n\n```html\n<ul>\n  <li>Some plain text</li>\n  <li>\n    Some <strong><em>bold italic</em></strong> text\n  </li>\n  <li>Some <code>code</code> text</li>\n</ul>\n\n```\n\nIt looks quite different\\! The code above is what the browser sees. A `ul` with some `li`s inside tell the browser we want a list. Putting some text inside a `strong` and an `em` will make the text **bold** and _italic_ respectively\\. \n# Why are we learning HTML?\n\nA few reasons: \n\n* It's visual\n* It gives you real skills, quickly\n* It's foundational\n\n\nHere's what this in more detail.\n\n## 1\\. It's visual\n\nWhat you write in code will appear on screen. This is hugely important when you're first learning. Programmers specialize in telling computers what to do, and computers don't always give you visual feedback to let you know that your commands are achieving the desired result.\n\nThink about the clock on your phone. Seem simple right? It shows the time. It also adjusts for daylight savings time, or if you physically enter a different timezone. It can display the time in 24\\-hour format or AM\\-PM format. Consider this:\n\n* How does your phone know the time? \n* How does the clock update when daylight savings time shifts or when you step off of a plane? \n\n\nThis functionality, which we all take for granted, was programmed by someone. Imagine you are that person. If you program the phone to update its time based on your GPS location, how do you know it worked? There's no immediate visual feedback to tell you whether your code worked or not.\n\nIf you're writing HTML there is visual feedback, so you will know immediately if your code is doing what you want it to.\n\n## 2\\. It gives you real skills, quickly\n\nIf you learn the basics of HTML, guess what? You can make your own website. In fact, in this course we'll walk you through creating a website from scratch and getting it online for free. \n\nAt the end of this module you will be able to build something real, that you can see online and show to other people. In fact, using just the skills in this first module you can even build websites for other people and **get paid to do it**. There are many people around the world who make a living this way. \n\nOf course our goal is to give you the skills to be a full software engineer so we will go well beyond HTML. Which brings us to the final point...\n\n## 3\\. It's foundational\n\nHTML is everywhere, and not just on the web.\n\nConsider Facebook, Twitter, Reddit, Google, Amazon, Netflix, etc. These massive companies all rely on HTML. They all have mobile apps too, but the web component is a significant part of their business.\n\nConsider also that the principles you learn while building HTML can translate into mobile app development as well. We will touch on this significantly in later parts of the course. For now, let's focus on HTML and dive in.\n# HTML Syntax\n\n\n## Tags\n\nAll those things you saw in the code at the beginning of the lesson, `<ul>`, `<li>`, `<strong>`, etc. are called tags. Don't worry, you don't have to remember this yet, but you will over time because this is how programmers talk about HTML and how we walk about it in our videos. \n\n### Anatomy of an HTML tag\n\nTags usually have two parts:\n\n* The opening tag\n* The closing tag\n\nOpening tags include a `<` symbol, followed by the name of the tag, followed by the `>` symbol\\. Closing tags are almost exactly the same. The only difference is that closing tags have a `/` symbol right after the `<`. Example:\n\n* `<p>I'm a paragraph</p>`\n\n\nReading through one character at a time, the opening \"P tag\" is `<` \\+ `p` \\+ `>`. The closing P tag is `<` \\+ `/` \\+ `p` \\+ `>`. You can use this rule for every tag you write. \n\nHere are a few more examples. Try to see the pattern of opening `<` \\+ tag name \\+ `>` and closing `</` \\+ tag name \\+ `>`.\n\n* `<a>Link</a>`\n* `<button>Click me</button>`\n* `<h1>Heading text</h1>`\n\n\n### Self\\-closing tags\n\nNot all tags have to correspond to a closing tags. Sometimes it wouldn't make sense to have any text inside the tag. For example, a `<p>` means a paragraph so you would expect some text inside. However, an `<img>` tag means an image and a `<video>` means a video. When you see one of these tags the browser knows to show the actual image or the actual video that the tag corresponds to, so there is no need to write additional text inside the tag. This is also true of input fields, where you can type things in to a webpage. Ever logged in to a site? Yeah, like that.\n\nHere are some common tags that are self\\-closing. \n\n* `<img />`\n* `<video />`\n* `<input />`\n\n\nNotice the syntax here. It's like the opening tag and closing tag got smushed together because there's nothing in between:\n\n* `<img></img>` becomes `<img />`\n* `<video></video>` becomes `<video />`\n* `<input></input>` becomes `<input />`\n\n\n## Properties\n\nThe final piece before we dive in to some code\\! Properties tell the browser things about the tag itself. This will become more clear with examples. Consider the `<img />` tag mentioned above. That points to an image, but how does the browser now what image? With a property.\n\n```markup\n<img src=\"https://placekitten.com/g/200/200\" />\n\n```\n\nThe key above is the `src` property\\. The syntax for properties looks like: property name \\+ `=` \\+ `\"` \\+ property value \\+ `\"`. All of this goes inside the opening tag, which is the only tag if it's self\\-closing like the `<img />` above\\.\n\nNow consider another example, perhaps the single most important property in all of HTML. The `href`:\n\n```markup\n<a href=\"https://www.reddit.com/r/ProgrammerHumor/\">Don't click me if you value your time...</a>\n\n```\n\nThe `a` tag is the \"link\" on the web. It's what you click when after searching for something, or when shopping, or when doing research. It's a fundamental part of the web. Web pages include `a` tags which link to other pages. Without links the internet would just be a bunch of disperate web pages that you had to visit directly by typing the address into your browser. OK, back on topic.\n\nThe `href` property of the `a` tag tells the browser where to send someone when they click the link. \n\nThese examples are just meant to be an overview, in the coming challenges you'll use all these tags directly. There's no substitute for hands\\-on practice. Onward\\!",
-          "skillTags": [
-            "HTML"
-          ]
+          "skillTags": ["HTML"]
         },
         {
           "id": "9scykDold",
@@ -120,9 +167,7 @@
           "testCode": "test(\"There should be an `h1` tag with the text 'Hello!'\", () => {\n  expect(get(\"h1\").innerHTML.trim()).toBe(\"Hello!\");\n});\n",
           "videoUrl": "https://www.youtube.com/embed/o7G8vNxD4M0",
           "content": "We're starting off with some simple text text tags. The web is full of text so these are some of the most common tags you will find. For now the webpages we create may not look like much, just some different text here an there, but soon we will learn about how to make things look much more interesting.",
-          "skillTags": [
-            "HTML"
-          ]
+          "skillTags": ["HTML"]
         },
         {
           "id": "9scykdziW",
@@ -134,9 +179,7 @@
           "testCode": "['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach(tag => {\n    test(`There should be an \\`${tag}\\` with text inside`, () => {\n        expect(typeof get(tag).innerHTML).toBe(\"string\")\n    })\n})\n",
           "videoUrl": "https://www.youtube.com/embed/DNkEvucHKlM",
           "content": "",
-          "skillTags": [
-            "HTML"
-          ]
+          "skillTags": ["HTML"]
         },
         {
           "id": "9scykuYtf",
@@ -148,9 +191,7 @@
           "testCode": "test(\"There should be a `p` tag with text inside.\", () => {\n  const element = get(\"p\");\n  return typeof element.innerHTML === \"string\";\n});\n\ntest(\"There should be a `b` tag with text inside.\", () => {\n  const element = get(\"b\");\n  return typeof element.innerHTML === \"string\";\n});\n\ntest(\"The `p` tag should contain a `b` tag with text inside.\", () => {\n  expect(typeof get(\"p b\").innerHTML).toBe(\"string\");\n});\n",
           "videoUrl": "https://www.youtube.com/embed/hfdVfk4wZMo",
           "content": "",
-          "skillTags": [
-            "HTML"
-          ]
+          "skillTags": ["HTML"]
         },
         {
           "id": "ab37hKKmv",
@@ -162,9 +203,7 @@
           "starterCode": "<!-- Something is wrong with the code below... -->\n<h1>Jello!</h1>\n<p>An amazing food",
           "solutionCode": "<h1>Jello!</h1>\n<p>An amazing food</p>",
           "content": "",
-          "skillTags": [
-            "HTML"
-          ]
+          "skillTags": ["HTML"]
         },
         {
           "id": "8XbaRXK0$",
@@ -176,9 +215,7 @@
           "starterCode": "<!-- These tags are empty. Add some content in order to pass the tests -->\n<h1></h1>\n<p></p>",
           "solutionCode": "<h1>hey</h1>\n<p>there</p>",
           "content": "",
-          "skillTags": [
-            "HTML"
-          ]
+          "skillTags": ["HTML"]
         },
         {
           "id": "MNNx8m4XV",
@@ -190,9 +227,7 @@
           "starterCode": "<style>\n  span {\n    font-weight: bold;\n  }\n</style>\n\n<!-- Only change code here: -->\n<p>This is a paragraph, with some <b>bold text</b>.</p>\n",
           "solutionCode": "<style>\n  span {\n    font-weight: bold;\n  }\n</style>\n\n<!-- Only change code here: -->\n<p>This is a paragraph, with some <span>bold text</span>.</p>\n",
           "content": "",
-          "skillTags": [
-            "HTML"
-          ]
+          "skillTags": ["HTML"]
         },
         {
           "id": "rOuaLSaYV",
@@ -204,9 +239,7 @@
           "starterCode": "<div>\n  <h1>Welcome to my website</h1>\n</div>\n\n<p>We are glad you can join us</p>\n<p>It's great you are here!</p>\n<p>Welcome!</p>\n\n<div>\n  <h3>Footer section...</h3>\n</div>\n",
           "solutionCode": "<div>\n  <h1>Welcome to my website</h1>\n</div>\n\n<div>\n  <p>We are glad you can join us</p>\n  <p>It's great you are here!</p>\n  <p>Welcome!</p>\n</div>\n\n<div>\n  <h3>Footer section...</h3>\n</div>\n",
           "content": "",
-          "skillTags": [
-            "HTML"
-          ]
+          "skillTags": ["HTML"]
         },
         {
           "id": "SB9wO2H4z",
@@ -218,9 +251,7 @@
           "starterCode": "<style>\n  body {\n    display: flex;\n    flex-wrap: wrap;\n  }\n  div {\n    margin: 2px;\n    width: 150px;\n    height: 150px;\n    background: teal;\n  }\n</style>\n\n<!-- Add divs here -->\n<div></div>\n<div></div>\n<div></div>\n",
           "solutionCode": "<style>\n  body {\n    display: flex;\n    flex-wrap: wrap;\n  }\n  div {\n    margin: 2px;\n    width: 150px;\n    height: 150px;\n    background: teal;\n  }\n</style>\n\n<!-- Add divs here -->\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n\n",
           "content": "",
-          "skillTags": [
-            "HTML"
-          ]
+          "skillTags": ["HTML"]
         },
         {
           "id": "C76VHWFEt",
@@ -232,9 +263,7 @@
           "starterCode": "",
           "solutionCode": "<a href=\"https://app.pairwise.tech/\" target=\"_blank\">Visit Pairwise!</a>\n",
           "content": "",
-          "skillTags": [
-            "HTML"
-          ]
+          "skillTags": ["HTML"]
         },
         {
           "id": "TaV@i63z8",
@@ -246,9 +275,7 @@
           "starterCode": "<div>\n  <h1>We want to enter some text</h1>\n  <p>Any text!</p>\n  <div>\n    <b>Let the user decide!</b>\n  </div>\n  <div>\n    <italic>Let's add an \"input\" tag here:</italic>\n  </div>\n</div>\n",
           "solutionCode": "<div>\n  <h1>We want to enter some text</h1>\n  <p>Any text!</p>\n  <div>\n    <b>Let the user decide!</b>\n  </div>\n  <div>\n    <italic>Let's add an \"input\" tag here:</italic>\n  </div>\n  <input />\n</div>\n",
           "content": "",
-          "skillTags": [
-            "HTML"
-          ]
+          "skillTags": ["HTML"]
         },
         {
           "id": "Fnru9fJsk",
@@ -260,9 +287,7 @@
           "starterCode": "<form>\n  <label for=\"first_name\">First Name</label>\n  <input\n    name=\"first_name\"\n    id=\"first_name\"\n    type=\"text\"\n    placeholder=\"Enter your first name\"\n  /><br />\n  <label for=\"middle_name\">Middle Name</label>\n  <input\n    name=\"middle_name\"\n    id=\"middle_name\"\n    type=\"text\"\n    placeholder=\"Enter your middle name\"\n  /><br />\n  <label for=\"last_name\">Last Name</label>\n  <input\n    name=\"last_name\"\n    id=\"last_name\"\n    type=\"text\"\n    placeholder=\"Enter your last name\"\n  /><br />\n\n  <!-- Add your code here: -->\n  <input name=\"age\" type=\"text\" placeholder=\"Enter your age\" /><br />\n  <input name=\"email\" type=\"text\" placeholder=\"Enter your email\" /><br />\n  <input\n    name=\"profession\"\n    type=\"text\"\n    placeholder=\"Enter your profession\"\n  /><br />\n</form>\n",
           "solutionCode": "<form>\n  <label for=\"first_name\">First Name</label>\n  <input\n    id=\"first_name\"\n    name=\"first_name\"\n    type=\"text\"\n    placeholder=\"Enter your first name\"\n  /><br />\n  <label for=\"middle_name\">Middle Name</label>\n  <input\n    id=\"middle_name\"\n    name=\"middle_name\"\n    type=\"text\"\n    placeholder=\"Enter your middle name\"\n  /><br />\n  <label for=\"last_name\">Last Name</label>\n  <input\n    id=\"last_name\"\n    name=\"last_name\"\n    type=\"text\"\n    placeholder=\"Enter your last name\"\n  /><br />\n\n  <!-- Add your code here: -->\n  <label for=\"age\">Age</label>\n  <input id=\"age name=\"age\" type=\"text\" placeholder=\"Enter your age\" /><br />\n  <label for=\"email\">Email</label>\n  <input\n    id=\"email\"\n    name=\"email\"\n    type=\"text\"\n    placeholder=\"Enter your email\"\n  /><br />\n  <label for=\"profession\">Profession</label>\n  <input\n    id=\"profession\"\n    name=\"profession\"\n    type=\"text\"\n    placeholder=\"Enter your profession\"\n  /><br />\n</form>\n",
           "content": "",
-          "skillTags": [
-            "HTML"
-          ]
+          "skillTags": ["HTML"]
         },
         {
           "id": "6hRkTDrSu",
@@ -274,9 +299,7 @@
           "starterCode": "<p><b>Personal Information:</b></p>\n<label for=\"name\">Name</label>\n<input type=\"text\" id=\"name\" name=\"name\" /><br />\n<label for=\"email\">Email</label>\n<input type=\"text\" id=\"email\" name=\"email\" /><br />\n\n<p><b>Gender:</b></p>\n<label for=\"male\">Male</label>\n<input type=\"radio\" id=\"gender\" name=\"gender\" /><br />\n<label for=\"female\">Female</label>\n<input type=\"radio\" id=\"gender\" name=\"gender\" /><br />\n<label for=\"other\">Other</label>\n<input type=\"radio\" id=\"gender\" name=\"gender\" /><br /><br />\n<label for=\"updates\">I want to receieve email updates:</label>\n<input type=\"checkbox\" id=\"updates\" name=\"updates\" /><br /><br />\n",
           "solutionCode": "<form>\n  <p><b>Personal Information:</b></p>\n  <label for=\"name\">Name</label>\n  <input type=\"text\" id=\"name\" name=\"name\" /><br />\n  <label for=\"email\">Email</label>\n  <input type=\"text\" id=\"email\" name=\"email\" /><br />\n\n  <p><b>Gender:</b></p>\n  <label for=\"male\">Male</label>\n  <input type=\"radio\" id=\"gender\" name=\"gender\" /><br />\n  <label for=\"female\">Female</label>\n  <input type=\"radio\" id=\"gender\" name=\"gender\" /><br />\n  <label for=\"other\">Other</label>\n  <input type=\"radio\" id=\"gender\" name=\"gender\" /><br /><br />\n  <label for=\"updates\">I want to receieve email updates:</label>\n  <input type=\"checkbox\" id=\"updates\" name=\"updates\" /><br /><br />\n</form>\n",
           "content": "",
-          "skillTags": [
-            "HTML"
-          ]
+          "skillTags": ["HTML"]
         },
         {
           "id": "e@rWfBJRk",
@@ -288,9 +311,7 @@
           "starterCode": "",
           "solutionCode": "<div><label for=\"prose\">Write to your heart's content:</label></div>\n<textarea id=\"prose\" />\n",
           "content": "",
-          "skillTags": [
-            "HTML"
-          ]
+          "skillTags": ["HTML"]
         },
         {
           "id": "kp3HVbx$L",
@@ -302,9 +323,7 @@
           "starterCode": "<label for=\"fruits\">Choose a fruit:</label>\n\n<select id=\"fruits\">\n  <option value=\"apples\">Apples</option>\n  <option value=\"oranges\">Oranges</option>\n  <option value=\"bananas\">Bananas</option>\n  <option value=\"plums\">Plums</option>\n</select>\n",
           "solutionCode": "<label for=\"fruits\">Choose a fruit:</label>\n\n<select id=\"fruits\">\n  <option value=\"apples\">Apples</option>\n  <option value=\"oranges\">Oranges</option>\n  <option value=\"bananas\">Bananas</option>\n  <option value=\"plums\">Plums</option>\n  <option value=\"blueberries\">Blueberries</option>\n  <option value=\"strawberries\">Strawberries</option>\n  <option value=\"grapes\">Grapes</option>\n</select>\n",
           "content": "",
-          "skillTags": [
-            "HTML"
-          ]
+          "skillTags": ["HTML"]
         },
         {
           "id": "f4zGLmWO2",
@@ -316,9 +335,7 @@
           "starterCode": "<h1>Buttons</h1>\n<p>Buttons bring HTML to life.</p>\n<button type=\"button\" onclick=\"alert('Alert!!! You clicked the button!')\">\n\n</button>\n",
           "solutionCode": "<h1>Buttons</h1>\n<p>Buttons bring HTML to life.</p>\n<button type=\"button\" onclick=\"alert('Alert!!! You clicked the button!')\">\n    Alert!\n</button>\n",
           "content": "",
-          "skillTags": [
-            "HTML"
-          ]
+          "skillTags": ["HTML"]
         },
         {
           "id": "Ba5aAVqP",
@@ -330,9 +347,7 @@
           "starterCode": "<html>\n  <header>\n    <title>My Programming Portfolio</title>\n    <style>\n      body {\n        background: #fffabf;\n        font-family: Avenir;\n      }\n      h3 {\n        margin-bottom: 0;\n      }\n      .project {\n        padding: 6px;\n        margin-top: 8px;\n        border-radius: 10px;\n        border: 3px solid #ffa699;\n      }\n    </style>\n  </header>\n  <body>\n    <h1>My Programming Portfolio</h1>\n    <h3>\n      Here are the projects and apps I built when learning to code. All of the\n      source code is open source and available on GitHub.\n    </h3>\n    <!-- Update the project information below here -->\n    <div class=\"project\">\n      <h2>Project 1</h2>\n      <p>Description</p>\n    </div>\n    <div class=\"project\">\n      <h2>Project 2</h2>\n      <p>Description</p>\n    </div>\n    <div class=\"project\">\n      <h2>Project 3</h2>\n      <p>Description</p>\n    </div>\n    <!-- Update the project information above here -->\n  </body>\n</html>\n",
           "solutionCode": "<html>\n  <header>\n    <title>My Programming Portfolio</title>\n    <style>\n      body {\n        background: #fffabf;\n        font-family: Avenir;\n      }\n      h3 {\n        margin-bottom: 0;\n      }\n      .project {\n        padding: 6px;\n        margin-top: 8px;\n        border-radius: 10px;\n        border: 3px solid #ffa699;\n      }\n    </style>\n  </header>\n  <body>\n    <h1>My Programming Portfolio</h1>\n    <h3>\n      Here are the projects and apps I built when learning to code. All of the\n      source code is open source and available on GitHub.\n    </h3>\n    <!-- Update the project information below here -->\n    <div class=\"project\">\n      <h2>Social Media For Cats</h2>\n      <p>A social network for cats to associate and interact.</p>\n    </div>\n    <div class=\"project\">\n      <h2>Code Cafe</h2>\n      <p>An app to find the best cafes for coding or coworking.</p>\n    </div>\n    <div class=\"project\">\n      <h2>Remind Me</h2>\n      <p>\n        An app which lets you easily schedule reminders which will be sent to\n        you as a message a future date, time, or place.\n      </p>\n    </div>\n    <!-- Update the project information above here -->\n  </body>\n</html>\n",
           "content": "",
-          "skillTags": [
-            "HTML"
-          ]
+          "skillTags": ["HTML"]
         },
         {
           "id": "Uf6xcgQtW",
@@ -344,9 +359,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "### HTML Conclusion\n\nWe have just touched the surface of HTML. We have covered headings and paragraphs for rendering text, inputs, forms, and buttons for capturing user input and creating interactions, and spans and divs for adding structure and layout to your HTML pages.\n\nThe tags you have learned constitute the most commonly used HTML tags and a knowledge of them will get you very far. If you are interested, take a look at the [MDN HTML reference page](https://developer.mozilla.org/en-US/docs/Web/HTML/Element) for a more exhaustive list of all of the HTML tags which exist. There's no need to memorize all of these, but a brief overview should help paint a picture of all of the different elements HTML has to offer.\n\n### Styles with CSS\n\nThe next section will introduce CSS, which will build upon your current HTML skills to start adding life and color to your HTML document. CSS allows you to color and shape HTML elements to create custom appearances and layouts for your webpages.\n\nWith HTML and CSS, you can create beautiful webpages but to really transform them into functional web applications you need a programming language.\n\n### JavaScript\n\nJavaScript is the programming language of the web. All web browsers can run JavaScript programs, and any functionality you use on websites is typically built using JavaScript. Once you complete the CSS section, the next course module will be a deep dive into programming with a special dialect of JavaScript, _TypeScript\\._\n\nTypeScript is a typed superset of JavaScript which compiles to JavaScript. Don't worry about the details here yet: we will cover them in depth once we get to the TypeScript section. This programming section will lay the foundation for everything which comes later.\n\n### Moving Forward\n\nAfter the TypeScript module, we will have covered the foundations of HTML/CSS and programming. You will understand the basics of how webpages are made and you will have a thorough grasp of a modern programming language.\n\nFrom there, the course will get into the modern skills, tools, and workflows software engineers use to build complex applications, servers, and mobile apps. There's a lot to learn, but as you will see all of this is built on the basic foundation you are learning now\\!\n\nLet's continue\\!",
-          "skillTags": [
-            "HTML"
-          ]
+          "skillTags": ["HTML"]
         },
         {
           "id": "CuwykKRM",
@@ -358,9 +371,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "CSS stands for Cascading Style Sheets, but that's unimportant. What matters here is that CSS is how you change the way things _look_ on the web.\n\nHTML is the \"stuff\", the actual content on a webpage, and CSS is how all that stuff looks. For example: \n\n* Is the background dark with light text \\(like what you're reading right now\\)? \n* Is there a menu bar near the top? \n* How does the form on screen try to grab your attention with color and positioning? \n\n\nThese are all questions CSS can answer. To be specific, CSS tells the browser two things:\n\n* What elements on the page to style.\n* How those elements should look.\n\n# Selectors\n\nSelectors tell the browser what you want to style.\n\nFor example, you might say to yourself \"I want all the paragraphs on my site to be red\\!\" A very elegant design decision. In order to communicate this to the browser we can use CSS:\n\n```css\np {\n  color: red;\n}\n\n```\n\nRemember the `<p>` tag from earlier lessons? Using the tag name, `p`, we were able to \"select\" every paragraph on the page and make them all red. In this example `p` is the selector. Now let's talk about what's inside those brackets.\n# Properties\n\nCSS properties tell the browser how you want something to look. Let's say you're tired of drab white\\-background websites and want to mix it up with a `teal` background\\.\n\n```css\nbody {\n  background: teal;\n}\n\n```\n\n`body` will select the entire visible area of the web page, but we will touch on that more later. Focus on `background: teal;`. Here we have another CSS property `background` with a value of `teal`.\n\n> CSS properties take the form: property name \\+ `:` \\+ property value \\+ `;`.\n\n`background` and `color` are just two examples. There are quite a few CSS properties you can use, and the combination of them is responsible for styling every site you use on the internet.\n\nIf you're curious you can skim through [the full list of CSS properties](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Properties_Reference), but we don't recommend it. It's a very dry read and by itself won't tell you what you really want to know which is what each property does. Furthermore, some CSS properties are so obscure that you can go your entire career without learning them on the job because they are just not useful in most context.\n# Blocks\n\nA \"block\" of CSS is simply the combination of selectors and properties. All the examples above are CSS blocks.\n\n> CSS blocks take the form: Selectors \\+ `{` \\+ properties \\+ `}`\n\nThese terms are not important for their own sake, but so that you aren't lost when you're working outside of this course. \n# The <style\\> tag connects HTML and CSS\n\nYou can't just write CSS anywhere in an HTML document and expect it to work. You have to write it **within a \\*\\***`style`**\\*\\* tag**. Like this:\n\n```html\n<style>\n  p { color: red; }\n</style>\n<p>Red text!</p>\n\n```\n\nIf you write that without the `style` tag the browser will literally put `p { color: red; }` on the page for everyone to see. By putting that CSS code within a `style` tag you are telling the browser to treat it as CSS rather than HTML.\n# Specificity and the HTML class and id props\n\nImagine you have two paragraphs, and you want one to be `red` and the other to be `blue`. How would you select just one? Here's the HTML:\n\n```html\n<p>I want a blue background</p>\n<p>I want a red background</p>\n\n```\n\nYou might try the following CSS:\n\n```\np { background: red; }\np { background: blue; }\n\n```\n\nHowever, both paragraphs will be `blue`\\! Why? Two things are happening here:\n\n1. `p` selects every `<p>` tag, not just the first or the second.\n1. When you have two identical selectors \\(`p` and `p` above\\) and two identical property names \\(`background` and `background` above\\) whichever one comes last wins.\n\nPoint 1 can be addressed with IDs and classes, which we will discuss shortly.\n\nPoint 2, how conflicting styles get applied by the browser, is called \"specificity\". As in, the second CSS block is considered more _specific_ than the first, and therefore it wins and gets applied.\n\n## IDs\n\nAn ID is a unique identifier in the browser and it can be used as a selector. \n\n* There should only be 1 of any ID on a web page.\n* IDs are very specific, meaning if you select an ID in your CSS that CSS will most likely win over other styles\n* HTML uses the `id` property, CSS uses the `#` selector\\.\n\n\n```html\n<style>\n  #my-paragraph { color: red; }\n  p { color: blue; }\n</style>\n<p id=\"my-paragraph\">Red text!</p>\n\n```\n\nEven though the `p` styles come last, the `#my-paragraph` styles get applied because they are more specific.\n\n> In general don't use IDs, use classes.\n\n## Classes\n\n* A class can be applied to as many things as you want.\n* Classes are more specific than tag names\n* HTML uses the `class` property, CSS uses the `.` selector\\.\n\n\n```markup\n<style>\n  .red-text { color: red; }\n  p { color: blue; }\n</style>\n<p class=\"red-text\">Red text!</p>\n\n```\n\nThe text is again red because classes are more specific than tag names.\n\n> Classes are extremely useful and flexible. Use them a lot.\n# More to come...\n\nThat's a lot of information, and mostly meaningless without practice. There's more to CSS which we will dive into later, but for now let's practice everything we just talked about. ",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "ny51KoEI",
@@ -372,9 +383,7 @@
           "testCode": "test(\"There should be a `p` tag with red text\", () => {\n  const el = get(\"p\");\n  expect(getStyle(el, \"color\")).toBe(cssColor(\"red\"));\n});\n\ntest(\"There should be a `<p>` tag with the text 'Exciting red text'\", () => {\n  const el = get(\"p\");\n  expect(el.innerHTML).toBe(\"Exciting red text\");\n});\n",
           "videoUrl": "https://www.youtube.com/embed/MsaKKxVTsEk",
           "content": "This is a quick intro to CSS before we really dive in. If you're thinking to yourself \"You haven't explained this yet\" then you're right. It's intentional\\!\n\nWe'll go more in depth about what's going on shortly.",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "KlxN3f11",
@@ -386,9 +395,7 @@
           "starterCode": "<!-- Put your code up here, above everything else. You will need a <style> tag -->\n<h1>Welcome to some text!</h1>\n<p>\n  Now we start the paragraphs! As you do more and more development you will\n  discover that there is a surprising amount of Latin online.\n</p>\n<p>\n  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nunc erat,\n  aliquet sed pellentesque ut, feugiat non orci. Nam consectetur egestas odio,\n  sed rutrum diam condimentum et. Nulla at cursus ante. Proin mollis lorem mi,\n  sit amet malesuada sem convallis sed. Nullam at lacus eget arcu facilisis\n  tempus vel viverra mauris. Nulla facilisi. Proin hendrerit ante a diam\n  sagittis, quis tristique sem facilisis. Sed sed viverra ante, in dignissim\n  neque.\n</p>\n\n<p>\n  Nullam id eros nec nunc euismod condimentum. Pellentesque habitant morbi\n  tristique senectus et netus et malesuada fames ac turpis egestas. Praesent sit\n  amet nulla libero. Pellentesque diam augue, condimentum eu convallis eu,\n  porttitor nec neque. Sed fringilla ipsum felis, ut rutrum lacus vehicula vel.\n  Nam et porta mauris. Suspendisse gravida ligula nec elit faucibus, et\n  ultricies lorem fermentum. Aliquam in erat a orci maximus aliquet vel id\n  risus. In tincidunt diam non lectus consequat, eu cursus nunc molestie. Duis\n  euismod turpis urna, a volutpat lorem condimentum ac. Suspendisse nec orci\n  dolor. Mauris eget pretium nulla. Donec convallis, elit a pellentesque\n  convallis, elit elit efficitur est, ut molestie justo sapien sed ligula.\n</p>\n",
           "solutionCode": "<style>\n    body {\n        background: #000000;\n    }\n    h1, p {\n        color: white;\n    }\n</style>\n<h1>Welcome to some text!</h1>\n<p>\n  Now we start the paragraphs! As you do more and more development you will\n  discover that there is a surprising amount of Latin online.\n</p>\n<p>\n  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nunc erat,\n  aliquet sed pellentesque ut, feugiat non orci. Nam consectetur egestas odio,\n  sed rutrum diam condimentum et. Nulla at cursus ante. Proin mollis lorem mi,\n  sit amet malesuada sem convallis sed. Nullam at lacus eget arcu facilisis\n  tempus vel viverra mauris. Nulla facilisi. Proin hendrerit ante a diam\n  sagittis, quis tristique sem facilisis. Sed sed viverra ante, in dignissim\n  neque.\n</p>\n\n<p>\n  Nullam id eros nec nunc euismod condimentum. Pellentesque habitant morbi\n  tristique senectus et netus et malesuada fames ac turpis egestas. Praesent sit\n  amet nulla libero. Pellentesque diam augue, condimentum eu convallis eu,\n  porttitor nec neque. Sed fringilla ipsum felis, ut rutrum lacus vehicula vel.\n  Nam et porta mauris. Suspendisse gravida ligula nec elit faucibus, et\n  ultricies lorem fermentum. Aliquam in erat a orci maximus aliquet vel id\n  risus. In tincidunt diam non lectus consequat, eu cursus nunc molestie. Duis\n  euismod turpis urna, a volutpat lorem condimentum ac. Suspendisse nec orci\n  dolor. Mauris eget pretium nulla. Donec convallis, elit a pellentesque\n  convallis, elit elit efficitur est, ut molestie justo sapien sed ligula.\n</p>\n",
           "content": "# The <body\\> tag\n\nI this lesson we touched on the `<body>` tag, which the browser will insert into the document for you if you don't do it yourself.\n# HTML colors\n\nIn HTML there are several ways to define colors. The most simple is what we've been doing so far, which is using colors that have names like `blue`, `red`, `black`, `green`, etc. However, if you had to rely on colors that have names you would be quite limited. HTML let's you define any custom color you want using some different syntax, namely HEX codes. For example, the color `white` can also be written `#ffffff`. Likewise `black` is `#000000` and `blue` is `#0000ff`. \n\nIn the meantime you can use named colors. There are quite a few, and often if you guess a color it will exist. You can see the full list here: <https://www.w3schools.com/colors/colors\\_names.asp\\>",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "wCrQh1f4",
@@ -400,9 +407,7 @@
           "testCode": "test(\"There should be a `<span>` tag with a yellow background wrapping some text\", function() {\n  const el = get(\"span\");\n  expect(el).toBeTruthy();\n  expect(el.innerHTML).not.toBe(\"\");\n  expect(getStyle(el, \"background-color\")).toBe(cssColor(\"yellow\"));\n});\n",
           "videoUrl": "https://www.youtube.com/embed/Q7TK9OFPKTQ",
           "content": "",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "pUf7$Qi2y",
@@ -414,9 +419,7 @@
           "starterCode": "<style>\n  /* Your code here */\n</style>\n<h1>Quotes</h1>\n<p>\n  Because a thing seems difficult for you, do not think it impossible for anyone\n  to accomplish.\n</p>\n<p>\n  Accept whatever comes to you woven in the pattern of your destiny, for what\n  could more aptly fit your needs?\n</p>\n<p>\n  Observe always that everything is the result of change, and get used to\n  thinking that there is nothing Nature loves so well as to change existing\n  forms and make new ones like them.\n</p>\n",
           "solutionCode": "<style>\n  /* Your code here */\n  body {\n    background: black;\n    color: white;\n  }\n  h1 {\n    color: palegreen;\n  }\n\n  /* \n   * NOTE: This is already done in the body tag. \n   * Our automated tests throw a fit if not styled directly though.\n   */\n  p { color: white; }\n</style>\n<h1>Quotes</h1>\n<p>\n  Because a thing seems difficult for you, do not think it impossible for anyone\n  to accomplish.\n</p>\n<p>\n  Accept whatever comes to you woven in the pattern of your destiny, for what\n  could more aptly fit your needs?\n</p>\n<p>\n  Observe always that everything is the result of change, and get used to\n  thinking that there is nothing Nature loves so well as to change existing\n  forms and make new ones like them.\n</p>\n",
           "content": "The browser has many secrets. Today we're talking about two secret tags: `body` and `html`. Where do these tags come from? From the browser itself. \n\n> Implicit** Tags**\n> These tags aren't really \"secret,\" they're implicit. What that means is that they are _implied_ simply by the fact that this is a webpage. There are many situations in which browser will make decisions for you if you're not explicit. It's something to be aware of.\n# Making it explicit\n\nYou can include these tags yourself if you're worried about the browser creating them for you:\n\n```markup\n<html>\n  <body>\n    <p>Body content in here</p>\n  </body>\n</html>\n\n```\n\nIn this code we've included the `html` and `body` tags _explicitly_, which will prevent the browser from adding them in automatically.\n# Why this matters\n\nThe big reason the `body` tag is important in CSS is it's how you control the styling of the page itself. Look at Pairwise. You're reading white text on a dark background. You can this type of look by styling the `body` tag:\n\n```css\nbody {\n  background: #1E1E1E;\n  color: white;\n}\n\n```\n\nAside from that it's just good to know. You want to know what's happening with your application. The more you know the easier it is to avoid bugs and debug them when they arise.\n",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "5oqm6GmH",
@@ -428,9 +431,7 @@
           "starterCode": "<h1>Oh what a day</h1>\n<p>\n  A wonderful day to start wrapping some divs!\n</p>\n",
           "solutionCode": "<style>\n  body {\n    background: orange;\n  }\n  div {\n    background: teal;\n  }\n</style>\n<div>\n  <h1>Oh what a day</h1>\n  <p>\n    A wonderful day to start wrapping some divs!\n  </p>\n</div>\n",
           "content": "",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "2kQ6adnb",
@@ -442,9 +443,7 @@
           "starterCode": "<style>\n  span {\n    background: pink;\n  }\n  /* Your code here */\n</style>\n<p>\n  What if <span>we</span> wanted to <span>highlight</span> different text with\n  different <span>colors</span>?\n</p>\n",
           "solutionCode": "<style>\n  span {\n    background: pink;\n  }\n  .highlight {\n    background: yellow;\n  }\n  .highlight-blue {\n    background: skyblue;\n  }\n</style>\n<p>\n  What if <span>we</span> wanted to\n  <span class=\"highlight\">highlight</span> different text with different\n  <span class=\"highlight-blue\">colors</span>?\n</p>\n",
           "content": "This is where CSS gets real. Classes are what professional programmers use all the time to style websites. Classes give you flexibility. When you style an html tag like `p` or `div` you are styling _all_ tags of that type. Usually, that's not actually what you want. \n\nMore often than not we have \"elements\" of the UI, like a nav bar, a submit button, a video embed, etc. CSS classes let you do that.\n\n> Classes let you name your HTML elements and style _anyth_ing with that name\n\n# To style many things\n\nCSS classes give you a ton of flexibility when styling your HTML. You can utilize classes to style one type of tag in many different ways. You can also utilize CSS classes to overwrite default styles since they have greater specificity.\n\nAlso check out the [CSS lesson](/workspace/CuwykKRM) for more information.",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "za5KHMo7",
@@ -456,9 +455,7 @@
           "starterCode": "<div class=\"menu\">\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n\n<div class=\"content\">\n  <p>\n    Welcome to my blog! If you ever want to get in touch I'd love to hear from\n    you. You can contact me using the <a href=\"#\">Contact Page</a>. Cheers!\n  </p>\n</div>\n",
           "solutionCode": "<style>\n  .menu a {\n    display: block;\n  }\n</style>\n<div class=\"menu\">\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n\n<div class=\"content\">\n  <p>\n    Welcome to my blog! If you ever want to get in touch I'd love to hear from\n    you. You can contact me using the <a href=\"#\">Contact Page</a>. Cheers!\n  </p>\n</div>\n",
           "content": "",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "3g8czfBn",
@@ -470,9 +467,7 @@
           "starterCode": "<h1>Welcome</h1>\n<p>This is a paragraph</p>",
           "solutionCode": "<style>\n  h1,\n  p {\n    color: red;\n    background: green;\n  }\n</style>\n<h1>Welcome</h1>\n<p>This is a paragraph</p>\n",
           "content": "",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "0CUYA6z5m",
@@ -484,9 +479,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Let's talk about tools. \n\nEvery professional has their tools: gardeners have trowels, instagram celebrities have cameras and programers have computers. We have more than just computers though—we have developer tools.\n# The Dev Tools\n\nDid you know you already have the tool we'll use installed on .your computer? We'll be using what's already built in to the browser in order to debug our layouts. I'm going to be using Google Chrome, but you can use other browsers if you prefer.\n\n**You don't have to use Chrome**\n\nGoogle Chrome has the most widely used developer tools, so I'm going to show you how to use that specific set of tools. However, other browser have dev tools as well.\n\n* Chrome \\(what we'll use\\)\n* Firefox\n* Safari \\(you can even debug apps on an iPhone\\)\n* Edge\n\n\nThese four cover the largest browser in the world, but if you use another browser it probably has dev tools too. \n\nUsing the dev tools is fairly visual so the video will be the focus of this lesson. ",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "B1LBriGU",
@@ -498,9 +491,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "I'm no fan of jargon, but sometimes you just gotta learn it. The \"box model\" is one such case. It's vital to being fluent in CSS.\n# What is the box model?\n\nThe official [CSS documentation](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/The_box_model) gives a nice overview:\n\n> Everything in CSS has a box around it, and understanding these boxes is key to being able to create layouts with CSS, or to align items with other items.\n\nTo put this another way, **the box model is how elements are visually arranged on a web page.** \n\nNow let's get a bit more concrete. There are a number of CSS properties that fall under the banner of the box model:\n\n* `width` and `height`: How wide or tall an element is.\n* `margin`: Visual space between elements.\n* `padding`: Visual space between an element's edge and its content.\n* `border`: Space around an element between its `margin` and `padding`. \n* `display`: How an element interacts with other elements on the page. \n\n\nLet's look at each property in a bit more detail.\n\n## Width and height\n\nThese properties are pretty straight forward. You can make can control how wide an element is using the `width` property\\. You can control how tall an element is using the `height` property\\. Simple... mostly.\n\nWhat can be confusing is that elements in a webpage all have _defaults_, meaning they will have a certain width or height even if you don't assign any. This is a good thing.\n\nHere's an image of a cat:\n\n\n![The standard width and height of the cat image.](/assets/B1LBriGU/3c36a842b67ee20197dc4611dd5e1cfa_cat.png)\n\nI didn't give it a `width` or a `height` yet, so what is it doing? By default an image in HTML will automatically have the width of the image. Every photo has a width and the browser will use that width by default. Same for the height.\n\nNow let's completely ignore that width and set our own.\n\n![Width is about double, while height is unchanged.](/assets/B1LBriGU/003a902631059ac5fb26f9d406930b91_cat-wide.png)\n\nAs you can see, this is not at all what you want, but it shows what using the width property can do. Height works in the same way.\n\n## Margin\n\nMargins are space between things. A common example is the space between paragraphs. Imagine the page you're reading right now if there was no visual separation between paragraphs. It would not be very readable.\n\n### Margins Collapse\n\nIf you have two margins next to each other they will collapse into each other. In other words the total visual space created will **not** be the sum of the margins but actually just the larger of the two. Let's say we have two elements with two classes and they are right next to each other in our HTML:\n\n```markup\n<style>\n    .a { margin-bottom: 10px }\n    .b { margin-top: 20px; }\n</style>\n<div class=\"a\">Div A</div>\n<div class=\"b\">Div B</div>\n\n```\n\nHow much space will there be between `.a` and `.b` on the page? **20px**\\! Not 30px, which would be the total of margins from both elements.\n\n## Padding\n\nPadding is space within an element. You can also think of this like space around its content. Let's look at an example. Here's Google's search UI at the time of writing:\n\n\n![](/assets/B1LBriGU/ca1f80839c0c0d88ee0da11ddd682fa4_goog.png)\nLet's focus specifically on those buttons. They have padding. Look at the amount of space _within_ each button. The text doesn't push up against the edge of the gray button background. \n\nHere's the same UI, but I've removed the padding from the buttons:\n\n![](/assets/B1LBriGU/19d43f243d639489d98bd3dd99630381_goog-no-adding.png)\nYou can barely tell the buttons have a gray background now\\! There is no space between the text of the buttons—the button content—and the edge of the button background.\n\nPadding does not collapse. If you have two elements with padding next to each other the visual space will be the total. Here's the same example from the margin section, but using padding.\n\n```markup\n<style>\n    .a { padding-bottom: 10px }\n    .b { padding-top: 20px; }\n</style>\n<div class=\"a\">Div A</div>\n<div class=\"b\">Div B</div>\n\n```\n\nHow much space will there be between `.a` and `.b` on the page? 30px.\n\n## Border\n\nBorder is pretty simple. It lets you add borders to elements. To be more specific, it lets you create space between an element's `margin` and `padding`. Let's keep on going with the example above. I'm going to remove the border around the Google search bar.\n\n![The Google search bar. The padding around the lower buttons is still removed.](/assets/B1LBriGU/19d43f243d639489d98bd3dd99630381_goog-no-adding.png)\n\n![The same google search bar, with one-line of CSS changed. What a difference!](/assets/B1LBriGU/2d7734fe0547fabff03f478dca4dcafb_goog-no-border.png)\n\nLook at the difference\\! With just a single border you can go from a search bar to a few disparate items on a page.\n\n## The display property\n\nThe `display` property determines how an element is displayed with relation to other elements. I know—not a very helpful description. This property makes the most sense once we've solidified your knowledge of the other box model properties so we will revisit it in [another challenge](/workspace/s8be1H0U). \n# Box Sizing\n\nCSS is tricky. The good news is developers used to have it _much worse_ than we do. Let me explain.\n\nWhen you set a `width` or a `height` in CSS you probably expect the selected element to have that exact width or height. This is a reasonable assumption—but it's wrong. _By default_ the visual size of an element—how large it looks to your eyes on screen—would be calculated as: `width` or `height` \\+ `margin` \\+ `border` \\+ `padding`. \n\nDoes that make sense? When you say `width: 300px` you generally expect the element to be `300px` wide, rather than `300px` \\+ padding, border and margins. \n\nDevelopers in the past had to be constantly doing math in their heads to figure out how much padding, border and margin to apply to get the width they wanted. ++No more\\!++ As I've been alluding to, these days there's a better way.\n\n```css\n* { box-sizing: border-box; }\n\n```\n\n## The first line of all your CSS\n\nThis bit of CSS is so useful i'm just going to repeated it again:\n\n```css\n* { box-sizing: border-box; }\n\n```\n\nWhat is this line doing?\n\n* `*` is selecting **everything** on the page. Every element. It's a special selector for exactly this purpose.\n* `box-sizing: border-box` Tells the browser that we want the `width` and `height` properties to determine the _visual_ width and _visual_ height of elements on the page.\n\n\nIn other words, when you say `width: 300px` you get 300 pixels of visual width. The thing to keep in mind is that if you do this your content might grow or shrink.\n\n## A concrete example\n\nWe're going to look at this again in the [box\\-sizing challenge](/workspace/nel5ggJ1), so don't worry. There's a hands\\-on exercise coming up.\n\nBox sizing is fairly abstract, so here's some code to help. You can drop this into the Sandbox and compare the visual difference between the two `div` elements\\. If you run this code in the sandbox you will notice that the content of the first `div` has the exact same width as the entire second `div`. \n\n```markup\n<style>\n  strong {\n    display: block;\n    text-align: center;\n  }\n  div {\n    background: white;\n    margin: 0 auto;\n    margin-top: 20px;\n  }\n  .outer {\n    background: lightblue;\n    width: 300px;\n    padding: 20px;\n    border: 5px solid tomato;\n  }\n  .border-box {\n    box-sizing: border-box;\n  }\n</style>\n<div class=\"outer\">\n  <div>\n    <h3>Standard Box Model</h3>\n    <p>\n      This div shows how the box model works by default. The border, padding and\n      width are all added together to get the visual width of the element.\n    </p>\n  </div>\n</div>\n<div class=\"outer border-box\">\n  <div>\n    <h3>Border Box</h3>\n    <p>\n      This div uses the super fun and interesting\n      <code>box-sizing: border-box;</code> property. You can control it's visual\n      <code>width</code> and <code>height</code> directly without calculation.\n    </p>\n  </div>\n</div>\n<script>\n  // This code just calculates the visual width and displays it in each div\n  for (let el of document.querySelectorAll('.outer')) {\n      const rect = el.getBoundingClientRect();\n      const label = document.createElement('strong');\n      label.textContent = 'Visual Width: ' + rect.width + 'px';\n      el.insertAdjacentElement('afterend', label);\n  }\n</script>\n\n```\n# Resources\n\n* [The CSS box model docs](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/The_box_model)\n\n",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "nel5ggJ1",
@@ -512,9 +503,7 @@
           "starterCode": "<style>\n  /* Your code here ... */\n  \n  /* You can ignore the styles below here */\n  strong {\n    display: block;\n    text-align: center;\n  }\n  div {\n    background: white;\n    margin: 0 auto;\n    margin-top: 20px;\n  }\n  .outer {\n    background: lightblue;\n    width: 300px;\n    padding: 18px;\n    border: 5px solid tomato;\n  }\n</style>\n<div class=\"outer\">\n  <div>\n    <h3>Border Box</h3>\n    <p>\n      The content within this inner area is white to show the difference between\n      the content area and the div's padding, which is blue.\n    </p>\n  </div>\n</div>\n<script>\n  // This code just calculates the visual width and displays it in the div\n  for (let el of document.querySelectorAll('.outer')) {\n      const rect = el.getBoundingClientRect();\n      const label = document.createElement('strong');\n      label.textContent = 'Visual Width: ' + rect.width.toFixed() + 'px';\n      el.insertAdjacentElement('afterend', label);\n  }\n</script>\n",
           "solutionCode": "<style>\n  div {\n    box-sizing: border-box;\n  }\n  \n  /* You can ignore the styles below here */\n  strong {\n    display: block;\n    text-align: center;\n  }\n  div {\n    background: white;\n    margin: 0 auto;\n    margin-top: 20px;\n  }\n  .outer {\n    background: lightblue;\n    width: 300px;\n    padding: 18px;\n    border: 5px solid tomato;\n  }\n</style>\n<div class=\"outer\">\n  <div>\n    <h3>Border Box</h3>\n    <p>\n      The content within this inner area is white to show the difference between\n      the content area and the div's padding, which is blue.\n    </p>\n  </div>\n</div>\n<script>\n  // This code just calculates the visual width and displays it in the div\n  for (let el of document.querySelectorAll('.outer')) {\n      const rect = el.getBoundingClientRect();\n      const label = document.createElement('strong');\n      label.textContent = 'Visual Width: ' + rect.width.toFixed(0) + 'px';\n      el.insertAdjacentElement('afterend', label);\n  }\n</script>\n",
           "content": "The purpose of `box-sizing: border-box;` is to change how the browser uses the `width` property\\. Although it may not be clear now, this simple property will make your journey as developer _much_ easier\\.  \n\nThis is why you will often find some CSS like the following at the very top of many CSS files:\n\n```css\n* { box-sizing: border-box; }\n\n```\n# Visual Width\n\nWe're talking about how wide something appears on screen. This is _not necessarily_ the same as the `width` property, which is what this lesson is about.",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "WqwXPsOO",
@@ -526,9 +515,7 @@
           "starterCode": "<style>\n  /* \n   * We've added a gray background so that it's easier to see if the div is \n   * centered or not \n   */\n  .centered {\n    width: 300px;\n    background: #dadada; /* Light gray */\n  }\n\n  /* Your code here */\n</style>\n<div class=\"centered\">\n  <div class=\"menu\">\n    <a href=\"#\">Home</a>\n    <a href=\"#\">About</a>\n    <a href=\"#\">Contact</a>\n  </div>\n  <p>\n    Here's some glorious page content! If only it was not so close to the top\n    menu!\n  </p>\n</div>\n",
           "solutionCode": "<style>\n  .menu {\n    margin-bottom: 40px;\n  }\n  .menu a {\n    margin-right: 20px;\n  }\n  .centered {\n      width: 300px;\n      background: #dadada; /* Light gray */\n      margin: 0 auto;\n  }\n</style>\n<div class=\"centered\">\n  <div class=\"menu\">\n    <a href=\"#\">Home</a>\n    <a href=\"#\">About</a>\n    <a href=\"#\">Contact</a>\n  </div>\n  <p>\n    Here's some glorious page content! If only it was not so close to the top\n    menu!\n  </p>\n</div>\n",
           "content": "# What are margins?\n\n> A margin is the visual space between one HTML element and another.\n\nUsing margins you can move elements away from each other to create visual space. However, you can also do this with `padding` and `border` so let's look at the differences between the three concepts. \n\n## How is this difference with padding ?\n\n* Padding is the visual space between an elements _content_ and it's edges\n* In other words, `padding` is visual space within an element while `margin` is visual space around \\(outside\\) an element.\n\n\n## How does margin relate to border ?\n\n* The `border` is between an elements `margin` and `padding` , and it usually has a color applied to it.\n\n# Beware, margins will \"collapse\"\n\nThere's a trick margins do that might confuse you when you first come across it: Margins will _collapse\\. _\n\nWhat this means is:\n\n> If two margins touch each other, they will _not combine_ but instead will collapse in to each other. This means the visual margin will only be as big as the larger of the two, not the combination of the two.\n\nFor now it's enough to know that this quirk exists. There's no good way to learn about this quirk other than to have it bite you while building an application. \n# When should I use margins?\n\nGenerally, when you want to move one element away from another element. Some examples:\n\n* You have a navigation menu of links and you want space between them\n* You want space between paragraphs in a blog post\n   * Consider the space between the paragraphs you're reading right now. You could do that with margins.\n* When you want to center something on the page \\(see below\\)\n\n\nUsing margins for centering is a special use case, which might not be obvious but is extremely common.\n# Margin auto\n\nThere's a special value you can use for margins called `auto`. For example:\n\n```css\n.centered {\n    margin-left: auto;\n    margin-right: auto;\n}\n\n```\n\nWhat `auto` does is it tells the browser to \\_auto\\_matically use as much space as possible given all other margins. So, what the code above does is it moves anything with the `.centered` class to the center of the page.\n\nAs with most CSS properties, `margin` has a shorthand syntax that is commonly used for centering something on the page:\n\n```css\n.centered {\n    margin: 0 auto;\n}\n\n```\n\nThis example is equivalent to the long\\-hand version:\n\n```css\n.centered {\n    margin-top: 0;\n    margin-bottom: 0;\n    margin-left: auto;\n    margin-right: auto;\n}\n\n```\n",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "Ojsg01Bi",
@@ -540,9 +527,7 @@
           "starterCode": "<style>\n  .centered {\n    width: 300px;\n    background: #dadada; /* Light gray */\n  }\n\n  /* Your code here */\n</style>\n<div class=\"centered\">\n  <div class=\"menu\">\n    <a href=\"#\">Home</a>\n    <a href=\"#\">About</a>\n    <a href=\"#\">Contact</a>\n  </div>\n  <p>\n    Here's some glorious page content! If only it was not so close to the top\n    menu!\n  </p>\n</div>\n",
           "solutionCode": "<style>\n  .centered {\n    width: 300px;\n    background: #dadada;\n  }\n  .menu a {\n    display: inline-block;\n    padding: 20px;\n  }\n  .menu a:hover {\n    background: tomato;\n    color: white;\n  }\n  p {\n    background: skyblue;\n    margin: 0;\n    padding: 20px;\n  }\n\n  /* Your code here */\n</style>\n<div class=\"centered\">\n  <div class=\"menu\">\n    <a href=\"#\">Home</a>\n    <a href=\"#\">About</a>\n    <a href=\"#\">Contact</a>\n  </div>\n  <p>\n    Here's some glorious page content! If only it was not so close to the top\n    menu!\n  </p>\n</div>\n",
           "content": "# Padding\n\nPadding means \"space inside\" of something. This is why we had you change some background colors in this challenge. Without a background color it's hard to tell where the padding is. Of course you don't always want to show how wide or slim something is, so it's up to you whether or not you use padding with a background or without.\n\nPadding without a background color can be used just like margin to separate things, however, visual space created by padding is only visual space. The element with padding itself becomes wider. This can be very useful for things like menus and buttons, where you want something to have a large clickable area even if the element itself isn't very large on screen.\n# The Display Property\n\nThe `display` property is very important in CSS. It determines how HTML elements interact with each other on the page. For example, `<a>` tags have a default display property of `inline`, which means other components can ignore their vertical padding. However, `inline-block` means their padding cannot be ignored, and you will get the results you see in this challenge.\n\nSome important display properties:\n\n* `display: block;` This is the default for most elements \\(`div`, `p`, `h1`, etc\\) and puts things on their own line.\n* `display: inline-block;` This is useful when you want things to line up horizontally \\(`a` tags in a horizontal menu for example\\) and you also want to add margins or padding.\n* `display: flex;` This is useful when you want child elements to expand or contract to fit available space. This display property is super flexible, and you might find yourself using it all the time once you know it.\n\n\nThese display properties will make up most of your UI. The web app you're using right now was built with only these display properties.",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "0fCd6MkU",
@@ -554,9 +539,7 @@
           "starterCode": "<style>\n  /* Your code here */\n</style>\n<div class=\"menu\">\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n<div class=\"content\">\n  <p>\n    Here's some <span>glorious</span> page content! If only it was not so close to the top\n    menu!\n  </p>\n</div>\n",
           "solutionCode": "<style>\n  .menu a {\n    margin-right: 20px;\n    padding-right: 20px;\n    border-right: 1px solid;\n  }\n  .content {\n    border: 1px solid black;\n    padding: 10px;\n    margin-top: 20px;\n  }\n  .content p {\n    margin: 0;\n  }\n  .content span {\n    border-bottom: 1px solid black;\n  }\n</style>\n<div class=\"menu\">\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n<div class=\"content\">\n  <p>\n    Here's some <span>glorious</span> page content! If only it was not so close to the top\n    menu!\n  </p>\n</div>\n",
           "content": "",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "s8be1H0U",
@@ -568,9 +551,7 @@
           "starterCode": "<style>\n  /* Code here... */\n</style>\n\n<div class=\"horizontal-nav\">\n  <p>A horizontal nav</p>\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n\n<div class=\"vertical-nav\">\n  <p>A vertical-nav nav</p>\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
           "solutionCode": "<style>\n  .horizontal-nav a {\n    display: inline-block;\n    margin-bottom: 20px;\n  }\n  .vertical-nav a {\n    display: block;\n  }\n</style>\n\n<div class=\"horizontal-nav\">\n  <p>A horizontal nav</p>\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n\n<div class=\"vertical-nav\">\n  <p>A vertical-nav nav</p>\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
           "content": "Every HTML element has a default `display` property. This can be confusing since it's easy to forget what the default is for a given tag. But there's a trick: \n\n**Don't worry about what the default is**. \n\nRather than try to remember what the default display property for an element is just look at it and adjust accordingly. If you want something to line up in a row you can set `display: inline-block` and if you want things to stack on top of each other use `display: block`.\n\nThere are other display values besides `block` and `inline-block` but you won't use most of them very often. There is however one more very important display property called `flex`, which we will cover in another challenge.",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "iFvzasqW",
@@ -582,9 +563,7 @@
           "starterCode": "<style>\n  /* Your code here... */\n\n  /* You can ignore these styles. This is just to make the link placement more obvious */\n  .mobile-nav a {\n    padding: 10px;\n    background: tomato;\n  }\n</style>\n<div class=\"mobile-nav\">\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
           "solutionCode": "<style>\n  .mobile-nav {\n    display: flex;\n    justify-content: space-between;\n  }\n  .mobile-nav a {\n    padding: 10px;\n    background: tomato;\n  }\n</style>\n<div class=\"mobile-nav\">\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
           "content": "Ever notice how mobile nav menus on a phone are often spaced perfectly so that the icons fill the space on screen? \n\nThis effect is quite simple to accomplish with CSS and Flexbox. \n\nFlexbox is the general term for CSS that utilizes the `display: flex` property\\. Display `flex` lets you do a lot of things that used to be very difficult in web browsers. Things like:\n\n* Create equal spacing between elements \\(this challenge\\!\\)\n* Create equal space around elements\n* Vertically or horizontally center elements\n\n\nThere are other uses for Flexbox but these are some of the most common.",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "iZ6nlkiQ",
@@ -596,9 +575,7 @@
           "starterCode": "<style>\n  /* Your code here */\n\n  /* You can ignore these styles. This is just to make the link placement more obvious */\n  .nav a {\n    padding: 10px;\n    background: tomato;\n    text-decoration: none; /* This removes the link underline */\n  }\n</style>\n<div class=\"nav\">\n  <p>Hover the mouse to see the effect</p>\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
           "solutionCode": "<style>\n  .nav a:hover {\n    background: blue;\n    color: tomato;\n  }\n  /* You can ignore these styles. This is just to make the link placement more obvious */\n  .nav a {\n    background: tomato;\n    color: blue;\n    padding: 10px;\n    text-decoration: none; /* This removes teh link underline */\n  }\n</style>\n<div class=\"nav\">\n  <p>Hover the mouse to see the effect</p>\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
           "content": "Here's a GIF of the end result of this challenge. This should give you a clear idea about what a hover state does.\n\n![](/assets/iZ6nlkiQ/9d080a45671f5e4e63d62090ab24a779_hov.gif)\n# General Concepts\n\nYou've probably noticed that when you hover over a link in a browser it will change somehow. You can customize this\\!\n\nThis is called a hover state, and you can style a hover state just like you can style any other CSS. The main difference is the selector.\n\n```css\n/* Style the hover state for all links on the site */\na:hover {\n  text-decoration: underline;\n}\n\n/* Style just the nav links */\n.nav a:hover {\n  color: tomato;\n}\n\n/* Style the entire nav div when it's hovered */\n.nav:hover {\n  background: gray;\n}\n\n```\n\nTo style how something looks when the mouse hovers over it you use `:hover`. Specifically, you just put `:hover` after the selector you want to style. It's important not to put a space in front of `:hover`.",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "fAGpsa4L",
@@ -610,9 +587,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "CSS is a bit of a mixed bag. Not to detract from it—it's amazing what you can accomplish with HTML and CSS alone, let alone HTML, CSS and JavaScript. However there are certain aspects of CSS that are not intuitive. \n\nYou may be thinking \"None of this is intuitive\\! 😤\" and that's fair, but it gets better \\(worse?\\). In the next few challenges we'll dive into some of the more confusing _and_ useful CSS properties. You already saw some of this when we [talked about `box-sizing`](/workspace/nel5ggJ1), but there's yet more to cover. \n\nFun topics to come include:\n\n* Positioning \\(including the interesting `content` property\\)\n* More `display` property\n* Transforms\n\n# Why?\n\nSome of this stuff is bound to be fairly confusing at first and we take our content selection very seriously. So is it really that important? \n\n++Yes\\.++\n\nThe techniques we'll cover are extremely potent for creating _layouts_, which is the most confounding aspect of CSS. Almost everyone who has complained about any aspect of CSS ran into issues with their layout and spent entirely too long figuring out how to fix it. I would know, I've been that person—Everyone on the Pairwise team has in fact. \n\n> **Layouts vs Styling**\n> Layouts can be time consuming and frustrating to create when you don't know what you're doing. Styling, on the other hand, is quite straightforward. Things like `border` , `padding`, `font-size`, etc. To generalize:\n> \n> \n> \n> \n>    * Styling refers to CSS that doesn't really care about _position_ on the page.\n>    * Layout is entirely concerned with position on the page. This includes vertical, horizontal, _and_ z\\-axis positioning—Layering things on top of  or behind one another.\n\nSo to bring it back to the question: Why are we learning these things? So that you can build any UI you want.\n\nWith a bit of practice ++you will be able to code up the CSS for Instagram, Twitter, Amazon, Etsy or your cat's blog++ \\(this last one sounds easy but you'd probably spend more time on it than any of the others. Try building anything for yourself as opposed to an employer or client and you will see why\\).\n\nSo let's move forward and learn some CSS\\!",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "zt2RAhbC",
@@ -624,9 +599,7 @@
           "starterCode": "<style>\n  * {\n    box-sizing: border-box;\n  }\n  .container {\n    width: 300px;\n    height: 500px;\n    background: aquamarine;\n    padding: 10px;\n  }\n  .rel {\n    background: gold;\n    padding: 10px;\n  }\n</style>\n\n<div class=\"container\">\n  <div class=\"rel\">\n    Relative Div\n  </div>\n  <p>\n    This lesson domonstrates <code>relative</code> positioning in CSS. Using\n    position relative you are actually positioning something\n    <em>relative to itself</em>.\n  </p>\n  <p>\n    So for example, if I give the Relative Div a <code>top: 20px</code>\n    property then it's going to overlap with the text.\n  </p>\n</div>\n",
           "solutionCode": "<style>\n  * {\n    box-sizing: border-box;\n  }\n  .container {\n    width: 300px;\n    height: 500px;\n    background: aquamarine;\n    padding: 10px;\n  }\n  .rel {\n    background: gold;\n    padding: 10px;\n    position: relative;\n    top: 100px;\n  }\n</style>\n\n<div class=\"container\">\n  <div class=\"rel\">\n    Relative Div\n  </div>\n  <p>\n    This lesson domonstrates <code>relative</code> positioning in CSS. Using\n    position relative you are actually positioning something\n    <em>relative to itself</em>.\n  </p>\n  <p>\n    So for example, if I give the Relative Div a <code>top: 100px</code>\n    property then it's going to overlap with the text.\n  </p>\n</div>\n",
           "content": "# An introduction to positioning\n\nIn CSS the `position` property has a lot of power, but it's not necessarily clear how it works. There are three main positioning properties we're going to look at:\n\n* `position: relative;` That's what you were working with in this challenge.\n* `position: absolute;` More interesting than `relative` but you need them both together.\n* `position: fixed;` Very useful or annoying depending on your opinion. This is how websites \"fix\" a header or footer to the window as you scroll. If you've ever been on a cramped mobile site and the header would not leave you alone it's probably because of this CSS property.\n\n\nThere's also `position: static;`, which is the default for all elements. This means you won't see this property very often because it's always there unless you change it. Setting a `position` property on an element to **anything other than static** will make it \"positioned.\"\n# What does this property let me do?\n\nIt lets you pick up an element and move it wherever you want relative to some other element.\n\nOnce you are using a position property you gain access to four new properties which let you control the location of an element on the page: `top`, `left`, `bottom`, `right`.\n\nFor example:\n\n```css\n.rel {\n    position: relative;\n    top: 20px;\n}\n\n```\n\nThis will visually move an element down by `20px`.\n\nThere are other challenges for `absolute` and `fixed` so let's talk about position `relative` first\\.\n# Relative to what?\n\nThis is one of those unintuitive properties in CSS. Relative positioning moves an element ++relative to itself++. That means, in the example above, the `.rel` element would be moved `20px` lower on the page than its initial position.\n# What does this let me do?\n\n* By far the most common use case of `position: relative;` is to set an element as an anchor for another element using `position: absolute;` which we'll cover in the next challenge.\n* You can use relative positioning to \"nudge\" elements into the position you want.\n   * Sometimes your layout just won't cooperate. You can use relative positioning to cheat and force your element in a direction.\n   * I say \"nudge\" because if you're doing more significant repositioning you might want absolute positioning instead.\n\n# Relative and absolute\n\nI said we'd hold off on `position: absolute;` until another challenge but there's something we need to mention first: ++Absolute positioning and relative positioning need to work together to be effective++.\n\nWhen you use `positionn: absolute;` you are positioning an element _relative to the nearest parent element with_ `position: relative;`. \n\nIf that sounds confusing, don't worry—it is. It's best understood through examples and practice, so let's keep learning.\n# Resources\n\n* [Official documentation on relative positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/position#Relative_positioning)\n\n",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "$TscTvcd",
@@ -638,9 +611,7 @@
           "starterCode": "<style>\n  /* Your styles here... */\n\n  /*\n     ========================================================================\n     All the styles below are for setting up the example, feel free to modify them\n     but you don't have to in order to complete the challenge.\n     ========================================================================\n   */\n\n  * {\n    box-sizing: border-box;\n  }\n  body {\n    font-family: system-ui;\n  }\n  .labeledCard {\n    width: 300px;\n    background: aquamarine;\n    padding: 10px;\n    margin-top: 50px;\n    margin-left: 50px;\n  }\n  .labeledCard.product {\n    background: thistle;\n    border-radius: 5px;\n  }\n  .labeledCard.messageApp {\n    background: royalblue;\n    color: white;\n    border-radius: 50px;\n  }\n  .label {\n    background: gold;\n    padding: 10px;\n    position: absolute;\n    top: -15px;\n    right: -15px;\n  }\n  .label.priceTag {\n    border-radius: 50px;\n    border: 2px solid black;\n  }\n  .label.unreadCount {\n    font-size: 11px;\n    font-weight: bold;\n    font-family: system-ui;\n    border-radius: 100px;\n    border: 5px solid white;\n    background: crimson;\n    color: white;\n  }\n</style>\n\n<div class=\"labeledCard\">\n  <div class=\"label\">\n    Absolute Div\n  </div>\n  <p>\n    Wouldn't it be nice if I had a label positioned in my upper-right corner?\n  </p>\n  <p>\n    An absolutely positioned element will be relative to the nearest parent with\n    a positon property.\n  </p>\n</div>\n<div class=\"labeledCard product\">\n  <div class=\"label priceTag\">\n    $12.00\n  </div>\n  <p>\n    Maybe this is some product page and I'm a product. Buy me!\n  </p>\n  <p>\n    (If only there was a price tag in my upper-right corner)\n  </p>\n</div>\n<div class=\"labeledCard messageApp\">\n  <div class=\"label unreadCount\">\n    102\n  </div>\n  <p>\n    Pretend I'm some app that needs an unread count.\n  </p>\n</div>\n",
           "solutionCode": "<style>\n  * {\n    box-sizing: border-box;\n  }\n  body {\n    font-family: system-ui;\n  }\n  .labeledCard {\n    width: 300px;\n    background: aquamarine;\n    padding: 10px;\n    margin-top: 50px;\n    margin-left: 50px;\n    position: relative;\n  }\n  .labeledCard.product {\n    background: thistle;\n    border-radius: 5px;\n  }\n  .labeledCard.messageApp {\n    background: royalblue;\n    color: white;\n    border-radius: 50px;\n  }\n  .label {\n    background: gold;\n    padding: 10px;\n    position: absolute;\n    top: -15px;\n    right: -15px;\n  }\n  .label.priceTag {\n    border-radius: 50px;\n    border: 2px solid black;\n  }\n  .label.unreadCount {\n    font-size: 11px;\n    font-weight: bold;\n    font-family: system-ui;\n    border-radius: 100px;\n    border: 5px solid white;\n    background: crimson;\n    color: white;\n  }\n</style>\n\n<div class=\"labeledCard\">\n  <div class=\"label\">\n    Absolute Div\n  </div>\n  <p>\n    Wouldn't it be nice if I had a label positioned in my upper-right corner?\n  </p>\n  <p>\n    An absolutely positioned element will be relative to the nearest parent with\n    a positon property.\n  </p>\n</div>\n<div class=\"labeledCard product\">\n  <div class=\"label priceTag\">\n    $12.00\n  </div>\n  <p>\n    Maybe this is some product page and I'm a product. Buy me!\n  </p>\n  <p>\n    (If only there was a price tag in my upper-right corner)\n  </p>\n</div>\n<div class=\"labeledCard messageApp\">\n  <div class=\"label unreadCount\">\n    102\n  </div>\n  <p>\n    Pretend I'm some app that needs an unread count.\n  </p>\n</div>\n",
           "content": "Hopefully you got the code above to look something like this:\n\n![Look at all those labels! 🏷](/assets/$TscTvcd/a988dc3acf3622a900b2e072b425fc8c_abs-positioning-1.png)\n\nThis is the power of absolute positioning: You can position one element relative to another. In this example we positioned the `.label` elements in the upper\\-right of their parent elements.\n\nThe key is, the parent element has to have a position. Usually, this position is `position: relative;` because we don't want the parent to reposition itself, just serve as an anchor for the child element.\n\n> \n> ### The DOM Family Tree\n> \n> \\(if you're wondering what the DOM is, [here's a link to our that challenge](/workspace/C$3mo2yQ)\\)\n> \n> Programmers needed words to talk about the relationships between elements in the DOM and they understood that the DOM is a tree—much like a family tree. So when we talk about the DOM we use words you've heard many times before, but in a different context.\n> \n> **Parents:** When talking about the DOM we use the words \"parent\" or \"ancestor\" to refer to any element higher up in the tree.\n> **Siblings:** Any element at the same level in the tree. If you have three `a` tags inside a `div` the links are all siblings to each other. The `div` is their parent.\n> **Children: **Any element lower in the tree. Children are easy to identify in code because they are within another element.\n# DOM relationships and position absolute\n\nThe short version is: `position: absolute;` will position an element _relative to its nearest ancestor_ ++with a position++. Remember, for an element to be \"positioned\" it must have the position property set to either `relative`, `absolute`, or `fixed`.\n\nIf the element has no positioned ancestors then it will be relative to the `body` tag\\. This is what is happening in this challenge when you first load it up. You will see the `.label` elements displaying in the upper\\-right of_ the _`body` as opposed to their parent element.\n# A simple recipe\n\nLet's say you have two divs, `div.a` and `div.b`. If you want to display `div.a` relative to `div.b` do this:\n\n* Make sure `div.a` is inside `div.b`, in other words `div.b` is the parent of `div.a`.\n* Set `position: relative;` on `div.b` \\(The parent div\\).\n* Set `position: absolute;` on `div.a` \\(The child div\\).\n\n\nThen you can use the `top`, `left`, `bottom`, `right` properties to move `div.a` anywhere you want relative to `div.b`.\n# When would you use this?\n\n* You want to display a badge of some sort, like an unread count on an email app.\n   * You can see an example of this in this challenge.\n* You want some sort of custom border or edge to your element.\n   * You can see an example of this in the Pairwise navigation menu. Whenever you hover one of the challenge names it gets a \"border\" which is actually an absolutely positioned element, not a the `border` property\\.\n* When you want something to stretch to fit inside another element.\n   * This is a result of combinations of the `top`, `left`, `bottom`, `right` properties\\. We'll revisit this later.\n\n# Resources\n\n* [Official Absolute Positioning Documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/position#Absolute_positioning)\n   * Just in case you're curious there are more examples in the official docs.\n\n",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "kUhWPOkj",
@@ -652,9 +623,7 @@
           "starterCode": "<style>\n  * {\n    box-sizing: border-box;\n  }\n\n  /* We remove the default margins for this exercise */\n  body {\n    margin: 0;\n  }\n\n  .outer {\n    position: relative;\n    background: salmon;\n    width: 300px;\n    height: 400px;\n    margin-top: 40px;\n    margin-left: 60px;\n  }\n\n  /* Label padding and background are just for aesthetics and not part of the tests */\n  .label {\n    padding: 10px;\n    background: thistle;\n  }\n\n  /* You can ignore the styles ABOVE ☝ this line */\n  \n  /* Fill in the styles below */\n  .top-right-inside {\n  }\n\n  .top-right-outside {\n  }\n\n  .bottom-left-inside {\n  }\n\n  .stretch-center {\n  }\n</style>\n\n<div class=\"outer\">\n  <div class=\"inner\">\n    <div class=\"label top-right-outside\">Heyo! top-right-outside</div>\n    <div class=\"label bottom-left-inside\">Heyo! bottom-left-inside</div>\n    <div class=\"label stretch-center\">Heyo! stretch-center</div>\n  </div>\n</div>\n<div class=\"label top-right-inside\">Heyo! top-right-inside</div>\n",
           "solutionCode": "<style>\n  * {\n    box-sizing: border-box;\n  }\n  body { margin: 0; }\n\n  .outer {\n    position: relative;\n    background: salmon;\n    width: 300px;\n    height: 400px;\n    margin-top: 40px;\n    margin-left: 60px;\n  }\n\n  .label {\n    position: absolute;\n    padding: 10px;\n    background: thistle;\n  }\n\n  .top-right-inside {\n    top: 0;\n    right: 0;\n  }\n\n  .top-right-outside {\n    top: 0;\n    left: 100%;\n  }\n\n  .bottom-left-inside {\n    bottom: 0;\n    left: 0;\n  }\n\n  .stretch-center {\n    top: 50%;\n    left: 0;\n    right: 0;\n  }\n  \n</style>\n\n<div class=\"outer\">\n  <div class=\"inner\">\n    <div class=\"label top-right-outside\">Heyo! top-right-outside</div>\n    <div class=\"label bottom-left-inside\">Heyo! bottom-left-inside</div>\n    <div class=\"label stretch-center\">Heyo! stretch-center</div>\n  </div>\n</div>\n<div class=\"label top-right-inside\">Heyo! top-right-inside</div>\n\n",
           "content": "The end result will look something like this, depending on how wide your screen is:\n\n![](/assets/kUhWPOkj/1fe1b62dd189961971162f729bd2f74b_top-left-bottom-right.png)\n\n",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "BLEmRiRd",
@@ -666,9 +635,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Let's revisit the display property. There are several values you should be familiar with.\n\n```css\n.inline-block { display: inline-block; }\n.block { display: block; }\n.flex { display: flex; }\n.table { display: table; }\n\n```\n# Display Properties\n\nSetting `display` on an element let's you play around with how it interacts with other elements on the page. For example, `display: inline-block;` tells an element to flow \"in line\" with other inline elements but also to allow setting margins and padding. Setting `display: flex;` will tell an element reposition it's children in a row \\(or column\\).\n\nWe'll go through the key display properties one by one.\n\n## Inline Block\n\n```css\ndiv { display: inline-block; }\n\n```\n\nBy default many inline elements have unintuitive ways of handling margins and padding. It's often a good idea to apply  `display: inline-block;` to inline elements just so you don't bang your head against a wall for an hour trying to figure out why your `padding` isn't acting the way you expect.\n\n### Uses\n\n* You want to apply `margin` or `padding` to some inline element \\(`span` for example, or `a`\\).\n\n\n## Block\n\n```css\ndiv { display: block; }\n\n```\n\nThis is the default for most elements, so even if you want to make use of it you don't need to write it out explicitly. \n\n### Uses\n\n* Where display block can be more interesting is where you want an inline item to act like a block. Use `display: block;` on `a` tags to make a vertical nav menu.\n* Automatically size to take up all available width.\n\n\n## Flex\n\n```css\ndiv { display: flex; }\n\n```\n\n### Uses\n\n* Everything\\! \\(ok, not literally, but _almost_ everything\\).\n* Center items vertically, horizontally, or both.\n* Tell elements to take up \"Whatever space is left\" once other siblings are accounted for.\n* Space elements vertically or horizontally. You can justify them, clump them, put space between, etc.\n\n\nFlexbox is extremely \\_flex\\_ible, no pun intended \\(seriously\\). It's a workhorse for creating all sorts of layouts. If you're ever unsure how to get some layout you want, flexbox is often the answer.\n\nThat being said, there's a lot to learn and you won't use most of it very often. So focus on these properties:\n\n```css\ndisplay: flex; /* Of course */\n\n/* \n  You can control how elements grow or shrink to take advantage of space */\nflex: 1 100%;\n\n/* \n  Once you have a display: flex; on an element, use align-items and justify-content \n  to control how its children arrange themselves. */\nalign-items: center;\njustify-content: center; /* Also try: space-between, space-around, flex-end */\n\n```\n\n## Table\n\n```css\ndiv { display: table; }\n\n```\n\nIn all honesty you won't use this much. However, it does have one specific use case which you may find quite useful.\n\n### Uses\n\n* Tell an element to take up only as much spaces as needed, but otherwise behave like `block`.\n\n\nBy default any element with `display: block;` will stretch to be as wide as possible. You can assign a `width` property, `width: 500px;` for example, but that requires being specific about the width. What if you want to say \"Be as wide as you need to be, but no wider.\"? That's what display table lets you do.",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "Ao8hbaiP",
@@ -680,9 +647,7 @@
           "starterCode": "<style>\n  * {\n    box-sizing: border-box;\n  }\n  body {\n    font-family: system-ui;\n  }\n  .box {\n    border: 5px solid black;\n    margin-top: 60px;\n    margin-left: 60px;\n    width: 300px;\n    height: 300px;\n    position: relative;\n    border-radius: 8px;\n  }\n\n  .label {\n    border: 3px solid black;\n    border-radius: 50px;\n    background: white;\n    padding: 10px 20px;\n    min-width: 100px;\n    text-align: center;\n  }\n\n  /* Feel free to ignore all styles above this if you want */\n  /* Your code below here (or wherever you want) */\n  .top {\n  }\n  .center {\n  }\n  .bottom {\n  }\n</style>\n\n<div class=\"box\">\n  <div class=\"label top\">TOP</div>\n  <div class=\"label center\">CENTER</div>\n  <div class=\"label bottom\">BOTTOM</div>\n</div>\n",
           "solutionCode": "<style>\n  * {\n    box-sizing: border-box;\n  }\n  body {\n      font-family: system-ui;\n  }\n  .box {\n    border: 5px solid black;\n    margin-top: 60px;\n    margin-left: 60px;\n    width: 300px;\n    height: 300px;\n    position: relative;\n    border-radius: 8px;\n  }\n\n  .label {\n    position: absolute;\n    border: 3px solid black;\n    border-radius: 50px;\n    background: white;\n    padding: 10px 20px;\n    transform: translate(-50%, -50%);\n    left: 50%;\n    min-width: 100px;\n    text-align: center;\n  }\n\n  .top {\n    top: 0;\n  }\n  .center {\n      top: 50%;\n  }\n  .bottom {\n      top: 100%;\n  }\n</style>\n\n<div class=\"box\">\n  <div class=\"label top\">TOP</div>\n  <div class=\"label center\">CENTER</div>\n  <div class=\"label bottom\">BOTTOM</div>\n</div>\n",
           "content": "The end result will look like this:\n\n![](/assets/Ao8hbaiP/250eb8cb0410e52bb171467a2541ad4f_transform-translate.png)\nCSS Transforms let you do a number of interesting things. Some of the most common are:\n\n* `translate`: Change the location of things on the page\n* `scale`: Change the size of things\n* `rotate`: Visually rotate an element\n\n\nThat's not all, those are just some of the most common ones. You can see what else is possible in the documentation linked below.\n# Resources\n\n* [CSS Transforms Documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/transform)\n\n",
-          "skillTags": [
-            "CSS"
-          ]
+          "skillTags": ["CSS"]
         },
         {
           "id": "kphKEurPG",
@@ -694,10 +659,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Welcome to the first projects section\\! This is where you get to really stretch your brain and learn. It's the second piece of the learning puzzle. Here's what I mean:\n\n* Challenges give you extremely valuable practice with concepts.\n* However, projects are where you get to apply those concepts on your own. \n\n\nYou won't really know something until you've been stuck without an answer wondering how to write some code. The key is you already know some, so you're not helpless. \n\nThe Pairwise projects will all be real world projects for you to complete. The projects will always be paired with \"Guided Projects\", which are walkthrough examples of how to complete the projects. The goal is for you to try to complete the project fully on your own, but if you struggle \\(or succeed\\) to use the guided project as an example tutorial of how to complete the projects. Later in the course, the guided projects will not directly mirror the actual project \\- they will just be an example which requires a similar application of the required skills.\n\nFor this module and the next module \\(TypeScript\\), the guided projects are actual solutions to the projects. This is to help you get off the ground in these early modules.\n\nEven if you feel these projects are well within your wheelhouse we'd still recommend skimming the videos as we cover some new topics that didn't warrant their own section.\n\n> The projects are **not** ordered\\. You can complete them in whatever order works best for you.\n# How to use these projects\n\n1. Choose a project.\n1. Read through the instructions.\n1. Try to complete the project on your own \\(even if you just give it 20 minutes, try on your own\\).\n1. Once you have completed the project, download the project file \\(you will need this later to deploy the project later \\- or, you can return to the project later to download it\\).\n1. Feel free to review the guided project walkthrough \\(either below the workspace on in the next section\\) which provides a full video tutorial for how to complete these projects.\n\n\nThese projects put your HTML & CSS skills to the test in the real world building webpages and actual UIs. For now, these do not have a lot of functionality, but they provide the foundation for bringing your own project ideas to life. As you will see, some of the later course projects will build on these to create full, working applications.\n\nLater in the course \\(in the Developer Workflow module\\), we will teach you how to develop websites on your own computer, manage your code with version control and GitHub, and deploy your websites for the world to see. At that stage, you can deploy all of the projects you build here \\(and add them to your portfolio\\).\n# What's to Come\n\nThe next module after this is the TypeScript module, where we provide a deep dive straight into programming. That module will provide the groundwork for developing software applications. After that, the real course begins: we will teach you the workflow and tools for a software engineer and then start to introduce the libraries, frameworks, and practices teams use to build and deploy real world apps. In those modules, you will build many projects which are real, practical applications.",
-          "skillTags": [
-            "HTML",
-            "CSS"
-          ]
+          "skillTags": ["HTML", "CSS"]
         },
         {
           "id": "GiZqL4Jpk",
@@ -709,10 +671,7 @@
           "starterCode": "",
           "solutionCode": "<!-- NOTE: A more complete solution will be added here in the future. -->\n<div id=\"my-custom-webpage\">",
           "content": "Today we're going to creating a full webpage which you can put online and stake out your own corner of the web\\!\n\n> ++NOTE:++ The video above completes this challenge in the Sandbox and suggests you can download the code to a file. That's perfectly fine, but we have since changed this project to include the Pairwise workspace editor above. Feel free to just complete the project in the above code editor.\n# The Task\n\nCreate a single webpage and style it so it doesn't look terrible to you. The styling part is subjective—no wrong answers here. The goal is just to make something you would be happy to put online, perhaps at `YOUR-NAME.com` or some similar domain.\n# What's the point?\n\nThere are more than one aspects to this challenge, but above all remember that challenges are here to help you get _practice_. ++The more repetitions complete with a given task the better you will be.++ If you write 1,000 webpages and put them online you will be pretty good at creating websites, considerably better than someone who's only created one or two.\n\nWith that being said, there is an additional point to this exercise:\n\n* **Create something real**. A website is something real and tangible which you can show to the world.\n\n# Resources\n\n* The [System Fonts Guide in Butterick's Practical Typography](https://practicaltypography.com/system-fonts.html)\n   * If you're wondering about fonts and how to know what fonts work by default without adding any external resources.\n   * Author's note: That site is an amazing resource for all things related to typography. Highly recommended.\n\n",
-          "skillTags": [
-            "HTML",
-            "CSS"
-          ]
+          "skillTags": ["HTML", "CSS"]
         },
         {
           "id": "CtxaGAJoJ",
@@ -724,10 +683,7 @@
           "starterCode": "",
           "solutionCode": "<!-- NOTE: A more complete solution will be added here in the future. -->\n<div id=\"my-custom-webpage\">",
           "content": "> ++NOTE:++ The video above completes this challenge in the Sandbox and suggests you can download the code to a file. That's perfectly fine, but we have since changed this project to include the Pairwise workspace editor above. Feel free to just complete the project in the above code editor.\n# Project Highlights\n\n* Create a real UI using HTML and CSS\n* Utilize the power of flexbox and absolute positioning\n\n# Why?\n\n* Many UIs these days are expected to be mobile. This project demonstrates coding a UI that works well in that context.\n* Building layouts based on _constraints_ is a key skill and it's better to learn through doing.\n* If you can build a an interface like the one in this challenge you've reached a professional level. There is _much_ more covered in the course but even at this point if you've mastered this module you know enough that someone would pay you to create websites.\n\n\n## Why not build a mobile app?\n\nYou absolute _can_ build a mobile app if that suits your needs, and we'll be diving deep into mobile in the Mobile module. For now, the purpose of this challenge is to get you more experience using the CSS concepts covered in this module and to show you what it's like to build a more full UI rather than just a bit of challenge code.\n\nBuilding mobile apps is significantly move involved than building for the web, and will involve many concepts we haven't touched on yet at this point in the course including:\n\n* TypeScript\n* React\n* CLIs\n* Build Pipelines\n\n\nThe good news is that almost all of what you're learning now is transferrable to building mobile apps in some way. This introductory coursework will put you on a good footing for learning mobile development if that's your interest.\n# Optional Starting Code\n\n```markup\n<style>\n  * {\n    box-sizing: border-box;\n  }\n  i {\n    font-style: normal;\n  }\n  button {\n    outline: none;\n    border: none;\n  }\n\n  /* This phone frame is just to give the impression of a mobile site. */\n  /* Feel free to delete it and style however you want. */\n  .phone {\n    min-width: 300px;\n    margin: 0 auto;\n    height: 700px;\n    border: 10px solid #333;\n    border-radius: 10px;\n    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);\n  }\n</style>\n<div class=\"phone\">\n  <div class=\"titleBar horizontalNav\">\n    <button>\n      <i>⟨</i>\n      Back\n    </button>\n  </div>\n  <div class=\"content\"></div>\n  <div class=\"footerNav\">\n    <button>\n      <i>👜</i>\n      Browse\n    </button>\n    <button>\n      <i>🛒</i>\n      Cart\n    </button>\n    <button>\n      <i>🔍</i>\n      Search\n    </button>\n    <button>\n      <i>🎛</i>\n      Account\n    </button>\n  </div>\n</div>\n\n```\n",
-          "skillTags": [
-            "HTML",
-            "CSS"
-          ]
+          "skillTags": ["HTML", "CSS"]
         },
         {
           "id": "nVAILxovd",
@@ -739,10 +695,7 @@
           "starterCode": "",
           "solutionCode": "<!-- NOTE: A more complete solution will be added here in the future. -->\n<div id=\"my-custom-webpage\">",
           "content": "> ++NOTE:++ The video above completes this challenge in the Sandbox and suggests you can download the code to a file. That's perfectly fine, but we have since changed this project to include the Pairwise workspace editor above. Feel free to just complete the project in the above code editor.\n\nHere's what we'll cover in this challenge:\n\n* Pseudo selectors and the `content` property\n* [Flexbox](/workspace/iFvzasqW)\n* Using various `display` properties, including the somewhat obscure `display: table` property\n* Using utility classes\n\n# The Task\n\nCreate a Tic Tac Toe board using HTML and CSS. It should look something like this:\n\n![A 3x3 tic tac toe board.](/assets/sfxItMSR/d476572f879076a3e659d2ac3081ef95_tic-tac-toe.png)\nIt doesn't matter which squares are blank, which have X and which have O. Just make sure that you style at least one square with an X and one with an O.\n# Why?\n\nThis challenge starts to touch on generalized UI programming rather than just text documents with the occasional image. Don't get me wrong—_most of the web_ is just text documents with the occasional image, but it's important to generalize the concepts your learning to more abstract ideas like a Tic Tac Toe board.\n\nFurthermore, we can use the tic tac toe board again later in the course to make it into a fully functional game that you can play with others or against the computer.\n\nAnd of course as always just by programming, getting more repetitions, you're building the neural pathways that will make all this stuff come as second nature to you over time.\n\n---\n\n\n> **There's almost always more than one solution**\n> \n> This challenge can be accomplished with `flex-wrap` and a fixed `width` or with a more conventional approach of three \"row\" divs and three `div`s inside them to serve as squares on the board.\n> \n> In fact there are many ways you could complete this challenge that I wouldn't even think of. That's part of the beauty of programming—there's always more than one way to get something done. It can also be a curse at times because other programmers will often do things in different ways than you would, but that's beside the point.\n",
-          "skillTags": [
-            "HTML",
-            "CSS"
-          ]
+          "skillTags": ["HTML", "CSS"]
         },
         {
           "id": "kbllMGDEL3",
@@ -754,10 +707,7 @@
           "starterCode": "",
           "solutionCode": "<!-- NOTE: A more complete solution will be added here in the future. -->\n<div id=\"my-custom-webpage\">",
           "content": "> ++NOTE:++ The video above completes this challenge in the Sandbox and suggests you can download the code to a file. That's perfectly fine, but we have since changed this project to include the Pairwise workspace editor above. Feel free to just complete the project in the above code editor.\n# The Task\n\nCreate a calculator based on the following image.\n\n![A trusty calculator application.](/assets/Fpw0qzGv/6b4ea75bda893632217dda54b9c13e4f_calculator.png)\n\nWe won't be making it work, not yet anyway. We haven't learned enough TypeScript for that yet, so this challenge is all about HTML and CSS.\n\nYou can complete this challenge in the [Sandbox](/workspace/sandbox?type=markup). Once you're satisfied with the result export it to an HTML file. \n# Why?\n\nThere are two particularly important aspects to this project:\n\n* Get familiar with building applications, not just webpages.\n* Turn a graphic design into a real interface you can use.\n\n\n\n## Applications not web pages\n\nMany people think of HTML and CSS as tools to build web _pages_. That's certainly true, but that's not all you can do with HTML and CSS. You can also build web _applications_.\n\n> **Web applications vs web pages**\n> Possibly a silly distinction, but you will hear these terms in the wild so let's touch on this briefly. \n> \n> \n> \n>    * A web page is just something you read. A news site, a product page, etc.\n>    * A web application is something you interact with. It's software. Web apps also include web pages. For example, Pairwise is a web _application_ \\(you can interact with it\\) but there are many parts of app that you just read, like this page here.\n\n## From design to product\n\nTaking a graphic design and turning it into a finished product is a very important skill because:\n\n* If you work for a company or a client they might give you designs that need to turn into apps.\n* If you want to build your own product you will have to design it and then create it, even if \"designing\" it just means visualizing it in your mind before coding.\n\n# Tips and hints\n\n* You can code in whatever order works best for you, but if you're not sure then start by writing some basic HTML then give it some basic styling. Maybe create the outline of the calculator and get the size and background color right. Then move on to the inner details and repeat.\n* If you're feeling stuck try starting over from the beginning.\n   * This may seem counterintuitive but sometimes you need a blank slate to get new ideas flowing, and there's not actually that much code to write in this challenge so actually typing things out won't take too long. _Thinking about what to write_ is where you will spend most of your time.\n* If you really get stuck or you feel this challenge needs some work let us know\\! There is a feedback button in the header.\n* If you're not sure how to type a `±` symbol or a `÷` symbol just copy and paste from here.\n   * These are Unicode symbols, so it's possible to type them on your computer. It's often a pain though so when in doubt just try Googling around for the relevant symbol. \n\n",
-          "skillTags": [
-            "HTML",
-            "CSS"
-          ]
+          "skillTags": ["HTML", "CSS"]
         },
         {
           "id": "4rq4ezCu",
@@ -828,12 +778,10 @@
       ]
     },
     {
-      "free": true,
+      "free": false,
       "id": "lzTzpPcS",
       "title": "TypeScript",
-      "skillTags": [
-        "TypeScript"
-      ],
+      "skillTags": ["TypeScript"],
       "challenges": [
         {
           "id": "2qKcNab8",
@@ -3318,7 +3266,6 @@
       "title": "Developer Workflow",
       "challenges": [
         {
-          "free": true,
           "id": "3a4-HU8P",
           "type": "media",
           "title": "Intro",
@@ -3832,7 +3779,6 @@
       "title": "Async Programming & APIs",
       "challenges": [
         {
-          "free": true,
           "id": "SfvRE0Ai",
           "type": "media",
           "title": "Intro",
@@ -4454,12 +4400,9 @@
       "free": false,
       "id": "ZdkSjC9P",
       "title": "Frontend Development",
-      "skillTags": [
-        "React"
-      ],
+      "skillTags": ["React"],
       "challenges": [
         {
-          "free": true,
           "id": "TpAkjWcr",
           "type": "media",
           "title": "Intro",
@@ -4766,9 +4709,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "For this project, create a UI with React which allows you to manage a to\\-do list. This is the archetypal programming project, so we have to go ahead and get it out of the way now\\!\n\nYour to\\-do app should allow you to do:\n\n* Create new to\\-do items.\n* Edit to\\-do items.\n* Mark to\\-do items as complete. \n* Remove/delete to\\-do items.\n* The app should store to\\-do items in the [browser local storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) so the data persists after page refresh events.\n\n\nOnce you have completed your project, add the links to it below.",
-          "skillTags": [
-            "React"
-          ]
+          "skillTags": ["React"]
         },
         {
           "id": "f8a76sHdF4",
@@ -4780,9 +4721,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "For this project, create a flashcards UI study app. The app should allow users to:\n\n* Create a deck of flashcards on a specific study topic. Users can create multiple topics, and each card has a front and back.\n* View the list of study topics and view the cards in each topic.\n* Edit the cards in a topic, edit a topic, and remove cards and topics.\n* Study a topic. When studying a topic, the user should be presented with the flashcards in random order and can flip over the card to see the back by clicking or pressing the Space key.\n\n\nOnce you have completed the project, consider adding some programming study terms for you to practice and review\\!\n\nThis project involves quite a lot of UI components and business logic. Try to think through the user stories and plan out your implementation before getting started.",
-          "skillTags": [
-            "React"
-          ]
+          "skillTags": ["React"]
         },
         {
           "id": "ajSUGSAdF4",
@@ -4794,9 +4733,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Here at Pairwise, we love playing Tic\\-Tac\\-Toe. Let's revisit our Tic\\-Tac\\-Toe game from the Programming Module and create a UI to actually play against. Your Tic\\-Tac\\-Toe Game UI should:\n\n* Display a game board and allow users to play against a computer.\n* A user can click in any square to play, and choose to play as \"X\"s or \"O\"s.\n* Restart a game after completing a round.\n* See a record of their current wins/losses in the current game session.\n\n\nSince this will involve reusing or rewriting the Tic\\-Tac\\-Toe game logic your created before, it may be interesting to reflect on your previous approach and see if you would do anything different now that you have a little more experience programming.\n\nOnce you complete the project don't forget to play a few rounds against the computer\\!",
-          "skillTags": [
-            "React"
-          ]
+          "skillTags": ["React"]
         },
         {
           "id": "iJAcbGybh",
@@ -4847,14 +4784,10 @@
     {
       "free": false,
       "id": "EmSvFhW8",
-      "skillTags": [
-        "NodeJS",
-        "Express"
-      ],
+      "skillTags": ["NodeJS", "Express"],
       "title": "Backend Development",
       "challenges": [
         {
-          "free": true,
           "id": "kUvFiQmw",
           "type": "media",
           "title": "Intro",
@@ -5069,12 +5002,9 @@
       "free": false,
       "id": "f0pDYSOV",
       "title": "Databases",
-      "skillTags": [
-        "PostgreSQL"
-      ],
+      "skillTags": ["PostgreSQL"],
       "challenges": [
         {
-          "free": true,
           "id": "LO2nn_8O",
           "type": "media",
           "title": "Intro",
@@ -5467,7 +5397,6 @@
       "title": "Mobile Development",
       "challenges": [
         {
-          "free": true,
           "id": "BfciawyS",
           "type": "media",
           "title": "Intro to React Native",
@@ -6025,7 +5954,6 @@
       "title": "Testing Software",
       "challenges": [
         {
-          "free": true,
           "id": "s_p7YnS0",
           "type": "media",
           "title": "Intro",
@@ -6035,9 +5963,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "In this module you will learn about how to test software and automate common tasks in order to improve your productivity as a developer. The idea of testing software is to create automated tests which will verify your software performs correctly and provides the functionality users expect. The value of tests is to give teams confidence to ship changes to software projects and know that their changes did not break some existing behavior or feature.\n\n> At a high level, software testing is intended to ensure your software works as expected, and will not break unexpectedly, once it is in production, out in the wild.\n\n## An Example: Regressions\n\nRegressions occur when you change some code and something seemingly unrelated breaks. If you continue on your journey of learning to code you will definitely experience it one day. Regressions happen like this:\n\n* You spend 3 weeks building a new feature in a product to let users post comments on some posts.\n* You ship the feature.\n* The next day at work, someone asks \"Hey, is the user login broken?\"\n* You sit still and start listening, thinking, nervous.\n* You didn't touch the user login, you probably didn't break it.... you say to yourself.\n* Someone else confirms: \"Yes, it appears to be broken\".\n* \"What happened\"? Another person says.\n* ... You are frozen now.\n* A while later, it is discovered how your new feature inadvertently broke the user login.\n* You rush to try to fix the problem and deploy an update to production.\n\n\n## Best Practice Testing\n\nThis is a regression, and this is exactly the type of thing software testing is intended to prevent. Ideally, a best practice workflow would look like this:\n\n* You build the feature.\n* You open a pull request to merge your feature into the main branch of your team's codebase.\n* Automated tests run to check the code on your feature branch.\n* The tests check the user login feature, and the tests fail.\n* You immediately see feedback that the user login is broken on your branch.\n* You debug the problem and fix it.\n* You update your branch, the tests run again and pass.\n* All of this happens in a safe testing environment, doesn't impact any users, and doesn't require any manual human interaction.\n* You ship your feature, and this time sleep peacefully at night knowing the code works and will not cause any fires in production.\n\n\nThe hard part, of course, is writing tests which truly verify an application's intended functionality works correctly. You will find that it is nearly impossible to test all the ways a user could think to break an application. And, it's important that tests are easy to read, write, understand, in addition to being simple and fast to run. You don't want to spend more time working on tests than you do building the business logic which supports your product.\n\n## Automation\n\nIn addition to software testing, we will also cover the topic of automation in this course module. Writing tests for your software is fundamentally a type of automation: you could check your software manually every time but this is tedious, time\\-consuming, and error\\-prone. Instead, \nwriting tests allows you to automate this process.\n\nHowever, automation goes beyond developing tests. Automation also involves building tools to help you write software more quickly, debug problems, and deploy software.\n\nLearning how to automate tasks is a force\\-multiplier skill for software engineers and very important to learn. In this module we will get some practice automating various tasks and learning about common ways automation is used in the software development process.\n\n## Moving Forward\n\nThis module contains two sections: one covering testing and the other covering automation. Then, there will be a few projects for you to get some practice working with these new skillsets. Let's get started\\!",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "KhDR1uPaa",
@@ -6049,9 +5975,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "# Intro\n\nIn this section, we will cover the topic of testing software.\n\n> The purpose of software testing is to ensure your software application works as advertised and to detect problems before your users do.\n\nOn a finer level, what this means is software testing is intended to ensure engineering teams can continue to change and update software without breaking its behavior.\n\nFor instance, imagine you've built a game. For simplicity, let's say it's Tic Tac Toe.\n\nYou then write some tests to ensure that the Tic Tac Toe game can be played and the program behaves correctly according to the rules of Tic Tac Toe. For instance, the tests would check that whenever a player fills in three squares in a row that player wins the game.\n\nLater, you may make a lot of changes to your game and add additional features. The goal of software testing is to verify that the game logic still works as intended in the future when the game code is changed and new features are added.\n\nThe end result is that users of your game will always enjoy a high quality, bug\\-free experience.\n\nIn turns out software testing is a very diverse topic. We'll start this section by covering a common method of conceptualizing software testing: the so\\-called Testing Pyramid.\n\nSee you in the next lesson\\!",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "DPmZjg50s",
@@ -6063,9 +5987,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "# Types of Tests\n\nA common approach to thinking about testing software is the idea of the [software \"testing pyramid\"](https://martinfowler.com/articles/practical-test-pyramid.html) \\(highly recommend to read through the linked article by Martin Fowler\\). This pattern of test organization groups tests into different categories depending on the level of the application they are testing. To explain this, let's start by defining some relevant terms:\n\n* **Unit Tests: **The term unit tests refers to individually testing small components of software, for instance single functions or classes. This level of testing is very specific and granular. For instance, you may have a function `validateUser` and then a series of unit tests for this function which basically pass in different inputs and perform assertions that the result you get back from the function is what you expect. The idea is that the test should enforce that the behavior of the function continues to be consistent with your expectations even if the code changes in the future.\n* **Integration Tests: **Generally, the applications you will build are not isolated. They tend to interact with other software systems. The idea of an integration test is to run a test for your software in a context where it connects with other systems. A good example is a server which depends on a database. An integration test would involve actually running the server and database and performing some tests which assert that data is written and retrieved correctly from the database.\n* **End\\-To\\-End/UI Tests:** In the final state, the software you build will involve a client application, a server application \\(probably backed by a database\\), and various other components and services. The idea of end\\-to\\-end tests is to test the _entire working system_ as a unit. The core idea here is to actually test the system as if you were a user and validate that you can interact with the system and always get the desired behavior.\n\n\nRemember, the purpose of writing tests is to:\n\n* Ensure your software behaves as expected.\n* Ensure that your software handles failure states in a reasonable way \\(e.g. how does the application react when the user does something you didn't expect?\\).\n* Ensure that when you \\(or others\\) change code in the future, you don't break the desired behavior of your application.\n\n\n> If you have high quality tests, you will always be confident to deploy new software changes\\!\n# The Testing Pyramid\n\nThe testing pyramid refers to a method of conceptualizing and organizing different types of tests. The idea of the pyramid is to have more tests the easier and more lightweight the tests are. These means having a lot of unit tests, fewer integration tests, and fewer still end\\-to\\-end tests.\n\n![Fast, easy to write tests outweigh slow running, expensive tests.](/assets/DPmZjg50s/c49607dac67f96acc8336a8a245aff65_Testing_Pyramid.png)\n\nThe main reason for this is because the higher level tests \\(e.g. end\\-to\\-end tests\\) are more involved and expensive to write, maintain, and run. A proper end\\-to\\-end test involves spinning up an entire running version of your application in a test environment and then executing tests against your running application. Unit tests, on the other hand, are usually as simple as just running some code which just calls functions which your application uses. This is simple, fast, and delivers feedback immediately.\n\nIt's also easier to test edge cases with unit tests. You can easily pass many wrong or unexpected inputs to a function, but it would be very hard to simulate every \"wrong\" way a user could interact with your application in an end\\-to\\-end test. For this reason, end\\-to\\-end tests tend to be more focused on testing broad pieces of functionality and ensuring they continue to work correctly. For instance: can a user go through the full registration process and create an account successfully?\n# An Ideal Testing Setup\n\nIn an ideal testing process, you would have multiple levels of testing integrated with your entire software development workflow. This starts to touch on another area we haven't fully introduced yet, which is software delivery and deployment \\(coming in a later module\\), but the key idea is to imagine you have multiple levels of testing built into your software development workflow and you are continuously running tests against your code.\n\nThis process should be entirely or largely automated, meaning it is just built into your workflow and happens automatically when you make changes. In practice, this means having automation systems setup with your version control system, e.g. Git/GitHub, which could run tests against pull requests to your codebase. Merging new code would only be allowed after the code passing all of the existing tests successfully.\n\nThe key idea is tests should be running in the background, ready to quickly give you feedback whenever new code changes break existing behavior. You should not _have_ to run the tests manually \\(although you can\\). These tests should safeguard software updates and deployments, requiring new deployments to pass all existing tests.\n# Testing Utilities and Tools\n\nAs you might imagine, testing software makes heavy use of external tools and libraries. Here are a few examples of important testing libraries and resources we will touch on in this module:\n\n* [Jest](https://jestjs.io/): A JavaScript testing framework.\n* [Cypress](https://www.cypress.io/how-it-works/): A framework for browser end\\-to\\-end tests.\n* [GitHub Actions](https://github.com/features/actions): GitHub automation for running tasks for code repositories.\n\n# Moving Forward\n\nBecause unit tests are quite simple, we can get some practice writing unit tests in the challenges in this module. Integration and end\\-to\\-end tests are more involved, and outside of the scope of individual code challenges. However, we will still cover these topics briefly.\n\nTo start with, let's begin with an introduction to Jest and then get started writing some unit tests to test the behavior of simple functions and classes\\!",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "wQ66ODZrbC",
@@ -6077,9 +5999,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "[Jest](https://jestjs.io/en/) is a testing framework for JavaScript code. It tends to follow a pattern similar to other JavaScript test runners and testing in other programming languages. A simple test in Jest looks like this:\n\n```\n/**\n * A simple example of a unit test for an add function.\n */ \ntest(\"The add function works correctly\", () => {\n    expect(add(5, 20)).toBe(25);\n});\n\n```\n\nWhen you are using Jest, you have a global `test` function which you pass tests to. The test function accepts two arguments, a string description of the test and a callback function \\(which can be asynchronous\\) which contains the code to execute for the test. This is the most basic syntax for a simple test.\n\nIn the body of the callback function, you perform assertions based on the code you are testing. You will usually be testing an individual function, or sometimes a class or a more complex component. Each of your tests should generally be testing a specific aspect of the expected functionality of your code.\n\nJest provides an `expect` global which allows you to make assertions in your test. Assertions are basically just statements which you expect to always be true. If it turns out the statement is false, the test will fail\\!\n\nIn the above example, the test is \"expecting\" the `add` function to add `5` and `20` and return `25`. If for some reason the function returned `26`, the test would fail and you would be notified.\n\nHere are some more resources on Jest:\n\n* [Getting Started Guide](https://jestjs.io/docs/en/getting-started)\n* [Guide to Matchers](https://jestjs.io/docs/en/using-matchers)\n* [Expect Documentation](https://jestjs.io/docs/en/expect)\n\n\nJest tests are generally included in the codebase for your project and run from the command line. An example output from running Jest tests for your project might look like this:\n\n```bash\nyarn run v1.22.5\n$ yarn jest --watchAll=false\n$ react-scripts test --watchAll=false\n PASS  src/js/browser-test-lib.test.ts\n PASS  src/test/utils.test.ts\n PASS  src/test/Torvalds.test.ts (90.579s)\n\nTest Suites: 3 passed, 3 total\nTests:       18 passed, 18 total\nSnapshots:   1 passed, 1 total\nTime:        91.62s\nRan all test suites.\n✨  Done in 93.32s.\n\n```\n\nIf any test failed, you would see some different output showing you some information about the failed test.\n\n---\n\nOk—with that intro out of the way let's get some practice writing some Jest\\-style tests\\!",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "kGOefnhFl",
@@ -6091,9 +6011,7 @@
           "starterCode": "// A function to add two numbers.\nlet add = (x: number, y: number) => x + y;\n\n// Your code here:\n",
           "solutionCode": "// A function to add two numbers.\nlet add = (x: number, y: number) => x + y;\n\n// Your code here:\ntest(\"The add function adds numbers correctly.\", () => {\n  expect(add(1, 2)).toEqual(3);\n  expect(add(5, 7)).toEqual(12);\n  expect(add(200, 300)).toEqual(500);\n  expect(add(1, 776)).toEqual(777);\n  expect(add(1000, 2145)).toEqual(3145);\n});\n",
           "content": "",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "l0IkyZi$m",
@@ -6105,9 +6023,7 @@
           "starterCode": "// A function to add two numbers.\nlet add = (x: number, y: number) => x + y;\n\n// Your code here:\n",
           "solutionCode": "// A function to add two numbers.\nlet add = (x: number, y: number) => x + y;\n\n// Your code here:\ntest(\"The add function works correctly\", () => {\n  expect(add(1, 2)).toBe(3);\n  expect(add(3, 4)).toBe(7);\n  expect(add(12, 8)).toBe(20);\n  expect(add(15, 5)).toBe(20);\n  expect(add(11, 42)).toBe(53);\n  expect(add(15, 15)).toBe(30);\n  expect(add(75, 25)).toBe(100);\n  expect(add(123, 322)).toBe(445);\n  expect(add(1231, 21)).toBe(1252);\n  expect(add(657881, 234252)).toBe(892133);\n});\n",
           "content": "",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "2EkzeSu52",
@@ -6119,9 +6035,7 @@
           "starterCode": "// Remove a key:value pair from an object by key name:\nlet removeKeyFromObject = (obj: { [key: string]: any }, key: string) => {\n  delete obj[key];\n  return obj;\n};\n\n// Your code here:\n",
           "solutionCode": "// Remove a key:value pair from an object by key name:\nlet removeKeyFromObject = (obj: { [key: string]: any }, key: string) => {\n  delete obj[key];\n  return obj;\n};\n\n// Your code here:\ntest(\"removeKeyFromObject removes key:value pairs from objects by key name.\", () => {\n  let obj: any = { name: \"Sam\", age: 15 };\n  let result = removeKeyFromObject(obj, \"age\");\n  expect(result).toEqual({ name: \"Sam\" });\n\n  obj = { name: \"Sam\", age: 15, profession: \"Carpenter\" };\n  result = removeKeyFromObject(obj, \"profession\");\n  expect(result).toEqual({ name: \"Sam\", age: 15 });\n\n  obj = { name: \"Sam\", age: 15, profession: \"Carpenter\", email: \"sam@sam.com\" };\n  result = removeKeyFromObject(obj, \"email\");\n  expect(result).toEqual({ name: \"Sam\", age: 15, profession: \"Carpenter\" });\n\n  obj = { name: \"Sam\", age: 15, profession: \"Carpenter\", email: \"sam@sam.com\" };\n  result = removeKeyFromObject(obj, \"blegh\");\n  expect(result).toEqual({\n    name: \"Sam\",\n    age: 15,\n    profession: \"Carpenter\",\n    email: \"sam@sam.com\",\n  });\n});\n",
           "content": "",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "cpGNKdx5s",
@@ -6133,9 +6047,7 @@
           "starterCode": "// A function to valid age\nlet validateAge = (age: number) => {\n  if (age < 18) {\n    throw new Error(\"Too young!\");\n  }\n};\n\n// Your code here",
           "solutionCode": "// A function to valid age\nlet validateAge = (age: number) => {\n  if (age < 18) {\n    throw new Error(\"Too young!\");\n  }\n};\n\n// Your code here\ntest(\"The validateAge function checks ages correctly.\", () => {\n  const invalid = [1, 3, 5, 7, 8, 13, 15];\n  for (const age of invalid) {\n    expect(() => validateAge(age)).toThrow();\n  }\n\n  const valid = [19, 21, 26, 32, 38, 42, 45, 55, 78];\n  for (const age of valid) {\n    expect(validateAge(age)).toBe(undefined);\n  }\n});\n",
           "content": "",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "2j9vhRMjW",
@@ -6147,9 +6059,7 @@
           "starterCode": "/**\n * A simple validation function to check that a password update\n * does not match the current, existing password.\n */\nlet validateUpdatePassword = (newPassword: string, oldPassword: string) => {\n  return newPassword !== oldPassword;\n};\n\n// Your code here:\n",
           "solutionCode": "/**\n * A simple validation function to check that a password update\n * does not match the current, existing password.\n */\nlet validateUpdatePassword = (newPassword: string, oldPassword: string) => {\n  return newPassword !== oldPassword;\n};\n\n// Your code here:\ntest(\"validateUpdatePassword\", () => {\n  expect(validateUpdatePassword(\"new\", \"old\")).toBeTruthy();\n  expect(\n    validateUpdatePassword(\"asdfas98d7f60as7f90sa\", \"l23l4hj2ql4ha2\")\n  ).toBeTruthy();\n  expect(validateUpdatePassword(\"new\", \"new\")).toBeFalsy();\n  expect(\n    validateUpdatePassword(\"f69asd87f698asfds\", \"f69asd87f698asfds\")\n  ).toBeFalsy();\n});\n",
           "content": "",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "zdV1F5Bdb",
@@ -6161,9 +6071,7 @@
           "starterCode": "/**\n * Reduce a list of items into a list of buckets specified\n * by the given size.\n */\nlet buckets = <T extends {}>(list: T[], size: number): Array<Array<T>> => {\n  if (size < 1) {\n    throw new Error(\"Size must be a positive number!\");\n  }\n\n  let bucketList = [];\n  for (let i = 0; i < list.length; i += size) {\n    bucketList.push(list.slice(i, i + size));\n  }\n  return bucketList;\n};\n\n// Your code here:\n",
           "solutionCode": "/**\n * Reduce a list of items into a list of buckets specified\n * by the given size.\n */\nlet buckets = <T extends {}>(list: T[], size: number): Array<Array<T>> => {\n  if (size < 1) {\n    throw new Error(\"Size must be a positive number!\");\n  }\n\n  let bucketList = [];\n  for (let i = 0; i < list.length; i += size) {\n    bucketList.push(list.slice(i, i + size));\n  }\n  return bucketList;\n};\n\n// Your code here:\ntest(\"The buckets function partitions a list correctly\", () => {\n  const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\n  let result = buckets(list, 2);\n  let expected = [\n    [1, 2],\n    [3, 4],\n    [5, 6],\n    [7, 8],\n    [9, 10],\n  ];\n  expect(result).toEqual(expected);\n\n  result = buckets(list, 5);\n  expected = [\n    [1, 2, 3, 4, 5],\n    [6, 7, 8, 9, 10],\n  ];\n  expect(result).toEqual(expected);\n\n  result = buckets(list, 10);\n  expected = [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]];\n  expect(result).toEqual(expected);\n\n  result = buckets(list, 7);\n  expected = [\n    [1, 2, 3, 4, 5, 6, 7],\n    [8, 9, 10],\n  ];\n  expect(result).toEqual(expected);\n\n  expect(() => buckets(list, 0)).toThrow();\n});\n",
           "content": "",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "gYpNeTnG1",
@@ -6175,9 +6083,7 @@
           "starterCode": "/**\n * A simple class to represent a racecar which can accelerate\n * and decelerate.\n *\n * NOTE: Do not change the code for the RaceCar class.\n */\nclass RaceCar {\n  running = false;\n  speed = 0;\n  maxSpeed = 0;\n\n  constructor(maxSpeed: number) {\n    this.maxSpeed = maxSpeed;\n  }\n\n  accelerate = () => {\n    if (this.speed < this.maxSpeed) {\n      this.speed++;\n    }\n  };\n\n  decelerate = () => {\n    if (this.speed > 0) {\n      this.speed--;\n    }\n  };\n\n  getSpeed = () => {\n    return this.speed;\n  };\n}\n\n// Your code here:\n",
           "solutionCode": "/**\n * A simple class to represent a racecar which can accelerate\n * and decelerate.\n *\n * NOTE: Do not change the code for the RaceCar class.\n */\nclass RaceCar {\n  running = false;\n  speed = 0;\n  maxSpeed = 0;\n\n  constructor(maxSpeed: number) {\n    this.maxSpeed = maxSpeed;\n  }\n\n  accelerate = () => {\n    if (this.speed < this.maxSpeed) {\n      this.speed++;\n    }\n  };\n\n  decelerate = () => {\n    if (this.speed > 0) {\n      this.speed--;\n    }\n  };\n\n  getSpeed = () => {\n    return this.speed;\n  };\n}\n\n// Your code here:\ntest(\"The RaceCar class operates correctly\", () => {\n  let car = new RaceCar(10);\n\n  // A helper function to accelerate and decelerate the car a number of times\n  const race = (times: number, direction: \"up\" | \"down\") => {\n    let count = 0;\n    let fn = direction === \"up\" ? car.accelerate : car.decelerate;\n\n    while (count < times) {\n      fn();\n      count++;\n    }\n  };\n\n  race(5, \"up\");\n  expect(car.getSpeed()).toBe(5);\n  race(10, \"up\");\n  expect(car.getSpeed()).toBe(10);\n\n  race(20, \"down\");\n  expect(car.getSpeed()).toBe(0);\n\n  car = new RaceCar(100);\n\n  race(15, \"up\");\n  race(15, \"up\");\n  race(15, \"up\");\n  race(15, \"up\");\n  race(15, \"up\");\n  expect(car.getSpeed()).toBe(75);\n  race(50, \"up\");\n  expect(car.getSpeed()).toBe(100);\n\n  race(20, \"down\");\n  expect(car.getSpeed()).toBe(80);\n  race(79, \"down\");\n  expect(car.getSpeed()).toBe(1);\n  race(100, \"down\");\n  expect(car.getSpeed()).toBe(0);\n});\n",
           "content": "",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "zCbzABROtb",
@@ -6189,9 +6095,7 @@
           "starterCode": "const mockAsyncDelay = async (time: number = 1000) => {\n  await new Promise((_: any) => setTimeout(_, time));\n};\n\ntype Data = string | null;\n\nlet fetchSomeData = async (): Promise<Data> => {\n  try {\n    await mockAsyncDelay();\n    return \"OK\";\n  } catch (err) {\n    return null;\n  }\n};\n\n// Your code here:\n",
           "solutionCode": "const mockAsyncDelay = async (time: number = 1000) => {\n  await new Promise((_: any) => setTimeout(_, time));\n};\n\ntype Data = string | null;\n\nlet fetchSomeData = async (): Promise<Data> => {\n  try {\n    await mockAsyncDelay();\n    return \"OK\";\n  } catch (err) {\n    return null;\n  }\n};\n\n// Your code here:\ntest(\"fetchSomeData returns OK after a delay\", async () => {\n  const result = await fetchSomeData();\n  expect(result).toBe(\"OK\");\n});\n",
           "content": "",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "e8LMnAF1U",
@@ -6203,9 +6107,7 @@
           "starterCode": "// Your code here:\n\ntest(\"The filterEvens function filters a list of numbers and returns only the odd numbers\", () => {\n  let list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\n  let result = filterEvens(list);\n  let expected = [1, 3, 5, 7, 9];\n  expect(result).toEqual(expected);\n\n  list = [2, 2, 2, 4, 4, 4, 6, 6, 6, 100, 100, 100];\n  result = filterEvens(list);\n  expected = [];\n  expect(result).toEqual(expected);\n\n  list = [1, 555, 777, 999];\n  result = filterEvens(list);\n  expected = [1, 555, 777, 999];\n  expect(result).toEqual(expected);\n\n  list = [1, 1000, 5];\n  result = filterEvens(list);\n  expected = [1, 5];\n  expect(result).toEqual(expected);\n\n  list = [];\n  result = filterEvens(list);\n  expected = [];\n  expect(result).toEqual(expected);\n});\n",
           "solutionCode": "// Your code here:\nlet filterEvens = (list: number[]): number[] => {\n  return list.filter((x) => x % 2 !== 0);\n};\n\ntest(\"The filterEvens function filters a list of numbers and returns only the odd numbers\", () => {\n  let list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\n  let result = filterEvens(list);\n  let expected = [1, 3, 5, 7, 9];\n  expect(result).toEqual(expected);\n\n  list = [2, 2, 2, 4, 4, 4, 6, 6, 6, 100, 100, 100];\n  result = filterEvens(list);\n  expected = [];\n  expect(result).toEqual(expected);\n\n  list = [1, 555, 777, 999];\n  result = filterEvens(list);\n  expected = [1, 555, 777, 999];\n  expect(result).toEqual(expected);\n\n  list = [1, 1000, 5];\n  result = filterEvens(list);\n  expected = [1, 5];\n  expect(result).toEqual(expected);\n\n  list = [];\n  result = filterEvens(list);\n  expected = [];\n  expect(result).toEqual(expected);\n});\n",
           "content": "",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "Vd0gFPl5V",
@@ -6217,9 +6119,7 @@
           "starterCode": "/**\n * A function to count the number of non space characters in a string.\n */\nlet countNonSpaceCharactersInString = (str: string): number => {\n  let count = 0;\n  for (let i = 0; i <= str.length; i++) {\n    if (str.charAt(i) !== \" \") {\n      count++;\n    }\n  }\n\n  return count;\n};\n\ntest(\"The countNonSpaceCharactersInString counts the number of non-space characters in a string correctly.\", () => {\n  let str = \"hello my name is Joe\";\n  let result = countNonSpaceCharactersInString(str);\n  expect(result).toBe(16);\n\n  str = \"\";\n  result = countNonSpaceCharactersInString(str);\n  expect(result).toBe(0);\n\n  str = \"hi\";\n  result = countNonSpaceCharactersInString(str);\n  expect(result).toBe(2);\n\n  str =\n    \"It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).\";\n  result = countNonSpaceCharactersInString(str);\n  expect(result).toBe(510);\n});\n",
           "solutionCode": "/**\n * A function to count the number of non space characters in a string.\n */\nlet countNonSpaceCharactersInString = (str: string): number => {\n  let count = 0;\n  for (let i = 0; i < str.length; i++) {\n    if (str.charAt(i) !== \" \") {\n      count++;\n    }\n  }\n\n  return count;\n};\n\ntest(\"The countNonSpaceCharactersInString counts the number of non-space characters in a string correctly.\", () => {\n  let str = \"hello my name is Joe\";\n  let result = countNonSpaceCharactersInString(str);\n  expect(result).toBe(16);\n\n  str = \"\";\n  result = countNonSpaceCharactersInString(str);\n  expect(result).toBe(0);\n\n  str = \"hi\";\n  result = countNonSpaceCharactersInString(str);\n  expect(result).toBe(2);\n\n  str =\n    \"It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).\";\n  result = countNonSpaceCharactersInString(str);\n  expect(result).toBe(510);\n});\n",
           "content": "",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "v1sB3gaFR",
@@ -6231,9 +6131,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "# External Test Dependencies\n\nThe code you write tests for often has various external dependencies, e.g. imported libraries, remote services and APIs, and so on. You often do not want to have to rely on these externalities in your test environment. For instance, consider that you have a function which calls a server API. If you are writing unit tests, you don't want to actually make the network request to the server. If you did, your tests would need that server to be running and available anytime the tests run. This dependency could lead to your tests failing even when your code works.\n\nFor example, what if at some point the network request failed, for any reason whatsoever? Your tests would then consequently fail. While it is true that you generally would want to ensure that your server is running and available, that should not be the concern of unit tests for the code which interacts with server responses. On top of this, relying on network requests would generally make your tests take a lot longer to run.\n# Mocking Dependencies\n\nHow can we deal with this problem?\n\nA common solution is the idea of \"mocking\". We can mock external services and dependencies in the test environment such that they produce a predictable outcome. For instance, we could mock the external API such that it provides a fixed response, or mock it such that it provides an error response, and then write tests to ensure our code behaves correctly in either case.\n# Mocking with Jest\n\nJest provides versatile support for mocking in a test environment. For instance, if the API call described above was implemented using axios, it could be mocked in Jest using some code like this:\n\n```\nimport axios from 'axios';\n\nclass Users {\n  static all() {\n    return axios.get('/users.json').then(resp => resp.data);\n  }\n}\n\njest.mock('axios');\n\ntest('should fetch users', () => {\n  const users = [{name: 'Bob'}];\n  const resp = {data: users};\n  axios.get.mockResolvedValue(resp);\n\n  return Users.all().then(data => expect(data).toEqual(users));\n});\n\n```\n\nThis effectively mocks the call to `/users.json` and returns the fixed `resp` data\\. This example is taken directly from the [Jest documentation on Mock Functions](https://jestjs.io/docs/en/mock-functions), which we would encourage you to review. Using mocks with Jest, we can mock the behavior of:\n\n* Regular functions\n* Function return values\n* Imported libraries and modules\n\n# Using Mocks Effectively\n\nMocks are a very useful tool in your toolbox for writing tests. Using mocks effectively can help to decouple your tests from external dependencies, therefore isolating the behavior you care about testing. Moreover, they can allow you to more easily test certain aspects of your code which would otherwise prove hard to test \\(e.g. code which makes network requests or interacts with external modules\\). An effective use of mocking can make your tests more versatile, useful, and less brittle.",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "qUXuU6Tyr",
@@ -6245,9 +6143,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "# The Problem\n\nYour tests will very frequently evaluate some code and then perform assertions which resemble the following:\n\n```\nexpect(result).toEqual(expected);\n\n```\n\nWhere you are asserting that some data you get back from your code matches some expected data. This is generally great when you asserting fairly simple things such as:\n\n```\nconst result = getUser();\nconst user = {\n    name: \"Joe\",\n    age: 25,\n};\nexpect(result).toEqual(user);\n\n```\n\nBut what if you are comparing two more complex data structures? It can be tedious and inconvenient to hard\\-code more complex data structures in your tests just to perform assertions against them.\n# Snapshot Testing\n\nJest provides a feature called snapshot testing which can help in this case. Snapshot testing basically ensures that some data always matches a fixed snapshot of that data. But where does the fixed snapshot come from in the first place? Jest creates it by default if it doesn't exist and saves it in an auto\\-generated file within your codebase. Once it exists, if the test ever produces data which no longer matches the snapshot, the test will fail and you will have the option to update the snapshot or fix the code which broke the test.\n\nHow does it work?\n\n```\nexpect(result).toMatchSnapshot();\n\n```\n\nJust like that—pretty simple\\!\n# Snapshot Testing UIs\n\nA particularly useful application of snapshot testing is for testing UIs. For example, imagine you have a component which renders a series of buttons and inputs. You can render this in your test environment in isolation and then snapshot the rendered component tree. This provides a very simple and easy way to add a test which ensures that that particular piece of UI does not change. If you wanted to ensure this without a snapshot, you would have to write a lot of specific assertions which check that the buttons and inputs all exist—and even then your test would probably not be exhaustive.\n\nSnapshot testing UIs is not a silver bullet, however. Often, the UI of an application can frequently change and that's not a problem or issue at all. If you have extensively snapshot tested a UI, however, this would lead to constantly failing tests. Snapshots are a great tool, but it's useful to know when and where to apply them.\n---\n\nTo learn more take a look at the [Jest documentation on Snapshot testing](https://jestjs.io/docs/en/snapshot-testing).\n\nTry to add some snapshot tests of your own in the projects later in this module\\!",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "qU36RQTcK",
@@ -6259,9 +6155,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "It's fairly easy to add Jest to your project.\n\nFor the best guide, [follow the Jest documentation](https://jestjs.io/docs/en/getting-started). See further down that page for the [TypeScript instructions](https://jestjs.io/docs/en/getting-started#using-typescript).\n\nThe brief summary is to install Jest, e.g. `yarn add --dev jest` and then add some test files which match the expected filename pattern, e.g. `.test.ts`. When you run Jest, e.g. `yarn jest`, Jest will search for files matching this filename pattern, e.g. `utils.test.ts`, and Jest will process those files.\n\nWithin your test files you can import code from the rest of your codebase and then create `describe` or `test` blocks which include your tests for that code. Jest will evaluate these tests and print out the results interactively in the CLI for you to view.\n\nBy the way, if you have seen the `describe` test keyword, it is basically a way to group a series of tests together. For example, you may have several tests for a single class or a particular feature. You could group all of these within a `describe` block, within which you can list your individual `test` cases\\. It's really just a utility for test organization, you can use it if you find it helpful or not—it's up to you\\!",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "oNwi40jtp",
@@ -6273,9 +6167,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "You are free to organize tests in your codebase anyway you see fit. However, there are some common patterns which more common than others. For instance, two common ways are to group your tests all in one place or to group your tests next to the files which they correspond to.\n\nIf you follow the first pattern, you will generally have a separate `tests/` folder, within which are all the tests for your codebase. For example, your file structure may look like this:\n\n```\nproject\n│   README.md\n│   ...\n│\n└───src\n│   └───utils\n│   │   helpers.ts\n│   └───ui\n│   │   App.tsx\n│   │   Login.tsx\n│   │   ...\n│   │\n│   └───tests\n│       │   helpers.test.ts\n│       │   App.test.tsx\n│       │   ...\n...\n\n```\n\nThis style of organization keeps your test code separate from the code which it tests.\n\nThe other option is to group them together:\n\n```\nproject\n│   README.md\n│   ...\n│\n└───src\n│   └───utils\n│   │   helpers.ts\n│   │   helpers.test.ts\n│   └───ui\n│   │   App.tsx\n│   │   App.test.tsx\n│   │   Login.tsx\n│   │   ...\n│   │\n...\n\n```\n\nThere is really no right or wrong here, the best option is to try to determine an organization which is clear, simple, and easy to understand for you and your team. Experiment with a few different options until you find something you like\\! One easy rule of thumb to remember here is to ask yourself how easy it would be for someone new to understand the organization of your codebase.",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "yKI$72Y7v",
@@ -6287,9 +6179,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "# Intro\n\nYou may recall from the earlier lesson on testing where we introduced the idea of the Testing Pyramid. This concept refers to stacking or organizing tests at different levels of granularity. So far, we have mainly covered unit testing, which is writing specific tests for functions, classes, or other small bits of code throughout your codebase. From here, the next level up the testing pyramid is usually referred to as \"integration testing\". The exact definition of integration testing may be hard to pin down because it depends a lot on the context it is used in, however generally the idea is that integration testing involves testing components of a software system in \"integration\" together.\n# Integration Testing\n\n[Wikipedia](https://en.wikipedia.org/wiki/Integration_testing#:~:text=Integration%20testing%20%28sometimes%20called%20integration,component%20with%20specified%20functional%20requirements.) defines integration testing as \"the phase in software testing in which individual software modules are combined and tested as a group.\" Imagine you have a server application with many different classes and modules. You have written unit tests for all the individual pieces of code and now you want to write some integration tests. Integration tests in this context could refer to running the entire server and then interacting with it at the API level. Or, imagine you have a frontend application built with React. Integration testing a React application could involve rendering all or some components in a test environment and then interacting with them \\(e.g. by simulating click events or text input\\).\n\nIf your software is composed of many decoupled and isolated small units \\(which, generally is a good practice\\), unit testing is writing specific individual tests for these units. Integration testing involves actually connecting these small units and testing the entire system.\n\nIntegration testing is a tricky term because it tends to mean different things to different people. For instance, some may not consider testing a server application in isolation to be a true integration test. You would need to deploy the server with a database in a test environment for it to be an integration test. Or, imagine you have a complex React application. Is it a unit test or integration test if you are rendering and testing a large form component? The distinctions and not perfectly clear.\n\nThe important thing to understand about integration testing is that you are testing behavior of a software system which involves the interaction of different smaller components. Usually, you should have already written unit tests for the small components themselves. The integration tests verify that more complex interactions between these components go as planned.\n# The Role of Integration Testing\n\nNow, let's revisit the testing pyramid\\!\n\n![You can think of \"Service Tests\" here as \"Integration Tests\". Naming and definition ambiguity!](/assets/yKI$72Y7v/c49607dac67f96acc8336a8a245aff65_testing-pyramid.png)\n\nIntegration tests should generally be fewer in number than unit tests and also slightly more difficult to write, maintain, and run. If your integration tests involved running a server and making requests to an API, for instance, this is going to be more complex to setup than simply using a quick test runner like Jest to interact with your code and perform assertions. Because of the greater overheard of integration tests, you usually want to have less of them.\n\nHowever, the upper levels of testing in the testing pyramid are very important. Let's say you have an integration test for a user signup flow via API. If the tests breaks, that's a big problem\\! It indicates that your user registration flow could be broken. That's really important to know and unit testing may not catch all errors like this.\n# Integration Testing in Practice\n\nEven after reading all of this, it may still feel a little unclear what an integration test actually _is_. What do they look like in practice and how can you write one?\n\nHere are two articles on writing integration tests in a [React application](https://css-tricks.com/react-integration-testing-greater-coverage-fewer-tests/) and for an [Express server application](https://medium.com/@pojotorshemi/integration-test-on-express-restful-apis-using-jest-and-supertest-4cf5d1414ab0) which provide more direct examples and also further illustrate the distinctions between unit, integration, and e2e/UI tests.",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "4X8ks1Rz$",
@@ -6301,9 +6191,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "# Intro\n\nThe final level of the testing pyramid goes by a few names, most commonly end\\-to\\-end \\(e2e\\) testing or UI testing. the key idea here is to test the _entire_ application, from end to end, as if you were a user interacting with it. For example, imagine you built a note\\-taking app. An e2e test would involve deploying the server in a test environment with a database and then actually interacting with the server through the UI \\(hence the name UI testing\\), just as a user would do. This is the highest level of testing with the most overhead.\n# UI/e2e Testing In Practice\n\nIf you are creating e2e tests, you want to genuinely run as much of your application as you can in the tests, exactly as it would run in production. You want to avoid test idiosyncrasies which result in tests failing/passing in the test environment but not in production. However, you may not be able to run your _entire_ application in the test environment as it is in production. Why not? Your application may rely on various external dependencies which are out of your control, but which you do not want to rely on in the test environment, such as third party APIs.\n\nPerhaps you rely on external payment APIs, or data feeds, or single\\-sign\\-on APIs. You typically do not want to rely on the actual instances of these external services in your e2e tests. Instead, you want to follow the same pattern we introduced previously: mocking. External services can be mocked just as individual classes, modules, or functions can be mocked. This removes the external dependency and replaces it with predictable behavior that allows you to construct more reliable tests.\n# Mocking External Services\n\nFor instance, imagine your application has a payment flow which submits a payment request to an external API. The request includes user payment details, such as a credit card and address and so on. The API request may succeed or fail in real life. Now, you want to build an e2e test for this entire payment flow. You have your application setup and running in a test environment \\(probably Docker—more on that later\\). At some point, your application code makes a network request to the external payment API, e.g.\n\n```\naxios.post(`${PAYMENTS_API}/payment`, paymentData);\n\n```\n\nA good practice to follow is to make the `PAYMENTS_API` an external, configurable environment variable. If you do this, you can simply provide a different `PAYMENTS_API` value to your application in the test and production environments, but your code remains the same. Your code itself is not modified for the test environment. In the test environment, the payments request could be mocked in some way, for example by running a separate server to mock the external payments API. This could be configured to return a predictable response which would allow your tests to consistently test the payment flow.\n# Caveats\n\nWhile it is a good practice to test your application in isolation, what this means is that your dependencies on external services are still a possible point of failure. For instance, in the above example what if the payments API fails or changes in production? Your tests would not catch this\\! There are two takeaways here:\n\n* There are always ways your software can break which are outside the current scope of whatever tests you have written.\n* Many additional tools exist for production software systems to guard against failures specific to production, such as logging, monitoring, and alerting \\(more on these later\\).\n\n# UI Testing Tools\n\nJust like we used Jest to write unit tests, there are various tools to help you write end\\-to\\-end tests. One of the best tools for testing browser based applications is [Cypress](https://www.cypress.io/). Cypress gives you a Jest\\-like approach for writing tests which interact with a browser application and perform assertions such as clicking buttons or completing forms and verifying the UI changes as expected. Cypress simply requires a URL to visit a running application.\n\nAs an example, we have extensive Cypress tests for the Pairwise application which run in Docker. We will get more into Docker in the Deployment and Delivery module, but for now just imagine Docker as a virtualized container which allows you to run software anywhere and always get the same behavior and results. Our Cypress tests for Pairwise deploy the entire Pairwise application \\(client, server, and database\\) in a dockerized environment and then execute a series of Cypress tests against the Pairwise app. These tests actually walk through the browser client UI \\(using a headless web\\-browser\\) and perform various actions like a user, such as completing challenge, logging in, purchasing the course, and so on.\n\nHere is an example of what one of those tests looks like:\n\n```typescript\nit(\"Home route includes courses list\", () => {\n  cy.visit(`${CLIENT_APP_URL}/home`);\n  cy.url().should(\"include\", \"home\");\n  cy.contains(\"Welcome to Pairwise!\");\n  cy.contains(\"Content\");\n\n  // These are currently the two courses we have\n  cy.contains(\"Fullstack TypeScript Course\");\n  cy.contains(\"Pairwise Library\");\n\n  click(\"course-link-0-start\");\n  cy.url().should(\"include\", \"workspace\");\n});\n\n```\n\nAs you can see, the syntax looks very similar to a Jest test. This test starts by visiting the `/home` route and then performing a few simple assertions, such as checking that some of the page content exists and then clicking the link to start the first course and verifying the browser URL has changed to include `workspace`.\n\nAs you can imagine, UI tests are the most expensive to write and run. They require the most overheard in terms of basically deploying your entire application, and, a test\\-runner like Cypress simply takes longer to execute tests \\(since it is actually interacting with a browser\\). Consequently, these tests should be fewer in number—hence the shape of the testing pyramid. However, UI tests provide a high level of signal. They allow you to test that your entire application is working as expected.\n# Takeaways\n\nRemember, the role of testing is to create checks which find broken software \\(before your users do\\) and to provide confidence in allowing teams to move quickly and ship new features and changes. Let's imagine you have a user registration flow which is extensively UI tested and you make a lot of changes to the flow \\(at any level\\). If your UI tests pass against the new changes, this gives you a high degree of confidence that your changes did not break existing behavior.\n\nConversely, shipping code without tests is asking for trouble\\! That's not to say tests will always protect you from introducing new errors and bugs, but the point of testing is to try to provide confidence for teams to release software quickly and reliably.",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "8gYWsIVO$",
@@ -6348,9 +6236,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Remember your [Tic Tac Toe game](https://app.pairwise.tech/workspace/zweKy6cg/tic-tac-toe) from the programming module way back?\n\nIt's a fairly simple game with clear rules. Revisit your code for this game and try to add tests for your code. Since the game before was implemented in the Pairwise workspace you can now move this to a separate repository and host it in your GitHub portfolio \\(if you haven't already\\).\n\nYou will want to install Jest, e.g. `yarn add jest`, and follow the [setup instructions](https://jestjs.io/docs/en/getting-started). Then, add some test cases for your Tic Tac Toe game until you feel satisfied you've covered the game logic and any edge cases which could occur.\n\n> Edge cases refers to rare but possible events which may happen but are probably not expected. Edge cases are important to take into account when designing software. They are a good source of major issues since unless you consider edge cases it's likely your code is not expecting them... which can result in errors, crashes, or unexpected behavior.\n> \n> As a simple example imagine you have a user input and the user inputs an empty string, or it is a number field and the user inputs a negative number. Are these values allowed? What happens if these inputs occur? It's always a good practice to try to keep edge cases in mind when designing and testing software.\n",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "AbAFrjYWc",
@@ -6362,9 +6248,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Now that you've tested your Tic Tac Toe game, let's do the same for the [Game Board Navigator](https://app.pairwise.tech/workspace/7B@lwOBb7/game-board-navigator) project\\. This project was more complex and should be a little more challenging to test. Our own tests for this project, for instance, are over 400 lines long\\!\n\nJust like the last project, you can move your Game Board Navigator code to a new repo to host in your GitHub portfolio. Write a test suite using Jest to test the main behavior of this game project.\n\nGood luck\\!",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "4EM0@GUSG",
@@ -6376,9 +6260,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "For this project, let's revisit our Post\\+Comment API from before. This API allows for some more complex behavior and is a great option for us to write some tests for. Create suite of API tests which walk through all of the various actions a user could take with this API, such as:\n\n* Creating a new post\n* Editing a post\n* Deleting a post\n* Commenting on a post\n* Editing a comment\n* Deleting a comment\n\n\nYour tests should try to cover various edge cases such as:\n\n* Deleting a post with comments also deletes the comments\n* Trying to delete a post with an invalid `id` has no effect\n* Deleting a comment only deletes that comment, other comments are unaffected.\n\n",
-          "skillTags": [
-            "Jest"
-          ]
+          "skillTags": ["Jest"]
         },
         {
           "id": "l3yJBFpRz",
@@ -6476,7 +6358,6 @@
       "title": "Refactoring & Debugging",
       "challenges": [
         {
-          "free": true,
           "id": "cBlWsqgO",
           "type": "media",
           "title": "Intro",
@@ -6671,7 +6552,6 @@
       "title": "Delivery & Deployment",
       "challenges": [
         {
-          "free": true,
           "id": "Vy435oZN",
           "type": "section",
           "title": "Intro",
@@ -6703,9 +6583,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "# Intro\n\n[Docker](https://www.docker.com/why-docker) is a tool for defining reproducible programming environments using containers. Docker also you to create deterministic and reproducible environments for running your software applications, so, whether you are developing and debugging locally, running tests against your application in a CI environment, or running your app in production, you can always have a consistent base runtime environment. This makes it easy to package, test, deploy, and collaborate on software projects. Docker is basically a software tool which always you to create, manage, and run these reproducible software environments.\n# A Docker Container for NodeJS\n\nIn the beginning docker can feel a little abstract so let's jump in with a simple example. Docker uses Dockerfiles as standard definition files which describe how to build a container. These files usually given the filename `Dockerfile` and contain instructions for building a container image. Consider the following standard Dockerfile for building a NodeJS runtime container:\n\n```bash\nFROM node:12.18.1\n\nENV NODE_ENV=production\n\nWORKDIR /app\n\nCOPY [\"package.json\", \"yarn.lock\", \"./\"]\n\nRUN yarn install --production\n\nCOPY . .\n\nCMD [ \"node\", \"server.js\" ]\n\n```\n\nThese command would be defined in a dockerfile which you can build using the `docker build` command\\. To do this, you would need Docker installed on your local system. The above Dockerfile would presumably exist in a project repository for a NodeJS application. Running `docker build` would have Docker execute all of the commands in the Dockefile and build a docker image. The docker image would contain all of the code \\(including relevant scripts, source code, dependencies, etc.\\) and the runtime environment \\(operating system, supporting libraries like NodeJS, etc.\\) in order to actually run your application. Then, the command `docker run` will run the command defined by `CMD` in your Dockerfile, which in our case is `node server.js`. This would start your server, on whatever default port is configured.\n\nLet's break down each line in the above Dockerfile to see what's happening.\n\n```bash\n# This instructs Docker to use an existing base image. A\n# base image is pre-build Docker image intended to contain\n# specific dependencies. Most Docker containers use a stripped\n# down Linux OS, such as Alpine Linux. So, as you might guess\n# the following base image is just an Alpine Linux docker container\n# with NodeJS version 12.18.1 already installed.\nFROM node:12.18.1\n\n# This will set the environment variable NODE_ENV for a production\n# environment. This is a standard NodeJS convention. Alternatively,\n# this could be set to development or test for other environments,\n# or passed in from outside, if you wish.\nENV NODE_ENV=production\n\n# This defines the default working directory for the remainder\n# of the commands in the Dockerfile.\nWORKDIR /app\n\n# This instructs Docker to copy the package.json and yarn.lock\n# files into the current directory, \"./\"\n# These files will be used to then install the project dependencies,\n# in the next step.\nCOPY [\"package.json\", \"yarn.lock\", \"./\"]\n\n# Install the dependencies for production.\nRUN yarn install --production\n\n# This command copies everything from the parent directory into\n# the current directory in the Dockerfile.\nCOPY . .\n\n# The CMD command is a final command to actual run when the docker\n# image is run. The 'docker build' command will run all the commands\n# to here, and produce a ready to run Docker image. Then, the\n# 'docker run' command would take that image and run the following\n# command to start the app:\nCMD [ \"node\", \"server.js\" ]\n\n```\n# Building and Running Docker Images\n\nNow, let's look at specifically how we can build and run a Docker image. To build the above Dockerfile, we could run the command:\n\n```bash\ndocker build --tag nodejs-server .\n\n```\n\nThis is the `docker build` command where we are passing in `nodejs-server` for the `tag`, which you can think of basically as a name for the image which is being built, and then `.` to specify the context for the docker build to take place. The `.` just refers to the present directory you are running the command in, so it assumes you are currently in the directory where your source code is.\n\nOnce the image is built we can see it by runnings `docker images`, which would print out something like this:\n\n```bash\nREPOSITORY              TAG                 IMAGE ID            CREATED             SIZE\nnodejs-server           latest              42e897e5a3a1        About a minute ago  945MB\n\n```\n\nThis lists exists images which have been built and can now be run. To run our image, we can use the following command:\n\n```bash\ndocker run --publish 8000:8000 nodejs-server\n\n```\n\nWe pass in `8000:8000` to the `--publish` flag, which instructs Docker to map the `8000` port in our container to the `8000` port in our host environment. Because Docker containers are completely isolated environments, we have to explicitly expose networking ports we want to be available. Otherwise, our application would be listening on port `8000` inside the Docker container but this port would be inaccessible from the host environment. Finally, we pass in `nodejs-server` which is the name we tagged our docker image with from before. This tells Docker which image to run.\n\nRunning this command should now print our whatever startup logs you expect to see when your server starts\\! This will now have commandeered your current terminal session, so you can also run a Docker image in detached mode to run it in the background with the detached flag `-d`.\n# Managing Running Containers\n\nThere are a few other commands which are useful to manage running containers:\n\n```bash\n# This will list out all current running images.\ndocker ps\n\n# This will stop a running image.\ndocker stop <image-name>\n\n# This will restart a running image.\ndocker restart <image-name>\n\n# This removes a built image from the host machine.\ndocker rmi <image-name>\n\n```\n# Summary\n\nThese are the basics for using Docker, and the steps for running Docker for most NodeJS apps will look similar to the above. Once you have a containerized version of your application, you have a reproducible runtime environment which you can easily use to run your application. Docker has become a standard for packaging, sharing, and running software over the last decades since it was introduced in the early 2010s, and having a basic understanding of how to work with Docker is an important skill for working as a software developer today.",
-          "skillTags": [
-            "Docker"
-          ]
+          "skillTags": ["Docker"]
         },
         {
           "id": "gGYkBO$Yf",
@@ -6783,9 +6661,7 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "For this project, use [Docker](https://www.docker.com/) to create a container for running one of the server projects you have completed previously. For a reference, you can take a look at the [NodeJS example of dockerizing a server](https://nodejs.org/en/docs/guides/nodejs-docker-webapp/).\n\nThe result should be a [Dockerfile](https://docs.docker.com/engine/reference/builder/) which allows one to build an image for your server with a `docker build` command and then start your server using `docker run`. Running the server in this way should also expose the server on a `localhost` port so other applications can access it.\n\nAs you go through this project, try to get familiar with running the various Docker commands on your local system and understand what the important parts of a Dockerfile are.",
-          "skillTags": [
-            "Docker"
-          ]
+          "skillTags": ["Docker"]
         },
         {
           "id": "X2xJUDejx",

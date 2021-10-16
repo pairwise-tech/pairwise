@@ -287,10 +287,16 @@ class Api extends BaseApiClass {
     });
   };
 
-  refundCourseForUser = async (userEmail: string) => {
+  refundCourseForUser = async ({
+    userEmail,
+    courseId,
+  }: {
+    userEmail: string;
+    courseId: string;
+  }) => {
     return this.httpHandler(async () => {
       // Course id is hard-coded for now
-      const body = { userEmail, courseId: "fpvPtfu7s" };
+      const body = { userEmail, courseId };
       const { config } = this.getRequestHeaders();
       return axios.post<string>(`${HOST}/admin/refund-course`, body, config);
     });
