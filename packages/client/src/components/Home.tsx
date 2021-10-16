@@ -15,7 +15,6 @@ import {
   themeText,
 } from "./ThemeContainer";
 import { YoutubeEmbed } from "./MediaArea";
-import { CODEPRESS } from "../tools/client-env";
 
 /** ===========================================================================
  * Home Component
@@ -27,7 +26,6 @@ class Home extends React.Component<IProps, {}> {
     const {
       isAuthenticated,
       userCourseProgressSummary,
-      hasPurchasedTypeScriptCourse,
       currentNavigationOverlayCourse,
     } = this.props;
 
@@ -44,40 +42,7 @@ class Home extends React.Component<IProps, {}> {
               showSubscribeButton
               url="https://www.youtube.com/embed/d2DShyE37T4"
             />
-            {hasPurchasedTypeScriptCourse ? (
-              <ContentText>
-                Thank you for purchasing the Pairwise Course! Please enjoy the
-                content and good luck in your journey learning to code.
-              </ContentText>
-            ) : (
-              <>
-                <ContentTitle>What is Pairwise?</ContentTitle>
-                <ContentText>
-                  Pairwise is an online platform where you can learn to code by
-                  solving challenges and building projects.
-                </ContentText>
-                <ContentTitle>What will I learn?</ContentTitle>
-                <ContentText>
-                  You will learn the most popular, in-demand fullstack web
-                  development stack: TypeScript, React, NodeJS/Express, and
-                  Postgres.
-                </ContentText>
-                <ContentTitle>How much does it cost?</ContentTitle>
-                <ContentText>
-                  The first three modules covering HTML, CSS, and TypeScript are
-                  free. The remaining course currently costs only $50.
-                </ContentText>
-                <ContentTitle>
-                  How is this different from other platforms?
-                </ContentTitle>
-                <ContentText>
-                  Pairwise combines everything you need to learn to get a job
-                  into a single curriculum, which is comprised of hands-on
-                  challenges and projects. Think of it like a coding bootcamp at
-                  a fraction of the cost.
-                </ContentText>
-              </>
-            )}
+            <PageTitle style={{ marginTop: -48 }}>Courses</PageTitle>
             {this.props.skeletons?.map(this.renderCourseItem)}
           </ContentContainer>
           <CourseProgressContainer>

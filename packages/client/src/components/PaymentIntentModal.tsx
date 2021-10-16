@@ -64,10 +64,10 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
           </ModalContainer>
         ) : hasEmail ? (
           <PaymentModal>
-            <PaymentPlanTwo>
-              <PlanTitleContainerTwo>
+            <PaymentPlanThree>
+              <PlanTitleContainerThree>
                 <PlanTitleText>{courseToPurchase.title}</PlanTitleText>
-              </PlanTitleContainerTwo>
+              </PlanTitleContainerThree>
               {this.renderCourseToPurchaseDetails(courseToPurchase)}
               <ButtonContainer>
                 <Button
@@ -83,7 +83,7 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
                   Proceed to Checkout
                 </Button>
               </ButtonContainer>
-            </PaymentPlanTwo>
+            </PaymentPlanThree>
           </PaymentModal>
         ) : emailVerificationStatus === EMAIL_VERIFICATION_STATUS.LOADING ? (
           <ModalContainer>
@@ -195,9 +195,7 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
 
   // Currently not used
   renderFullPaymentModal = () => {
-    const { user, courseToPurchase, checkoutLoading, emailVerificationStatus } =
-      this.props;
-
+    const { user, courseToPurchase } = this.props;
     const { profile } = user;
     if (!courseToPurchase || !profile) {
       return null;
