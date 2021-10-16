@@ -16,6 +16,7 @@ env:
 
 jobs:
   build-and-test:
+    name: "Check Pull Requests"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
