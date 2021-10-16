@@ -81,7 +81,12 @@ class AdminUserComponent extends React.Component<
       user.challengeProgressHistory,
     );
 
-    const paidCourseIds = user.payments.map((x) => x.courseId);
+    const paidCourseIds = user.payments.map((x) => {
+      const paidLabel = x.paymentType === "ADMIN_GIFT" ? " (admin gift)" : "";
+      const refundLabel = x.status === "REFUNDED" ? " (refunded)" : "";
+      return `${x.courseId}${paidLabel}${refundLabel}`;
+    });
+
     const key = `${user.uuid}-${this.state.challengeId}`;
     const blob = challengeBlobCache[key];
 
@@ -168,7 +173,7 @@ class AdminUserComponent extends React.Component<
           <SummaryText
             style={{ color: COLORS.PRIMARY_GREEN, fontWeight: "bold" }}
           >
-            User has paid for course(s): {paidCourseIds.join(", ")}.
+            User has course(s): {paidCourseIds.join(", ")}.
           </SummaryText>
         )}
         <SummaryText>
