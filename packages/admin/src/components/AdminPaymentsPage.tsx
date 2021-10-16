@@ -34,13 +34,16 @@ class AdminPaymentsPage extends React.Component<IProps, {}> {
           </SummaryText>
         )}
 
-        {paymentRecords.reverse().map((payment) => {
+        {paymentRecords.map((payment) => {
           return (
             <DataCard key={payment.uuid}>
               <KeyValue label="status" value={payment.status} />
               <KeyValue label="paymentType" value={payment.paymentType} />
               <KeyValue label="courseId" value={payment.courseId} code />
-              <KeyValue label="amountPaid" value={payment.amountPaid} />
+              <KeyValue
+                label="amountPaid"
+                value={`$${(payment.amountPaid / 100).toFixed(2)}`}
+              />
               <KeyValue
                 label="datePaid"
                 value={new Date(payment.datePaid).toDateString()}

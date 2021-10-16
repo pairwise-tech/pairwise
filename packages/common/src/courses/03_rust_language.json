@@ -1,9 +1,9 @@
 {
+  "id": "alosiqu45",
+  "title": "Rust",
   "free": false,
   "price": 5000,
   "premiumPrice": 50000,
-  "id": "alosiqu45",
-  "title": "Rust",
   "description": "Rust is a statically typed, multi paradigm programming language which excels at performance and safety.",
   "modules": [
     {

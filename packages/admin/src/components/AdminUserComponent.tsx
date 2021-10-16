@@ -16,7 +16,7 @@ import {
   Row,
   Key,
 } from "./AdminComponents";
-import { Button, Collapse, Alert, Intent } from "@blueprintjs/core";
+import { Button, Collapse, Alert, Intent, Label } from "@blueprintjs/core";
 import { AdminUserView } from "../modules/users/store";
 import {
   computeCourseProgressSummary,
@@ -25,6 +25,7 @@ import {
 import { COLORS } from "../tools/constants";
 import { BlobCache } from "../modules/challenges/store";
 import { themeColor } from "./AdminThemeContainer";
+import toaster from "../tools/toast-utils";
 
 /** ===========================================================================
  * Types & Config
@@ -36,6 +37,7 @@ interface AdminUserComponentState {
   plan: Nullable<PAYMENT_PLAN>;
   uuid: Nullable<string>;
   alert: null | "gift" | "refund";
+  alertInputCourseId: string;
   showDeleteUserAlert: boolean;
 }
 
@@ -56,6 +58,7 @@ class AdminUserComponent extends React.Component<
       alert: null,
       plan: null,
       challengeId: "",
+      alertInputCourseId: "",
       showDeleteUserAlert: false,
     };
   }
@@ -71,18 +74,19 @@ class AdminUserComponent extends React.Component<
     } = this.props;
     const isDark = adminUserSettings.appTheme === "dark";
     const showDetails = this.state.uuid === user.uuid;
-    const payment = user.payments[0];
+    const payment = user.payments.find((x) => x.status === "CONFIRMED");
     const HAS_PAYMENT = !!payment;
     const IS_PREMIUM = payment && payment.plan === "PREMIUM";
     const challengeTotal = progressHistoryToChallengeCount(
       user.challengeProgressHistory,
     );
 
+    const paidCourseIds = user.payments.map((x) => x.courseId);
     const key = `${user.uuid}-${this.state.challengeId}`;
     const blob = challengeBlobCache[key];
 
     return (
-      <DataCard key={user.uuid}>
+      <DataCard style={{ maxWidth: 1025 }} key={user.uuid}>
         <Alert
           icon="dollar"
           canEscapeKeyCancel
@@ -96,17 +100,41 @@ class AdminUserComponent extends React.Component<
           confirmButtonText={alert === "gift" ? "Gift Course" : "Refund Course"}
         >
           {alert === "gift" ? (
-            <p>
-              Are you sure you want to gift the {this.state.plan} course to{" "}
-              <CodeText>{user.email}</CodeText>?
-            </p>
+            <div>
+              <Label>Course Id:</Label>
+              <Input
+                id="course-gift-input"
+                placeholder="Enter the course to gift"
+                value={this.state.alertInputCourseId}
+                style={{ width: 115, marginTop: 0, marginBottom: 12 }}
+                onChange={(e) =>
+                  this.setState({ alertInputCourseId: e.target.value })
+                }
+              />
+              <p>
+                Are you sure you want to gift the {this.state.plan} course to{" "}
+                <CodeText>{user.email}</CodeText>?
+              </p>
+            </div>
           ) : (
-            <p>
-              Are you sure you want to refund the course payment for{" "}
-              <CodeText>{user.email}</CodeText>?<br />
-              <br />
-              You will also need to refund the payment transaction in Stripe.
-            </p>
+            <div>
+              <Label>Course Id:</Label>
+              <Input
+                id="course-gift-input"
+                placeholder="Enter the course to gift"
+                value={this.state.alertInputCourseId}
+                style={{ width: 115, marginTop: 0, marginBottom: 12 }}
+                onChange={(e) =>
+                  this.setState({ alertInputCourseId: e.target.value })
+                }
+              />
+              <p>
+                Are you sure you want to refund the course payment for{" "}
+                <CodeText>{user.email}</CodeText>?<br />
+                <br />
+                You will also need to refund the payment transaction in Stripe.
+              </p>
+            </div>
           )}
         </Alert>
         <Alert
@@ -140,7 +168,7 @@ class AdminUserComponent extends React.Component<
           <SummaryText
             style={{ color: COLORS.PRIMARY_GREEN, fontWeight: "bold" }}
           >
-            User has paid for course {payment.courseId}.
+            User has paid for course(s): {paidCourseIds.join(", ")}.
           </SummaryText>
         )}
         <SummaryText>
@@ -177,36 +205,29 @@ class AdminUserComponent extends React.Component<
               Email User
             </ExternalLink>
           </CardButton>
-          {!payment ? (
-            <>
-              <CardButton
-                icon="dollar"
-                onClick={() =>
-                  this.setState({ alert: "gift", plan: "REGULAR" })
-                }
-              >
-                Gift Course (REGULAR)
-              </CardButton>
-              {/* Not available at the moment: */}
-              {/* <CardButton
-                icon="dollar"
-                onClick={() =>
-                  this.setState({ alert: "gift", plan: "PREMIUM" })
-                }
-              >
-                Gift Course (PREMIUM)
-              </CardButton> */}
-            </>
-          ) : payment.status === "CONFIRMED" ? (
-            <CardButton
-              icon="dollar"
-              onClick={() => this.setState({ alert: "refund" })}
-            >
-              Refund Course
-            </CardButton>
-          ) : (
-            <CardButton disabled>Payment has been refunded.</CardButton>
-          )}
+          <CardButton
+            icon="dollar"
+            onClick={() =>
+              this.setState({
+                alert: "gift",
+                plan: "REGULAR",
+                alertInputCourseId: "fpvPtfu7s",
+              })
+            }
+          >
+            Gift Course (REGULAR)
+          </CardButton>
+          <CardButton
+            icon="dollar"
+            onClick={() =>
+              this.setState({
+                alert: "refund",
+                alertInputCourseId: payment ? payment.courseId : "",
+              })
+            }
+          >
+            Refund Course
+          </CardButton>
           {user.coachingSessions > 0 && (
             <CardButton
               icon="hat"
@@ -338,19 +359,38 @@ class AdminUserComponent extends React.Component<
   };
 
   handleCancel = () => {
-    this.setState({ alert: null });
+    this.setState({ alert: null, alertInputCourseId: "" });
   };
 
   handleConfirm = () => {
-    if (this.state.alert === "gift") {
+    const { courseSkeletons } = this.props;
+    if (!courseSkeletons) {
+      return;
+    }
+
+    const courseIdsSet = new Set(courseSkeletons.map((x) => x.id));
+    const isCourseIdValid = (id: string) => courseIdsSet.has(id);
+
+    const { alert, alertInputCourseId } = this.state;
+
+    if (!isCourseIdValid(alertInputCourseId)) {
+      toaster.warn("Invalid course id submitted.");
+      return;
+    }
+
+    const courseId = alertInputCourseId;
+
+    if (alert === "gift") {
       // Course id is hard-coded for now.
-      const courseId = "fpvPtfu7s";
       const userEmail = this.props.user.email;
       const plan: PAYMENT_PLAN = this.state.plan || "REGULAR";
       const payload = { plan, userEmail, courseId };
       this.props.giftCourseForUser(payload);
     } else {
-      this.props.refundCourseForUser(this.props.user.email);
+      this.props.refundCourseForUser({
+        courseId,
+        userEmail: this.props.user.email,
+      });
     }
 
     this.setState({ alert: null });

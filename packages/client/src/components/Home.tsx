@@ -159,9 +159,11 @@ class Home extends React.Component<IProps, {}> {
   };
 
   renderTypeScriptCourseButtonBox = () => {
-    const { user, skeletons, challengeMap } = this.props;
+    const { user, currentActiveIds, skeletons, challengeMap } = this.props;
     const { payments, lastActiveChallengeIds } = user;
-    const skeleton = skeletons?.find((c) => c.id === "fpvPtfu7s");
+    const skeleton = skeletons?.find(
+      (c) => c.id === currentActiveIds.currentCourseId,
+    );
 
     if (!skeleton) {
       return null;
@@ -408,6 +410,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   skeletons: Modules.selectors.challenges.getCourseSkeletons(state),
   challengeMap: Modules.selectors.challenges.getChallengeMap(state),
   isAuthenticated: Modules.selectors.auth.userAuthenticated(state),
+  currentActiveIds: Modules.selectors.challenges.getCurrentActiveIds(state),
   currentNavigationOverlayCourse:
     Modules.selectors.challenges.getCurrentNavigationOverlayCourseSkeleton(
       state,

@@ -53,7 +53,7 @@ export const giftCourseForUserFailure = createAction(
 
 export const refundCourseForUser = createAction(
   ActionTypesEnum.REFUND_COURSE_FOR_USER,
-)<string>();
+)<{ courseId: string; userEmail: string }>();
 
 export const refundCourseForUserSuccess = createAction(
   ActionTypesEnum.REFUND_COURSE_FOR_USER_SUCCESS,
