@@ -1491,6 +1491,17 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   startTestCancellationTimer = () => {
+    const { type } = this.props.challenge;
+
+    // Ignore for rust challenges, instead, show a toast explaining that
+    // challenge execution will take longer.
+    if (type === "rust") {
+      toaster.warn(
+        "Rust code has to be compiled and executed remotely - please be patient, this will take a moment. Especially if the server was sleeping...",
+      );
+      return;
+    }
+
     this.handleCancelCancellationTimer();
 
     const timeout = this.getTestTimeout();
