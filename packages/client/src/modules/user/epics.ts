@@ -66,6 +66,7 @@ const updateUserEmailEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.updateUserEmail)),
     pluck("payload"),
+    filter((x) => x !== ""),
     mergeMap(async (email) => {
       const valid = validate(email);
       if (!valid) {

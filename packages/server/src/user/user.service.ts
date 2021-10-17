@@ -436,7 +436,10 @@ export class UserService {
           userDetails.username,
         );
 
-        if (existingUserByUsername) {
+        if (
+          existingUserByUsername &&
+          existingUserByUsername.uuid !== user.profile.uuid
+        ) {
           throw new BadRequestException(
             "Username is taken, please try another.",
           );

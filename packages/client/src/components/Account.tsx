@@ -173,7 +173,7 @@ class Account extends React.Component<IProps, IState> {
           style={{ marginBottom: 12 }}
           avatar={profile.avatarUrl}
         />
-        {edit && !usingGravatar ? (
+        {edit && (
           <div style={{ marginTop: 12, marginBottom: 24 }}>
             <Checkbox
               checked={this.state.editAvatarUseGravatar}
@@ -184,37 +184,31 @@ class Account extends React.Component<IProps, IState> {
                 })
               }
             />
-            <TextItem>
-              This will set your avatar based on your email address.
-            </TextItem>
-            <TextItem>
-              You will need to add an avatar icon with a Gravatar account.{" "}
-              <ExternalLink link="https://en.gravatar.com/support/what-is-gravatar/">
-                Learn more here
-              </ExternalLink>
-              .
-            </TextItem>
+
+            {usingGravatar ? (
+              <TextItem style={{ marginBottom: 24 }}>
+                Profile is currently using Gravatar for the avatar icon.{" "}
+                <ExternalLink link="https://en.gravatar.com/support/what-is-gravatar/">
+                  Learn more here
+                </ExternalLink>
+                .
+              </TextItem>
+            ) : (
+              <>
+                <TextItem>
+                  This will set your avatar based on your email address.
+                </TextItem>
+                <TextItem>
+                  You will need to add an avatar icon with a Gravatar account.{" "}
+                  <ExternalLink link="https://en.gravatar.com/support/what-is-gravatar/">
+                    Learn more here
+                  </ExternalLink>
+                  .
+                </TextItem>
+              </>
+            )}
           </div>
-        ) : usingGravatar ? (
-          <>
-            <TextItem style={{ marginBottom: 24 }}>
-              Profile is currently using Gravatar for the avatar icon.{" "}
-              <ExternalLink link="https://en.gravatar.com/support/what-is-gravatar/">
-                Learn more here
-              </ExternalLink>
-              .
-            </TextItem>
-            <Checkbox
-              checked={this.state.editAvatarUseGravatar}
-              label="Use Gravatar for my avatar icon."
-              onChange={() =>
-                this.setState({
-                  editAvatarUseGravatar: !this.state.editAvatarUseGravatar,
-                })
-              }
-            />
-          </>
-        ) : null}
+        )}
         <TextItem id="profile-given-name">
           <Bold>Given Name:</Bold> {!edit && profile.givenName}
         </TextItem>
@@ -468,12 +462,14 @@ class Account extends React.Component<IProps, IState> {
       // Reset email verification status to allow users to edit their
       // email again, if they wish
       this.props.setEmailVerificationStatus(EMAIL_VERIFICATION_STATUS.DEFAULT);
+      const usingGravatar = isUsingGravatar(profile.avatarUrl);
       this.setState({
         editMode: true,
         email: profile.email || "",
         givenName: profile.givenName,
         familyName: profile.familyName,
         username: profile.username || "",
+        editAvatarUseGravatar: usingGravatar,
       });
     }
   };
@@ -481,18 +477,26 @@ class Account extends React.Component<IProps, IState> {
   handleSaveChanges = () => {
     const { editedEmail, editAvatarUseGravatar } = this.state;
 
+    const email = this.state.email || this.props.user.profile?.email;
     let avatarUrl = this.props.user.profile?.avatarUrl;
     const usingGravatar = isUsingGravatar(avatarUrl);
-
-    const applyGravatar = usingGravatar || editAvatarUseGravatar;
-    const email = this.state.email || this.props.user.profile?.email;
 
     /**
      * Update the avatar URL if the user changed their email and if they are
      * using Gravatar for their avatar icon.
      */
+    const applyGravatar = !usingGravatar && editAvatarUseGravatar;
     if (email && applyGravatar) {
       avatarUrl = getGravatarUrlFromEmail(email);
+    }
+
+    /**
+     * Remove their avatar if they were using it on their user profile and
+     * then edited it to false.
+     */
+    const removeGravatar = usingGravatar && !editAvatarUseGravatar;
+    if (removeGravatar) {
+      avatarUrl = "";
     }
 
     const userDetails = {
