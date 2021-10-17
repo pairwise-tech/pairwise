@@ -139,6 +139,7 @@ interface IState {
   testResults: ReadonlyArray<TestCase>;
   dimensions: ReturnType<typeof getDimensions>;
   mobileDevicePreviewType: MobileDevicePreviewType;
+  hasShownRustToastWarning: boolean;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
 
@@ -231,6 +232,7 @@ class Workspace extends React.Component<IProps, IState> {
       shouldRefreshLayout: false,
       userTriggeredTestRun: false,
       mobileDevicePreviewType: "ios",
+      hasShownRustToastWarning: false,
       monacoInitializationError: false,
     };
   }
@@ -1497,9 +1499,19 @@ class Workspace extends React.Component<IProps, IState> {
     // challenge execution will take longer.
     // This may be adjusted in the future as other challenge types are added.
     if (type === "rust") {
-      toaster.warn(
-        "Rust code has to be compiled and executed remotely - please be patient, this will take a moment. Especially if the server was sleeping...",
-      );
+      // Show the toast if it has not been shown yet:
+      if (!this.state.hasShownRustToastWarning) {
+        this.setState(
+          {
+            hasShownRustToastWarning: true,
+          },
+          () => {
+            toaster.warn(
+              "Rust code has to be compiled and executed remotely. Please be patient, this will take a moment. Especially if the server was sleeping...",
+            );
+          },
+        );
+      }
       return;
     }
 
