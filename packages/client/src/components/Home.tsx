@@ -40,7 +40,7 @@ class Home extends React.Component<IProps, {}> {
             <PageTitle>Welcome to Pairwise!</PageTitle>
             <YoutubeEmbed
               showSubscribeButton
-              url="https://www.youtube.com/embed/d2DShyE37T4"
+              url="https://www.youtube.com/embed/M87M_Iy4dAE"
             />
             <PageTitle style={{ marginTop: -48 }}>Courses</PageTitle>
             {this.props.skeletons?.map(this.renderCourseItem)}
