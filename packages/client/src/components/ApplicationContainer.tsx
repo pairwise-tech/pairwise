@@ -611,14 +611,15 @@ const ApplicationContainer = (props: IProps) => {
           )}
         </ControlsContainer>
       </Header>
-      {showMediaAreaButton && (
+      {/* Hide for now: */}
+      {/* {showMediaAreaButton && (
         <SmoothScrollButton
           icon="chevron-down"
           position="bottom"
           positionOffset={-20}
           scrollToId={CONTENT_AREA_ID}
         />
-      )}
+      )} */}
       <Suspense fallback={<LoadingInline />}>
         <Switch>
           <Route
