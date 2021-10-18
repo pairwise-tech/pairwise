@@ -1288,6 +1288,17 @@
           "starterCode": "// This function should take a mutable borrow of s:\nfn borrow_mutable_reference(s: String) {\n  s.push_str(\" pushing some other string...\");\n}\n\nlet s = String::from(\"This is the original string...\");\nborrow_mutable_reference(s);\nprintln!(\"s = {}\", s);",
           "solutionCode": "// This function should take a mutable borrow of s:\nfn borrow_mutable_reference(s: &mut String) {\n  s.push_str(\" pushing some other string...\");\n}\n\nlet mut s = String::from(\"This is the original string...\");\nborrow_mutable_reference(&mut s);\nprintln!(\"s = {}\", s);",
           "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "G0I6mUvfI",
+          "title": "One Mutable or Unlimited Immutable References",
+          "instructions": "The rules for borrowing references to data are simple: At a single time you may have one mutable reference or unlimited immutable references. The code in the editor below breaks this rule, by maintaining immutable references after the creation of a mutable reference. Without change any of the variable declarations, remove the offending `println!` statements so that the code compiles. The code should still print out the mutable reference `f`.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The code should compile without errors.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "let mut x = String::from(\"Some string data...\");\n\nlet a = &x;\nlet b = &x;\nlet c = &x;\nlet d = &x;\nlet e = &x;\n// All of the above references are valid... until\n// we created a mutable reference to x here:\nlet f = &mut x;\n\n// Now, only f is valid...\nprintln!(\"a = {}\", a);\nprintln!(\"b = {}\", b);\nprintln!(\"c = {}\", c);\nprintln!(\"d = {}\", d);\nprintln!(\"e = {}\", e);\nprintln!(\"f = {}\", f);",
+          "solutionCode": "let mut x = String::from(\"Some string data...\");\n\nlet a = &x;\nlet b = &x;\nlet c = &x;\nlet d = &x;\nlet e = &x;\n// All of the above references are valid... until\n// we created a mutable reference to x here:\nlet f = &mut x;\n\n// Now, only f is valid...\nprintln!(\"f = {}\", f);",
+          "content": ""
         }
       ]
     },
