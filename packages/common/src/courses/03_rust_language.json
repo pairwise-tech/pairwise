@@ -1266,6 +1266,28 @@
           "starterCode": "// This function returns an owned String\nfn create_a_string() -> String {\n  let s1 = String::from(\"This is a String\");\n  let s2 = s1.clone();\n\n  // Return one of the above String values,\n  // the value you choose not to return will be\n  // dropped here when it goes out of scope.\n}\n\n// s now owns the String from create_a_string\nlet s = create_a_string();\nprintln!(\"s = {}\", s);",
           "solutionCode": "// This function returns an owned String\nfn create_a_string() -> String {\n  let s1 = String::from(\"This is a String\");\n  let s2 = s1.clone();\n\n  s1 // Here we return s1, which is moved out of the function\n\n  // s2, a clone of s1, is dropped here, when it goes out of scope\n}\n\n// s now owns the String from create_a_string\nlet s = create_a_string();\nprintln!(\"s = {}\", s);",
           "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "JxfqwhwE9",
+          "title": "Borrowing Data with References",
+          "instructions": "We can use the `&` symbol to create a reference to some data. Change the `working_with_strings` function to borrow a reference to the `s` string, rather than take ownership of it. Doing so will allow the code below to compile.\n\n> Note: We can also _dereference _a reference using the `*` operator\\.\n",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let s = String::new();\n  working_with_strings(&s);\n\n  true\n}\n`;\n\ntest(\"The code should compile without errors and `working_with_strings` should borrow a reference to a `String`.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// This function currently takes ownership over its String argument.\n// Change it to take a reference instead.\nfn working_with_strings(s: String) -> () {\n  println!(\"The length of the String is: {}\", s.len());\n\n  ()\n}\n\nlet s = String::from(\"To avoid moving ownership, you can borrow a reference to this String.\");\nworking_with_strings(s);\n\nprintln!(\"Will this compile, or not? s is = {}\", s);",
+          "solutionCode": "// This function currently takes ownership over its String argument.\n// Change it to take a reference instead.\nfn working_with_strings(s: &String) -> () {\n  println!(\"The length of the String is: {}\", s.len());\n\n  ()\n}\n\nlet s = String::from(\"To avoid moving ownership, you can borrow a reference to this String.\");\nworking_with_strings(&s);\n\nprintln!(\"Will this compile, or not? s is = {}\", s);",
+          "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "2@TuH61f@",
+          "title": "Mutable References",
+          "instructions": "We can also borrow a mutable reference to some owned piece of data. If we choose to do this, however, we must maintain only a single valid mutable reference at a time.\n\nIn addition, using mutable references follows the same rules as the general mutability rules in Rust, that is, _any_ data or references that are intended to be mutable must be deliberately marked as mutable using the `mut` keyword\\.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest('The `borrow_mutable_reference` function should accept a mutable borrow of a `String` argument and push the text \" pushing some other string...\" onto it.', async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// This function should take a mutable borrow of s:\nfn borrow_mutable_reference(s: String) {\n  s.push_str(\" pushing some other string...\");\n}\n\nlet s = String::from(\"This is the original string...\");\nborrow_mutable_reference(s);\nprintln!(\"s = {}\", s);",
+          "solutionCode": "// This function should take a mutable borrow of s:\nfn borrow_mutable_reference(s: &mut String) {\n  s.push_str(\" pushing some other string...\");\n}\n\nlet mut s = String::from(\"This is the original string...\");\nborrow_mutable_reference(&mut s);\nprintln!(\"s = {}\", s);",
+          "content": ""
         }
       ]
     },
