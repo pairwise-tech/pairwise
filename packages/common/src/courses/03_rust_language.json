@@ -1164,6 +1164,17 @@
           "starterCode": "// Write your code here",
           "solutionCode": "struct Rectangle {\n  width: u32,\n  height: u32,\n}\n\nimpl Rectangle {\n  fn new(width: u32, height: u32) -> Self {\n    Rectangle {\n      width,\n      height,\n    }\n  }\n\n  fn area(&self) -> u32 {\n    self.width * self.height\n  }\n}\n\nlet rect = Rectangle::new(42, 58);\nlet area = rect.area();\nassert_eq!(area, 2436);\nprintln!(\"The rectangle's area is: {}\", area);",
           "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "hdj2EHK0m",
+          "title": "Reverse a Vector in Place",
+          "instructions": "Write a function `reverse_vector_elements` which accepts a mutable vector of `i32` integers and reverses the vector in place.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let result = reverse_vector_elements(vec![1, 2, 3, 4, 5, 92, 18, 32]);\n  let expected = [32, 18, 92, 5, 4, 3, 2, 1];\n  assert_eq!(result, expected);\n\n  let result = reverse_vector_elements(vec![1911]);\n  let expected = [1911];\n  assert_eq!(result, expected);\n\n  let result = reverse_vector_elements(vec![]);\n  let expected = [];\n  assert_eq!(result, expected);\n\n  let result = reverse_vector_elements(vec![5, 5, 5]);\n  let expected = [5, 5, 5];\n  assert_eq!(result, expected);\n\n  true\n}\n`;\n\ntest(\"The `reverse_vector_elements` function should exist an accept a mutable vector of `i32` integers, reverse it in place, and return the result.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Write your code here:",
+          "solutionCode": "",
+          "content": ""
         }
       ]
     },
@@ -1298,6 +1309,17 @@
           "videoUrl": "",
           "starterCode": "let mut x = String::from(\"Some string data...\");\n\nlet a = &x;\nlet b = &x;\nlet c = &x;\nlet d = &x;\nlet e = &x;\n// All of the above references are valid... until\n// we created a mutable reference to x here:\nlet f = &mut x;\n\n// Now, only f is valid...\nprintln!(\"a = {}\", a);\nprintln!(\"b = {}\", b);\nprintln!(\"c = {}\", c);\nprintln!(\"d = {}\", d);\nprintln!(\"e = {}\", e);\nprintln!(\"f = {}\", f);",
           "solutionCode": "let mut x = String::from(\"Some string data...\");\n\nlet a = &x;\nlet b = &x;\nlet c = &x;\nlet d = &x;\nlet e = &x;\n// All of the above references are valid... until\n// we created a mutable reference to x here:\nlet f = &mut x;\n\n// Now, only f is valid...\nprintln!(\"f = {}\", f);",
+          "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "hCEdw4lG6U",
+          "title": "Referencing Data with Slices",
+          "instructions": "Another way to reference data is using a slice. With a slice we can reference a sequence of elements in a collection without referencing the entire collection. Slices do not take ownership of the data they reference.\n\nString slices are the more primitive string type `&str` that we have already seen, and we can create a slice of a `String` using Rust's range `..` syntax, like this: `&my_string[0..5]`.\n\nUse the `.chars()` method on a `String` to iterate through a given string and find the first word in that string. Return a string slice of that word.\n",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let sentence = String::from(\"Here is the first word?\");\n  let result = find_first_word(&sentence);\n  assert_eq!(result, \"Here\");\n\n  let sentence = String::from(\"Hi\");\n  let result = find_first_word(&sentence);\n  assert_eq!(result, \"Hi\");\n\n  let sentence = String::from(\"\");\n  let result = find_first_word(&sentence);\n  assert_eq!(result, \"\");\n\n  true\n}\n`;\n\ntest(\"The `find_first_word` function should return a string slice of the first word in the given `&String`.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn find_first_word(s: &String) -> &str {\n  // Find the first word in the string. If there are no spaces,\n  // the entire string is the first word.\n}\n\nlet result = find_first_word(&String::from(\"What is the first word?\"));\nprintln!(\"Result = {}\", result);\nassert_eq!(result, \"What\");",
+          "solutionCode": "fn find_first_word(s: &String) -> &str {\n  let mut index = 0;\n\n  for c in s.chars() {\n    if c == ' ' {\n      return &s[0..index];\n    }\n    index = index + 1;\n  }\n\n  return s;\n}\n\nlet sentence = String::from(\"What is the first word?\");\nlet result = find_first_word(&sentence);\nprintln!(\"Result = {}\", result);\nassert_eq!(result, \"What\");",
           "content": ""
         }
       ]
