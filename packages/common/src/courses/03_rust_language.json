@@ -1321,6 +1321,17 @@
           "starterCode": "fn find_first_word(s: &String) -> &str {\n  // Find the first word in the string. If there are no spaces,\n  // the entire string is the first word.\n}\n\nlet result = find_first_word(&String::from(\"What is the first word?\"));\nprintln!(\"Result = {}\", result);\nassert_eq!(result, \"What\");",
           "solutionCode": "fn find_first_word(s: &String) -> &str {\n  let mut index = 0;\n\n  for c in s.chars() {\n    if c == ' ' {\n      return &s[0..index];\n    }\n    index = index + 1;\n  }\n\n  return s;\n}\n\nlet sentence = String::from(\"What is the first word?\");\nlet result = find_first_word(&sentence);\nprintln!(\"Result = {}\", result);\nassert_eq!(result, \"What\");",
           "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "M44gL51Md",
+          "title": "Find All the Words",
+          "instructions": "Let's expand on the previous function and create a function `find_all_the_words` which returns a vector of string slices for all the words in a given `String`.\n\nThis demonstrates that you can create as many strings slices of an original `String` as you want \\- none of them take ownership over that original string. They are the same as take read\\-only, immutable references, with the only difference being that they only reference a ",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let s = &String::from(\"\");\n  let result = find_all_the_words(s);\n  let expected = vec![\"\"];\n  assert_eq!(result, expected);\n\n  let s = &String::from(\"WORD\");\n  let result = find_all_the_words(s);\n  let expected = vec![\"WORD\"];\n  assert_eq!(result, expected);\n\n  let s = &String::from(\"This is some long string of words\");\n  let result = find_all_the_words(s);\n  let expected = vec![\"This\", \"is\", \"some\", \"long\", \"string\", \"of\", \"words\"];\n  assert_eq!(result, expected);\n  \n  true\n}\n`;\n\ntest(\"The `find_all_the_words` function should return a `Vec<&str>` containing string slices of all the words in the provided `&String`.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Write your function here",
+          "solutionCode": "fn find_all_the_words(s: &String) -> Vec<&str> {\n    let mut words = Vec::new();\n    let mut previous_index = 0;\n    for (i, c) in s.chars().enumerate() {\n        if c == ' ' {\n            let word = &s[previous_index..i];\n            words.push(word);\n            previous_index = i + 1;\n        }\n    }\n\n    words.push(&s[previous_index..]);\n\n    words\n}",
+          "content": ""
         }
       ]
     },
