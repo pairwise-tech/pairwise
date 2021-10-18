@@ -1255,6 +1255,17 @@
           "starterCode": "// This function takes ownership of the provided String\nfn should_return_ownership(s: String) -> String {\n  // Here we move ownership again into x. After this,\n  // s is no longer valid.\n  let x = s;\n  println!(\"Received String: {}\", x);\n\n  // One pattern is to have a function like this simply\n  // return ownership of the given data after doing\n  // whatever it needs to do.\n}\n\nlet s = String::from(\"Hi\");\n// Ownership of 's' is moved into the should_return_ownership function:\nlet s = should_return_ownership(s);\nprintln!(\"Now here is s again: {}\", s);\n\n",
           "solutionCode": "// This function takes ownership of the provided String\nfn should_return_ownership(s: String) -> String {\n  // Here we move ownership again into x. After this,\n  // s is no longer valid.\n  let x = s;\n  println!(\"Received String: {}\", x);\n\n  // One pattern is to have a function like this simply\n  // return ownership of the given data after doing\n  // whatever it needs to do.\n  x\n}\n\nlet s = String::from(\"Hi\");\n// Ownership of 's' is moved into the should_return_ownership function:\nlet s = should_return_ownership(s);\nprintln!(\"Now here is s again: {}\", s);\n\n",
           "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "8XUghQfBZ",
+          "title": "Functions Return Ownership",
+          "instructions": "When you return data from a function, whether the return values are related to arguments passed to the function or not, you move ownership of that data into the calling code.\n\nWhenever data goes out of scope in Rust, the data is dropped from memory. This means when a function finishes execution, Rust can safely return ownership of some data within the functions scope to the calling code.\n\nModify the `create_a_string` function to return one of the `String` values defined in its function body. Note that the return string will be moved back into the calling code. The other value which is not returned will be dropped as it goes out of scope once the function finishes execution.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let s: String = create_a_string();\n\n  true\n}\n`;\n\ntest(\"The `create_a_string` function should return a `String`.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// This function returns an owned String\nfn create_a_string() -> String {\n  let s1 = String::from(\"This is a String\");\n  let s2 = s1.clone();\n\n  // Return one of the above String values,\n  // the value you choose not to return will be\n  // dropped here when it goes out of scope.\n}\n\n// s now owns the String from create_a_string\nlet s = create_a_string();\nprintln!(\"s = {}\", s);",
+          "solutionCode": "// This function returns an owned String\nfn create_a_string() -> String {\n  let s1 = String::from(\"This is a String\");\n  let s2 = s1.clone();\n\n  s1 // Here we return s1, which is moved out of the function\n\n  // s2, a clone of s1, is dropped here, when it goes out of scope\n}\n\n// s now owns the String from create_a_string\nlet s = create_a_string();\nprintln!(\"s = {}\", s);",
+          "content": ""
         }
       ]
     },
