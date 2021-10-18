@@ -130,7 +130,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "We've now seen some of the basics of the Rust language."
+          "content": "We've now seen some of the basics of the Rust language. The following modules will walk through the Rust language and give you hands on practice solving challenges using the concepts we introduce along the way.\n\nIn addition to the content here, the other resources are highly recommended:\n\n* The [Rust Programming Language Book](https://doc.rust-lang.org/book/).\n* The [Rust Standard Library Crate documentation](https://doc.rust-lang.org/std/), useful for looking up information on built\\-in types and methods.\n\n"
         }
       ]
     },
