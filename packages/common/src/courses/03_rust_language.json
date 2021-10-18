@@ -1173,7 +1173,7 @@
           "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let result = reverse_vector_elements(vec![1, 2, 3, 4, 5, 92, 18, 32]);\n  let expected = [32, 18, 92, 5, 4, 3, 2, 1];\n  assert_eq!(result, expected);\n\n  let result = reverse_vector_elements(vec![1911]);\n  let expected = [1911];\n  assert_eq!(result, expected);\n\n  let result = reverse_vector_elements(vec![]);\n  let expected = [];\n  assert_eq!(result, expected);\n\n  let result = reverse_vector_elements(vec![5, 5, 5]);\n  let expected = [5, 5, 5];\n  assert_eq!(result, expected);\n\n  true\n}\n`;\n\ntest(\"The `reverse_vector_elements` function should exist an accept a mutable vector of `i32` integers, reverse it in place, and return the result.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
           "videoUrl": "",
           "starterCode": "// Write your code here:",
-          "solutionCode": "",
+          "solutionCode": "fn reverse_vector_elements(mut v: Vec<i32>) -> Vec<i32> {\n  let mut i = 0;\n  let mid = v.len() / 2;\n  while i < mid {\n    let element = v[i];\n    let oppositeIndex = v.len() - i - 1;\n    let oppositeElement = v[oppositeIndex];\n    v[i] = oppositeElement;\n    v[oppositeIndex] = element;\n    i = i + 1;\n  }\n\n  v\n}",
           "content": ""
         }
       ]
