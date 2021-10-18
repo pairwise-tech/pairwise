@@ -103,11 +103,11 @@
           "type": "rust",
           "id": "TRAA2QQYn",
           "title": "Ownership Primer",
-          "instructions": "Borrowing and ownership are fundamental concepts in Rust, but they are more advanced, can be hard to understand in practice, and tend to trip up many beginning Rust programmers.\n\nWe want to introduce the concept of ownership and borrowing here but we will deep dive on this topic later. You will inevitably encounter some compiler errors related to ownership so it is helpful to have a brief primer in advance.",
-          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "instructions": "Borrowing and ownership are fundamental concepts in Rust, but they are more advanced, can be hard to understand in practice, and tend to trip up many beginning Rust programmers.\n\nWe want to introduce the concept of ownership and borrowing here but we will deep dive on this topic later. You will inevitably encounter some compiler errors related to ownership so it is helpful to have a brief primer in advance.\n\nFor now, the main point to understand is that in Rust a value can only have a single owner. If you transfer ownership of a value to a new owner, the previous owner becomes invalid and cannot be used again. Once an owner goes out of scope, the data it owns is dropped from memory.\n\nIn the editor below is some innocent looking code you may expect to work without issue. In fact, the compile rejects this code. We cannot move `x` into `_y` and then again into `_z`. Delete the second move so that the code compiles without error.\n",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The code should compile without issue.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
           "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
+          "starterCode": "\nlet x = String::from(\"Right now, x is the owner of this string.\");\n\n// Now we transfer ownership of x to y\nlet _y = x;\n\n// Now we try to transfer ownership of x again to z...\n// but x has been invalidated by the move of ownership which\n// occurred above.\nlet _z = x;",
+          "solutionCode": "\nlet x = String::from(\"Right now, x is the owner of this string.\");\n\n// Now we transfer ownership of x to y\nlet y = x;\n\nprintln!(\"y = {}\", y);\n",
           "content": ""
         },
         {
