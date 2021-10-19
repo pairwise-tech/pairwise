@@ -1372,6 +1372,17 @@
           "starterCode": "struct StringField {\n  data: String,\n}\n\nstruct IntegerField {\n  data: i32,\n}\n\nstruct BooleanField {\n  data: bool,\n}",
           "solutionCode": "struct FormField<T> {\n  data: T,\n}",
           "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "MV1HmGlJ3a",
+          "title": "Multiple Generic Parameters",
+          "instructions": "Structs can also accept multiple generic type parameters. Consider the \\(rather contrived\\) code in the editor for an example. Complete the function to return a new instance of this struct.\n\nObserve how, after battling with the unforgiving Rust compiler, we can now declare and exchange different types of data with some freedom\\!\n\n> ++NOTE:++ When returning a struct like this from a function, you have to provide concrete type information, unless of course function itself is generic—which we will see next. \n",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let x = create_new_struct();\n  assert!(x.items.len() >= 0);\n  let a = x.values.0;\n  let b = x.values.1;\n  let c = x.id;\n\n  true\n}\n`;\n\ntest(\"The `create_new_struct` function should return a new `ContrivedMultiGenericStructExample` struct.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// This is a contrived example struct, which accepts 4 generic types:\nstruct ContrivedMultiGenericStructExample <A, B, C, D> {\n  items: Vec<A>,\n  id: B,\n  values: (C, D),\n}\n\nfn create_new_struct() -> ContrivedMultiGenericStructExample {\n  // Return a new instance of the struct here:\n}",
+          "solutionCode": "// This is a contrived example struct, which accepts 4 generic types:\nstruct ContrivedMultiGenericStructExample<A, B, C, D> {\n  items: Vec<A>,\n  id: B,\n  values: (C, D),\n}\n\nfn create_new_struct() -> ContrivedMultiGenericStructExample<i32, String, bool, i8> {\n  ContrivedMultiGenericStructExample::<i32, String, bool, i8> {\n    items: vec![1, 2, 3],\n    id: String::from(\"asdf08asf70a9s78dfsa90\"),\n    values: (true, 15),\n  }\n}",
+          "content": ""
         }
       ]
     },
