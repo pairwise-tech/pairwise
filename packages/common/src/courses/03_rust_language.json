@@ -1350,7 +1350,30 @@
       "id": "5wbe@14QT",
       "title": "Generics, Traits and Lifetimes",
       "free": false,
-      "challenges": []
+      "challenges": [
+        {
+          "type": "section",
+          "id": "X4iLpNic2",
+          "title": "Generics",
+          "instructions": "",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In programming, one of the fundamental principles is to avoid repeating yourself. Generics provide a way to consolidate specific patterns or operations into single data structures or functions, rather than duplicating code. Generics are common to other typed programming languages, and work in a similar way in Rust.\n\nRust supports generic type patterns for function, structs, and method implementations, which we will see in the following challenges.\n\nAfter that, we will explore _traits_, which are a unique feature in Rust that allows you to define specific behavior which types can then choose to implement. Traits are a unique way to express specific shared behavior between different types of data."
+        },
+        {
+          "type": "rust",
+          "id": "x9iAH9hPZ",
+          "title": "Creating a Struct Generic",
+          "instructions": "We can make a struct generic by creating a generic type parameter in the definition, like this:\n\n```\nstruct Data<T> {\n    values: T,\n}\n\n```\n\nWe create the generic type `<T>` here, and follow the convention of naming the parameter as `T` for \"type\". However, you can name it anything you want, of course.\n\nRefactor the code in the editor to consolidate the three struct definitions into a single `FormField` struct, which accepts a generic type parameter.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let x = FormField {\n    data: String::new(),\n  };\n\n  let x = FormField {\n    data: true,\n  };\n\n  let x = FormField {\n    data: 15,\n  };\n\n  true\n}\n`;\n\ntest(\"The `FormField` struct should accept a generic type parameter for its `data` field.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "struct StringField {\n  data: String,\n}\n\nstruct IntegerField {\n  data: i32,\n}\n\nstruct BooleanField {\n  data: bool,\n}",
+          "solutionCode": "struct FormField<T> {\n  data: T,\n}",
+          "content": ""
+        }
+      ]
     },
     {
       "id": "zfbfBa6nP",

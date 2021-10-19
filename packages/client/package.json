@@ -165,6 +165,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:9000",
+  "proxy": "http://localhost:3000",
   "secure": "false"
 }
