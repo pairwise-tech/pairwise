@@ -1383,6 +1383,17 @@
           "starterCode": "// This is a contrived example struct, which accepts 4 generic types:\nstruct ContrivedMultiGenericStructExample <A, B, C, D> {\n  items: Vec<A>,\n  id: B,\n  values: (C, D),\n}\n\nfn create_new_struct() -> ContrivedMultiGenericStructExample {\n  // Return a new instance of the struct here:\n}",
           "solutionCode": "// This is a contrived example struct, which accepts 4 generic types:\nstruct ContrivedMultiGenericStructExample<A, B, C, D> {\n  items: Vec<A>,\n  id: B,\n  values: (C, D),\n}\n\nfn create_new_struct() -> ContrivedMultiGenericStructExample<i32, String, bool, i8> {\n  ContrivedMultiGenericStructExample::<i32, String, bool, i8> {\n    items: vec![1, 2, 3],\n    id: String::from(\"asdf08asf70a9s78dfsa90\"),\n    values: (true, 15),\n  }\n}",
           "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "GINJFhOIR",
+          "title": "Generic Functions",
+          "instructions": "We can also make functions generic, using a similar syntax. For example:\n\n```\nfn x<T>(value: T) -> T { ... }\n\n```\n\nConsider the three identity functions in the editor below. They all do the same thing, but we have to duplicate them to handle different types of data.\n\nRefactor the code to instead use a single `identity` which accepts a generic type parameter.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let x: bool = identity(true);\n  let x: String = identity(String::from(\"blegga\"));\n  let x: i32 = identity(100);\n\n  true\n}\n`;\n\ntest(\"The `identity` function exists with a generic definition to replace the three existing functions.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn string_identity(s: String) -> String {\n  s\n}\n\nfn integer_identity(i: i32) -> i32 {\n  i\n}\n\nfn boolean_identity(b: bool) -> bool {\n  b\n}",
+          "solutionCode": "fn identity<T>(x: T) -> T {\n  x\n}",
+          "content": ""
         }
       ]
     },
