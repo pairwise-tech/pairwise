@@ -1396,6 +1396,28 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "D3BrxbB0c",
+          "title": "Generic Implementations",
+          "instructions": "We can also create generic implementations. Consider the code in the editor where we have a generic container and a `new` function for that container which accepts a single `initial_value` to add to the container's `items`. Complete the `new` function to return a new `Container`.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let new_container: Container<i32> = Container::new(15);\n  let new_container: Container<bool> = Container::new(true);\n  let new_container: Container<&str> = Container::new(\"hi\");\n\n  true\n}\n`;\n\ntest(\"The `Container` has a generic implementation of the `new` function.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "#[derive(Debug)]\nstruct Container<T> {\n  items: Vec<T>,\n}\n\nimpl <T>Container<T> {\n  fn new(initial_item: T) -> Container<T> {\n    // Write your code here:\n  }\n}\n\nlet new_container = Container::new(15);\nprintln!(\"Container = {:?}\", new_container);\n\nlet new_container = Container::new(true);\nprintln!(\"Container = {:?}\", new_container);\n\nlet new_container = Container::new(\"hi\");\nprintln!(\"Container = {:?}\", new_container);\n",
+          "solutionCode": "#[derive(Debug)]\nstruct Container<T> {\n  items: Vec<T>,\n}\n\nimpl <T>Container<T> {\n  fn new(initial_item: T) -> Container<T> {\n    Container {\n      items: vec![initial_item],\n    }\n  }\n}\n\nlet new_container = Container::new(15);\nprintln!(\"Container = {:?}\", new_container);\n\nlet new_container = Container::new(true);\nprintln!(\"Container = {:?}\", new_container);\n\nlet new_container = Container::new(\"hi\");\nprintln!(\"Container = {:?}\", new_container);\n",
+          "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "@LuChidfH",
+          "title": "More Generic Implementations",
+          "instructions": "We have the same `Container` from the last challenge again. This time, write a generic `impl` block from scratch, and implement the following methods:\n\n* `new` which accepts a vector of items, not just a single item.\n* `get_items` which returns the current items in the container.\n* `set_items` which sets the current items in the container and returns `()`.\n\n\nAll the methods should be generic.\n",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let mut container = Container::new(vec![20, 25, 18]);\n  let items = container.get_items();\n  assert_eq!(items, &vec![20, 25, 18]);\n  container.set_items(vec![25, 25, 25]);\n  let items = container.get_items();\n  assert_eq!(items, &vec![25, 25, 25]);\n\n  true\n}\n`;\n\ntest(\"The `Container` should implementation `new`, `getItems`, and `setItems` methods according to the descriptions above.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "#[derive(Debug)]\nstruct Container<T> {\n  items: Vec<T>,\n}\n\n// Write your code here:\n\n// The following API usages should be valid:\nlet mut container = Container::new(vec![20, 25, 18]);\nlet items = container.get_items();\nassert_eq!(items, &vec![20, 25, 18]);\ncontainer.set_items(vec![25, 25, 25]);\nlet items = container.get_items();\nassert_eq!(items, &vec![25, 25, 25]);\n",
+          "solutionCode": "#[derive(Debug)]\nstruct Container<T> {\n  items: Vec<T>,\n}\n\nimpl <T> Container <T> {\n  fn new(items: Vec<T>) -> Container<T> {\n    Container {\n      items,\n    }\n  }\n\n  fn get_items(&self) -> &Vec<T> {\n    &self.items\n  }\n\n  fn set_items(&mut self, items: Vec<T>) -> () {\n    self.items = items;\n  }\n}\n\n// The following API usages should be valid:\nlet mut container = Container::new(vec![20, 25, 18]);\nlet items = container.get_items();\nassert_eq!(items, &vec![20, 25, 18]);\ncontainer.set_items(vec![25, 25, 25]);\nlet items = container.get_items();\nassert_eq!(items, &vec![25, 25, 25]);\n",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "VNkyZD6qX",
           "title": "Traits",
