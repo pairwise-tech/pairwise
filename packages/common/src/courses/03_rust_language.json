@@ -1559,6 +1559,17 @@
           "starterCode": "fn two_boolean_values(boolean_one: &bool, boolean_two: &bool) -> Option<&bool> {\n  if boolean_one == &true {\n    return Some(boolean_one);\n  } else if boolean_two == &true {\n    return Some(boolean_two);\n  }\n\n  None\n}\n\nlet x = true;\nlet y = false;\nlet result = two_boolean_values(&x, &y);",
           "solutionCode": "fn two_boolean_values<'a>(boolean_one: &'a bool, boolean_two: &'a bool) -> Option<&'a str> {\n  if boolean_one == &true {\n    return Some(\"1\");\n  } else if boolean_two == &true {\n    return Some(\"2\")\n  }\n\n  None\n}\n\nlet x = true;\nlet y = false;\nlet result = two_boolean_values(&x, &y);",
           "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "d5B03S7On",
+          "title": "Lifetimes with Structs",
+          "instructions": "We can also apply lifetime annotations to struct definitions.\n\nConsider the unassuming code in the editor below.\n\nHere's a hint: the compiler doesn't like it.\n\nUse the compiler's suggestions to add lifetime annotations to the struct definition so the code compiles.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let g = Person {\n    name: \"Gandalf\",\n  };\n\n  assert_eq!(g.name, \"Gandalf\");\n\n  true\n}\n`;\n\ntest(\"The `Person` struct should have lifetime annotations and a string slice type for the `name` field.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "#[derive(Debug)]\nstruct Person {\n  name: &str,\n}\n\nlet sam = Person {\n  name: \"Sam\",\n};\n\nprintln!(\"Sam = {:?}\", sam);",
+          "solutionCode": "#[derive(Debug)]\nstruct Person<'a> {\n  name: &'a str,\n}\n\nlet sam = Person {\n  name: \"Sam\",\n};\n\nprintln!(\"Sam = {:?}\", sam);",
+          "content": ""
         }
       ]
     },
