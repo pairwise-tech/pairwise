@@ -1515,6 +1515,28 @@
           "starterCode": "// Write your code here:",
           "solutionCode": "fn search_in_list<T: PartialEq>(list: Vec<T>, item: T) -> Option<T> {\n  for x in list.iter() {\n    if x == &item {\n      return Some(item);\n    }\n  }\n\n  None\n}\n\nlet result = search_in_list(vec![1,2,3,4,5], 4);\nprintln!(\"Result = {:?}\", result);\n\nlet result = search_in_list(vec![1,2,3,4,5], 40);\nprintln!(\"Result = {:?}\", result);\n",
           "content": ""
+        },
+        {
+          "type": "section",
+          "id": "d7t673tRB",
+          "title": "Lifetimes",
+          "instructions": "",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "You may have seen compile\\-time errors like this before:"
+        },
+        {
+          "type": "rust",
+          "id": "uZ0Et7OkS",
+          "title": "Do You Live Long Enough?",
+          "instructions": "Consider the code in the editor, which currently results in a compile time error:\n\n```none\nresult = &x;\n         ^^ borrowed value does not live long enough\n\n```\n\nThe variable `x` is dropped once it goes out of scope, which makes one of the `println!` invocations invalid. It would be pointing to an invalid reference to `x` \\- a dangling reference.\n\nRemove the offending `println!` statement so that they code compiles.\n\nRust's _borrow checker_ is able to determine the lifetime of the reference and ensure that we do not create any invalid references in our programs.\n\n> ++NOTE:++ You might think the `let result;` initialization is a bit odd. What is the value of `result` before it is assigned a reference to `x`? Well, if you try to read `x` before it is assigned, the Rust compile will not let you. A value must be assigned before you read from it.\n> \n> You really can't get around the Rust compiler, now can you.\n",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The code should compile with no errors.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "let result;\n\n{\n  let x = true;\n\n  {\n    result = &x;\n\n    println!(\"[1] Result = {}\", result);\n  }\n\n  println!(\"[2] Result = {}\", result);\n}\n\nprintln!(\"[3] Result = {}\", result);",
+          "solutionCode": "let result;\n\n{\n  let x = true;\n\n  {\n    result = &x;\n\n    println!(\"[1] Result = {}\", result);\n  }\n\n  println!(\"[2] Result = {}\", result);\n}\n",
+          "content": ""
         }
       ]
     },
