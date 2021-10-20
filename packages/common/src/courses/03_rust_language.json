@@ -1537,6 +1537,17 @@
           "starterCode": "let result;\n\n{\n  let x = true;\n\n  {\n    result = &x;\n\n    println!(\"[1] Result = {}\", result);\n  }\n\n  println!(\"[2] Result = {}\", result);\n}\n\nprintln!(\"[3] Result = {}\", result);",
           "solutionCode": "let result;\n\n{\n  let x = true;\n\n  {\n    result = &x;\n\n    println!(\"[1] Result = {}\", result);\n  }\n\n  println!(\"[2] Result = {}\", result);\n}\n",
           "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "FUoLBRWMx",
+          "title": "Function Lifetime Annotations",
+          "instructions": "When passing data to functions, Rust sometimes must be told explicitly how long references can live for. These are called _lifetime annotations_, and in many function definitions are _elided_ or inferred by default by the Rust compiler based on some deterministic rules. But, in some cases, you have to write lifetime annotations directly \\(if you need to, the compiler will tell you\\).\n\nConsider the `return_one_of_two_strings` in the editor below, where we have given lifetime annotations to the arguments. Lifetime annotations in Rust are written with a single quote `'` and usually a single lowercase letter, like `'a`. The follow a similar pattern to generic type arguments, and can then be used within the function arguments list and return value. The purpose of lifetime annotations is to tell the Rust compiler out of a given set of argument references, how long should the returned data live for?\n\nThe code in the editor fails to compile, because the function returns data which does not live longer enough for the usage later on. Take a look at how the returned data `result` is being used, and considered which returned values would be valid.\n\nModify the `return_one_of_two_strings` to return a valid reference, without changing the rest of the code in the editor.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `return_one_of_two_strings` function should return a valid reference.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn return_one_of_two_strings<'a, 'b>(string_a: &'a String, string_b: &'b String) -> &'b String {\n    string_b\n}\n\nlet result;\n\n{\n    let a = String::from(\"blah blah blah\");\n\n    {\n        let b = String::from(\"blah blah blah blah blah\");\n\n        result = return_one_of_two_strings(&a, &b);\n    }\n\n    println!(\"Result = {}\", result);\n}",
+          "solutionCode": "fn return_one_of_two_strings<'a, 'b>(string_a: &'a String, string_b: &'b String) -> &'a String {\n    string_a\n}\n\nlet result;\n\n{\n    let a = String::from(\"blah blah blah\");\n\n    {\n        let b = String::from(\"blah blah blah blah blah\");\n\n        result = return_one_of_two_strings(&a, &b);\n    }\n\n    println!(\"Result = {}\", result);\n}",
+          "content": ""
         }
       ]
     },
