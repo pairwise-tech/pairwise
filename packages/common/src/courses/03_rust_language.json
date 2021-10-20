@@ -1517,6 +1517,17 @@
           "content": ""
         },
         {
+          "type": "rust",
+          "id": "42RYeMZFA",
+          "title": "Deriving Traits",
+          "instructions": "You may have heard about \"deriving\" traits or seen the `#[derive(...)]` syntax used previously. As we saw previously, once you define a trait you can the implement the trait for a data type. This process can be tedious, and in many cases the compile can implement for you \\(read: [derive](https://doc.rust-lang.org/rust-by-example/trait/derive.html)\\) the trait.\n\nThis is true for standard library traits like `Copy`, `Clone`, and `Debug` but also for traits in external crates which you use in your programs \\(a good example here would be [Serde's](https://serde.rs/) `Serialize` and `Deserialize` traits\\.\n\nConsider the `Data` struct in the editor below. The code currently does not compile, because this struct does not implement the `Debug` or `Clone` traits\\. Implement these traits for this struct by _deriving _them\\.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let data = Data {\n    id: String::from(\"sadf987saf70assa0fasa97sdf\"),\n  };\n\n  let data_clone = data.clone();\n\n  println!(\"d = {:?}\", data);\n  println!(\"c = {:?}\", data_clone);\n\n  true\n}\n`;\n\ntest(\"The `Data` struct should implement the `Debug` and `Clone` traits.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "struct Data {\n  id: String,\n}\n\nlet data = Data {\n  id: String::from(\"sadf987saf70assa0fasa97sdf\"),\n};\n\nlet data_clone = data.clone();\n\nprintln!(\"d = {:?}\", data);\nprintln!(\"c = {:?}\", data_clone);\n\n",
+          "solutionCode": "#[derive(Debug, Clone)]\nstruct Data {\n  id: String,\n}\n\nlet data = Data {\n  id: String::from(\"sadf987saf70assa0fasa97sdf\"),\n};\n\nlet data_clone = data.clone();\n\nprintln!(\"d = {:?}\", data);\nprintln!(\"c = {:?}\", data_clone);\n\n",
+          "content": ""
+        },
+        {
           "type": "section",
           "id": "d7t673tRB",
           "title": "Lifetimes",
@@ -1581,6 +1592,17 @@
           "starterCode": "let mut s = \"\";\nlet mut i = &24;\n\nprintln!(\"--- Initial --- \");\nprintln!(\"s = {}\", s);\nprintln!(\"i = {}\", i);\n\n{\n  // scope 1\n  {\n    // scope 2\n    {\n      // scope 3\n      let string_literal = \"This is a string literal, with a static lifetime\";\n      s = &string_literal;\n\n      let integer = 42;\n      i = &integer;\n\n      // string_literal and integer will both be dropped here\n    }\n  }\n}\n\nprintln!(\"--- Results --- \");\nprintln!(\"s = {}\", s);\nprintln!(\"i = {}\", i);\n",
           "solutionCode": "let mut s = \"\";\nlet mut i = &24;\n\nprintln!(\"--- Initial --- \");\nprintln!(\"s = {}\", s);\nprintln!(\"i = {}\", i);\n\nlet integer = 42;\n\n{\n  // scope 1\n  {\n    // scope 2\n    {\n      // scope 3\n      let string_literal = \"This is a string literal, with a static lifetime\";\n      s = &string_literal;\n\n      // let integer = 42;\n      i = &integer;\n\n      // string_literal and integer will both be dropped here\n    }\n  }\n}\n\nprintln!(\"--- Results --- \");\nprintln!(\"s = {}\", s);\nprintln!(\"i = {}\", i);\n",
           "content": ""
+        },
+        {
+          "type": "media",
+          "id": "DpicEWB92",
+          "title": "Summary",
+          "instructions": "",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Lifetimes are a more complex topic in Rust, which can be challenging and confusing. We would encourage a read of the Lifetimes chapter of the Rust Programming Language Book to dig further into this subject. That chapter concludes with a code snippet which ties together all the concepts we've seen in this module: generics, traits and trait bounds, and lifetime annotations:\n\n```\nuse std::fmt::Display;\n\nfn longest_with_an_announcement<'a, T>(\n    x: &'a str,\n    y: &'a str,\n    ann: T,\n) -> &'a str\nwhere\n    T: Display,\n{\n    println!(\"Announcement! {}\", ann);\n    if x.len() > y.len() {\n        x\n    } else {\n        y\n    }\n}\n\n```\n\nThe topics covered here are more advanced and can be challenging for programmers coming from other languages because not all the topics here have corollaries in other programming languages. Nevertheless, these skills are important to writing applications in Rust. Generics and traits are especially useful in defining shared behavior and writing composable code."
         }
       ]
     },
