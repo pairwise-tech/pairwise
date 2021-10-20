@@ -1548,6 +1548,17 @@
           "starterCode": "fn return_one_of_two_strings<'a, 'b>(string_a: &'a String, string_b: &'b String) -> &'b String {\n    string_b\n}\n\nlet result;\n\n{\n    let a = String::from(\"blah blah blah\");\n\n    {\n        let b = String::from(\"blah blah blah blah blah\");\n\n        result = return_one_of_two_strings(&a, &b);\n    }\n\n    println!(\"Result = {}\", result);\n}",
           "solutionCode": "fn return_one_of_two_strings<'a, 'b>(string_a: &'a String, string_b: &'b String) -> &'a String {\n    string_a\n}\n\nlet result;\n\n{\n    let a = String::from(\"blah blah blah\");\n\n    {\n        let b = String::from(\"blah blah blah blah blah\");\n\n        result = return_one_of_two_strings(&a, &b);\n    }\n\n    println!(\"Result = {}\", result);\n}",
           "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "mriKTNxYN",
+          "title": "Adding Lifetime Annotations",
+          "instructions": "In the editor below we have a function which accepts two references to booleans \\(yes, we know booleans can be cheaply copied...\\). This \\(contrived\\) function returns an `Option` containing a reference to the first of the two booleans which are `true`, or `None` if neither are `true`.\n\nHowever, Rust does not know how long this returned reference will live for. And, perhaps we don't know either. The function cannot know how the arguments passed to it will look, and it could be that the first or second are `true` or neither.\n\nRunning the code now results in compile errors. You must explicitly add lifetime annotations, and since we cannot know which boolean reference will be returned, we can provide the same lifetime annotation for both and the return reference. Rust will the constrain the usage of the function to the _shorter lived_ of the references passed in.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  let x = true;\n  let y = false;\n  let result = two_boolean_values(&x, &y);\n\n  true\n}\n`;\n\ntest(\"The `two_boolean_values` function should have lifetime annotations to specify the lifetime of the returned reference.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "fn two_boolean_values(boolean_one: &bool, boolean_two: &bool) -> Option<&bool> {\n  if boolean_one == &true {\n    return Some(boolean_one);\n  } else if boolean_two == &true {\n    return Some(boolean_two);\n  }\n\n  None\n}\n\nlet x = true;\nlet y = false;\nlet result = two_boolean_values(&x, &y);",
+          "solutionCode": "fn two_boolean_values<'a>(boolean_one: &'a bool, boolean_two: &'a bool) -> Option<&'a str> {\n  if boolean_one == &true {\n    return Some(\"1\");\n  } else if boolean_two == &true {\n    return Some(\"2\")\n  }\n\n  None\n}\n\nlet x = true;\nlet y = false;\nlet result = two_boolean_values(&x, &y);",
+          "content": ""
         }
       ]
     },
