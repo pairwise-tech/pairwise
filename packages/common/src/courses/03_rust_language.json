@@ -1570,6 +1570,17 @@
           "starterCode": "#[derive(Debug)]\nstruct Person {\n  name: &str,\n}\n\nlet sam = Person {\n  name: \"Sam\",\n};\n\nprintln!(\"Sam = {:?}\", sam);",
           "solutionCode": "#[derive(Debug)]\nstruct Person<'a> {\n  name: &'a str,\n}\n\nlet sam = Person {\n  name: \"Sam\",\n};\n\nprintln!(\"Sam = {:?}\", sam);",
           "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "LCvQ0Kgb7",
+          "title": "String Literals have a Static Lifetime",
+          "instructions": "A very important caveat to the discussion of lifetimes is that string literals have a static lifetime which means the string _can_ live for the entire duration of the program.\n\nConsider the peculiar code in the editor below. The compiler complains that the reference to the `integer` value does not live long enough, because the `integer` will be dropped once it goes out of scope.\n\nHowever\\... there is no issue with the string slice. Interesting\\!\n\nString slices are stored directly into the compiled program binary as read only data, and a guaranteed to have a static lifetime which is valid for the duration of the program. The reference we create to the string literal here, can then remain valid even as the string literal itself goes out of scope.\n\nChange the code which deals with the integer in some way so that the program compiles without error.",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The code should compile without error.\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "let mut s = \"\";\nlet mut i = &24;\n\nprintln!(\"--- Initial --- \");\nprintln!(\"s = {}\", s);\nprintln!(\"i = {}\", i);\n\n{\n  // scope 1\n  {\n    // scope 2\n    {\n      // scope 3\n      let string_literal = \"This is a string literal, with a static lifetime\";\n      s = &string_literal;\n\n      let integer = 42;\n      i = &integer;\n\n      // string_literal and integer will both be dropped here\n    }\n  }\n}\n\nprintln!(\"--- Results --- \");\nprintln!(\"s = {}\", s);\nprintln!(\"i = {}\", i);\n",
+          "solutionCode": "let mut s = \"\";\nlet mut i = &24;\n\nprintln!(\"--- Initial --- \");\nprintln!(\"s = {}\", s);\nprintln!(\"i = {}\", i);\n\nlet integer = 42;\n\n{\n  // scope 1\n  {\n    // scope 2\n    {\n      // scope 3\n      let string_literal = \"This is a string literal, with a static lifetime\";\n      s = &string_literal;\n\n      // let integer = 42;\n      i = &integer;\n\n      // string_literal and integer will both be dropped here\n    }\n  }\n}\n\nprintln!(\"--- Results --- \");\nprintln!(\"s = {}\", s);\nprintln!(\"i = {}\", i);\n",
+          "content": ""
         }
       ]
     },
