@@ -1,7 +1,7 @@
 {
   "id": "alosiqu45",
   "title": "Rust",
-  "free": false,
+  "free": true,
   "price": 5000,
   "premiumPrice": 50000,
   "description": "Rust is a statically typed, multi paradigm programming language which excels at performance and safety.",
@@ -1607,18 +1607,6 @@
       ]
     },
     {
-      "id": "zfbfBa6nP",
-      "title": "Macros",
-      "free": false,
-      "challenges": []
-    },
-    {
-      "id": "HiDVdMr4I",
-      "title": "Concurrency",
-      "free": false,
-      "challenges": []
-    },
-    {
       "id": "XT73AIuM5",
       "title": "Advanced Topics",
       "free": false,
@@ -1672,6 +1660,28 @@
           "id": "TX6cpQJuy",
           "title": "Smart Pointers",
           "instructions": "TODO",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "pkNTSor$1",
+          "title": "Macros",
+          "instructions": "...",
+          "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "type": "rust",
+          "id": "8CburJx3P",
+          "title": "Concurrency",
+          "instructions": "",
           "testCode": "// Do not change the following line, it is used in Rust file export generation.\nconst TEST_STRING = `\n// Returns a boolean representing challenge test status.\nfn test() -> bool {\n  true\n}\n`;\n\ntest(\"The `example` function should...\", async () => {\n  const CODE_STRING = __user_code_string__;\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n\n",
           "videoUrl": "",
           "starterCode": "",
