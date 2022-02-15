@@ -6,7 +6,7 @@ import { IconNavLink } from "./SharedComponents";
 import Modules, { ReduxStoreState } from "modules/root";
 import styled from "styled-components/macro";
 import { AppTheme, getChallengeSlug } from "@pairwise/common";
-import { COLORS, MOBILE } from "tools/constants";
+import { COLORS, MOBILE, SUNSET } from "tools/constants";
 import { getDimensions } from "tools/dimensions";
 import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
 
@@ -146,16 +146,18 @@ export const NextChallengeCard = connect(
             <p style={{ marginRight: 10 }}>{text}</p>
             <H5>{challenge?.title}</H5>
           </Horizontal>
-          <Button
-            className="feedback-button"
-            large={isMobile}
-            intent="none"
-            icon="comment"
-            aria-label="open the feedback dialog"
-            onClick={openFeedbackDialog}
-          >
-            Feedback
-          </Button>
+          {!SUNSET && (
+            <Button
+              className="feedback-button"
+              large={isMobile}
+              intent="none"
+              icon="comment"
+              aria-label="open the feedback dialog"
+              onClick={openFeedbackDialog}
+            >
+              Feedback
+            </Button>
+          )}
         </Upper>
         {nextChallenge && (
           <>

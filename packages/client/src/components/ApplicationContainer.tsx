@@ -264,11 +264,13 @@ const ApplicationContainer = (props: IProps) => {
         }}
         text="Sandbox"
       />
-      <MenuItem
-        icon="help"
-        onClick={openFeedbackDialog}
-        text="Submit Feedback"
-      />
+      {!SUNSET && (
+        <MenuItem
+          icon="help"
+          onClick={openFeedbackDialog}
+          text="Submit Feedback"
+        />
+      )}
       <MenuItem
         icon="lightbulb"
         onClick={toggleAppTheme}
@@ -357,7 +359,7 @@ const ApplicationContainer = (props: IProps) => {
           {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
           <div style={{ marginLeft: 10 }} />
           {!isMobile && <PomodoroTimer />}
-          {!isMobile && (
+          {!isMobile && !SUNSET && (
             <Tooltip2
               usePortal={false}
               position="bottom"
