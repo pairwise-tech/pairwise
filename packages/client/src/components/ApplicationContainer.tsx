@@ -25,7 +25,6 @@ import Account from "./Account";
 import {
   ProfileIcon,
   IconButton,
-  SmoothScrollButton,
   FullScreenOverlay,
   OverlayText,
   LoadingInline,
@@ -47,7 +46,6 @@ import { challengeRequiresWorkspace, SANDBOX_TYPE_CHOICES } from "tools/utils";
 import SearchBox from "./SearchBox";
 import { AuthenticationForm } from "components/SingleSignOnModal";
 import { ShortcutKeysPopover } from "./KeyboardShortcuts";
-import { CONTENT_AREA_ID } from "./MediaArea";
 import PomodoroTimer from "./PomodoroTimer";
 import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
 import { getChallengeSlug } from "@pairwise/common";
@@ -83,6 +81,8 @@ const Modals = () => (
     <FeedbackModal />
   </>
 );
+
+const SUNSET = true;
 
 /** ===========================================================================
  * ApplicationContainer
@@ -481,7 +481,7 @@ const ApplicationContainer = (props: IProps) => {
                 <Button
                   id="sandboxButton"
                   disabled={isSandbox}
-                  style={{ marginLeft: 9 }}
+                  style={{ marginLeft: 9, marginRight: 9 }}
                 >
                   Sandbox
                 </Button>
@@ -500,7 +500,7 @@ const ApplicationContainer = (props: IProps) => {
               </Popover2>
             </LastChildMargin>
           )}
-          {(isSearchFocused && isMobile) || userLoading ? (
+          {SUNSET ? null : (isSearchFocused && isMobile) || userLoading ? (
             <div style={{ width: 8 }} />
           ) : isLoggedIn && user.profile ? (
             <AccountDropdownButton>
