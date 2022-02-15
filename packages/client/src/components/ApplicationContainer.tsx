@@ -761,7 +761,7 @@ const BetaLabel = styled.small`
   transform: translate(-50%, -50%) scale(0.7);
 
   &:before {
-    content: "BETA";
+    content: "${SUNSET ? "SUNSET" : "BETA"}";
   }
 `;
 

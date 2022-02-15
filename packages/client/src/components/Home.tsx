@@ -39,8 +39,8 @@ class Home extends React.Component<IProps, {}> {
           <ContentContainer style={{ paddingRight: 50, marginBottom: 25 }}>
             <PageTitle>Welcome to Pairwise!</PageTitle>
             {SUNSET ? (
-              <SpecialBox>
-                <p>
+              <SpecialBox style={{ marginBottom: 12 }}>
+                <p style={{ margin: 2 }}>
                   Pairwise is currently a frontend only application. The full
                   product has been sunset due to a lack of user traction. You
                   can find the open source code on GitHub.
