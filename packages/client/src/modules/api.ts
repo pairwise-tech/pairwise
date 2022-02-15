@@ -39,7 +39,7 @@ import {
   saveSandboxToLocalStorage,
   getSandboxFromLocalStorage,
 } from "tools/storage-utils";
-import { SANDBOX_ID } from "tools/constants";
+import { SANDBOX_ID, SUNSET } from "tools/constants";
 import toaster from "tools/toast-utils";
 import { wait, mapCourseSkeletonInDev } from "tools/utils";
 import { UserStoreState } from "./user/store";
@@ -210,6 +210,16 @@ class BaseApiClass {
  * ============================================================================
  */
 
+const TS = "fpvPtfu7s";
+
+const filterSunsetCourseList = (list: CourseList) => {
+  return list.filter((c) => c.id === TS);
+};
+
+const filterSunsetCourseSkeletonList = (list: CourseSkeletonList) => {
+  return list.filter((c) => c.id === TS);
+};
+
 class Api extends BaseApiClass {
   codepressApi = createCodepressAPI(ENV.CODEPRESS_HOST);
 
@@ -219,7 +229,7 @@ class Api extends BaseApiClass {
   fetchCourses = async (): Promise<Result<CourseList, HttpResponseError>> => {
     try {
       let courses: CourseList;
-      if (ENV.DEV) {
+      if (ENV.DEV || SUNSET) {
         // eslint-disable-next-line
         const courseList = require("@pairwise/common").default;
         courses = Object.values(courseList);
@@ -234,6 +244,10 @@ class Api extends BaseApiClass {
         courses = result.data;
       }
 
+      if (SUNSET) {
+        courses = filterSunsetCourseList(courses);
+      }
+
       return Ok(courses);
     } catch (err) {
       return this.handleHttpError(err);
@@ -241,11 +255,16 @@ class Api extends BaseApiClass {
   };
 
   fetchCourseSkeletons = async () => {
-    if (ENV.DEV) {
+    if (ENV.DEV || SUNSET) {
       // eslint-disable-next-line
       const courseMap = require("@pairwise/common").default;
       const courses: CourseSkeletonList = Object.values(courseMap);
-      const courseSkeletonList = courses.map(mapCourseSkeletonInDev);
+      let courseSkeletonList = courses.map(mapCourseSkeletonInDev);
+
+      if (SUNSET) {
+        courseSkeletonList = filterSunsetCourseSkeletonList(courseSkeletonList);
+      }
+
       return Ok(courseSkeletonList);
     } else if (ENV.CODEPRESS) {
       return lastValueFrom(this.codepressApi.getSkeletons().pipe(map(Ok)));

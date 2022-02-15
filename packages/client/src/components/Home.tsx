@@ -6,7 +6,7 @@ import { Button, Card, Elevation } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 import Modules, { ReduxStoreState } from "modules/root";
 import { PageContainer, Text, PageTitle } from "./SharedComponents";
-import { COLORS, MOBILE } from "tools/constants";
+import { COLORS, MOBILE, SUNSET } from "tools/constants";
 import SEO from "./SEO";
 import {
   defaultTextColor,
@@ -38,17 +38,20 @@ class Home extends React.Component<IProps, {}> {
         <FlexContainer>
           <ContentContainer style={{ paddingRight: 50, marginBottom: 25 }}>
             <PageTitle>Welcome to Pairwise!</PageTitle>
-            <SpecialBox>
-              <p>
-                Pairwise is currently a frontend only application. The full
-                product has been sunset due to a lack of user traction. You can
-                find the open source code on GitHub.
-              </p>
-            </SpecialBox>
-            {/* <YoutubeEmbed
-              showSubscribeButton
-              url="https://www.youtube.com/embed/M87M_Iy4dAE"
-            /> */}
+            {SUNSET ? (
+              <SpecialBox>
+                <p>
+                  Pairwise is currently a frontend only application. The full
+                  product has been sunset due to a lack of user traction. You
+                  can find the open source code on GitHub.
+                </p>
+              </SpecialBox>
+            ) : (
+              <YoutubeEmbed
+                showSubscribeButton
+                url="https://www.youtube.com/embed/M87M_Iy4dAE"
+              />
+            )}
             <PageTitle>Courses</PageTitle>
             {this.props.skeletons?.map(this.renderCourseItem)}
           </ContentContainer>
@@ -150,14 +153,16 @@ class Home extends React.Component<IProps, {}> {
                     : "Start Now for Free"}
                 </Button>
               </Link>
-              {/* <Button
-                large
-                intent="success"
-                id={`course-link-${i}-purchase`}
-                onClick={this.handlePurchaseCourse(skeleton.id)}
-              >
-                Purchase Course
-              </Button> */}
+              {!SUNSET && (
+                <Button
+                  large
+                  intent="success"
+                  id={`course-link-${i}-purchase`}
+                  onClick={this.handlePurchaseCourse(skeleton.id)}
+                >
+                  Purchase Course
+                </Button>
+              )}
             </>
           )}
         </ButtonsBox>
@@ -241,22 +246,26 @@ class Home extends React.Component<IProps, {}> {
                 : "Start Now for Free"}
             </Button>
           </Link>
-          {/* <Button
-            large
-            id="course-link-0-purchase"
-            onClick={this.handlePurchaseCourse(skeleton.id)}
-          >
-            Purchase Course
-          </Button> */}
+          {!SUNSET && (
+            <Button
+              large
+              id="course-link-0-purchase"
+              onClick={this.handlePurchaseCourse(skeleton.id)}
+            >
+              Purchase Course
+            </Button>
+          )}
         </ButtonsBox>
-        {/* <SpecialBox>
-          <p style={{ margin: 0 }}>
-            Pairwise is currently offering a special deal to early adopters like
-            yourself. If you purchase the course now you will also get a
-            complimentary 30 minute career coaching session with a professional
-            developer.
-          </p>
-        </SpecialBox> */}
+        {!SUNSET && (
+          <SpecialBox>
+            <p style={{ margin: 0 }}>
+              Pairwise is currently offering a special deal to early adopters
+              like yourself. If you purchase the course now you will also get a
+              complimentary 30 minute career coaching session with a
+              professional developer.
+            </p>
+          </SpecialBox>
+        )}
       </div>
     );
   };
