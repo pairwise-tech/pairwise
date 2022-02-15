@@ -46,7 +46,7 @@ We use the following libraries across the codebase, here are some quick links to
 
 ## 👷 Getting Started
 
-To work with Pairwise you will need [Node](https://nodejs.org/en/), [npm](https://www.npmjs.com/), [yarn](https://yarnpkg.com/lang/en/docs/), and [Docker](https://www.docker.com/) installed. We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage different versions of Node.
+To work with Pairwise you will need [Node](https://nodejs.org/en/), [npm](https://www.npmjs.com/), [yarn](https://yarnpkg.com/lang/en/docs/), and [Docker](https://www.docker.com/) installed. We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage different versions of Node (we recommend Node 12, e.g. `12.16.1`).
 
 We recommend using the latest version of Yarn and Node LTS:
 
