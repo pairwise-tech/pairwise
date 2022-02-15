@@ -4,6 +4,10 @@
 
 The **Pairwise** codebase includes a React app client application, a NestJS server application, and other various services, all bundled up in a monorepo using Lerna and Yarn workspaces.
 
+## ‼️ NOTE
+
+Pairwise failed to gain enough user traction and is no longer operating as a business. All the code here is now open source and the app has been converted to a frontend-only application, which is still running for anyone to see.
+
 ## 📋 Structure
 
 This project is managed using Lerna, and contains the following packages:
