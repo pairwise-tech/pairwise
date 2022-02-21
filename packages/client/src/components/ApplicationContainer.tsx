@@ -320,7 +320,7 @@ const ApplicationContainer = (props: IProps) => {
             >
               Pairwise
             </Link>
-            <BetaLabel />
+            {/* <BetaLabel /> */}
           </ProductTitle>
         </ControlsContainer>
         {CODEPRESS && (
@@ -354,6 +354,41 @@ const ApplicationContainer = (props: IProps) => {
               >
                 Viewing Pull Request {adminPullRequestId}
               </Button>
+            </Tooltip2>
+          )}
+          {!isMobile && (
+            <Tooltip2
+              usePortal={false}
+              position="bottom"
+              content={
+                <div style={{ maxWidth: 500 }}>
+                  <h3 style={{ marginTop: 6, marginBottom: 6 }}>
+                    Product Sunset Notice
+                  </h3>
+                  <HorizonLine />
+                  <p>
+                    The full Pairwise product is going to be converted to a
+                    frontend-only application soon. It's hard to hard to gain
+                    sufficient user traction to justify continuing to support
+                    Pairwise as a business.
+                  </p>
+                  <p>
+                    When that happens, the course will still be available and we
+                    will open source the Pairwise codebase. However, data for
+                    user accounts and progress history will be lost once we
+                    shutdown the backend for the platform.
+                  </p>
+                  <p>
+                    Thanks for being an early Pairwise user! We hope you learned
+                    something. If you have any questions feel free to contact me
+                    at sean@pairwise.tech.
+                  </p>
+                </div>
+              }
+            >
+              <SunsetBox>
+                <SunsetText>Sunset Notice</SunsetText>
+              </SunsetBox>
             </Tooltip2>
           )}
           {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
@@ -1043,6 +1078,31 @@ const SearchBoxFiller = styled.div`
   flex: 1 100%;
   width: auto;
   margin-left: 9px;
+`;
+
+const SunsetBox = styled.div`
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 185px;
+  margin-left: 8px;
+  border-radius: 4px;
+  background: ${COLORS.SECONDARY_PINK};
+`;
+
+const SunsetText = styled.p`
+  margin: 0;
+  font-weight: 400;
+`;
+
+const HorizonLine = styled.div`
+  height: 1px;
+  width: 100%;
+  margin: 4px 0 8px 0;
+  background: ${(props: IThemeProps) => {
+    return props.theme.dark ? "white" : "black";
+  }};
 `;
 
 /** ===========================================================================
