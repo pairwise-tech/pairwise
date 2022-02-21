@@ -24,7 +24,7 @@ jobs:
       - name: Setup NodeJS Environment
         uses: actions/setup-node@v1
         with:
-          node-version: 10.x
+          node-version: 14.x
 
       # Install dependencies, if any package.json or lock files have changed
       - name: Install and cache dependencies
