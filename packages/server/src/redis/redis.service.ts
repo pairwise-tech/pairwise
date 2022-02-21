@@ -108,11 +108,9 @@ export class RedisClientService {
     this.initializePubSubClients();
   }
 
-  private async initializePrimaryClient() {
+  private initializePrimaryClient() {
     try {
-      const client = await this.redisService.getClient(
-        REDIS_CLIENT_CONFIG.CLIENT,
-      );
+      const client = this.redisService.getClient(REDIS_CLIENT_CONFIG.CLIENT);
 
       this.client = client;
     } catch (err) {
