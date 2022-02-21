@@ -58,6 +58,7 @@ import AdminDrawer from "./AdminDrawer";
 import UserLeaderboard from "./UserLeaderboard";
 import Portfolio from "./Portfolio";
 import PublicUserProfilePage from "./PublicUserProfilePage";
+import { SunsetMessage } from "./SunsetMessage";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -366,27 +367,17 @@ const ApplicationContainer = (props: IProps) => {
                     Product Sunset Notice
                   </h3>
                   <HorizonLine />
-                  <p>
-                    The full Pairwise product is going to be converted to a
-                    frontend-only application soon. It's hard to hard to gain
-                    sufficient user traction to justify continuing to support
-                    Pairwise as a business.
-                  </p>
-                  <p>
-                    When that happens, the course will still be available and we
-                    will open source the Pairwise codebase. However, data for
-                    user accounts and progress history will be lost once we
-                    shutdown the backend for the platform.
-                  </p>
-                  <p>
-                    Thanks for being an early Pairwise user! We hope you learned
-                    something. If you have any questions feel free to contact me
-                    at sean@pairwise.tech.
-                  </p>
+                  <SunsetMessage />
                 </div>
               }
             >
-              <SunsetBox>
+              <SunsetBox
+                icon="moon"
+                onClick={() => {
+                  const url = "https://github.com/pairwise-tech/pairwise";
+                  window.open(url, "_blank")?.focus();
+                }}
+              >
                 <SunsetText>Sunset Notice</SunsetText>
               </SunsetBox>
             </Tooltip2>
@@ -1080,7 +1071,7 @@ const SearchBoxFiller = styled.div`
   margin-left: 9px;
 `;
 
-const SunsetBox = styled.div`
+const SunsetBox = styled(Button)`
   height: 30px;
   display: flex;
   align-items: center;
@@ -1088,7 +1079,6 @@ const SunsetBox = styled.div`
   width: 185px;
   margin-left: 8px;
   border-radius: 4px;
-  background: ${COLORS.SECONDARY_PINK};
 `;
 
 const SunsetText = styled.p`

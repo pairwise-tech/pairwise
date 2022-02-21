@@ -5,7 +5,12 @@ import { CourseSkeleton, getChallengeSlug } from "@pairwise/common";
 import { Button, Card, Elevation } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer, Text, PageTitle } from "./SharedComponents";
+import {
+  PageContainer,
+  Text,
+  PageTitle,
+  ExternalLink,
+} from "./SharedComponents";
 import { COLORS, MOBILE, SUNSET } from "tools/constants";
 import SEO from "./SEO";
 import {
@@ -15,6 +20,7 @@ import {
   themeText,
 } from "./ThemeContainer";
 import { YoutubeEmbed } from "./MediaArea";
+import { SunsetMessage } from "./SunsetMessage";
 
 /** ===========================================================================
  * Home Component
@@ -40,11 +46,10 @@ class Home extends React.Component<IProps, {}> {
             <PageTitle>Welcome to Pairwise!</PageTitle>
             {SUNSET ? (
               <SpecialBox style={{ marginBottom: 12 }}>
-                <p style={{ margin: 2 }}>
-                  Pairwise is currently a frontend only application. The full
-                  product has been sunset due to a lack of user traction. You
-                  can find the open source code on GitHub.
-                </p>
+                <SunsetMessage />
+                <ExternalLink link="https://github.com/pairwise-tech/pairwise">
+                  Visit Pairwise Github
+                </ExternalLink>
               </SpecialBox>
             ) : (
               <YoutubeEmbed
