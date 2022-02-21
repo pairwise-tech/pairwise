@@ -3,7 +3,7 @@
 # used to run the e2e and Cypress tests with the full application using
 # docker-compose.
 
-FROM cypress/base:16.13.0
+FROM cypress/base:14.18.1
 
 # Dockerize is needed to sync containers startup
 ENV DOCKERIZE_VERSION v0.6.0
