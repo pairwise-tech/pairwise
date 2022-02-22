@@ -1077,7 +1077,7 @@ const SunsetBox = styled(Button)`
   align-items: center;
   justify-content: center;
   width: 185px;
-  margin-left: 8px;
+  margin-left: 10px;
   border-radius: 4px;
 `;
 
