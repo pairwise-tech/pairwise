@@ -366,9 +366,9 @@ const ApplicationContainer = (props: IProps) => {
                   <HorizonLine />
                   <p>
                     The full Pairwise product is going to be converted to a
-                    frontend-only application soon. It's hard to hard to gain
-                    sufficient user traction to justify continuing to support
-                    Pairwise as a business.
+                    frontend-only application soon. It's hard to gain sufficient
+                    user traction to justify continuing to support Pairwise as a
+                    business.
                   </p>
                   <p>
                     When that happens, the course will still be available and we
