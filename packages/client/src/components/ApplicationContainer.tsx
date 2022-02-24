@@ -368,6 +368,23 @@ const ApplicationContainer = (props: IProps) => {
                   </h3>
                   <HorizonLine />
                   <SunsetMessage />
+                  <p>
+                    The full Pairwise product is going to be converted to a
+                    frontend-only application soon. It's hard to gain sufficient
+                    user traction to justify continuing to support Pairwise as a
+                    business.
+                  </p>
+                  <p>
+                    When that happens, the course will still be available and we
+                    will open source the Pairwise codebase. However, data for
+                    user accounts and progress history will be lost once we
+                    shutdown the backend for the platform.
+                  </p>
+                  <p>
+                    Thanks for being an early Pairwise user! We hope you learned
+                    something. If you have any questions feel free to contact me
+                    at sean@pairwise.tech.
+                  </p>
                 </div>
               }
             >
