@@ -357,7 +357,7 @@ const ApplicationContainer = (props: IProps) => {
               </Button>
             </Tooltip2>
           )}
-          {!isMobile && (
+          {/* {!isMobile && (
             <Tooltip2
               usePortal={false}
               position="bottom"
@@ -398,7 +398,7 @@ const ApplicationContainer = (props: IProps) => {
                 <SunsetText>Sunset Notice</SunsetText>
               </SunsetBox>
             </Tooltip2>
-          )}
+          )} */}
           {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
           <div style={{ marginLeft: 10 }} />
           {!isMobile && <PomodoroTimer />}
