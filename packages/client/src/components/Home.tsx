@@ -38,10 +38,10 @@ class Home extends React.Component<IProps, {}> {
         <FlexContainer>
           <ContentContainer style={{ paddingRight: 50, marginBottom: 25 }}>
             <PageTitle>Welcome to Pairwise!</PageTitle>
-            <YoutubeEmbed
+            {/* <YoutubeEmbed
               showSubscribeButton
               url="https://www.youtube.com/embed/M87M_Iy4dAE"
-            />
+            /> */}
             <PageTitle style={{ marginTop: -48 }}>Courses</PageTitle>
             {this.props.skeletons?.map(this.renderCourseItem)}
           </ContentContainer>
