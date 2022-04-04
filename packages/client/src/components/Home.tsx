@@ -42,7 +42,7 @@ class Home extends React.Component<IProps, {}> {
               showSubscribeButton
               url="https://www.youtube.com/embed/M87M_Iy4dAE"
             /> */}
-            <PageTitle style={{ marginTop: -48 }}>Courses</PageTitle>
+            <PageTitle>Courses</PageTitle>
             {this.props.skeletons?.map(this.renderCourseItem)}
           </ContentContainer>
           <CourseProgressContainer>
