@@ -19,7 +19,6 @@ import {
   themeColor,
   themeText,
 } from "./ThemeContainer";
-import { YoutubeEmbed } from "./MediaArea";
 import { SunsetMessage } from "./SunsetMessage";
 
 /** ===========================================================================
@@ -50,7 +49,8 @@ class Home extends React.Component<IProps, {}> {
                 <ExternalLink link="https://github.com/pairwise-tech/pairwise">
                   Visit Pairwise Github
                 </ExternalLink>
-              </SpecialBox>}
+              </SpecialBox>
+            )}
             <PageTitle>Courses</PageTitle>
             {this.props.skeletons?.map(this.renderCourseItem)}
           </ContentContainer>
