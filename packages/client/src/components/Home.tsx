@@ -44,19 +44,13 @@ class Home extends React.Component<IProps, {}> {
         <FlexContainer>
           <ContentContainer style={{ paddingRight: 50, marginBottom: 25 }}>
             <PageTitle>Welcome to Pairwise!</PageTitle>
-            {SUNSET ? (
+            {SUNSET && (
               <SpecialBox style={{ marginBottom: 12 }}>
                 <SunsetMessage />
                 <ExternalLink link="https://github.com/pairwise-tech/pairwise">
                   Visit Pairwise Github
                 </ExternalLink>
-              </SpecialBox>
-            ) : (
-              <YoutubeEmbed
-                showSubscribeButton
-                url="https://www.youtube.com/embed/M87M_Iy4dAE"
-              />
-            )}
+              </SpecialBox>}
             <PageTitle>Courses</PageTitle>
             {this.props.skeletons?.map(this.renderCourseItem)}
           </ContentContainer>
