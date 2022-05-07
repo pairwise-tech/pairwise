@@ -212,8 +212,31 @@ class BaseApiClass {
 
 const TS = "fpvPtfu7s";
 
+const IDS_TO_EXCLUDE = new Set([
+  // Async module which uses backend APIs
+  "2o@y8Hx6oD",
+  "qIaveTrGu",
+  "@kclY2ckQ",
+  "Jn4aBfdYt",
+  "TFgdPCNyW",
+  "u374HXzhc",
+  "TC7HwcXRc",
+  "A12jr6EIC",
+  "9H3df@@nF",
+  "crFGCiQkX",
+  "8h2qN7py$",
+  "jso8aTAKQ",
+  "hx0KMlQN2",
+  "FkgTjFf5x",
+  // Databases module
+  "f0pDYSOV",
+]);
+
 const filterSunsetCourseList = (list: CourseList) => {
-  return list.filter((c) => c.id === TS);
+  const TypeScript = list.filter((c) => c.id === TS);
+  // TODO: Filter
+
+  return TypeScript;
 };
 
 const filterSunsetCourseSkeletonList = (list: CourseSkeletonList) => {
