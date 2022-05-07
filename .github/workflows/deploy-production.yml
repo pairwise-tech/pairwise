@@ -71,8 +71,8 @@ jobs:
         run: yarn e2e
 
       # Run Cypress tests
-      - name: Run Cypress tests
-        run: yarn cypress
+      # - name: Run Cypress tests
+      #   run: yarn cypress
 
       # Send Slack notification if workflow fails
       - name: Notify Slack on workflow failure
