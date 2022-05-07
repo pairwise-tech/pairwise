@@ -121,3 +121,10 @@ export const SANDBOX_ID = "sandbox";
 export const MOBILE = `(max-width: 768px)`;
 
 export const DESKTOP = `(min-width: 768px)`;
+
+/** ===========================================================================
+ * Sunset
+ * ============================================================================
+ */
+
+export const SUNSET = true;

@@ -1,4 +1,5 @@
 import { SandboxBlob } from "@pairwise/common";
+import { SUNSET } from "./constants";
 import { defaultSandboxBlob } from "./utils";
 
 /** ===========================================================================
@@ -124,6 +125,15 @@ export const logoutUserInLocalStorage = () => setAccessTokenInLocalStorage("");
  * Get the access token.
  */
 export const getAccessTokenFromLocalStorage = () => {
+  /**
+   * If SUNSET is activated, invalidate the user's session and return an
+   * empty token which will cause the api to default to local mode only.
+   */
+  if (SUNSET) {
+    logoutUserInLocalStorage();
+    return "";
+  }
+
   try {
     const token = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
     if (token) {

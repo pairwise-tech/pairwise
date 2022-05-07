@@ -27,6 +27,10 @@ import {
   PublicUserProfile,
   PaymentRequestDto,
   RecentProgressPublicStats,
+  ModuleList,
+  ChallengeList,
+  ModuleSkeletonList,
+  ChallengeSkeletonList,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable, lastValueFrom } from "rxjs";
@@ -39,12 +43,13 @@ import {
   saveSandboxToLocalStorage,
   getSandboxFromLocalStorage,
 } from "tools/storage-utils";
-import { SANDBOX_ID } from "tools/constants";
+import { SANDBOX_ID, SUNSET } from "tools/constants";
 import toaster from "tools/toast-utils";
 import { wait, mapCourseSkeletonInDev } from "tools/utils";
 import { UserStoreState } from "./user/store";
 import { captureSentryException } from "../tools/sentry-utils";
 import { v4 as uuidv4 } from "uuid";
+import challenges from "./challenges";
 
 /** ===========================================================================
  * Types & Config
@@ -198,6 +203,102 @@ class BaseApiClass {
   };
 }
 
+/**
+ * These are various ids for courses, modules, and challenges which are not
+ * available in sunset mode and should be excluded from the course content.
+ */
+const IDS_TO_EXCLUDE = new Set([
+  // Non-TypeScript courses
+  "aiqu278z9",
+  "alosiqu45",
+  "asiuq8e7l",
+  "f76shgb2W",
+  // Async module which uses backend APIs
+  "2o@y8Hx6oD",
+  "qIaveTrGu",
+  "@kclY2ckQ",
+  "Jn4aBfdYt",
+  "TFgdPCNyW",
+  "u374HXzhc",
+  "TC7HwcXRc",
+  "A12jr6EIC",
+  "9H3df@@nF",
+  "crFGCiQkX",
+  "8h2qN7py$",
+  "jso8aTAKQ",
+  "hx0KMlQN2",
+  "FkgTjFf5x",
+  // Databases module
+  "f0pDYSOV",
+]);
+
+const shouldExcludeEntity = (id: string): boolean => IDS_TO_EXCLUDE.has(id);
+
+const filterSunsetCourseList = (list: CourseList) => {
+  return list.reduce((courses: CourseList, course) => {
+    if (shouldExcludeEntity(course.id)) {
+      return courses;
+    } else {
+      return courses.concat({
+        ...course,
+        modules: course.modules.reduce((modules: ModuleList, module) => {
+          if (shouldExcludeEntity(module.id)) {
+            return modules;
+          } else {
+            return modules.concat({
+              ...module,
+              challenges: module.challenges.reduce(
+                (challenges: ChallengeList, challenge) => {
+                  if (shouldExcludeEntity(challenge.id)) {
+                    return challenges;
+                  } else {
+                    return challenges.concat(challenge);
+                  }
+                },
+                [],
+              ),
+            });
+          }
+        }, []),
+      });
+    }
+  }, []);
+};
+
+const filterSunsetCourseSkeletonList = (list: CourseSkeletonList) => {
+  return list.reduce((courses: CourseSkeletonList, course) => {
+    if (shouldExcludeEntity(course.id)) {
+      return courses;
+    } else {
+      return courses.concat({
+        ...course,
+        modules: course.modules.reduce(
+          (modules: ModuleSkeletonList, module) => {
+            if (shouldExcludeEntity(module.id)) {
+              return modules;
+            } else {
+              return modules.concat({
+                ...module,
+                challenges: module.challenges.reduce(
+                  (challenges: ChallengeSkeletonList, challenge) => {
+                    if (shouldExcludeEntity(challenge.id)) {
+                      return challenges;
+                    } else {
+                      return challenges.concat(challenge);
+                    }
+                  },
+                  [],
+                ),
+              });
+            }
+          },
+          [],
+        ),
+      });
+    }
+  }, []);
+};
+
 /** ===========================================================================
  * HTTP API Utility Class
  * ----------------------------------------------------------------------------
@@ -219,7 +320,7 @@ class Api extends BaseApiClass {
   fetchCourses = async (): Promise<Result<CourseList, HttpResponseError>> => {
     try {
       let courses: CourseList;
-      if (ENV.DEV) {
+      if (ENV.DEV || SUNSET) {
         // eslint-disable-next-line
         const courseList = require("@pairwise/common").default;
         courses = Object.values(courseList);
@@ -234,6 +335,10 @@ class Api extends BaseApiClass {
         courses = result.data;
       }
 
+      if (SUNSET) {
+        courses = filterSunsetCourseList(courses);
+      }
+
       return Ok(courses);
     } catch (err) {
       return this.handleHttpError(err);
@@ -241,11 +346,16 @@ class Api extends BaseApiClass {
   };
 
   fetchCourseSkeletons = async () => {
-    if (ENV.DEV) {
+    if (ENV.DEV || SUNSET) {
       // eslint-disable-next-line
       const courseMap = require("@pairwise/common").default;
       const courses: CourseSkeletonList = Object.values(courseMap);
-      const courseSkeletonList = courses.map(mapCourseSkeletonInDev);
+      let courseSkeletonList = courses.map(mapCourseSkeletonInDev);
+
+      if (SUNSET) {
+        courseSkeletonList = filterSunsetCourseSkeletonList(courseSkeletonList);
+      }
+
       return Ok(courseSkeletonList);
     } else if (ENV.CODEPRESS) {
       return lastValueFrom(this.codepressApi.getSkeletons().pipe(map(Ok)));

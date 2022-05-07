@@ -25,7 +25,6 @@ import Account from "./Account";
 import {
   ProfileIcon,
   IconButton,
-  SmoothScrollButton,
   FullScreenOverlay,
   OverlayText,
   LoadingInline,
@@ -47,7 +46,6 @@ import { challengeRequiresWorkspace, SANDBOX_TYPE_CHOICES } from "tools/utils";
 import SearchBox from "./SearchBox";
 import { AuthenticationForm } from "components/SingleSignOnModal";
 import { ShortcutKeysPopover } from "./KeyboardShortcuts";
-import { CONTENT_AREA_ID } from "./MediaArea";
 import PomodoroTimer from "./PomodoroTimer";
 import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
 import { getChallengeSlug } from "@pairwise/common";
@@ -60,6 +58,7 @@ import AdminDrawer from "./AdminDrawer";
 import UserLeaderboard from "./UserLeaderboard";
 import Portfolio from "./Portfolio";
 import PublicUserProfilePage from "./PublicUserProfilePage";
+import { SunsetMessage } from "./SunsetMessage";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -83,6 +82,8 @@ const Modals = () => (
     <FeedbackModal />
   </>
 );
+
+const SUNSET = true;
 
 /** ===========================================================================
  * ApplicationContainer
@@ -264,11 +265,13 @@ const ApplicationContainer = (props: IProps) => {
         }}
         text="Sandbox"
       />
-      <MenuItem
-        icon="help"
-        onClick={openFeedbackDialog}
-        text="Submit Feedback"
-      />
+      {!SUNSET && (
+        <MenuItem
+          icon="help"
+          onClick={openFeedbackDialog}
+          text="Submit Feedback"
+        />
+      )}
       <MenuItem
         icon="lightbulb"
         onClick={toggleAppTheme}
@@ -364,6 +367,7 @@ const ApplicationContainer = (props: IProps) => {
                     Product Sunset Notice
                   </h3>
                   <HorizonLine />
+                  <SunsetMessage />
                   <p>
                     The full Pairwise product is going to be converted to a
                     frontend-only application soon. It's hard to gain sufficient
@@ -384,7 +388,13 @@ const ApplicationContainer = (props: IProps) => {
                 </div>
               }
             >
-              <SunsetBox>
+              <SunsetBox
+                icon="moon"
+                onClick={() => {
+                  const url = "https://github.com/pairwise-tech/pairwise";
+                  window.open(url, "_blank")?.focus();
+                }}
+              >
                 <SunsetText>Sunset Notice</SunsetText>
               </SunsetBox>
             </Tooltip2>
@@ -392,7 +402,7 @@ const ApplicationContainer = (props: IProps) => {
           {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
           <div style={{ marginLeft: 10 }} />
           {!isMobile && <PomodoroTimer />}
-          {!isMobile && (
+          {!isMobile && !SUNSET && (
             <Tooltip2
               usePortal={false}
               position="bottom"
@@ -516,7 +526,7 @@ const ApplicationContainer = (props: IProps) => {
                 <Button
                   id="sandboxButton"
                   disabled={isSandbox}
-                  style={{ marginLeft: 9 }}
+                  style={{ marginLeft: 9, marginRight: 9 }}
                 >
                   Sandbox
                 </Button>
@@ -535,7 +545,7 @@ const ApplicationContainer = (props: IProps) => {
               </Popover2>
             </LastChildMargin>
           )}
-          {(isSearchFocused && isMobile) || userLoading ? (
+          {SUNSET ? null : (isSearchFocused && isMobile) || userLoading ? (
             <div style={{ width: 8 }} />
           ) : isLoggedIn && user.profile ? (
             <AccountDropdownButton>
@@ -796,7 +806,7 @@ const BetaLabel = styled.small`
   transform: translate(-50%, -50%) scale(0.7);
 
   &:before {
-    content: "BETA";
+    content: "${SUNSET ? "SUNSET" : "BETA"}";
   }
 `;
 
@@ -1078,7 +1088,7 @@ const SearchBoxFiller = styled.div`
   margin-left: 9px;
 `;
 
-const SunsetBox = styled.div`
+const SunsetBox = styled(Button)`
   height: 30px;
   display: flex;
   align-items: center;
@@ -1086,7 +1096,6 @@ const SunsetBox = styled.div`
   width: 185px;
   margin-left: 10px;
   border-radius: 4px;
-  background: ${COLORS.SECONDARY_PINK};
 `;
 
 const SunsetText = styled.p`

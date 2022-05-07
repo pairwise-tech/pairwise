@@ -4,6 +4,10 @@
 
 The **Pairwise** codebase includes a React app client application, a NestJS server application, and other various services, all bundled up in a monorepo using Lerna and Yarn workspaces.
 
+## ‼️ NOTE
+
+Pairwise failed to gain enough user traction and is no longer operating as a business. All the code here is now open source and the app has been converted to a frontend-only application, which is still running for anyone to see.
+
 <img width="1440" alt="pairwise" src="https://user-images.githubusercontent.com/18126719/155054677-9ecb63cd-a2ac-4154-ab62-60c7b7f76bb8.png">
 
 ## 📋 Structure
@@ -48,7 +52,7 @@ We use the following libraries across the codebase, here are some quick links to
 
 ## 👷 Getting Started
 
-To work with Pairwise you will need [Node](https://nodejs.org/en/), [npm](https://www.npmjs.com/), [yarn](https://yarnpkg.com/lang/en/docs/), and [Docker](https://www.docker.com/) installed. We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage different versions of Node.
+To work with Pairwise you will need [Node](https://nodejs.org/en/), [npm](https://www.npmjs.com/), [yarn](https://yarnpkg.com/lang/en/docs/), and [Docker](https://www.docker.com/) installed. We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage different versions of Node (we recommend Node 12, e.g. `12.16.1`).
 
 We recommend using the latest version of Yarn and Node LTS:
 

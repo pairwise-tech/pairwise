@@ -85,69 +85,69 @@ jobs:
           status: FAILED
           channel_id: CTBG8AT0B
 
-  server-deploy:
-    name: Server Deploy
-    needs: build-and-test
-    runs-on: ubuntu-latest
+  # server-deploy:
+  #   name: Server Deploy
+  #   needs: build-and-test
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
+  #   steps:
+  #     - name: Checkout repo
+  #       uses: actions/checkout@v2
 
-      # Install dependencies, if any package.json or lock files have changed
-      - name: Login to GitHub Packages Docker Registry
-        uses: docker/login-action@v1
-        with:
-          registry: docker.pkg.github.com
-          username: bonham000
-          password: "${{ secrets.GITHUB_TOKEN }}"
+  #     # Install dependencies, if any package.json or lock files have changed
+  #     - name: Login to GitHub Packages Docker Registry
+  #       uses: docker/login-action@v1
+  #       with:
+  #         registry: docker.pkg.github.com
+  #         username: bonham000
+  #         password: "${{ secrets.GITHUB_TOKEN }}"
 
-      # Setup gcloud CLI
-      - name: Setup gcloud CLI
-        uses: google-github-actions/setup-gcloud@v0
-        with:
-          service_account_key: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
-          service_account_email: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
+  #     # Setup gcloud CLI
+  #     - name: Setup gcloud CLI
+  #       uses: google-github-actions/setup-gcloud@v0
+  #       with:
+  #         service_account_key: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+  #         service_account_email: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
 
-      # Configure gcloud CLI
-      - name: Set gcloud project ID
-        run: |
-          gcloud config set project $CLOUD_RUN_PROJECT_ID
+  #     # Configure gcloud CLI
+  #     - name: Set gcloud project ID
+  #       run: |
+  #         gcloud config set project $CLOUD_RUN_PROJECT_ID
 
-      # Configure Docker to use gcloud
-      - name: Configure Docker with gcloud
-        run: gcloud auth configure-docker
+  #     # Configure Docker to use gcloud
+  #     - name: Configure Docker with gcloud
+  #       run: gcloud auth configure-docker
 
-      # Build the server application directly (instead of using Google Cloud Build)
-      - name: Build the server application
-        run: |
-          docker build \
-            --tag gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
-            -t pairwise-production \
-            -f packages/server/Dockerfile .
+  #     # Build the server application directly (instead of using Google Cloud Build)
+  #     - name: Build the server application
+  #       run: |
+  #         docker build \
+  #           --tag gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
+  #           -t pairwise-production \
+  #           -f packages/server/Dockerfile .
 
-      # Push the server image to gcloud
-      - name: Push the server image to GCR
-        run: docker push gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA
+  #     # Push the server image to gcloud
+  #     - name: Push the server image to GCR
+  #       run: docker push gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA
 
-      # Deploy the image to Cloud Run
-      - name: Deploy the server to Google Cloud Run
-        run: |
-          gcloud run deploy $CLOUD_RUN_SERVICE_NAME \
-            --region $RUN_REGION \
-            --image gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
-            --platform managed
+  #     # Deploy the image to Cloud Run
+  #     - name: Deploy the server to Google Cloud Run
+  #       run: |
+  #         gcloud run deploy $CLOUD_RUN_SERVICE_NAME \
+  #           --region $RUN_REGION \
+  #           --image gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
+  #           --platform managed
 
-      # Send Slack notification if workflow fails
-      - name: Notify Slack on workflow failure
-        if: failure()
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
-        uses: voxmedia/github-action-slack-notify-build@v1
-        with:
-          color: danger
-          status: FAILED
-          channel_id: CTBG8AT0B
+  #     # Send Slack notification if workflow fails
+  #     - name: Notify Slack on workflow failure
+  #       if: failure()
+  #       env:
+  #         SLACK_BOT_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
+  #       uses: voxmedia/github-action-slack-notify-build@v1
+  #       with:
+  #         color: danger
+  #         status: FAILED
+  #         channel_id: CTBG8AT0B
 
   client-deploy:
     name: Client Deploy
@@ -201,55 +201,56 @@ jobs:
           status: FAILED
           channel_id: CTBG8AT0B
 
-  admin-deploy:
-    name: Admin Deploy
-    needs: build-and-test
-    runs-on: ubuntu-latest
+  # admin-deploy:
+  #   name: Admin Deploy
+  #   needs: build-and-test
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
+  #   steps:
+  #     - name: Checkout repo
+  #       uses: actions/checkout@v2
 
-      # Install dependencies, if any package.json or lock files have changed
-      - name: Login to GitHub Packages Docker Registry
-        uses: docker/login-action@v1
-        with:
-          registry: docker.pkg.github.com
-          username: bonham000
-          password: "${{ secrets.GITHUB_TOKEN }}"
+  #     # Install dependencies, if any package.json or lock files have changed
+  #     - name: Login to GitHub Packages Docker Registry
+  #       uses: docker/login-action@v1
+  #       with:
+  #         registry: docker.pkg.github.com
+  #         username: bonham000
+  #         password: "${{ secrets.GITHUB_TOKEN }}"
 
-      # Same setup as workspace client
-      - name: Build the admin client application
-        run: |
-          docker build \
-            --build-arg REACT_APP_HOST=$PRODUCTION_SERVER_URL \
-            -t pairwise-admin-client \
-            -f packages/admin/Dockerfile .
+  #     # Same setup as workspace client
+  #     - name: Build the admin client application
+  #       run: |
+  #         docker build \
+  #           --build-arg REACT_APP_HOST=$PRODUCTION_SERVER_URL \
+  #           -t pairwise-admin-client \
+  #           -f packages/admin/Dockerfile .
 
-      # Same setup as workspace client
-      - name: Deploy the admin client to Netlify
-        run: |
-          docker run \
-            --env GITHUB_SHA=$GITHUB_SHA \
-            --env NETLIFY_SITE_ID=$NETLIFY_ADMIN_SITE_ID \
-            --env NETLIFY_AUTH_TOKEN=$NETLIFY_AUTH_TOKEN \
-            -t pairwise-admin-client
+  #     # Same setup as workspace client
+  #     - name: Deploy the admin client to Netlify
+  #       run: |
+  #         docker run \
+  #           --env GITHUB_SHA=$GITHUB_SHA \
+  #           --env NETLIFY_SITE_ID=$NETLIFY_ADMIN_SITE_ID \
+  #           --env NETLIFY_AUTH_TOKEN=$NETLIFY_AUTH_TOKEN \
+  #           -t pairwise-admin-client
 
-      # Send Slack notification if workflow fails
-      - name: Notify Slack on workflow failure
-        if: failure()
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
-        uses: voxmedia/github-action-slack-notify-build@v1
-        with:
-          color: danger
-          status: FAILED
-          channel_id: CTBG8AT0B
+  #     # Send Slack notification if workflow fails
+  #     - name: Notify Slack on workflow failure
+  #       if: failure()
+  #       env:
+  #         SLACK_BOT_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
+  #       uses: voxmedia/github-action-slack-notify-build@v1
+  #       with:
+  #         color: danger
+  #         status: FAILED
+  #         channel_id: CTBG8AT0B
 
   # Provide a success confirmation to Slack when all the jobs pass
   deploy-success-notification:
     name: Deploy Success Notification
-    needs: ["server-deploy", "client-deploy", "admin-deploy"]
+    # needs: ["server-deploy", "client-deploy", "admin-deploy"]
+    needs: ["client-deploy"]
     runs-on: ubuntu-latest
 
     steps:

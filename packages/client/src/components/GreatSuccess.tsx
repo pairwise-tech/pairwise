@@ -10,7 +10,7 @@ import Modules, { ReduxStoreState } from "modules/root";
 import { NextChallengeButton } from "./ChallengeControls";
 import { connect } from "react-redux";
 import KeyboardShortcuts from "./KeyboardShortcuts";
-import { COLORS, MOBILE } from "tools/constants";
+import { COLORS, MOBILE, SUNSET } from "tools/constants";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
 import { defaultTextColor, themeColor } from "./ThemeContainer";
@@ -273,9 +273,6 @@ const GreatSuccess: React.FC<Props> = ({
     }
   };
 
-  // Move this to a user field which can be updated
-  const showSubscribeToYouTube = true;
-
   const LoginSignup = isMobileView ? (
     <LoginSignupButton
       id="login-signup-button"
@@ -311,12 +308,7 @@ const GreatSuccess: React.FC<Props> = ({
       <ButtonActions>
         {!isRegisteredUser ? (
           LoginSignup
-        ) : showSubscribeToYouTube ? (
-          <SubscribeToYouTubeButton
-            shortName={isMobileView}
-            className="secondary-button"
-          />
-        ) : (
+        ) : !SUNSET ? (
           <Button
             large
             icon="comment"
@@ -329,7 +321,7 @@ const GreatSuccess: React.FC<Props> = ({
           >
             Have feedback?
           </Button>
-        )}
+        ) : null}
         <div className="right-buttons">
           {challenge.videoUrl && (
             <Button
