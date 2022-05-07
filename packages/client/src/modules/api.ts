@@ -27,6 +27,10 @@ import {
   PublicUserProfile,
   PaymentRequestDto,
   RecentProgressPublicStats,
+  ModuleList,
+  ChallengeList,
+  ModuleSkeletonList,
+  ChallengeSkeletonList,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable, lastValueFrom } from "rxjs";
@@ -45,6 +49,7 @@ import { wait, mapCourseSkeletonInDev } from "tools/utils";
 import { UserStoreState } from "./user/store";
 import { captureSentryException } from "../tools/sentry-utils";
 import { v4 as uuidv4 } from "uuid";
+import challenges from "./challenges";
 
 /** ===========================================================================
  * Types & Config
@@ -198,21 +203,16 @@ class BaseApiClass {
   };
 }
 
-/** ===========================================================================
- * HTTP API Utility Class
- * ----------------------------------------------------------------------------
- * This class provides methods to fetch data from all REST APIs and provides
- * standardized responses using the Result<Data, Error> approach.
- *
- * - All code related to actually dispatching HTTP requests is in this file.
- * - No errors are thrown from here! Only descriptive Result objects which
- *   are then handled by the calling code with perfect type safety. Boom!
- * ============================================================================
+/**
+ * These are various ids for courses, modules, and challenges which are not
+ * available in sunset mode and should be excluded from the course content.
  */
-
-const TS = "fpvPtfu7s";
-
 const IDS_TO_EXCLUDE = new Set([
+  // Non-TypeScript courses
+  "aiqu278z9",
+  "alosiqu45",
+  "asiuq8e7l",
+  "f76shgb2W",
   // Async module which uses backend APIs
   "2o@y8Hx6oD",
   "qIaveTrGu",
@@ -232,16 +232,84 @@ const IDS_TO_EXCLUDE = new Set([
   "f0pDYSOV",
 ]);
 
-const filterSunsetCourseList = (list: CourseList) => {
-  const TypeScript = list.filter((c) => c.id === TS);
-  // TODO: Filter
+const shouldExcludeEntity = (id: string): boolean => IDS_TO_EXCLUDE.has(id);
 
-  return TypeScript;
+const filterSunsetCourseList = (list: CourseList) => {
+  return list.reduce((courses: CourseList, course) => {
+    if (shouldExcludeEntity(course.id)) {
+      return courses;
+    } else {
+      return courses.concat({
+        ...course,
+        modules: course.modules.reduce((modules: ModuleList, module) => {
+          if (shouldExcludeEntity(module.id)) {
+            return modules;
+          } else {
+            return modules.concat({
+              ...module,
+              challenges: module.challenges.reduce(
+                (challenges: ChallengeList, challenge) => {
+                  if (shouldExcludeEntity(challenge.id)) {
+                    return challenges;
+                  } else {
+                    return challenges.concat(challenge);
+                  }
+                },
+                [],
+              ),
+            });
+          }
+        }, []),
+      });
+    }
+  }, []);
 };
 
 const filterSunsetCourseSkeletonList = (list: CourseSkeletonList) => {
-  return list.filter((c) => c.id === TS);
+  return list.reduce((courses: CourseSkeletonList, course) => {
+    if (shouldExcludeEntity(course.id)) {
+      return courses;
+    } else {
+      return courses.concat({
+        ...course,
+        modules: course.modules.reduce(
+          (modules: ModuleSkeletonList, module) => {
+            if (shouldExcludeEntity(module.id)) {
+              return modules;
+            } else {
+              return modules.concat({
+                ...module,
+                challenges: module.challenges.reduce(
+                  (challenges: ChallengeSkeletonList, challenge) => {
+                    if (shouldExcludeEntity(challenge.id)) {
+                      return challenges;
+                    } else {
+                      return challenges.concat(challenge);
+                    }
+                  },
+                  [],
+                ),
+              });
+            }
+          },
+          [],
+        ),
+      });
+    }
+  }, []);
 };
+
+/** ===========================================================================
+ * HTTP API Utility Class
+ * ----------------------------------------------------------------------------
+ * This class provides methods to fetch data from all REST APIs and provides
+ * standardized responses using the Result<Data, Error> approach.
+ *
+ * - All code related to actually dispatching HTTP requests is in this file.
+ * - No errors are thrown from here! Only descriptive Result objects which
+ *   are then handled by the calling code with perfect type safety. Boom!
+ * ============================================================================
+ */
 
 class Api extends BaseApiClass {
   codepressApi = createCodepressAPI(ENV.CODEPRESS_HOST);
