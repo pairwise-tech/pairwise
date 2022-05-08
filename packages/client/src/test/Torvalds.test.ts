@@ -90,6 +90,20 @@ const DANGEROUSLY_SKIP_CHALLENGE = new Set([
   "hbAfMbUAT0",
   "RBkHLlPHT",
   "aC5pqM5B6",
+  "2o@y8Hx6oD",
+  "qIaveTrGu",
+  "@kclY2ckQ",
+  "Jn4aBfdYt",
+  "TFgdPCNyW",
+  "u374HXzhc",
+  "TC7HwcXRc",
+  "A12jr6EIC",
+  "9H3df@@nF",
+  "crFGCiQkX",
+  "8h2qN7py$",
+  "jso8aTAKQ",
+  "hx0KMlQN2",
+  "FkgTjFf5x",
   // *************************************************************************
   // Two other challenges which also use external APIs:
   "EoK0U8Q$0", // Fetching Data Asynchronously
