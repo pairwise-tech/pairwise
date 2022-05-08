@@ -6,7 +6,7 @@ The **Pairwise** codebase includes a React app client application, a NestJS serv
 
 ## ‼️ NOTE
 
-Pairwise failed to gain enough user traction and is no longer operating as a business. All the code here is now open source and the app has been converted to a frontend-only application, which is still running for anyone to see.
+Pairwise failed to gain enough user traction and is no longer operating as a business. All the code here is now open source and the app has been converted to a frontend-only application, which is still running for anyone to see. Thanks for visiting!
 
 <img width="1440" alt="pairwise" src="https://user-images.githubusercontent.com/18126719/155054677-9ecb63cd-a2ac-4154-ab62-60c7b7f76bb8.png">
 
