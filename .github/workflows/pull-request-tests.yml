@@ -47,8 +47,8 @@ jobs:
         run: yarn docker:test
 
       # Run e2e tests
-      - name: Run e2e tests
-        run: yarn e2e
+      # - name: Run e2e tests
+      #   run: yarn e2e
 
       # Run Cypress tests
       # [2] Enable this step to run the Cypress tests for PR workflows:
