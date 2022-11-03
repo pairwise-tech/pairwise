@@ -143,7 +143,7 @@ export const NextChallengeCard = connect(
           className={complete ? "challenge-content-success" : ""}
         >
           <Horizontal>
-            <p style={{ marginRight: 10 }}>{text}</p>
+            <p style={{ margin: 0, marginRight: 10 }}>{text}</p>
             <H5>{challenge?.title}</H5>
           </Horizontal>
           {!SUNSET && (
@@ -210,11 +210,6 @@ const MobileOnly = styled.div`
 const Horizontal = styled.div`
   display: flex;
   align-items: center;
-  & > * {
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-
   @media ${MOBILE} {
     flex-direction: column;
     align-items: flex-start;
@@ -225,9 +220,8 @@ const Upper = styled(Callout)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 5px;
+  padding: 10px;
   margin-bottom: 20px;
-
   @media ${MOBILE} {
     flex-direction: column;
     align-items: flex-start;
